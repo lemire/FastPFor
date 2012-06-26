@@ -1,0 +1,325 @@
+/**
+ * This is code is released under the
+ * Apache License Version 2.0 http://www.apache.org/licenses/.
+ *
+ * (c) Daniel Lemire, http://lemire.me/en/
+ * and Owen Kaser
+ */
+
+#ifndef BLOCKPACKING_H_
+#define BLOCKPACKING_H_
+
+#include "codecs.h"
+#include "bitpackingunaligned.h"
+#include "bitpackingaligned.h"
+#include "util.h"
+
+/**
+ * This is 32-bit *aligned* binary packing, designed from the
+ * ground up.
+ *
+ * For all purposes, it has performance equal to ByteAlignedPacking
+ * with the align template parameter set to true, but it is slightly
+ * more elegant.
+ */
+template<uint32_t MiniBlockSize>
+class BinaryPacking: public IntegerCODEC {
+public:
+public:
+    enum {
+        HowManyMiniBlocks = 16,
+        // If you set HowManyMiniBlocks to a small value, then
+        // when you pack you have poor alignment on 32-bit boundaries.
+        BlockSize = HowManyMiniBlocks * MiniBlockSize
+    };
+
+    static const uint32_t bits32 = gccbits(32);
+
+    void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
+            size_t &nvalue) {
+        checkifdivisibleby(length, BlockSize);
+        const uint32_t * const initout(out);
+        *out++ = length;
+        uint32_t Bs[HowManyMiniBlocks];
+        for (const uint32_t * const final = in + length; in + BlockSize
+                <= final; in += BlockSize) {
+            for (uint32_t i = 0; i < HowManyMiniBlocks; ++i)
+                Bs[i] = maxbits(in + i * MiniBlockSize,
+                        in + (i + 1) * MiniBlockSize);
+            if (HowManyMiniBlocks == 16)
+                out = fastpackwithoutmask_16(&Bs[0], out, bits32);
+            else
+                throw logic_error("unsupported HowManyMiniBlocks");
+            for (uint32_t i = 0; i < HowManyMiniBlocks; ++i) {
+                if (MiniBlockSize == 8)
+                    out = fastpackwithoutmask_8(in + i * MiniBlockSize, out,
+                            Bs[i]);
+                else if (MiniBlockSize == 16)
+                    out = fastpackwithoutmask_16(in + i * MiniBlockSize, out,
+                            Bs[i]);
+                else if (MiniBlockSize == 24)
+                    out = fastpackwithoutmask_24(in + i * MiniBlockSize, out,
+                            Bs[i]);
+                else if (MiniBlockSize == 32)
+                    out = fastpackwithoutmask_32(in + i * MiniBlockSize, out,
+                            Bs[i]);
+
+                else
+                    throw logic_error("unsupported MiniBlockSize");
+            }
+        }
+        nvalue = out - initout;
+    }
+
+    const uint32_t * decodeArray(const uint32_t *in, const size_t /*length*/,
+            uint32_t *out, size_t & nvalue) {
+        const uint32_t actuallength = *in++;
+        const uint32_t * const initout(out);
+        uint32_t Bs[HowManyMiniBlocks];
+        for (; out < initout + actuallength;) {
+            if (HowManyMiniBlocks == 16)
+                in = fastunpack_16(in, &Bs[0], bits32);
+            else
+                throw logic_error("unsupported HowManyMiniBlocks");
+            for (int i = 0; i < HowManyMiniBlocks; ++i, out += MiniBlockSize) {
+                if (MiniBlockSize == 8)
+                    in = fastunpack_8(in, out, Bs[i]);
+                else if (MiniBlockSize == 16)
+                    in = fastunpack_16(in, out, Bs[i]);
+                else if (MiniBlockSize == 24)
+                    in = fastunpack_24(in, out, Bs[i]);
+                else if (MiniBlockSize == 32)
+                    in = fastunpack_32(in, out, Bs[i]);
+                else
+                    throw logic_error("unsupported MiniBlockSize");
+            }
+        }
+        nvalue = out - initout;
+        return in;
+    }
+
+    string name() const {
+        ostringstream convert;
+        convert << "BinaryPacking" << MiniBlockSize;
+        return convert.str();
+    }
+
+};
+
+/**
+ * This is an attempt to make BinaryPacking faster, at the expense
+ * of some compression.
+ */
+template<uint32_t MiniBlockSize>
+class FastBinaryPacking: public IntegerCODEC {
+public:
+public:
+    enum {
+        HowManyMiniBlocks = 4,
+        BlockSize = HowManyMiniBlocks * MiniBlockSize
+    };
+
+    static const uint32_t bits32 = 8 ; // 8 > gccbits(32);
+
+    void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
+            size_t &nvalue) {
+        checkifdivisibleby(length, BlockSize);
+        const uint32_t * const initout(out);
+        *out++ = length;
+        uint32_t Bs[HowManyMiniBlocks];
+        for (const uint32_t * const final = in + length; in + BlockSize
+                <= final; in += BlockSize) {
+            for (uint32_t i = 0; i < HowManyMiniBlocks; ++i)
+                Bs[i] = maxbits(in + i * MiniBlockSize,
+                        in + (i + 1) * MiniBlockSize);
+            *out++ = (Bs[0] << 24) | (Bs[1] << 16) | (Bs[2] << 8)
+                | Bs[3];
+            for (uint32_t i = 0; i < HowManyMiniBlocks; ++i) {
+                if (MiniBlockSize == 8)
+                    out = fastpackwithoutmask_8(in + i * MiniBlockSize, out,
+                            Bs[i]);
+                else if (MiniBlockSize == 16)
+                    out = fastpackwithoutmask_16(in + i * MiniBlockSize, out,
+                            Bs[i]);
+                else if (MiniBlockSize == 24)
+                    out = fastpackwithoutmask_24(in + i * MiniBlockSize, out,
+                            Bs[i]);
+                else if (MiniBlockSize == 32)
+                    out = fastpackwithoutmask_32(in + i * MiniBlockSize, out,
+                            Bs[i]);
+
+                else
+                    throw logic_error("unsupported MiniBlockSize");
+            }
+        }
+        nvalue = out - initout;
+    }
+
+    const uint32_t * decodeArray(const uint32_t *in, const size_t /*length*/,
+            uint32_t *out, size_t & nvalue) {
+        const uint32_t actuallength = *in++;
+        const uint32_t * const initout(out);
+        uint32_t Bs[HowManyMiniBlocks];
+        for (; out < initout + actuallength;) {
+            Bs[0] = static_cast<uint8_t>(in[0] >> 24);
+            Bs[1] = static_cast<uint8_t>(in[0] >> 16);
+            Bs[2] = static_cast<uint8_t>(in[0] >> 8);
+            Bs[3] = static_cast<uint8_t>(in[0]);
+            ++in;
+            for (int i = 0; i < HowManyMiniBlocks; ++i, out += MiniBlockSize) {
+                if (MiniBlockSize == 8)
+                    in = fastunpack_8(in, out, Bs[i]);
+                else if (MiniBlockSize == 16)
+                    in = fastunpack_16(in, out, Bs[i]);
+                else if (MiniBlockSize == 24)
+                    in = fastunpack_24(in, out, Bs[i]);
+                else if (MiniBlockSize == 32)
+                    in = fastunpack_32(in, out, Bs[i]);
+                else
+                    throw logic_error("unsupported MiniBlockSize");
+            }
+        }
+        nvalue = out - initout;
+        return in;
+    }
+
+    string name() const {
+        ostringstream convert;
+        convert << "FastBinaryPacking" << MiniBlockSize;
+        return convert.str();
+    }
+
+};
+
+
+
+
+
+
+/**
+ * This is the original unaligned binary packing. You can
+ * force alignment on 32-bit boundaries with the "align" template
+ *  parameter however.
+ * The packing is aligned on byte boundaries only.
+ */
+template<uint32_t MiniBlockSize, bool align = false, bool prescan = false>
+class ByteAlignedPacking: public IntegerCODEC {
+public:
+    enum {
+        HowManyMiniBlocks = 16,
+        // If you set HowManyMiniBlocks to a small value, then
+        // when you pack you have poor alignment on 32-bit boundaries.
+        BlockSize = HowManyMiniBlocks * MiniBlockSize
+    };
+
+    static const uint32_t bits32 = gccbits(32);
+
+    void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
+            size_t &nvalue) {
+        checkifdivisibleby(length, BlockSize);
+        const uint32_t * const initout(out);
+        *out++ = length;
+        uint8_t * outbyte = reinterpret_cast<uint8_t *> (out);
+        uint32_t Bs[HowManyMiniBlocks];
+        const uint32_t storageforbitwidth = prescan ? bits(
+                maxbits(in, in + length)) : bits32;
+        if (prescan)
+            *outbyte++ = storageforbitwidth;
+        if (MiniBlockSize == 32)
+           assert((storageforbitwidth * HowManyMiniBlocks) % 32 == 0);
+
+        for (const uint32_t * const final = in + length; in + BlockSize
+                <= final; in += BlockSize) {
+            for (uint32_t i = 0; i < HowManyMiniBlocks; ++i)
+                Bs[i] = maxbits(in + i * MiniBlockSize,
+                        in + (i + 1) * MiniBlockSize);
+            if (HowManyMiniBlocks == 16)
+                outbyte = fastunalignedpackwithoutmask_16(&Bs[0], outbyte,
+                        storageforbitwidth);
+            else
+                throw logic_error("unsupported HowManyMiniBlocks");
+            for (uint32_t i = 0; i < HowManyMiniBlocks; ++i) {
+                if (align)
+                    outbyte = padTo32bits(outbyte);
+                if (MiniBlockSize == 8)
+                    outbyte = fastunalignedpackwithoutmask_8(
+                            in + i * MiniBlockSize, outbyte, Bs[i]);
+
+                else if (MiniBlockSize == 16)
+                    outbyte = fastunalignedpackwithoutmask_16(
+                            in + i * MiniBlockSize, outbyte, Bs[i]);
+
+                else if (MiniBlockSize == 32) {
+                     fastpackwithoutmask(
+                            in + i * MiniBlockSize, reinterpret_cast<uint32_t*>(outbyte), Bs[i]);
+                     outbyte += sizeof(uint32_t) * Bs[i];
+
+                } else
+                    throw logic_error("unsupported MiniBlockSize");
+            }
+        }
+        outbyte = padTo32bits(outbyte);
+        const uint32_t storageinbytes = outbyte
+                - reinterpret_cast<const uint8_t *> (initout);
+        nvalue = storageinbytes / 4;
+    }
+
+    const uint32_t * decodeArray(const uint32_t *in, const size_t length,
+            uint32_t *out, size_t & nvalue) {
+        const uint32_t actuallength = *in++;
+        const uint8_t * inbyte = reinterpret_cast<const uint8_t *> (in);
+        const uint8_t * finalinbyte = reinterpret_cast<const uint8_t *> (in
+                + length);
+        const uint32_t * const initout(out);
+
+        const uint32_t storageforbitwidth = prescan ? *inbyte++ : bits32;
+        uint32_t Bs[HowManyMiniBlocks];
+        for (; out < initout + actuallength;) {
+            if (HowManyMiniBlocks == 16)
+                inbyte = fastunalignedunpack_16(inbyte, &Bs[0],storageforbitwidth);
+            else
+                throw logic_error("unsupported HowManyMiniBlocks");
+            for (int i = 0; i < HowManyMiniBlocks; ++i, out += MiniBlockSize) {
+                if (align)
+                    inbyte = padTo32bits(inbyte);
+                if (MiniBlockSize == 8)
+                    inbyte = fastunalignedunpack_8(inbyte, out, Bs[i]);
+                else if (MiniBlockSize == 16)
+                    inbyte = fastunalignedunpack_16(inbyte, out, Bs[i]);
+                else if (MiniBlockSize == 32) {
+                    fastunpack(reinterpret_cast<const uint32_t *>(inbyte), out, Bs[i]);
+                    inbyte += sizeof(uint32_t) * Bs[i];
+                } else
+                    throw logic_error("unsupported MiniBlockSize");
+            }
+        }
+
+        assert(inbyte <= finalinbyte);
+        nvalue = out - initout;
+        return reinterpret_cast<const uint32_t *> (padTo32bits(inbyte));
+    }
+
+    string name() const {
+        ostringstream convert;
+        convert << "ByteAlignedPacking" << MiniBlockSize;
+        if (prescan or align) {
+            convert << "<";
+            if (prescan) {
+                convert << "prescan";
+                if (align)
+                    convert << ",aligned";
+            } else if (align)
+                convert << "aligned";
+            convert << ">";
+        }
+        return convert.str();
+    }
+
+};
+
+
+
+
+
+
+#endif /* BLOCKPACKING_H_ */

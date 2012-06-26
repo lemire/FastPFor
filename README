@@ -1,0 +1,129 @@
+The FastPFOR C++ library : Fast integer compression
+Daniel Lemire, Owen Kaser and Maxime Caron
+
+
+== What is this? ==
+
+A research library with integer compression schemes.
+It should be suitable for applications to d-gap
+compression and delta coding in general.
+
+
+== License ==
+
+APL 2.0.
+
+== Warning ==
+
+This code requires a (recent as of 2012) compiler supporting
+C++11. This was a design decision. You can specify which
+C++ compiler you are using with the YOURCXX variable.
+
+e.g., under bash type
+
+export YOURCXX=g++-4.7
+
+== GCC 4.7 under Linux ==
+
+
+Under Linux, installing GCC 4.7 is not difficult. For example,
+for Linux Mint you need to edit two files to include "debian
+experimental":
+
+http://community.linuxmint.com/tutorial/view/250
+
+then type 
+
+sudo apt-get install gcc-4.7 g++-4.7
+
+== GCC 4.7 under Mac ==
+
+Mac Ports supports gcc 4.7.
+
+http://www.macports.org/
+
+== Requirements ==
+
+You need GNU GCC 4.7 or better. The code
+was tested under Linux and MacOS. 
+
+
+== Building and testing ==
+
+make
+./unit
+
+
+
+== Simple benchmark ==
+
+make
+./testcodecs.sh
+
+
+$ ./codecs --codecs fastpfor,newpfor,optpfor,pfor,pfor2008 --zipfian2
+
+For a more lengthy test, do
+
+$ ./codecs --codecs fastpfor,newpfor,optpfor,pfor,pfor2008 --clusterdynamic
+
+
+== Processing data files ==
+
+Typing make will generate both a gapencoder and
+gapdecoder executable. You can use gapencoder to
+process some flat d-grap data files using the
+following 32-bit format: 1 unsigned integer 
+indicating array length followed by the corresponding
+number of 32-bit integer. Repeat.
+ 
+ ( It is assumed that the integers are sorted and
+ that there is no duplicate. That is the case
+ with "d-gaps". To allow more general delta coding
+ --- for arbitrary integers, containing duplicates,
+ and maybe not always perfectly sorted --- use the "-notdgaps"
+ flag for "modulo delta coding".)
+ 
+You can test the library over d-gaps data
+from the TREC GOV2 data set that was made graciously
+available by   Fabrizio Silvestri,  Takeshi Yamamuro
+and Rossano Venturini.
+
+Go to:
+
+http://integerencoding.isti.cnr.it/?page_id=8
+
+Download both the software and the gov.sort.tar file.
+
+Untar the tar file:
+
+$ tar xvf gov2.sort.tar
+
+You may want to make the newly generated files non-writeable
+(I'm paranoid):
+
+ $ chmod -w gov2.sort.Delta gov2.sort.Delta.TOC 
+
+Build the software (you need the decoders executable)
+and 
+
+
+You need to run this command
+
+./decoders 3 gov2.sort somefilename
+
+where "3" is for delta.
+
+Once you have the uncompressed file somefilename you can
+process it with our gapdencoder:
+
+./gapencoder vbyte somefilename.DEC vbyte.bin
+
+This will encode the content using variable byte encoding.
+
+To decode, simply do
+
+./gapdecoder vbyte vbyte.bin recover.bin
+
+(If you omit recover.bin, it will simply uncompress the
+data in memory.)
