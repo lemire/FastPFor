@@ -64,7 +64,7 @@ public:
 
     // returns the *user* CPU time in micro seconds (mu s)
     uint64_t systemelapsed() {
-        return ((t2.ru_utime.tv_sec - t1.ru_utime.tv_sec) * 1000ULL * 1000ULL) + ((t2.ru_utime.tv_usec - t1.ru_utime.tv_usec)
+        return ((t2.ru_stime.tv_sec - t1.ru_stime.tv_sec) * 1000ULL * 1000ULL) + ((t2.ru_stime.tv_usec - t1.ru_stime.tv_usec)
                 );
     }
 
