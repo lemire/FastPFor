@@ -223,7 +223,6 @@ public:
         const uint8_t * bytep = reinterpret_cast<const uint8_t *> (inexcept);
         inexcept += (bytesize + sizeof(uint32_t) - 1) / sizeof(uint32_t);
         const uint32_t bitmap = *(inexcept++);
-        vector < vector<uint32_t> > mydatatobepacked(33);
         for (uint32_t k = 1; k <= 32; ++k) {
             if ((bitmap & (1U << (k - 1))) != 0) {
                 inexcept = unpackme(inexcept, datatobepacked[k], k);
