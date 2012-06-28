@@ -145,9 +145,9 @@ public:
             numInt++;
         }
 
-        int written = 0;
-        dest[written] = desc;
-        written++;
+        
+        dest[0] = desc;
+        int written = 1;
         for (int i = 0; i < numInt; i++) {
             int size = ithSize[i];
             uint32_t value = buffer[i];
@@ -155,9 +155,6 @@ public:
                 dest[written] = value >> (j * 8);
                 written++;
             }
-            bitmask = bitmask << (ithSize[i] - 1);
-            desc = desc ^ bitmask;
-            bitmask = bitmask << 1;
         }
         dest += 9;
         dstlength -= 9;
