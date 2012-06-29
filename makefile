@@ -37,10 +37,6 @@ bitpackingunaligned.o: ./headers/bitpacking.h ./src/bitpackingunaligned.cpp
 bitpackingaligned.o: ./headers/bitpacking.h ./src/bitpackingaligned.cpp
 	$(CXX) $(CXXFLAGS) -c ./src/bitpackingaligned.cpp -Iheaders
 
-
-unrolledvsrolledbitpacking: $(HEADERS) makefile ./headers/rolledbitpacking.h src/unrolledvsrolledbitpacking.cpp
-	$(CXX) $(CXXFLAGS) $(GCCPARAMS)  -o unrolledvsrolledbitpacking src/unrolledvsrolledbitpacking.cpp -Iheaders -S
-
 gapstats: $(HEADERS) src/gapstats.cpp
 	$(CXX) $(CXXFLAGS) -o gapstats src/gapstats.cpp -Iheaders
 
