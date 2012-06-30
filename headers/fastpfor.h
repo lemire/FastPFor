@@ -151,7 +151,7 @@ public:
         for (uint32_t b = bestb - 1; b < 32; --b) {
             cexcept += freqs[b + 1];
             uint32_t thiscost = cexcept * overheadofeachexcept + cexcept
-                    * (maxb - b) + b * BlockSize;
+                    * (maxb - b) + b * BlockSize + 8;// the  extra 8 is the cost of storing maxbits
             if (thiscost < bestcost) {
                 bestcost = thiscost;
                 bestb = b;
