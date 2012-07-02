@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
     CPUBenchmark cpu;
     z.reset();
     cpuz.reset();
-    __uint128_t clockcycles = 0;
+    uint64_t clockcycles = 0;
 
     if (fseek(fdin, 0, SEEK_END)) {
         cerr << "couldn't seek the end of file" << endl;

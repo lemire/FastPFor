@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
     CPUBenchmark cpu;
     z.reset();
     cpuz.reset();
-    __uint128_t x = 0;
+    uint64_t x = 0;
     cpu.start();
     while (reader.loadIntegers(rawdata)) {
         if (rawdata.size() < MINLENGTH)
@@ -121,8 +121,8 @@ int main(int argc, char **argv) {
         cout << "# cpu nanoseconds per integer = " << cputimespent * 1000.0
                 / integers << " ms" << endl;
 
-        cout << "# CPU = " << ((x / static_cast<__uint128_t > (integers)) + (x
-                % static_cast<__uint128_t > (integers)) * 1.0 / integers)
+        cout << "# CPU = " << ((x / static_cast<uint64_t > (integers)) + (x
+                % static_cast<uint64_t > (integers)) * 1.0 / integers)
                 << " clock cycles per integer" << endl;
     }
     cout << "# wrote " << counter << " arrays to " << ofilename << endl;
