@@ -19,6 +19,8 @@
 #include "newpfor.h"
 
 /**
+ * OptPFD
+ *
  * Follows:
  *
  * H. Yan, S. Ding, T. Suel, Inverted index compression and query processing with
