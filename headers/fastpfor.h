@@ -386,7 +386,7 @@ public:
         for (uint32_t b = bestb - 1; b < 32; --b) {
             cexcept += freqs[b + 1];
             uint32_t thiscost = cexcept * overheadofeachexcept + cexcept
-                    * (maxb - b) + b * BlockSize + 8;// the  extra 8 is the cost of storing maxbits
+                    * (maxb - b) + b * BlockSize ;
             if (thiscost < bestcost) {
                 bestcost = thiscost;
                 bestb = b;
@@ -436,11 +436,9 @@ public:
                 / sizeof(uint32_t);
         size_t outcap = 10000;
         //*out++ = datatobepacked.size();
-        cout<<"datatobepacked.size() "<<datatobepacked.size()<<endl;
         ecoder.encodeArray(&datatobepacked[0],datatobepacked.size(),out,outcap);
         out+=outcap;
         nvalue = out - initout;
-cout<<"data written "<<nvalue<<endl;
     }
 
     void __decodeArray(const uint32_t *in, size_t & length, uint32_t *out,
@@ -456,10 +454,8 @@ cout<<"data written "<<nvalue<<endl;
         size_t cap = datatobepacked.capacity();// theoretically unsafe
         size_t le = initin+length - inexcept;
         inexcept = ecoder.decodeArray(inexcept, le,&datatobepacked[0],cap );
-        cout<<"read datatobepacked.size() "<<cap<<endl;
 
         length = inexcept - initin;
-        cout<<"data read "<<length<<endl;
 
         auto exceptionsptr = datatobepacked.begin();
        for (uint32_t run = 0; run < nvalue / BlockSize; ++run, out
@@ -472,7 +468,6 @@ cout<<"data written "<<nvalue<<endl;
                     out[pos] |= (*(exceptionsptr++)) << b;
                 }
         }
-       assert(exceptionsptr==datatobepacked.end());
        assert(in == headerin + wheremeta);
     }
 
