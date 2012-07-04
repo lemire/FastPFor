@@ -616,7 +616,7 @@ const uint32_t * Simple8b<MarkLength>::decodeArray(const uint32_t *in,
         cout << "simple8b stats[" << k << "]=" << stats[k]*1.0/sum << endl;
     }
 #endif
-    assert(in64 == finalin64);
+    assert(in64 <= finalin64);
     in = reinterpret_cast<const uint32_t *> (in64);
     assert(in <= endin);
     //check that we don't overrun the buffer too much?
