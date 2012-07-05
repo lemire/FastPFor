@@ -62,8 +62,8 @@ public:
 
     void open() {
 #ifdef USE_O_DIRECT
-        int fd = ::open(file, O_DIRECT | O_RDONLY);
-        fd = ::fdopen(fd, "rb");
+        int fdi = ::open(mFilename.c_str(), O_DIRECT | O_RDONLY);
+        fd = ::fdopen(fdi, "rb");
 #else
         fd = ::fopen(mFilename.c_str(), "rb");
 #endif

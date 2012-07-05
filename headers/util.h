@@ -10,9 +10,9 @@
 #define UTIL
 #include "common.h"
 
-#ifdef __linux__
-#define USE_O_DIRECT
-#endif
+//#ifdef __linux__
+//#define USE_O_DIRECT
+//#endif
 
 using namespace std;
 //#define STATS
