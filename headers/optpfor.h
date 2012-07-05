@@ -30,19 +30,11 @@ template<uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder = Simple16<
         false> >
 class OPTPFor: public NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder> {
 public:
-    /*enum {
-     PACKSIZE = 32, PFORDELTA_BLOCKSZ = BlockSizeInUnitsOfPackSize
-     * PACKSIZE
-     };*/
-    OPTPFor() /*:
-                encodedExceptions(
-                        4
-                                * NewPFor<BlockSizeInUnitsOfPackSize,
-                                        ExceptionCoder>::BlockSize + 1024)*/ {
+
+    OPTPFor()  {
     }
     uint32_t tryB(uint32_t b, const uint32_t *in, uint32_t len);
     uint32_t findBestB(const uint32_t *in, uint32_t len);
-    //vector<uint32_t> encodedExceptions;
 
     virtual string name() const {
         ostringstream convert;
@@ -62,7 +54,6 @@ uint32_t OPTPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::tryB(uint32_t b,
     if (b == 32) {
         return len;
     }
-    //encodedExceptions.resize(2 * len + 2);
     uint32_t size = div_roundup(len * b, 32);
     uint32_t curExcept = 0;
 
@@ -120,6 +111,9 @@ uint32_t OPTPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::findBestB(
                     NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs.back();
     assert(b == 32);
     uint32_t bsize = tryB(b, in, len);
+    const uint32_t mb = maxbits(in,in+len);
+    uint32_t i = 0;
+    while(mb  > 28 + possLogs[i]) ++i; // some schemes such as Simple16 don't code numbers greater than 28
 
     for (uint32_t i = 0; i
             < NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs.size()
