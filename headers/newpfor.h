@@ -91,6 +91,7 @@ uint32_t NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::tryB(uint32_t b,
             curExcept++;
     }
 
+
     return curExcept;
 }
 
@@ -98,8 +99,12 @@ template<uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder>
 __attribute__ ((pure))
 uint32_t NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::findBestB(
         const uint32_t *in, uint32_t len) {
+    const uint32_t mb = maxbits(in,in+len);
+    uint32_t i = 0;
+    while(mb  > 28 + possLogs[i]  ) ++i; // some schemes such as Simple16 don't code numbers greater than 28
 
-    for (uint32_t i = 0; i < possLogs.size() - 1; i++) {
+    for (; i < possLogs.size() - 1; i++) {
+
         const uint32_t nExceptions = tryB(possLogs[i], in, len);
         if (nExceptions * PFORDELTA_INVERSERATIO <= len)
             return possLogs[i];

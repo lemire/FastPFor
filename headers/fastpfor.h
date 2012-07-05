@@ -12,6 +12,7 @@
 #include "packingvectors.h"
 #include "cpubenchmark.h"
 #include "blockpacking.h"
+#include "simple8b.h"
 
 /**
  * FastPFor 
@@ -253,9 +254,7 @@ public:
     }
 
     string name() const {
-        ostringstream convert;
-        convert << "FastPFor";
-        return convert.str();
+        return "FastPFor";
     }
 
 };
@@ -268,8 +267,8 @@ public:
 
 
 
-template <class EXCEPTIONCODER>
-class FastPFor2: public IntegerCODEC {
+template <class EXCEPTIONCODER=Simple8b<true> >
+class SimplePFor: public IntegerCODEC {
 public:
 
     EXCEPTIONCODER ecoder;
@@ -277,7 +276,7 @@ public:
      * ps (page size) should be a multiple of BlockSize, any "large"
      * value should do.
      */
-    FastPFor2(uint32_t ps = 65536) :ecoder(),
+    SimplePFor(uint32_t ps = 65536) :ecoder(),
         PageSize(ps), bitsPageSize(gccbits(PageSize)), datatobepacked(PageSize),
                 bytescontainer(PageSize + 3 * PageSize / BlockSize) {
         assert(ps / BlockSize * BlockSize == ps);
@@ -400,9 +399,6 @@ public:
         uint32_t * const initout = out; // keep track of this
         checkifdivisibleby(length, BlockSize);
         uint32_t * const headerout = out++; // keep track of this
-        //for (uint32_t k = 0; k < 32 + 1; ++k)
-        //    datatobepacked[k].clear();
-        //bytescontainer.clear();
         datatobepacked.clear();
         uint8_t * bc = &bytescontainer[0];
         for (const uint32_t * const final = in + length; (in + BlockSize
@@ -410,19 +406,13 @@ public:
             uint8_t bestb, bestcexcept, maxb;
             getBestBFromData(in, bestb, bestcexcept, maxb);
             *bc++ = bestb;
-            //bytescontainer.push_back(bestb);
             *bc++ = bestcexcept;
-            //bytescontainer.push_back(bestcexcept);
             if (true) {
-                //            *bc++ = maxb;
-                //bytescontainer.push_back(maxb);
                 const uint32_t maxval = 1U << bestb;
                 for (uint32_t k = 0; k < BlockSize; ++k) {
                     if (in[k] >= maxval) {
-                        // we have an exception
                         datatobepacked.push_back(in[k] >> bestb);
                         *bc++ = k;
-                        //bytescontainer.push_back(k);
                     }
                 }
             }
@@ -435,7 +425,6 @@ public:
         out += (bytescontainersize + sizeof(uint32_t) - 1)
                 / sizeof(uint32_t);
         size_t outcap = 10000;
-        //*out++ = datatobepacked.size();
         ecoder.encodeArray(&datatobepacked[0],datatobepacked.size(),out,outcap);
         out+=outcap;
         nvalue = out - initout;
@@ -472,9 +461,7 @@ public:
     }
 
     string name() const {
-        ostringstream convert;
-        convert << "FastPFor2";
-        return convert.str();
+        return "SimplePFor";
     }
 
 };
