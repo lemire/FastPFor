@@ -59,8 +59,8 @@ int main(int argc, char **argv) {
 #ifdef USE_O_DIRECT
     cout<<"# you are using Linux: I am disabling IO caching with O_DIRECT"<<endl;
     cout<<"# Performance may be negatively affected."<<endl;
-    int fd = ::open(filename.c_str(, O_DIRECT | O_RDONLY);
-    fd = ::fdopen(fd, "rb");
+    int fdi = ::open(filename.c_str(), O_DIRECT | O_RDONLY);
+    FILE * fdin = ::fdopen(fdi, "rb");
 #else
     FILE * fdin = ::fopen(filename.c_str(), "rb");
 #endif
