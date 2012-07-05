@@ -61,11 +61,15 @@ public:
 
 
     void open() {
+#ifdef USE_O_DIRECT
+        int fd = ::open(file, O_DIRECT | O_RDONLY);
+        fd = ::fdopen(fd, "rb");
+#else
         fd = ::fopen(mFilename.c_str(), "rb");
+#endif
         if (fd == NULL) {
             cerr << "IO status: " << strerror(errno) << endl;
             cerr << "Can't open " << mFilename << endl;
-            //cerr << "IO status: " << strerror(errno) << endl;
             throw runtime_error("could not open temp file");
         }
         setvbuf (fd , NULL , _IOFBF , 1024*4 ); // large buffer

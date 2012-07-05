@@ -56,7 +56,14 @@ int main(int argc, char **argv) {
         ofilename = argv[argindex++];
     }
     cout << "# parsing " << filename << endl;
-    FILE * fdin = ::fopen(filename.c_str(), "r");
+#ifdef USE_O_DIRECT
+    cout<<"# you are using Linux: I am disabling IO caching with O_DIRECT"<<endl;
+    cout<<"# Performance may be negatively affected."<<endl;
+    int fd = ::open(filename.c_str(, O_DIRECT | O_RDONLY);
+    fd = ::fdopen(fd, "rb");
+#else
+    FILE * fdin = ::fopen(filename.c_str(), "rb");
+#endif
     if (fdin == NULL) {
         cerr << "IO status: " << "IO status: " << strerror(errno) << endl;
         cerr << "can't open " << filename << endl;
@@ -65,6 +72,8 @@ int main(int argc, char **argv) {
     setvbuf(fdin, NULL, _IOFBF, 1024 * 1024 * 32); // large buffer
 
     vector < uint32_t > rawdata;
+    // I'm not disabling buffering with O_DIRECT here because
+    // user does not need to output the result during benchmarking.
     FILE * fd = writeit ? ::fopen(ofilename.c_str(), "w+b") : NULL;
     if ((writeit) and (fd == NULL)) {
         cerr << "IO status: " << "IO status: " << strerror(errno) << endl;
