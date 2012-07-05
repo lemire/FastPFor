@@ -115,7 +115,7 @@ uint32_t OPTPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::findBestB(
     uint32_t i = 0;
     while(mb  > 28 + NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs[i]) ++i; // some schemes such as Simple16 don't code numbers greater than 28
 
-    for (uint32_t i = 0; i
+    for (; i
             < NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs.size()
                     - 1; i++) {
         const uint32_t
