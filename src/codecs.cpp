@@ -353,7 +353,7 @@ int main(int argc, char **argv) {
                 UniformDataGenerator clu;
                 for (uint k = 0; k < (1U << 5); ++k)
                     datas.push_back(
-                                    clu.generateDenseUniform((1U << 18) + 1,
+                                    clu.generateUniform((1U << 18) ,
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 process(myalgos, datas, true, fulldisplay, displayhistogram);
@@ -363,9 +363,9 @@ int main(int argc, char **argv) {
                 cout << "# sparse uniform data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 UniformDataGenerator clu;
-                for (uint k = 0; k < (1U << 14); ++k)
+                for (uint k = 0; k < (1U << 14); ++k)// by original paper should be 1U<<19
                     datas.push_back(
-                                    clu.generateSparseUniform((1U << 9) + 1,
+                                    clu.generateUniform((1U << 9) ,
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 process(myalgos, datas, true, fulldisplay, displayhistogram);
@@ -375,9 +375,9 @@ int main(int argc, char **argv) {
                 cout << "# dense cluster data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 ClusteredDataGenerator clu;
-                for (uint k = 0; k < (1U << 5); ++k)
+                for (uint k = 0; k < (1U << 5); ++k)// by original paper should be 1U<<10
                     datas.push_back(
-                                    clu.generateDenseClustered((1U << 18) + 1,
+                                    clu.generateClustered((1U << 18) ,
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 process(myalgos, datas, true, fulldisplay, displayhistogram);
@@ -387,9 +387,9 @@ int main(int argc, char **argv) {
                 cout << "# sparse cluster data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 ClusteredDataGenerator clu;
-                for (uint k = 0; k < (1U << 14); ++k)
+                for (uint k = 0; k < (1U << 14); ++k)// by original paper should be 1U<<19
                     datas.push_back(
-                                    clu.generateSparseClustered((1U << 9) + 1,
+                                    clu.generateClustered((1U << 9) ,
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 process(myalgos, datas, false, fulldisplay, displayhistogram);
@@ -399,9 +399,9 @@ int main(int argc, char **argv) {
                 cout << "# dense uniform data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 UniformDataGenerator clu;
-                for (uint k = 0; k < (1U << 3); ++k)
+                for (uint k = 0; k < (1U << 3); ++k)// by original paper should be 1U<<10
                     datas.push_back(
-                                    clu.generateDenseUniform((1U << 22) + 1,
+                                    clu.generateUniform((1U << 22) ,
                                             1U << 29));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 process(myalgos, datas, true, fulldisplay, displayhistogram);
@@ -413,7 +413,7 @@ int main(int argc, char **argv) {
                 UniformDataGenerator clu;
                 for (uint k = 0; k < (1U << 13); ++k)
                     datas.push_back(
-                                    clu.generateSparseUniform((1U << 12) + 1,
+                                    clu.generateUniform((1U << 12) ,
                                             1U << 29));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 process(myalgos, datas, true, fulldisplay, displayhistogram);
@@ -425,7 +425,7 @@ int main(int argc, char **argv) {
                 ClusteredDataGenerator clu;
                 for (uint k = 0; k < 1; ++k)
                     datas.push_back(
-                                    clu.generateDenseClustered((1U << 23) + 1,
+                                    clu.generateClustered((1U << 23) ,
                                             1U << 26));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 process(myalgos, datas, true, fulldisplay, displayhistogram);
@@ -437,48 +437,10 @@ int main(int argc, char **argv) {
                 ClusteredDataGenerator clu;
                 for (uint k = 0; k < (1U << 13); ++k)
                     datas.push_back(
-                                    clu.generateSparseClustered((1U << 12) + 1,
+                                    clu.generateClustered((1U << 12) ,
                                             1U << 26));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 process(myalgos, datas, false, fulldisplay, displayhistogram);
-                summarize(myalgos);
-                return 0;
-            } else if (strcmp(parameter, "vclusterdynamic") == 0) {
-                cout << "# dynamic very clustered data generation..." << endl;
-                ClusteredDataGenerator clu(0.1);
-                for (uint32_t K = 10; K <= 25; K += 5) {
-                    vector < vector<uint32_t, cacheallocator> > datas;
-                    for (uint k = 0; k < (1U << (25 - K)); ++k)
-                        datas.push_back(
-                                        clu.generateSparseClustered(
-                                                (1U << K) + 1, 1U << 29));
-                    cout << "# generated " << datas.size() << " arrays" << endl;
-                    cout << "# their size is  " << (1U << K) << endl;
-                    const uint32_t p = 29 - K;
-                    ostringstream convert;
-                    convert << p;
-                    process(myalgos, datas, true, fulldisplay, displayhistogram,
-                            convert.str());
-                }
-                summarize(myalgos);
-                return 0;
-            } else if (strcmp(parameter, "crazyclusterdynamic") == 0) {
-                cout << "# dynamic crazy clustered data generation..." << endl;
-                ClusteredDataGenerator clu(0.0);
-                for (uint32_t K = 10; K <= 25; K += 5) {
-                    vector < vector<uint32_t, cacheallocator> > datas;
-                    for (uint k = 0; k < (1U << (25 - K)); ++k)
-                        datas.push_back(
-                                        clu.generateSparseClustered(
-                                                (1U << K) + 1, 1U << 29));
-                    cout << "# generated " << datas.size() << " arrays" << endl;
-                    cout << "# their size is  " << (1U << K) << endl;
-                    const uint32_t p = 29 - K;
-                    ostringstream convert;
-                    convert << p;
-                    process(myalgos, datas, true, fulldisplay, displayhistogram,
-                            convert.str());
-                }
                 summarize(myalgos);
                 return 0;
             } else if (strcmp(parameter, "clusterdynamic") == 0) {
@@ -489,8 +451,8 @@ int main(int argc, char **argv) {
                     for (uint k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
                                 diffs(
-                                        clu.generateSparseClustered(
-                                                (1U << K) + 1, 1U << 29), true));
+                                        clu.generateClustered(
+                                                (1U << K) , 1U << 29), true));
                     cout << "# generated " << datas.size() << " arrays" << endl;
                     cout << "# their size is  " << (1U << K) << endl;
                     const uint32_t p = 29 - K;
@@ -509,7 +471,7 @@ int main(int argc, char **argv) {
                     for (uint k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
                                 diffs(
-                                        clu.generateUniform((1U << K) + 1,
+                                        clu.generateUniform((1U << K) ,
                                                 1U << 29), true));
                     cout << "# generated " << datas.size() << " arrays" << endl;
                     cout << "# their size is  " << (1U << K) << endl;

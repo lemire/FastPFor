@@ -82,6 +82,8 @@ map<string, shared_ptr<IntegerCODEC> > CODECFactory::scodecmap = {
                 VariableByte>)},
     {   "fastbinarypacking32", shared_ptr<IntegerCODEC> (new CompositeCodec<FastBinaryPacking<32> ,
                 VariableByte>)},
+    {   "BP32", shared_ptr<IntegerCODEC> (new CompositeCodec<BP32 ,
+                        VariableByte>)},
     {   "globalbinarypacking32", shared_ptr<IntegerCODEC> (new CompositeCodec<PackedCODEC ,
                  VariableByte>)},
     {   "vsencoding", shared_ptr<IntegerCODEC> (new vsencoding::VSEncodingBlocks(1U << 16))},

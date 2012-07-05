@@ -33,14 +33,6 @@ public:
     UniformDataGenerator(uint32_t seed = time(NULL)) :
         rand(seed) {
     }
-
-    vector<uint32_t,cacheallocator> generateDenseUniform(uint32_t N, uint32_t Max) {
-        return generateUniform(N, Max);
-    }
-    vector<uint32_t,cacheallocator> generateSparseUniform(uint32_t N, uint32_t Max) {
-        return generateUniform(N, Max);
-    }
-
     /**
      * fill the vector with N numbers uniformly picked from  from 0 to Max
      */
@@ -57,13 +49,13 @@ public:
         if (N > Max / 2) {
             set < uint32_t > s;
             while (s.size() < N)
-                s.insert(rand.getValue(Max-1) );
+                s.insert(rand.getValue(Max) );
             ans.assign(s.begin(), s.end());
             return ans;
         }
         while (ans.size() < N) {
             while (ans.size() < N) {
-                ans.push_back(rand.getValue(Max-1) );
+                ans.push_back(rand.getValue(Max) );
             }
             sort(ans.begin(), ans.end());
             auto it = unique(ans.begin(), ans.end());
@@ -84,13 +76,6 @@ public:
         unidg(seed) {
     }
 
-    vector<uint32_t,cacheallocator> generateDenseClustered(uint32_t N, uint32_t Max) {
-        return generateClustered(N, Max);
-    }
-    vector<uint32_t,cacheallocator> generateSparseClustered(uint32_t N, uint32_t Max) {
-        return generateClustered(N, Max);
-    }
-
     template<class iterator>
     void fillUniform(iterator begin, iterator end, uint32_t Min, uint32_t Max) {
         vector < uint32_t,cacheallocator > v = unidg.generateUniform(end - begin, Max - Min);
@@ -98,23 +83,26 @@ public:
             *(begin + k) = Min + v[k];
     }
 
+
     template<class iterator>
     void fillClustered(iterator begin, iterator end, uint32_t Min, uint32_t Max) {
         const size_t N = end - begin;
         const uint32_t range = Max - Min;
         assert(range >= N);
-        if ((range == N) or (N <= 10)) {
+        if ((range == N) or (N < 10)) {
             fillUniform(begin, end, Min, Max);
             return;
         }
-        const uint32_t cut = N / 2 + unidg.rand.getValue(range - N - 1);
+        const uint32_t cut = N / 2 + unidg.rand.getValue( range - N );
         assert(cut >= N / 2);
         assert(Max - Min - cut >= N - N / 2);
         const double p = unidg.rand.getDouble();
-        if (p < 0.25) {
+        assert(p <= 1);
+        assert(p >= 0);
+        if (p <= 0.25) {
             fillUniform(begin, begin + N / 2, Min, Min + cut);
             fillClustered(begin + N / 2, end, Min + cut, Max);
-        } else if (p < 0.5) {
+        } else if (p <= 0.5) {
             fillClustered(begin, begin + N / 2, Min, Min + cut);
             fillUniform(begin + N / 2, end, Min + cut, Max);
         } else {
@@ -122,6 +110,7 @@ public:
             fillClustered(begin + N / 2, end, Min + cut, Max);
         }
     }
+
 
     vector<uint32_t,cacheallocator> generateClustered(uint32_t N, uint32_t Max) {
         vector < uint32_t,cacheallocator > ans(N);

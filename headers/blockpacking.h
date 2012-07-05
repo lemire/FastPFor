@@ -144,11 +144,15 @@ public:
                 else if (MiniBlockSize == 24)
                     out = fastpackwithoutmask_24(in + i * MiniBlockSize, out,
                             Bs[i]);
-                else if (MiniBlockSize == 32)
-                    out = fastpackwithoutmask_32(in + i * MiniBlockSize, out,
-                            Bs[i]);
+                else if (MiniBlockSize == 32) {
+                    fastpackwithoutmask(in + i * MiniBlockSize, out,
+                                Bs[i]);
+                        out += Bs[i];
 
-                else
+                    // out = fastpackwithoutmask_32(in + i * MiniBlockSize, out,
+                     //       Bs[i]);
+
+                } else
                     throw logic_error("unsupported MiniBlockSize");
             }
         }
@@ -173,9 +177,11 @@ public:
                     in = fastunpack_16(in, out, Bs[i]);
                 else if (MiniBlockSize == 24)
                     in = fastunpack_24(in, out, Bs[i]);
-                else if (MiniBlockSize == 32)
-                    in = fastunpack_32(in, out, Bs[i]);
-                else
+                else if (MiniBlockSize == 32) {
+                    fastunpack(in, out, Bs[i]);
+                    in += Bs[i];
+                    //in = fastunpack_32(in, out, Bs[i]);
+                } else
                     throw logic_error("unsupported MiniBlockSize");
             }
         }
@@ -194,6 +200,63 @@ public:
 
 
 
+// A simpler version of FastBinaryPacking32. (For sanity testing.)
+class BP32: public IntegerCODEC {
+public:
+public:
+    enum {
+        MiniBlockSize = 32,
+        HowManyMiniBlocks = 4,
+        BlockSize = HowManyMiniBlocks * MiniBlockSize
+    };
+
+    void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
+            size_t &nvalue) {
+        checkifdivisibleby(length, BlockSize);
+        const uint32_t * const initout(out);
+        *out++ = length;
+        uint32_t Bs[HowManyMiniBlocks];
+        for (const uint32_t * const final = in + length; in + BlockSize
+                <= final; in += BlockSize) {
+            for (uint32_t i = 0; i < HowManyMiniBlocks; ++i)
+                Bs[i] = maxbits(in + i * MiniBlockSize,
+                        in + (i + 1) * MiniBlockSize);
+            *out++ = (Bs[0] << 24) | (Bs[1] << 16) | (Bs[2] << 8)
+                | Bs[3];
+            for (uint32_t i = 0; i < HowManyMiniBlocks; ++i) {
+                fastpackwithoutmask(in + i * MiniBlockSize, out,
+                            Bs[i]);
+                    out += Bs[i];
+            }
+        }
+        nvalue = out - initout;
+    }
+
+    const uint32_t * decodeArray(const uint32_t *in, const size_t /*length*/,
+            uint32_t *out, size_t & nvalue) {
+        const uint32_t actuallength = *in++;
+        const uint32_t * const initout(out);
+        uint32_t Bs[HowManyMiniBlocks];
+        for (; out < initout + actuallength;) {
+            Bs[0] = static_cast<uint8_t>(in[0] >> 24);
+            Bs[1] = static_cast<uint8_t>(in[0] >> 16);
+            Bs[2] = static_cast<uint8_t>(in[0] >> 8);
+            Bs[3] = static_cast<uint8_t>(in[0]);
+            ++in;
+            for (int i = 0; i < HowManyMiniBlocks; ++i, out += MiniBlockSize) {
+                fastunpack(in, out, Bs[i]);
+                in += Bs[i];
+            }
+        }
+        nvalue = out - initout;
+        return in;
+    }
+
+    string name() const {
+        return "BP32";
+    }
+
+};
 
 
 /**
