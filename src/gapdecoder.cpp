@@ -57,6 +57,7 @@ int main(int argc, char **argv) {
     }
     cout << "# parsing " << filename << endl;
 #ifdef USE_O_DIRECT
+    /**  as of July 2012, this is disabled by default **/
     cout<<"# you are using Linux: I am disabling IO caching with O_DIRECT"<<endl;
     cout<<"# Performance may be negatively affected."<<endl;
     int fdi = ::open(filename.c_str(), O_DIRECT | O_RDONLY);
@@ -135,6 +136,10 @@ int main(int argc, char **argv) {
     if (fd != NULL)
         ::fclose(fd);
     ::fclose(fdin);
+    if(lSize != ftell(fdin)) {
+        cerr<<" We have a problem because I did not read until the end of the file."<<endl;
+        cerr<<" Read"<< ftell(fdin)<<" expected "<<lSize<<endl;
+    }
     cout << "# integers = " << integers << endl;
     cout << "# arrays = " << counter << endl;
     const uint64_t timespent = z.split();

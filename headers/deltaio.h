@@ -200,7 +200,9 @@ private:
         result = fread(aligned_buffer, sizeof(buffer[0]),
                 h.compressedsize, fd);
         if (result != h.compressedsize) {
-            return false;
+            cerr << "IO status: " << strerror(errno) << endl;
+            cerr << "Error reading from file " << endl;
+            throw runtime_error("bad read");
         }
         size_t nvalue = data.size() - 1;
         c.decodeArray(aligned_buffer, h.compressedsize, &data[1], nvalue);

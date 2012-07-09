@@ -166,7 +166,6 @@ void NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::encodeBlock(
             fastpackwithoutmask(&tobecoded[i], out, b);
             out += b;
         }
-
         nvalue = out - initout;
 
     } else {
