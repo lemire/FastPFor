@@ -11,7 +11,7 @@
 
 #include "common.h"
 #include "util.h"
-#include "bitpacking.h"
+#include "bitpackinghelpers.h"
 
 class NotEnoughStorage: public std::runtime_error {
 public:

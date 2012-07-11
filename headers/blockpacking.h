@@ -110,6 +110,8 @@ public:
  * This is an attempt to make BinaryPacking faster, at the expense
  * of some compression.
  */
+
+
 template<uint32_t MiniBlockSize>
 class FastBinaryPacking: public IntegerCODEC {
 public:
@@ -149,9 +151,6 @@ public:
                                 Bs[i]);
                         out += Bs[i];
 
-                    // out = fastpackwithoutmask_32(in + i * MiniBlockSize, out,
-                     //       Bs[i]);
-
                 } else
                     throw logic_error("unsupported MiniBlockSize");
             }
@@ -164,23 +163,22 @@ public:
         const uint32_t actuallength = *in++;
         const uint32_t * const initout(out);
         uint32_t Bs[HowManyMiniBlocks];
-        for (; out < initout + actuallength;) {
+        for (; out < initout + actuallength; out += BlockSize) {
             Bs[0] = static_cast<uint8_t>(in[0] >> 24);
             Bs[1] = static_cast<uint8_t>(in[0] >> 16);
             Bs[2] = static_cast<uint8_t>(in[0] >> 8);
             Bs[3] = static_cast<uint8_t>(in[0]);
             ++in;
-            for (int i = 0; i < HowManyMiniBlocks; ++i, out += MiniBlockSize) {
+            for (int i = 0; i < HowManyMiniBlocks; ++i) {
                 if (MiniBlockSize == 8)
-                    in = fastunpack_8(in, out, Bs[i]);
+                    in = fastunpack_8(in, out + i * MiniBlockSize, Bs[i]);
                 else if (MiniBlockSize == 16)
-                    in = fastunpack_16(in, out, Bs[i]);
+                    in = fastunpack_16(in, out + i * MiniBlockSize, Bs[i]);
                 else if (MiniBlockSize == 24)
-                    in = fastunpack_24(in, out, Bs[i]);
+                    in = fastunpack_24(in, out + i * MiniBlockSize, Bs[i]);
                 else if (MiniBlockSize == 32) {
-                    fastunpack(in, out, Bs[i]);
+                    fastunpack(in, out + i * MiniBlockSize, Bs[i]);
                     in += Bs[i];
-                    //in = fastunpack_32(in, out, Bs[i]);
                 } else
                     throw logic_error("unsupported MiniBlockSize");
             }

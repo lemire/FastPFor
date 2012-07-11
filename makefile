@@ -11,7 +11,7 @@ CXXFLAGSEXTRA = -mssse3 # necessary for varintg8iu
 CXXFLAGS = $(CXXFLAGSEXTRA) -ggdb -std=c++0x -Weffc++ -pedantic -O3 -Wold-style-cast -Wall -Wextra -Wcast-align -Wunsafe-loop-optimizations -Wcast-qual
 
 
-HEADERS = ./headers/common.h ./headers/memutil.h ./headers/pfor.h ./headers/pfor2008.h ./headers/bitpackingunaligned.h ./headers/bitpackingaligned.h ./headers/blockpacking.h ./headers/deltaio.h ./headers/codecfactory.h ./headers/packingvectors.h ./headers/compositecodec.h ./headers/cpubenchmark.h  ./headers/maropuparser.h ./headers/bitpacking.h  ./headers/util.h ./headers/simple9.h ./headers/simple8b.h ./headers/simple16.h ./headers/optpfor.h ./headers/newpfor.h ./headers/vsencoding.h ./headers/mersenne.h  ./headers/ztimer.h ./headers/codecs.h ./headers/synthetic.h ./headers/fastpfor.h ./headers/variablebyte.h ./headers/stringutil.h ./headers/entropy.h ./headers/VarIntG8IU.h 
+HEADERS = ./headers/bitpackinghelpers.h ./headers/common.h ./headers/memutil.h ./headers/pfor.h ./headers/pfor2008.h ./headers/bitpackingunaligned.h ./headers/bitpackingaligned.h ./headers/blockpacking.h ./headers/deltaio.h ./headers/codecfactory.h ./headers/packingvectors.h ./headers/compositecodec.h ./headers/cpubenchmark.h  ./headers/maropuparser.h ./headers/bitpacking.h  ./headers/util.h ./headers/simple9.h ./headers/simple8b.h ./headers/simple16.h ./headers/optpfor.h ./headers/newpfor.h ./headers/vsencoding.h ./headers/mersenne.h  ./headers/ztimer.h ./headers/codecs.h ./headers/synthetic.h ./headers/fastpfor.h ./headers/variablebyte.h ./headers/stringutil.h ./headers/entropy.h ./headers/VarIntG8IU.h 
 
 all: unit codecs iotests gapencoder gapdecoder csv2maropu
 
@@ -26,7 +26,7 @@ GCCPARAMS=  --param max-completely-peel-times=64  --param max-completely-peeled-
 ./headers/common.h.gch: 
 	$(CXX) $(CXXFLAGS) -x c++-header  -c ./headers/common.h -Iheaders
 
-COMMONBINARIES=bitpacking.o bitpackingaligned.o bitpackingunaligned.o
+COMMONBINARIES= bitpacking.o bitpackingaligned.o bitpackingunaligned.o
 
 bitpacking.o: ./headers/bitpacking.h ./src/bitpacking.cpp
 	$(CXX) $(CXXFLAGS) -c ./src/bitpacking.cpp -Iheaders
@@ -39,6 +39,9 @@ bitpackingaligned.o: ./headers/bitpacking.h ./src/bitpackingaligned.cpp
 
 gapstats: $(HEADERS) src/gapstats.cpp
 	$(CXX) $(CXXFLAGS) -o gapstats src/gapstats.cpp -Iheaders
+
+benchbitpacking: $(HEADERS) src/benchbitpacking.cpp ./headers/common.h.gch makefile $(COMMONBINARIES)
+	$(CXX) $(CXXFLAGS) $(GCCPARAMS) -Winvalid-pch  -o benchbitpacking src/benchbitpacking.cpp $(COMMONBINARIES) -Iheaders
 
 partitionbylength: $(HEADERS) src/partitionbylength.cpp
 	$(CXX) $(CXXFLAGS) -o partitionbylength src/partitionbylength.cpp -Iheaders

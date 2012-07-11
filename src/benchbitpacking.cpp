@@ -12,39 +12,29 @@
 #include "synthetic.h"
 #include "ztimer.h"
 
-// this exists only for looking at assembly language
-void foobar()
-{
-  uint32_t fred[10];
-  uint32_t bob[10];
-  __pack<20>(fred,bob);
-  cout << "now unpack";
-  __unpack<20>(bob,fred);
-  cout << "result is " << bob[5] << fred[5] << endl;
-}
 
-void maskfnc(vector<uint32_t> & out, const uint32_t L) {
+void maskfnc(vector<uint32_t,cacheallocator> & out, const uint32_t L) {
     if(L==32) return;
-    for(vector<uint32_t>::iterator i = out.begin(); i!= out.end() ; ++i) {
+    for(auto i = out.begin(); i!= out.end() ; ++i) {
         *i = *i % (1U<<L);
     }
 }
 
-void fastpack(const vector<uint32_t> & data, vector<uint32_t> & out, const uint32_t bit) {
+void fastpack(const vector<uint32_t,cacheallocator> & data, vector<uint32_t,cacheallocator> & out, const uint32_t bit) {
         const uint32_t N = data.size();
         for(uint32_t k = 0; k<N/32;++k) {
                 fastpack(& data[0]+32*k,&out[0]+bit *k,bit);
         }
 }
 
-void fastpackwithoutmask(const vector<uint32_t> & data, vector<uint32_t> & out, const uint32_t bit) {
+void fastpackwithoutmask(const vector<uint32_t,cacheallocator> & data, vector<uint32_t,cacheallocator> & out, const uint32_t bit) {
         const uint32_t N = data.size();
         for(uint32_t k = 0; k<N/32;++k) {
                 fastpackwithoutmask(& data[0]+32*k,&out[0]+bit *k,bit);
         }
 }
 
-void fastunpack(const vector<uint32_t> & data, vector<uint32_t> & out, const uint32_t bit) {
+void fastunpack(const vector<uint32_t,cacheallocator> & data, vector<uint32_t,cacheallocator> & out, const uint32_t bit) {
         const uint32_t N = out.size();
         for(uint32_t k = 0; k<N/32;++k) {
                 fastunpack(& data[0]+bit *k,&out[0]+32*k,bit);
@@ -107,15 +97,14 @@ bool equalOnFirstBits(const container32bit & data, const container32bit & recove
     return true;
 }
 void simplebenchmark(uint32_t N = 1U<<24) {
-    vector<uint32_t> data = generateArray32(N);
-    vector<uint32_t> compressed(N, 0);
-    vector<uint32_t> recovered(N, 0);
+    vector<uint32_t,cacheallocator> data = generateArray32(N);
+    vector<uint32_t,cacheallocator> compressed(N, 0);
+    vector<uint32_t,cacheallocator> recovered(N, 0);
     WallClockTimer z;
     const uint32_t T = 5;
     double packtime,packtimewm,unpacktime;
-    double slowpacktime,slowpacktimewm,slowunpacktime;
-    double tightpacktime,tightpacktimewm,tightunpacktime;
-    cout<<"#integers per second: higher is better"<<endl;
+    cout<<"#million of integers per second: higher is better"<<endl;
+    cout<<"#bit, pack, pack without mask, unpack"<<endl;
     for (uint32_t bitindex = 0; bitindex < 32; ++bitindex) {
         uint32_t bit = 32-bitindex;
         maskfnc(data,bit);
@@ -147,9 +136,9 @@ void simplebenchmark(uint32_t N = 1U<<24) {
 
         }
 
-        cout<<std::setprecision(4)<<bit<<"\t\t"<<N*(T-1)/(packtime*1000)
-                <<"\t\t"<<N*(T-1)/(packtimewm*1000)<<"\t\t\t"
-                <<N*(T-1)/(unpacktime*1000);
+        cout<<std::setprecision(4)<<bit<<"\t\t"<<N*(T-1)/(packtime)
+                <<"\t\t"<<N*(T-1)/(packtimewm)<<"\t\t\t"
+                <<N*(T-1)/(unpacktime);
         cout<<endl;
 
     }

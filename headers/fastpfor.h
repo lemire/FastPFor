@@ -116,23 +116,6 @@ public:
         resetBuffer();// if you don't do this, the buffer has a memory
     }
 
-    uint32_t * packblockup(const uint32_t * source, uint32_t * out,
-            const uint32_t bit) {
-        for (uint32_t j = 0; j != BlockSize; j += PACKSIZE) {
-            fastpack(source + j, out, bit);
-            out += bit;
-        }
-        return out;
-    }
-
-    const uint32_t * unpackblock(const uint32_t * source, uint32_t * out,
-            const uint32_t bit) {
-        for (uint32_t j = 0; j != BlockSize; j += PACKSIZE) {
-            fastunpack(source, out + j, bit);
-            source += bit;
-        }
-        return source;
-    }
 
     void getBestBFromData(const uint32_t * in, uint8_t& bestb,
             uint8_t & bestcexcept, uint8_t & maxb) {
@@ -168,19 +151,15 @@ public:
         uint32_t * const headerout = out++; // keep track of this
         for (uint32_t k = 0; k < 32 + 1; ++k)
             datatobepacked[k].clear();
-        //bytescontainer.clear();
         uint8_t * bc = &bytescontainer[0];
         for (const uint32_t * const final = in + length; (in + BlockSize
                 <= final); in += BlockSize) {
             uint8_t bestb, bestcexcept, maxb;
             getBestBFromData(in, bestb, bestcexcept, maxb);
             *bc++ = bestb;
-            //bytescontainer.push_back(bestb);
             *bc++ = bestcexcept;
-            //bytescontainer.push_back(bestcexcept);
             if (bestcexcept > 0) {
                 *bc++ = maxb;
-                //bytescontainer.push_back(maxb);
                 vector < uint32_t > &thisexceptioncontainer
                         = datatobepacked[maxb - bestb];
                 const uint32_t maxval = 1U << bestb;
@@ -189,11 +168,10 @@ public:
                         // we have an exception
                         thisexceptioncontainer.push_back(in[k] >> bestb);
                         *bc++ = k;
-                        //bytescontainer.push_back(k);
                     }
                 }
             }
-            out = packblockup(in, out, bestb);
+            out = packblockup<BlockSize>(in, out, bestb);
         }
         headerout[0] = static_cast<uint32_t> (out - headerout);
         const uint32_t bytescontainersize = bc - &bytescontainer[0];
@@ -239,7 +217,7 @@ public:
                 += BlockSize) {
             const uint8_t b = *bytep++;
             const uint8_t cexcept = *bytep++;
-            in = unpackblock(in, out, b);
+            in = unpackblock<BlockSize>(in, out, b);
             if (cexcept > 0) {
                 const uint8_t maxbits = *bytep++;
                 vector<uint32_t>::const_iterator & exceptionsptr =
@@ -349,23 +327,6 @@ public:
             cerr << "It is possible we have a buffer overrun. " << endl;
     }
 
-    uint32_t * packblockup(const uint32_t * source, uint32_t * out,
-            const uint32_t bit) {
-        for (uint32_t j = 0; j != BlockSize; j += PACKSIZE) {
-            fastpack(source + j, out, bit);
-            out += bit;
-        }
-        return out;
-    }
-
-    const uint32_t * unpackblock(const uint32_t * source, uint32_t * out,
-            const uint32_t bit) {
-        for (uint32_t j = 0; j != BlockSize; j += PACKSIZE) {
-            fastunpack(source, out + j, bit);
-            source += bit;
-        }
-        return source;
-    }
 
     void getBestBFromData(const uint32_t * in, uint8_t& bestb,
             uint8_t & bestcexcept, uint8_t & maxb) {
@@ -416,7 +377,7 @@ public:
                     }
                 }
             }
-            out = packblockup(in, out, bestb);
+            out = packblockup<BlockSize>(in, out, bestb);
         }
         headerout[0] = static_cast<uint32_t> (out - headerout);
         const uint32_t bytescontainersize = bc - &bytescontainer[0];
@@ -451,7 +412,7 @@ public:
                 += BlockSize) {
             const uint8_t b = *bytep++;
             const uint8_t cexcept = *bytep++;
-            in = unpackblock(in, out, b);
+            in = unpackblock<BlockSize>(in, out, b);
                 for (uint32_t k = 0; k < cexcept; ++k) {
                     const uint8_t pos = *(bytep++);
                     out[pos] |= (*(exceptionsptr++)) << b;
