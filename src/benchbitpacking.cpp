@@ -230,7 +230,6 @@ void simplebenchmark(uint32_t N = 1U << 24) {
     const uint32_t T = 5;
     double packtime, packtimewm, unpacktime;
     double tightpacktime, tightpacktimewm, tightunpacktime;
-    double slowpacktime, slowpacktimewm, slowunpacktime;
 
     cout << "#million of integers per second: higher is better" << endl;
     cout << "#bit, pack, pack without mask, unpack" << endl;
@@ -244,36 +243,13 @@ void simplebenchmark(uint32_t N = 1U << 24) {
             tightpacktime = 0;
             tightpacktimewm = 0;
             tightunpacktime = 0;
-            slowpacktime = 0;
-            slowpacktimewm = 0;
-            slowunpacktime = 0;
 
             for (uint32_t t = 0; t < T; ++t) {
                 compressed.clear();
                 compressed.resize(N * bit / 32, 0);
                 recovered.clear();
                 recovered.resize(N, 0);
-                z.reset();
-                pack(data, compressed, bit);
-                if (t > 0)
-                    slowpacktime += z.split();
-
-                z.reset();
-                packwithoutmask(data, compressed, bit);
-                if (t > 0)
-                    slowpacktimewm += z.split();
-
-                z.reset();
-                unpack(compressed, recovered, bit);
-                if (t > 0)
-                    slowunpacktime += z.split();
-
-                if (!equalOnFirstBits(data, recovered, bit)) {
-                    cout << " Bug0!" << endl;
-                    return;
-                }
-
-                z.reset();
+                            z.reset();
                 pack_tight(data, compressed, bit);
                 if (t > 0)
                     tightpacktime += z.split();
@@ -323,11 +299,6 @@ void simplebenchmark(uint32_t N = 1U << 24) {
                     / (tightpacktime) << "\t\t" << N * (T - 1)
                     / (tightpacktimewm) << "\t\t\t" << N * (T - 1)
                     / (tightunpacktime) << "\t\t";
-
-            cout << std::setprecision(4) << bit << "\t\t" << N * (T - 1)
-                    / (slowpacktime) << "\t\t" << N * (T - 1)
-                    / (slowpacktimewm) << "\t\t\t" << N * (T - 1)
-                    / (slowunpacktime) << "\t\t";
 
             cout << endl;
         }
