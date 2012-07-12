@@ -233,7 +233,7 @@ void simplebenchmark(uint32_t N = 1U << 24) {
 
     cout << "#million of integers per second: higher is better" << endl;
     cout << "#bit, pack, pack without mask, unpack" << endl;
-    for (uint32_t bitindex = 29; bitindex < 32; ++bitindex) {
+    for (uint32_t bitindex = 0; bitindex < 32; ++bitindex) {
         uint32_t bit = 32 - bitindex;
         maskfnc(data, bit);
         for (uint32_t repeat = 0; repeat < 3; ++repeat) {
