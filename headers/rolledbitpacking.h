@@ -78,28 +78,29 @@ void __pack(const uint32_t * __restrict__ in, uint32_t * __restrict__ out) {
 template<uint32_t bit, bool mask = true>
 void __pack_tight(const uint32_t * __restrict__ in, uint32_t * __restrict__ out) {
     assert(bit <= 32);
-    enum {
-        mygcd = gcd(bit, 32)
-    };
+    if (bit == 32) {
+        for (int k = 0; k < 32; ++k) {
+            out[k] = in[k];
+        }
+        return;
+    }
+    enum { mygcd = gcd(bit, 32)};
     // iterate over bit position of the output
     for (uint32_t t = 0; t < mygcd; ++t) {
-        out[0] = __bitmask<bit, mask> (*in++);
-        for (uint32_t pointer = bit; pointer < 32 * bit / mygcd; pointer += bit) {
-            const uint32_t inword = (pointer % 32);
+        for (uint32_t pointer = 0; pointer < 32 * bit / mygcd; /*pointer += 2
+                * bit*/) {
+            for(int i = 0; i <2; ++i, pointer+=bit) {
+            uint32_t inword = (pointer % 32);
             out[pointer / 32] |= __bitmask<bit, mask> (*in) << inword;
-            //if (__builtin_expect(inword > 32 - bit,0))
-            if (inword > 32 - bit,0)
+            if (inword > 32 - bit)
                 out[pointer / 32 + 1] = __bitmask<bit, mask> (*in) >> (32
                         - inword);
             ++in;
+            }
         }
         out += bit / mygcd;
     }
 }
-
-
-
-
 /**
  * Alternative to __unpack
  */
@@ -113,8 +114,7 @@ void __unpack_tight(const uint32_t * __restrict__ in,
     for (uint32_t t = 0; t < mygcd; ++t) {
         for (uint32_t pointer = 0; pointer < 32 * bit / mygcd; pointer += bit) {
             const uint32_t inword = (pointer % 32);
-            //if (__builtin_expect(inword > 32 - bit,0))
-            if(inword > 32 - bit)
+            if (inword > 32 - bit)
                 *out++ = __bitmask<bit, mask> (
                         (in[pointer / 32] >> inword) | (in[pointer / 32 + 1]
                                 << (32 - inword)));
@@ -153,8 +153,7 @@ uint8_t * __pack_vl(const uint32_t * __restrict__ in,
     for (uint32_t t = 0; t < mygcd; ++t) {
         out[0] = __bitmask<bit, mask> (*in++);
         if (++counter == length)
-            return reinterpret_cast<uint8_t *> (&out[0])
-                    + 1 + byteoffset(bit);
+            return reinterpret_cast<uint8_t *> (&out[0]) + 1 + byteoffset(bit);
         for (uint32_t pointer = bit; pointer < 32 * bit / mygcd; pointer += bit) {
             const uint32_t inword = (pointer % 32);
             out[pointer / 32] |= __bitmask<bit, mask> (*in) << inword;
@@ -166,8 +165,8 @@ uint8_t * __pack_vl(const uint32_t * __restrict__ in,
                             + 1 + byteoffset(bit + 32 - inword - 1);
             } else {
                 if (++counter == length)
-                    return reinterpret_cast<uint8_t *> (&out[pointer / 32 ])
-                            + 1 + byteoffset(bit + inword - 1);
+                    return reinterpret_cast<uint8_t *> (&out[pointer / 32]) + 1
+                            + byteoffset(bit + inword - 1);
             }
             ++in;
         }
@@ -675,110 +674,108 @@ void unpack_tight(const uint32_t * __restrict__ in,
     }
 }
 
-
-
-template<bool mask,uint32_t length>
-uint8_t *  pack_vl(const uint32_t * __restrict__ in, uint8_t  * __restrict__ out,
+template<bool mask, uint32_t length>
+uint8_t * pack_vl(const uint32_t * __restrict__ in, uint8_t * __restrict__ out,
         const uint32_t bit) {
     switch (bit) {
     case 0:
         // nothing to do
         return out;
     case 1:
-        return __pack_vl<1, mask,length> (in, out);
+        return __pack_vl<1, mask, length> (in, out);
 
     case 2:
-        return __pack_vl<2, mask,length> (in, out);
+        return __pack_vl<2, mask, length> (in, out);
 
     case 3:
-        return __pack_vl<3, mask,length> (in, out);
+        return __pack_vl<3, mask, length> (in, out);
 
     case 4:
-        return __pack_vl<4, mask,length> (in, out);
+        return __pack_vl<4, mask, length> (in, out);
 
     case 5:
-        return __pack_vl<5, mask,length> (in, out);
+        return __pack_vl<5, mask, length> (in, out);
 
     case 6:
-        return __pack_vl<6, mask,length> (in, out);
+        return __pack_vl<6, mask, length> (in, out);
 
     case 7:
-        return __pack_vl<7, mask,length> (in, out);
+        return __pack_vl<7, mask, length> (in, out);
 
     case 8:
-        return __pack_vl<8, mask,length> (in, out);
+        return __pack_vl<8, mask, length> (in, out);
 
     case 9:
-        return __pack_vl<9, mask,length> (in, out);
+        return __pack_vl<9, mask, length> (in, out);
 
     case 10:
-        return __pack_vl<10, mask,length> (in, out);
+        return __pack_vl<10, mask, length> (in, out);
 
     case 11:
-        return __pack_vl<11, mask,length> (in, out);
+        return __pack_vl<11, mask, length> (in, out);
 
     case 12:
-        return __pack_vl<12, mask,length> (in, out);
+        return __pack_vl<12, mask, length> (in, out);
 
     case 13:
-        return __pack_vl<13, mask,length> (in, out);
+        return __pack_vl<13, mask, length> (in, out);
 
     case 14:
-        return __pack_vl<14, mask,length> (in, out);
+        return __pack_vl<14, mask, length> (in, out);
 
     case 15:
-        return __pack_vl<15, mask,length> (in, out);
+        return __pack_vl<15, mask, length> (in, out);
 
     case 16:
-        return __pack_vl<16, mask,length> (in, out);
+        return __pack_vl<16, mask, length> (in, out);
 
     case 17:
-        return __pack_vl<17, mask,length> (in, out);
+        return __pack_vl<17, mask, length> (in, out);
 
     case 18:
-        return __pack_vl<18, mask,length> (in, out);
+        return __pack_vl<18, mask, length> (in, out);
 
     case 19:
-        return __pack_vl<19, mask,length> (in, out);
+        return __pack_vl<19, mask, length> (in, out);
 
     case 20:
-        return __pack_vl<20, mask,length> (in, out);
+        return __pack_vl<20, mask, length> (in, out);
 
     case 21:
-        return __pack_vl<21, mask,length> (in, out);
+        return __pack_vl<21, mask, length> (in, out);
 
     case 22:
-        return __pack_vl<22, mask,length> (in, out);
+        return __pack_vl<22, mask, length> (in, out);
 
     case 23:
-        return __pack_vl<23, mask,length> (in, out);
+        return __pack_vl<23, mask, length> (in, out);
 
     case 24:
-        return __pack_vl<24, mask,length> (in, out);
+        return __pack_vl<24, mask, length> (in, out);
 
     case 25:
-        return __pack_vl<25, mask,length> (in, out);
+        return __pack_vl<25, mask, length> (in, out);
 
     case 26:
-        return __pack_vl<26, mask,length> (in, out);
+        return __pack_vl<26, mask, length> (in, out);
 
     case 27:
-        return __pack_vl<27, mask,length> (in, out);
+        return __pack_vl<27, mask, length> (in, out);
 
     case 28:
-        return __pack_vl<28, mask,length> (in, out);
+        return __pack_vl<28, mask, length> (in, out);
 
     case 29:
-        return __pack_vl<29, mask,length> (in, out);
+        return __pack_vl<29, mask, length> (in, out);
 
     case 30:
-        return __pack_vl<30, mask,length> (in, out);
+        return __pack_vl<30, mask, length> (in, out);
 
     case 31:
-        return __pack_vl<31, mask,length> (in, out);
+        return __pack_vl<31, mask, length> (in, out);
 
     case 32:
-        return __pack_vl<32, mask,length> (in, out);
+        return __pack_vl<32, mask, length> (in, out);
 
     default:
         throw runtime_error("Unsupported number of bits");
@@ -796,100 +793,100 @@ const uint8_t * unpack_vl(const uint8_t * __restrict__ in,
         return in;
 
     case 1:
-        return __unpack_vl<1,length> (in, out);
+        return __unpack_vl<1, length> (in, out);
 
     case 2:
-        return __unpack_vl<2,length> (in, out);
+        return __unpack_vl<2, length> (in, out);
 
     case 3:
-        return __unpack_vl<3,length> (in, out);
+        return __unpack_vl<3, length> (in, out);
 
     case 4:
-        return __unpack_vl<4,length> (in, out);
+        return __unpack_vl<4, length> (in, out);
 
     case 5:
-        return __unpack_vl<5,length> (in, out);
+        return __unpack_vl<5, length> (in, out);
 
     case 6:
-        return __unpack_vl<6,length> (in, out);
+        return __unpack_vl<6, length> (in, out);
 
     case 7:
-        return __unpack_vl<7,length> (in, out);
+        return __unpack_vl<7, length> (in, out);
 
     case 8:
-        return __unpack_vl<8,length> (in, out);
+        return __unpack_vl<8, length> (in, out);
 
     case 9:
-        return __unpack_vl<9,length> (in, out);
+        return __unpack_vl<9, length> (in, out);
 
     case 10:
-        return __unpack_vl<10,length> (in, out);
+        return __unpack_vl<10, length> (in, out);
 
     case 11:
-        return __unpack_vl<11,length> (in, out);
+        return __unpack_vl<11, length> (in, out);
 
     case 12:
-        return __unpack_vl<12,length> (in, out);
+        return __unpack_vl<12, length> (in, out);
 
     case 13:
-        return __unpack_vl<13,length> (in, out);
+        return __unpack_vl<13, length> (in, out);
 
     case 14:
-        return __unpack_vl<14,length> (in, out);
+        return __unpack_vl<14, length> (in, out);
 
     case 15:
-        return __unpack_vl<15,length> (in, out);
+        return __unpack_vl<15, length> (in, out);
 
     case 16:
-        return __unpack_vl<16,length> (in, out);
+        return __unpack_vl<16, length> (in, out);
 
     case 17:
-        return __unpack_vl<17,length> (in, out);
+        return __unpack_vl<17, length> (in, out);
 
     case 18:
-        return __unpack_vl<18,length> (in, out);
+        return __unpack_vl<18, length> (in, out);
 
     case 19:
-        return __unpack_vl<19,length> (in, out);
+        return __unpack_vl<19, length> (in, out);
 
     case 20:
-        return __unpack_vl<20,length> (in, out);
+        return __unpack_vl<20, length> (in, out);
 
     case 21:
-        return __unpack_vl<21,length> (in, out);
+        return __unpack_vl<21, length> (in, out);
 
     case 22:
-        return __unpack_vl<22,length> (in, out);
+        return __unpack_vl<22, length> (in, out);
 
     case 23:
-        return __unpack_vl<23,length> (in, out);
+        return __unpack_vl<23, length> (in, out);
 
     case 24:
-        return __unpack_vl<24,length> (in, out);
+        return __unpack_vl<24, length> (in, out);
 
     case 25:
-        return __unpack_vl<25,length> (in, out);
+        return __unpack_vl<25, length> (in, out);
 
     case 26:
-        return __unpack_vl<26,length> (in, out);
+        return __unpack_vl<26, length> (in, out);
 
     case 27:
-        return __unpack_vl<27,length> (in, out);
+        return __unpack_vl<27, length> (in, out);
 
     case 28:
-        return __unpack_vl<28,length> (in, out);
+        return __unpack_vl<28, length> (in, out);
 
     case 29:
-        return __unpack_vl<29,length> (in, out);
+        return __unpack_vl<29, length> (in, out);
 
     case 30:
-        return __unpack_vl<30,length> (in, out);
+        return __unpack_vl<30, length> (in, out);
 
     case 31:
-        return __unpack_vl<31,length> (in, out);
+        return __unpack_vl<31, length> (in, out);
 
     case 32:
-        return __unpack_vl<32,length> (in, out);
+        return __unpack_vl<32, length> (in, out);
 
     default:
         throw runtime_error("Unsupported number of bits");

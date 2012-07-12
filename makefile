@@ -40,7 +40,7 @@ bitpackingaligned.o: ./headers/bitpacking.h ./src/bitpackingaligned.cpp
 gapstats: $(HEADERS) src/gapstats.cpp
 	$(CXX) $(CXXFLAGS) -o gapstats src/gapstats.cpp -Iheaders
 
-benchbitpacking: $(HEADERS) src/benchbitpacking.cpp ./headers/common.h.gch makefile $(COMMONBINARIES)
+benchbitpacking: $(HEADERS) src/benchbitpacking.cpp ./headers/rolledbitpacking.h ./headers/common.h.gch makefile $(COMMONBINARIES)
 	$(CXX) $(CXXFLAGS) $(GCCPARAMS) -Winvalid-pch  -o benchbitpacking src/benchbitpacking.cpp $(COMMONBINARIES) -Iheaders
 
 partitionbylength: $(HEADERS) src/partitionbylength.cpp

@@ -2804,102 +2804,18 @@ void __fastunpack31(const uint32_t *  __restrict__ in, uint32_t *  __restrict__ 
 
 
 void __fastunpack32(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out) {
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
-    ++in;
-    out++;
-    *out = ( (*in) >>  0  ) ;
+    for(int k = 0 ; k <32 ;++k)
+        out[k] = in[k];
+}
+void __fastpack32(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out) {
+    for(int k = 0 ; k <32 ;++k)
+        out[k] = in[k];
 }
 
+void __fastpackwithoutmask32(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out) {
+    for(int k = 0 ; k <32 ;++k)
+        out[k] = in[k];
+}
 
 
 
@@ -5724,105 +5640,6 @@ void __fastpack31(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  o
 
 
 
-void __fastpack32(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out) {
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-}
-
-
-
 
 void __fastpack4(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out) {
   for(uint32_t outer=0; outer< 4 ;++outer) {
@@ -8643,106 +8460,6 @@ void __fastpack16(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  o
     *out =  ( (*in) ) >> ( 31  -  1 );
     ++in;
     *out |= ( (*in)  ) <<  1 ;
-}
-
-
-
-  /*assumes that integers fit in the prescribed number of bits */
-  void __fastpackwithoutmask32(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out) {
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
-    ++out;
-    ++in;
-    *out = *in;
 }
 
 
