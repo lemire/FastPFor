@@ -84,23 +84,56 @@ void __pack_tight(const uint32_t * __restrict__ in, uint32_t * __restrict__ out)
         }
         return;
     }
-    enum { mygcd = gcd(bit, 32)};
+
+    if (bit == 16) {
+        for (uint32_t outer = 0; outer < 16; ++outer) {
+            for (uint32_t inwordpointer = 0; inwordpointer < 32; inwordpointer
+                    += 16)
+                *out |= __bitmask<bit, mask> (*(in++)) << inwordpointer;
+            ++out;
+        }
+        return;
+    }
+    if (bit == 8) {
+        for (uint32_t outer = 0; outer < 8; ++outer) {
+            for (uint32_t inwordpointer = 0; inwordpointer < 32; inwordpointer
+                    += 8)
+                *out |= __bitmask<bit, mask> (*(in++)) << inwordpointer;
+            ++out;
+        }
+        return;
+    }
+
+    enum {
+        mygcd = gcd(bit, 32)
+    };
     // iterate over bit position of the output
-    for (uint32_t t = 0; t < mygcd; ++t) {
-        for (uint32_t pointer = 0; pointer < 32 * bit / mygcd; /*pointer += 2
-                * bit*/) {
-            for(int i = 0; i <2; ++i, pointer+=bit) {
-            uint32_t inword = (pointer % 32);
-            out[pointer / 32] |= __bitmask<bit, mask> (*in) << inword;
-            if (inword > 32 - bit)
-                out[pointer / 32 + 1] = __bitmask<bit, mask> (*in) >> (32
-                        - inword);
-            ++in;
+    if ((bit & 1) == 0) {
+        for (uint32_t t = 0; t < mygcd; ++t) {
+            for (uint32_t pointer = 0; pointer < 32 * bit / mygcd; pointer
+                    += bit) {
+                uint32_t inword = (pointer % 32);
+                const uint32_t v = __bitmask<bit, mask> (*in++);
+                out[pointer / 32] |= v << inword;
+                if (inword > 32 - bit)
+                    out[pointer / 32 + 1] = v >> (32 - inword);
+            }
+            out += bit / mygcd;
+        }
+    } else {
+        for (uint32_t pointer = 0; pointer < 32 * bit;) {
+            for (int i = 0; i < 2; ++i, pointer += bit) {
+                uint32_t inword = (pointer % 32);
+                const uint32_t v = __bitmask<bit, mask> (*in++);
+                out[pointer / 32] |= v << inword;
+                if (inword > 32 - bit)
+                    out[pointer / 32 + 1] = v >> (32 - inword);
             }
         }
         out += bit / mygcd;
     }
 }
+
 /**
  * Alternative to __unpack
  */
@@ -108,21 +141,46 @@ template<uint32_t bit, bool mask = true>
 void __unpack_tight(const uint32_t * __restrict__ in,
         uint32_t * __restrict__ out) {
     assert(bit <= 32);
+    if (bit == 32) {
+        for (int k = 0; k < 32; ++k) {
+            out[k] = in[k];
+        }
+        return;
+    }
+    if (bit == 16) {
+        for (uint32_t outer = 0; outer < 16; ++outer) {
+            for (uint32_t inwordpointer = 0; inwordpointer < 32; inwordpointer
+                    += 16)
+                *(out++) = __bitmask<bit, mask> ((*in) >> inwordpointer);
+            ++in;
+        }
+        return;
+    }
+    if (bit == 8) {
+        for (uint32_t outer = 0; outer < 8; ++outer) {
+            for (uint32_t inwordpointer = 0; inwordpointer < 32; inwordpointer
+                    += 8)
+                *(out++) = __bitmask<bit, mask> ((*in) >> inwordpointer);
+            ++in;
+        }
+        return;
+    }
+
     enum {
         mygcd = gcd(bit, 32)
     };
     for (uint32_t t = 0; t < mygcd; ++t) {
         for (uint32_t pointer = 0; pointer < 32 * bit / mygcd; pointer += bit) {
             const uint32_t inword = (pointer % 32);
+            *out = in[pointer / 32] >> inword;
             if (inword > 32 - bit)
-                *out++ = __bitmask<bit, mask> (
-                        (in[pointer / 32] >> inword) | (in[pointer / 32 + 1]
-                                << (32 - inword)));
-            else
-                *out++ = __bitmask<bit, mask> (in[pointer / 32] >> inword);
+                *out |= (in[pointer / 32 + 1] << (32 - inword));
+            *out = __bitmask<bit, mask> (*out);
+            ++out;
         }
         in += bit / mygcd;
     }
+    return;
 }
 
 // from bit offset compute byte offset +
