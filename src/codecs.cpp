@@ -131,7 +131,7 @@ void process(vector<algostats> & myalgos,
         for (uint32_t k = 0; k < backupdatas.size(); ++k) {
             vector<uint32_t, cacheallocator> &data = backupdatas[k];
             nvalue = outs[k].size();
-            uint32_t *aligned_buffer = &outs[k][0];//reinterpret_cast<uint32_t *>(padTo64bytes( reinterpret_cast<uint8_t *>(&outs[k][0])));  // ofk
+            uint32_t *aligned_buffer = &outs[k][0];
             assert(!needPaddingTo64bytes(aligned_buffer));
             if (needtodelta) {
                 for (size_t i = data.size() - 1; i > 0; --i) {
@@ -172,8 +172,7 @@ void process(vector<algostats> & myalgos,
         for (uint32_t k = 0; k < backupdatas.size(); ++k) {
             const vector<uint32_t, cacheallocator> &data = backupdatas[k];
             size_t recoveredsize = data.size();
-            // uint32_t *aligned_buffer = reinterpret_cast<uint32_t *>(padTo64bytes( reinterpret_cast<uint8_t *>(&outs[k][0])));  // ofk
-            uint32_t *aligned_buffer = &outs[k][0];//reinterpret_cast<uint32_t *>(padTo64bytes( reinterpret_cast<uint8_t *>(&outs[k][0])));  // ofk
+            uint32_t *aligned_buffer = &outs[k][0];
             assert(!needPaddingTo64bytes(aligned_buffer));
             if (needtodelta) {
                 vector<uint32_t, cacheallocator> & r = recovereds[k];
