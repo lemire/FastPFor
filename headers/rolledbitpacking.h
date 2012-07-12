@@ -87,7 +87,8 @@ void __pack_tight(const uint32_t * __restrict__ in, uint32_t * __restrict__ out)
         for (uint32_t pointer = bit; pointer < 32 * bit / mygcd; pointer += bit) {
             const uint32_t inword = (pointer % 32);
             out[pointer / 32] |= __bitmask<bit, mask> (*in) << inword;
-            if (inword > 32 - bit)
+            //if (__builtin_expect(inword > 32 - bit,0))
+            if (inword > 32 - bit,0)
                 out[pointer / 32 + 1] = __bitmask<bit, mask> (*in) >> (32
                         - inword);
             ++in;
@@ -95,6 +96,9 @@ void __pack_tight(const uint32_t * __restrict__ in, uint32_t * __restrict__ out)
         out += bit / mygcd;
     }
 }
+
+
+
 
 /**
  * Alternative to __unpack
@@ -109,7 +113,8 @@ void __unpack_tight(const uint32_t * __restrict__ in,
     for (uint32_t t = 0; t < mygcd; ++t) {
         for (uint32_t pointer = 0; pointer < 32 * bit / mygcd; pointer += bit) {
             const uint32_t inword = (pointer % 32);
-            if (inword > 32 - bit)
+            //if (__builtin_expect(inword > 32 - bit,0))
+            if(inword > 32 - bit)
                 *out++ = __bitmask<bit, mask> (
                         (in[pointer / 32] >> inword) | (in[pointer / 32 + 1]
                                 << (32 - inword)));

@@ -21,8 +21,8 @@ test: unit
 #search to find which is the important parameter.  Turns out that there are 2.  Note that 400 insns was not enough
 #GCCPARAMS=  --param max-completely-peel-times=32  --param max-completely-peeled-insns=800 # --param max-peeled-insns=1000  # --param max-unrolled-insns=1000 # --param max-average-unrolled-insns=500 --param max-unroll-times=32 --param max-peel-times=32
 
-GCCPARAMS=  --param max-completely-peel-times=64  --param max-completely-peeled-insns=5000 --param max-peeled-insns=6000  --param max-unrolled-insns=6000 --param max-average-unrolled-insns=4000  --param max-unroll-times=64 --param max-peel-times=64
-
+#GCCPARAMS=  --param max-completely-peel-times=64  --param max-completely-peeled-insns=5000 --param max-peeled-insns=6000  --param max-unrolled-insns=6000 --param max-average-unrolled-insns=4000  --param max-unroll-times=64 --param max-peel-times=64
+GCCPARAMS=
 ./headers/common.h.gch: 
 	$(CXX) $(CXXFLAGS) -x c++-header  -c ./headers/common.h -Iheaders
 
