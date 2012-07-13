@@ -80,6 +80,26 @@ public:
         }
     }
 
+    template<class container>
+    static void inplacedeltas(container & data, int mode) {
+        switch (mode) {
+        case DeltaMode:
+            for (size_t i = data.size() - 1; i > 0; --i) {
+                data[i] = (data[i] - data[i - 1] - 1);
+            }
+            return;
+        case DeltaDGapMode:
+            for (size_t i = data.size() - 1; i > 0; --i) {
+                data[i] = (data[i] - data[i - 1]);
+            }
+            return;
+        case NoDeltaMode:
+            return;
+        default:
+            throw runtime_error("unsupported mode");
+        }
+    }
+
 private:
 
     /**
@@ -124,8 +144,7 @@ private:
         if (result != 1) {
             return false;
         }
-        result = fwrite(aligned_buffer, sizeof(buffer[0]),
-                finalsize, fd);
+        result = fwrite(aligned_buffer, sizeof(buffer[0]), finalsize, fd);
         if (result != finalsize) {
             return false;
         }
@@ -197,8 +216,7 @@ private:
             buffer.resize(h.compressedsize + fudgefactor);
         uint32_t *aligned_buffer = &buffer[0];
         assert(!needPaddingTo64bytes(aligned_buffer));
-        result = fread(aligned_buffer, sizeof(buffer[0]),
-                h.compressedsize, fd);
+        result = fread(aligned_buffer, sizeof(buffer[0]), h.compressedsize, fd);
         if (result != h.compressedsize) {
             cerr << "IO status: " << strerror(errno) << endl;
             cerr << "Error reading from file " << endl;

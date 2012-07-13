@@ -37,6 +37,9 @@ bitpackingunaligned.o: ./headers/bitpacking.h ./src/bitpackingunaligned.cpp
 bitpackingaligned.o: ./headers/bitpacking.h ./src/bitpackingaligned.cpp
 	$(CXX) $(CXXFLAGS) -c ./src/bitpackingaligned.cpp -Iheaders
 
+entropy: $(HEADERS) src/entropy.cpp
+	$(CXX) $(CXXFLAGS) -o entropy src/entropy.cpp $(COMMONBINARIES) -Iheaders
+
 gapstats: $(HEADERS) src/gapstats.cpp
 	$(CXX) $(CXXFLAGS) -o gapstats src/gapstats.cpp -Iheaders
 
