@@ -12,7 +12,7 @@
 #include "deltaio.h"
 
 void message(const char * prog) {
-    cerr << " usage : " << prog << " scheme  maropubinaryfile "
+    cerr << " usage : " << prog << "  maropubinaryfile "
             << endl;
     cerr << "By default, is assumes that the original data is made of "
         "sorted distinct integers, to process the more general case,"
@@ -24,7 +24,7 @@ void message(const char * prog) {
 
 int main(int argc, char **argv) {
     uint32_t MAXCOUNTER = 1U << 31;
-    if (argc < 4) {
+    if (argc < 2) {
         message(argv[0]);
         return -1;
     }
