@@ -66,6 +66,10 @@ gapdecoder: $(HEADERS) src/gapdecoder.cpp makefile ./headers/common.h.gch $(COMM
 	$(CXX) $(CXXFLAGS) $(GCCPARAMS)  -Winvalid-pch -o gapdecoder src/gapdecoder.cpp $(COMMONBINARIES) -Iheaders
 
 
+inmemorybenchmark.cpp: $(HEADERS)  src/inmemorybenchmark.cpp ./headers/common.h.gch makefile $(COMMONBINARIES)
+	$(CXX) $(CXXFLAGS) -Winvalid-pch  -o inmemorybenchmark  src/inmemorybenchmark.cpp $(COMMONBINARIES) -Iheaders 
+
+
 gapencoder: $(HEADERS)  src/gapencoder.cpp ./headers/common.h.gch makefile $(COMMONBINARIES)
 	$(CXX) $(CXXFLAGS) -Winvalid-pch  -o gapencoder  src/gapencoder.cpp $(COMMONBINARIES) -Iheaders 
 
