@@ -19,7 +19,7 @@ using namespace std;
 
 struct simplealgostats {
 
-    algostats(shared_ptr<IntegerCODEC> & a) :
+    simplealgostats(shared_ptr<IntegerCODEC> & a) :
     comptime(0), decomptime(0),
     compressedsizeinints(0), totalints(0), algo(a) {
     }

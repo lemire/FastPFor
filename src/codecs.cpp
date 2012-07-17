@@ -391,7 +391,7 @@ int main(int argc, char **argv) {
                                     clu.generateClustered((1U << 9) ,
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                process(myalgos, datas, false, fulldisplay, displayhistogram);
+                process(myalgos, datas, true, fulldisplay, displayhistogram);
                 summarize(myalgos);
                 return 0;
             } else if (strcmp(parameter, "uniformdense") == 0) {
@@ -439,7 +439,7 @@ int main(int argc, char **argv) {
                                     clu.generateClustered((1U << 12) ,
                                             1U << 26));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                process(myalgos, datas, false, fulldisplay, displayhistogram);
+                process(myalgos, datas, true, fulldisplay, displayhistogram);
                 summarize(myalgos);
                 return 0;
             } else if (strcmp(parameter, "clusterdynamic") == 0) {
@@ -457,7 +457,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    process(myalgos, datas, false, fulldisplay, displayhistogram,
+                    process(myalgos, datas, true, fulldisplay, displayhistogram,
                             convert.str());
                 }
                 summarize(myalgos);
@@ -477,23 +477,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    process(myalgos, datas, false, fulldisplay, displayhistogram,
-                            convert.str());
-                }
-                summarize(myalgos);
-                return 0;
-            } else if (strcmp(parameter, "sillyuniformdynamic") == 0) {
-                cout << "# silly uniform data generation..." << endl;
-                const uint32_t N = 4194304;
-                for (uint32_t b = 0; b < 20; ++b) {
-                    vector < vector<uint32_t, cacheallocator> > datas;
-                    for (uint k = 0; k < (1U << 1); ++k) {
-                        datas.push_back(generateArray32(N, (1U << b) - 1));
-
-                    }
-                    ostringstream convert;
-                    convert << b;
-                    process(myalgos, datas, false, fulldisplay, displayhistogram,
+                    process(myalgos, datas, true, fulldisplay, displayhistogram,
                             convert.str());
                 }
                 summarize(myalgos);
