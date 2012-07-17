@@ -34,13 +34,15 @@ public:
         rand(seed) {
     }
     /**
-     * fill the vector with N numbers uniformly picked from  from 0 to Max
+     * fill the vector with N numbers uniformly picked from  from 0 to Max, not including Max
+     * if it is not possible, an exception is thrown
      */
     vector<uint32_t,cacheallocator> generateUniform(uint32_t N, uint32_t Max) {
+        if(Max < N) throw runtime_error("can't generate enough distinct elements in small interval");
         vector < uint32_t,cacheallocator > ans;
-        ans.reserve(Max);
-        if (N > Max)
-            throw runtime_error("not possible");
+        if(N==0) return ans; // nothing to do
+        ans.reserve(N);
+        assert(Max >= 1);
         if (N == Max) {
             for (uint32_t k = 0; k < Max; ++k)
                 ans.push_back(k);
@@ -49,13 +51,13 @@ public:
         if (N > Max / 2) {
             set < uint32_t > s;
             while (s.size() < N)
-                s.insert(rand.getValue(Max) );
+                s.insert(rand.getValue(Max - 1) );
             ans.assign(s.begin(), s.end());
             return ans;
         }
         while (ans.size() < N) {
             while (ans.size() < N) {
-                ans.push_back(rand.getValue(Max) );
+                ans.push_back(rand.getValue(Max - 1) );
             }
             sort(ans.begin(), ans.end());
             auto it = unique(ans.begin(), ans.end());
@@ -76,6 +78,7 @@ public:
         unidg(seed) {
     }
 
+    // Max value is excluded from range
     template<class iterator>
     void fillUniform(iterator begin, iterator end, uint32_t Min, uint32_t Max) {
         vector < uint32_t,cacheallocator > v = unidg.generateUniform(end - begin, Max - Min);
@@ -84,10 +87,13 @@ public:
     }
 
 
+    // Max value is excluded from range
+    // throws exception if impossible
     template<class iterator>
     void fillClustered(iterator begin, iterator end, uint32_t Min, uint32_t Max) {
         const size_t N = end - begin;
         const uint32_t range = Max - Min;
+        if(range < N) throw runtime_error("can't generate that many in small interval.");
         assert(range >= N);
         if ((range == N) or (N < 10)) {
             fillUniform(begin, end, Min, Max);
@@ -111,7 +117,7 @@ public:
         }
     }
 
-
+    // Max value is excluded from range
     vector<uint32_t,cacheallocator> generateClustered(uint32_t N, uint32_t Max) {
         vector < uint32_t,cacheallocator > ans(N);
         fillClustered(ans.begin(), ans.end(), 0, Max);
