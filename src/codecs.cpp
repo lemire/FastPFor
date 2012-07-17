@@ -75,6 +75,19 @@ using namespace std;
 void process(vector<algostats> & myalgos,
         const vector<vector<uint32_t, cacheallocator> > & datas, bool needtodelta,
         bool fulldisplay, bool displayhistogram, string prefix = "") {
+    if(needtodelta) {
+        cout<<"# delta coding requested... checking whether we have sorted arrays...";
+        for(auto x : datas)
+            for (size_t k = 1; k < x.size(); ++k) {
+                if(x[k]>=x[k-1]) {
+                    cerr<<"Delta coding requested, but data is not sorted!"<<endl;
+                    cerr<<"Aborting!"<<endl;
+                    return;
+                }
+            }
+    } else {
+        cout<<"# compressing the arrays themselves, no delta coding applied."<<endl;
+    }
     if (displayhistogram) {
         BitWidthHistoGram hist;
         for (auto i = datas.begin(); i != datas.end(); ++i)
