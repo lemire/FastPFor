@@ -79,12 +79,13 @@ void process(vector<algostats> & myalgos,
         cout<<"# delta coding requested... checking whether we have sorted arrays...";
         for(auto x : datas)
             for (size_t k = 1; k < x.size(); ++k) {
-                if(x[k]>=x[k-1]) {
+                if(x[k]<=x[k-1]) {
                     cerr<<"Delta coding requested, but data is not sorted!"<<endl;
                     cerr<<"Aborting!"<<endl;
                     return;
                 }
             }
+       cout<<" arrays are indeed sorted. Good."<<endl;
     } else {
         cout<<"# compressing the arrays themselves, no delta coding applied."<<endl;
         // we check whether it could have been applied...
@@ -92,14 +93,17 @@ void process(vector<algostats> & myalgos,
         for(auto x : datas)
             if(sorted)
                     for (size_t k = 1; k < x.size(); ++k) {
-                        if(x[k]>=x[k-1]) {
+                        if(x[k]<=x[k-1]) {
                             sorted = false;
                             break;
                         }
                     }
         if(sorted) {
-            cout<<"#\n#\n# you are providing sorted arrays, but you are not requesting delta coding. Are you sure?\n #\n#\n"<<endl;
+            cout<<"#\n#\n# you are providing sorted arrays, but you are not requesting delta coding. Are you sure?\n#\n#\n"<<endl;
+        } else {
+            cout<<"# I verified that the arrays are not sorted so simple delta coding is unapplicable."<<endl;
         }
+
     }
     if (displayhistogram) {
         BitWidthHistoGram hist;
@@ -483,7 +487,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    process(myalgos, datas, false, fulldisplay, displayhistogram,
+                    process(myalgos, datas, true, fulldisplay, displayhistogram,
                             convert.str());
                 }
                 summarize(myalgos);
@@ -502,7 +506,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    process(myalgos, datas, false, fulldisplay, displayhistogram,
+                    process(myalgos, datas, true, fulldisplay, displayhistogram,
                             convert.str());
                 }
                 summarize(myalgos);
