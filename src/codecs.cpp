@@ -87,6 +87,19 @@ void process(vector<algostats> & myalgos,
             }
     } else {
         cout<<"# compressing the arrays themselves, no delta coding applied."<<endl;
+        // we check whether it could have been applied...
+        bool sorted = true;
+        for(auto x : datas)
+            if(sorted)
+                    for (size_t k = 1; k < x.size(); ++k) {
+                        if(x[k]>=x[k-1]) {
+                            sorted = false;
+                            break;
+                        }
+                    }
+        if(sorted) {
+            cout<<"#\n#\n# you are providing sorted arrays, but you are not requesting delta coding. Are you sure?\n #\n#\n"<<endl;
+        }
     }
     if (displayhistogram) {
         BitWidthHistoGram hist;
@@ -264,7 +277,8 @@ static struct option long_options[] = { { "uniformsparseclassic", no_argument,
         no_argument, 0, 0 }, { "zipfian1", no_argument, 0, 0 }, { "zipfian2",
         no_argument, 0, 0 }, { "vclusterdynamic", no_argument, 0, 0 }, {
         "crazyclusterdynamic", no_argument, 0, 0 }, { "clusterdynamic",
-        no_argument, 0, 0 }, { "uniformdynamic", no_argument, 0, 0 }, {
+        no_argument, 0, 0 }, { "uniformdynamic", no_argument, 0, 0 },{ "clusterdynamicpredelta",
+                no_argument, 0, 0 }, { "uniformdynamicpredelta", no_argument, 0, 0 }, {
         "sillyuniformdynamic", no_argument, 0, 0 }, { "codecs",
         required_argument, 0, 'c' }, { "short", no_argument, 0, 's' }, { 0, 0,
         0, 0 } };
@@ -462,15 +476,14 @@ int main(int argc, char **argv) {
                     vector < vector<uint32_t, cacheallocator> > datas;
                     for (uint k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
-                                diffs(
                                         clu.generateClustered(
-                                                (1U << K) , 1U << 29), true));
+                                                (1U << K) , 1U << 29));
                     cout << "# generated " << datas.size() << " arrays" << endl;
                     cout << "# their size is  " << (1U << K) << endl;
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    process(myalgos, datas, true, fulldisplay, displayhistogram,
+                    process(myalgos, datas, false, fulldisplay, displayhistogram,
                             convert.str());
                 }
                 summarize(myalgos);
@@ -482,15 +495,54 @@ int main(int argc, char **argv) {
                     vector < vector<uint32_t, cacheallocator> > datas;
                     for (uint k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
-                                diffs(
                                         clu.generateUniform((1U << K) ,
-                                                1U << 29), true));
+                                                1U << 29));
                     cout << "# generated " << datas.size() << " arrays" << endl;
                     cout << "# their size is  " << (1U << K) << endl;
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    process(myalgos, datas, true, fulldisplay, displayhistogram,
+                    process(myalgos, datas, false, fulldisplay, displayhistogram,
+                            convert.str());
+                }
+                summarize(myalgos);
+                return 0;
+            } else if (strcmp(parameter, "clusterdynamicpredelta") == 0) {
+                cout << "# dynamic clustered data generation..." << endl;
+                ClusteredDataGenerator clu;
+                for (uint32_t K = 10; K <= 25; K += 5) {
+                    vector < vector<uint32_t, cacheallocator> > datas;
+                    for (uint k = 0; k < (1U << (25 - K)); ++k)
+                        datas.push_back(
+                                diffs(
+                                        clu.generateClustered(
+                                                (1U << K) , 1U << 29), true));
+                    cout << "# generated " << datas.size() << " arrays and applied delta coding" << endl;
+                    cout << "# their size is  " << (1U << K) << endl;
+                    const uint32_t p = 29 - K;
+                    ostringstream convert;
+                    convert << p;
+                    process(myalgos, datas, false, fulldisplay, displayhistogram,
+                            convert.str());
+                }
+                summarize(myalgos);
+                return 0;
+            } else if (strcmp(parameter, "uniformdynamicpredelta") == 0) {
+                cout << "# sparse uniform data generation..." << endl;
+                UniformDataGenerator clu;
+                for (uint32_t K = 10; K <= 25; K += 5) {
+                    vector < vector<uint32_t, cacheallocator> > datas;
+                    for (uint k = 0; k < (1U << (25 - K)); ++k)
+                        datas.push_back(
+                                diffs(
+                                        clu.generateUniform((1U << K) ,
+                                                1U << 29), true));
+                    cout << "# generated " << datas.size() << " arrays and applied delta coding" << endl;
+                    cout << "# their size is  " << (1U << K) << endl;
+                    const uint32_t p = 29 - K;
+                    ostringstream convert;
+                    convert << p;
+                    process(myalgos, datas, false, fulldisplay, displayhistogram,
                             convert.str());
                 }
                 summarize(myalgos);
