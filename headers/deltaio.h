@@ -90,7 +90,7 @@ public:
             return;
         case DeltaDGapMode:
             for (size_t i = data.size() - 1; i > 0; --i) {
-                data[i] = (data[i] - data[i - 1]);
+                data[i] -= data[i - 1];
             }
             return;
         case NoDeltaMode:
@@ -129,7 +129,7 @@ private:
         }
         h.data0 = data[0];
         for (size_t i = data.size() - 1; i > 0; --i) {
-            data[i] = valuesaredgap ? (data[i] - data[i - 1] - 1) : (data[i]
+            data[i] = valuesaredgap ? (data[i] - data[i - 1]) : (data[i]
                     - data[i - 1]) & mask;
         }
         if (buffer.size() < data.size() * 2 + fudgefactor)
@@ -224,9 +224,24 @@ private:
         }
         size_t nvalue = data.size() - 1;
         c.decodeArray(aligned_buffer, h.compressedsize, &data[1], nvalue);
-        for (size_t i = 1; i < data.size(); ++i) {
-            data[i] = valuesaredgap ? data[i] + data[i - 1] + 1 : (data[i]
-                    + data[i - 1]) & mask;
+        if (valuesaredgap) {
+            size_t i = 1;
+            for (; i < data.size() - 1; i += 2) {
+                data[i] += data[i - 1] + (valuesaredgap ? 1 : 0);
+                data[i + 1] += data[i] + (valuesaredgap ? 1 : 0);
+            }
+            for (; i != data.size(); ++i) {
+                data[i] += data[i - 1] + (valuesaredgap ? 1 : 0);
+            }
+        } else {
+            size_t i = 1;
+            for (; i < data.size() - 1; i += 2) {
+                data[i] = (data[i] + data[i - 1]) & mask;
+                data[i + 1] = (data[i + 1] + data[i]) & mask;
+            }
+            for (; i != data.size(); ++i) {
+                data[i] += (data[i] + data[i - 1]) & mask;
+            }
         }
         return true;
     }

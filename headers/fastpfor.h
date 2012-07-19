@@ -212,8 +212,7 @@ public:
         for (uint32_t k = 1; k <= 32; ++k) {
             unpackpointers[k] = datatobepacked[k].begin();
         }
-
-             for (uint32_t run = 0; run < nvalue / BlockSize; ++run, out
+        for (uint32_t run = 0; run < nvalue / BlockSize; ++run, out
                 += BlockSize) {
             const uint8_t b = *bytep++;
             const uint8_t cexcept = *bytep++;
@@ -400,7 +399,6 @@ public:
         const uint32_t bytesize = *inexcept++;
         const uint8_t * bytep = reinterpret_cast<const uint8_t *> (inexcept);
         inexcept += (bytesize + sizeof(uint32_t) - 1) / sizeof(uint32_t);
-        //datatobepacked.resize(*inexcept++ ) ;
         size_t cap = datatobepacked.capacity();// theoretically unsafe
         size_t le = initin+length - inexcept;
         inexcept = ecoder.decodeArray(inexcept, le,&datatobepacked[0],cap );
@@ -408,7 +406,7 @@ public:
         length = inexcept - initin;
 
         auto exceptionsptr = datatobepacked.begin();
-       for (uint32_t run = 0; run < nvalue / BlockSize; ++run, out
+        for (uint32_t run = 0; run < nvalue / BlockSize; ++run, out
                 += BlockSize) {
             const uint8_t b = *bytep++;
             const uint8_t cexcept = *bytep++;
@@ -418,13 +416,12 @@ public:
                     out[pos] |= (*(exceptionsptr++)) << b;
                 }
         }
-       assert(in == headerin + wheremeta);
+        assert(in == headerin + wheremeta);
     }
 
     string name() const {
         return "SimplePFor";
     }
-
 };
 
 

@@ -21,8 +21,7 @@ void message(const char * prog) {
     cerr << " usage : " << prog << " scheme  maropubinaryfile compressedfile "
             << endl;
     cerr << "By default, is assumes that the original data is made of "
-        "sorted distinct integers, to process the more general case,"
-        "add the -notdgaps flag." << endl;
+        "sorted integers." << endl;
     cerr << "The -nodelta flag disables delta coding." << endl;
     cerr << "The -minlength ignores all arrays smaller than a threshold."
             << endl;
@@ -51,7 +50,7 @@ int main(int argc, char **argv) {
         } else if (strcmp(argv[argindex], "-nodelta") == 0) {
             mode = DeltaIO::NoDeltaMode;
             ++argindex;
-        } else if (strcmp(argv[argindex], "-notdgaps") == 0) {
+        } else if (strcmp(argv[argindex], "-delta") == 0) {
             mode = DeltaIO::DeltaMode;
             ++argindex;
         } else

@@ -78,25 +78,29 @@ void process(vector<algostats> & myalgos,
     if(needtodelta) {
         cout<<"# delta coding requested... checking whether we have sorted arrays...";
         for(auto x : datas)
-            for (size_t k = 1; k < x.size(); ++k) {
-                if(x[k]>=x[k-1]) {
+            if (x.size()>=1)
+             for (size_t k = 1; k < x.size(); ++k) {
+                if(x[k]<x[k-1]) {
                     cerr<<"Delta coding requested, but data is not sorted!"<<endl;
                     cerr<<"Aborting!"<<endl;
                     return;
                 }
-            }
+             }
+        cout<<"good!"<<endl;
     } else {
         cout<<"# compressing the arrays themselves, no delta coding applied."<<endl;
         // we check whether it could have been applied...
         bool sorted = true;
-        for(auto x : datas)
-            if(sorted)
+#pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations" // otherwise I get bogus warning
+        for(auto & x : datas)
+            if(sorted and (x.size()>=1))
                     for (size_t k = 1; k < x.size(); ++k) {
-                        if(x[k]>=x[k-1]) {
+                        if(x[k]<x[k-1]) {
                             sorted = false;
                             break;
                         }
                     }
+#pragma GCC diagnostic pop
         if(sorted) {
             cout<<"#\n#\n# you are providing sorted arrays, but you are not requesting delta coding. Are you sure?\n #\n#\n"<<endl;
         }
@@ -143,8 +147,8 @@ void process(vector<algostats> & myalgos,
         IntegerCODEC & c = *(i->algo);
         vector<vector<uint32_t, cacheallocator> > backupdatas (datas); // a safe copy
         size_t nvalue;
-        for (uint32_t k = 0; k < datas.size(); ++k) {
-            auto data = backupdatas[k];
+        for (size_t k = 0; k < datas.size(); ++k) {
+            auto & data = backupdatas[k];
             data.reserve(data.size() + 1024);
             // ofk assumes the 1024 padding can accommodate an extra 60 bytes from alignment
             outs[k].clear();
@@ -154,14 +158,14 @@ void process(vector<algostats> & myalgos,
         z.reset();
         zcpu.reset();
         cpu.start();
-        for (uint32_t k = 0; k < backupdatas.size(); ++k) {
+        for (size_t k = 0; k < backupdatas.size(); ++k) {
             vector<uint32_t, cacheallocator> &data = backupdatas[k];
             nvalue = outs[k].size();
             uint32_t *aligned_buffer = &outs[k][0];
             assert(!needPaddingTo64bytes(aligned_buffer));
             if (needtodelta) {
                 for (size_t i = data.size() - 1; i > 0; --i) {
-                    data[i] = data[i] - data[i - 1] - 1;
+                    data[i] -=  data[i - 1];
                 }
                 c.encodeArray(&data[1], data.size() - 1, aligned_buffer, nvalue);
             } else {
@@ -186,7 +190,7 @@ void process(vector<algostats> & myalgos,
         cout << std::setprecision(4) << cpu.stop() * 1.0 / er.totallength
                 << "\t";
 
-        for (uint32_t k = 0; k < backupdatas.size(); ++k) {
+        for (size_t k = 0; k < backupdatas.size(); ++k) {
             auto &data = backupdatas[k];
             recovereds[k].clear();
             recovereds[k].resize(data.size() + 1024, 0);
@@ -195,7 +199,7 @@ void process(vector<algostats> & myalgos,
         z.reset();
         zcpu.reset();
         cpu.start();
-        for (uint32_t k = 0; k < backupdatas.size(); ++k) {
+        for (size_t k = 0; k < backupdatas.size(); ++k) {
             const vector<uint32_t, cacheallocator> &data = backupdatas[k];
             size_t recoveredsize = data.size();
             uint32_t *aligned_buffer = &outs[k][0];
@@ -210,8 +214,15 @@ void process(vector<algostats> & myalgos,
                 }
                 r.resize(recoveredsize + 1);
                 r[0] = backupdatas[k][0];
-                for (size_t i = 1; i < r.size(); ++i) {
-                    r[i] = r[i] + r[i - 1] + 1;
+                if(!r.empty()) {
+                  size_t i = 1;
+                  for (; i < r.size() - 1; i+=2) {
+                      r[i] += r[i - 1];
+                      r[i+1] += r[i ];
+                  }
+                  for (; i != r.size(); ++i) {
+                      r[i] += r[i - 1];
+                  }
                 }
             } else {
                 c.decodeArray(aligned_buffer, outs[k].size(),
@@ -244,7 +255,7 @@ void process(vector<algostats> & myalgos,
 
         i->bitsperint.push_back(totalcompressed * 32.0 / er.totallength);
 
-        for (uint32_t k = 0; k < datas.size(); ++k) {
+        for (size_t k = 0; k < datas.size(); ++k) {
             const vector<uint32_t, cacheallocator> &data = datas[k];
             const vector<uint32_t, cacheallocator> &recovered = recovereds[k];
 
@@ -319,8 +330,8 @@ int main(int argc, char **argv) {
     bool displayhistogram = false;
     vector < shared_ptr<IntegerCODEC> > tmp = CODECFactory::allSchemes();// the default
     vector<algostats> myalgos;
-    for (auto i = tmp.begin(); i != tmp.end(); ++i)
-        myalgos.push_back(algostats(*i));
+    for (auto & i  : tmp)
+        myalgos.push_back(algostats(i));
     int c;
     while (1) {
         int option_index = 0;
@@ -483,7 +494,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    process(myalgos, datas, false, fulldisplay, displayhistogram,
+                    process(myalgos, datas, true, fulldisplay, displayhistogram,
                             convert.str());
                 }
                 summarize(myalgos);
@@ -502,7 +513,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    process(myalgos, datas, false, fulldisplay, displayhistogram,
+                    process(myalgos, datas, true, fulldisplay, displayhistogram,
                             convert.str());
                 }
                 summarize(myalgos);
@@ -516,7 +527,7 @@ int main(int argc, char **argv) {
                         datas.push_back(
                                 diffs(
                                         clu.generateClustered(
-                                                (1U << K) , 1U << 29), true));
+                                                (1U << K) , 1U << 29), false));
                     cout << "# generated " << datas.size() << " arrays and applied delta coding" << endl;
                     cout << "# their size is  " << (1U << K) << endl;
                     const uint32_t p = 29 - K;
@@ -536,7 +547,7 @@ int main(int argc, char **argv) {
                         datas.push_back(
                                 diffs(
                                         clu.generateUniform((1U << K) ,
-                                                1U << 29), true));
+                                                1U << 29), false));
                     cout << "# generated " << datas.size() << " arrays and applied delta coding" << endl;
                     cout << "# their size is  " << (1U << K) << endl;
                     const uint32_t p = 29 - K;

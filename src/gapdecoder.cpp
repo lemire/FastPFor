@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
     if (strcmp(argv[argindex], "-nodelta") == 0) {
         mode = DeltaIO::NoDeltaMode;
         ++argindex;
-    } else if (strcmp(argv[argindex], "-notdgaps") == 0) {
+    } else if (strcmp(argv[argindex], "-delta") == 0) {
         mode = DeltaIO::DeltaMode;
         ++argindex;
     }
