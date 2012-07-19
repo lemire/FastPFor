@@ -13,7 +13,7 @@
  * with minor modifications by D. Lemire.
  */
 #ifndef __SSSE3__
-#pragma message "Disabling varintg8iu due to lack of SSSE3 support, try adding -msss.e3"
+#pragma message "Disabling varintg8iu due to lack of SSSE3 support, try adding -mssse3"
 #else
 #ifndef VARINTG8IU_H__
 #define VARINTG8IU_H__

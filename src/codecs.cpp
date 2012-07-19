@@ -23,7 +23,7 @@
 struct algostats {
 
     algostats(shared_ptr<IntegerCODEC> & a) :
-        compspeed(), decompspeed(), cpucompspeed(), cpudecompspeed(),
+        compspeed(), decompspeed(), 
                 bitsperint(), algo(a) {
     }
     string name() {
@@ -37,8 +37,6 @@ struct algostats {
     }
     vector<double> compspeed;
     vector<double> decompspeed;
-    vector<double> cpucompspeed;
-    vector<double> cpudecompspeed;
     vector<double> bitsperint;
     shared_ptr<IntegerCODEC> algo;
 
@@ -61,20 +59,14 @@ void summarize(vector<algostats> v) {
                     << i->compspeed[k] << " \t " << i->decompspeed[k] << " \t "
                     << i->bitsperint[k] << endl;
         cout << "#" << endl;
-        cout << "#cpu  (comp mis, decomp mis, bits per int)" << endl;
-        cout << "#" << endl;
-        for (auto i = v.begin(); i != v.end(); ++i)
-            cout << "# " << std::setprecision(4) << i->name(40) << " \t "
-                    << i->cpucompspeed[k] << " \t " << i->cpudecompspeed[k]
-                    << " \t " << i->bitsperint[k] << endl;
     }
 }
 
 using namespace std;
 
 void process(vector<algostats> & myalgos,
-        const vector<vector<uint32_t, cacheallocator> > & datas, bool needtodelta,
-        bool fulldisplay, bool displayhistogram, string prefix = "") {
+        const vector<vector<uint32_t, cacheallocator> > & datas, const bool needtodelta,
+        const bool fulldisplay, const bool displayhistogram, const string prefix = "", const bool computeentropy = false) {
     if(needtodelta) {
         cout<<"# delta coding requested... checking whether we have sorted arrays...";
         for(auto x : datas)
@@ -114,7 +106,7 @@ void process(vector<algostats> & myalgos,
         hist.display("#");
     }
     cout << "#";
-    if (fulldisplay)
+    if (fulldisplay and computeentropy)
         cout << " entropy  databits(entropy) ";
 
     for (auto i = myalgos.begin(); i != myalgos.end(); ++i) {
@@ -131,17 +123,18 @@ void process(vector<algostats> & myalgos,
                 << "# for each scheme we give compression time (clock cycles per integer),"
                     " decompression time and bits per integer" << endl;
     EntropyRecorder er;
-    for (uint k = 0; k < datas.size(); ++k)
-        er.eat(&datas[k][0], datas[k].size());
-    cout << "# generated " << er.totallength << " integers" << endl;
+    if(computeentropy) {
+         for (uint k = 0; k < datas.size(); ++k)
+           er.eat(&datas[k][0], datas[k].size());
+         cout << "# generated " << er.totallength << " integers" << endl;
+    }
     cout << prefix << "\t";
-    if (fulldisplay)
+    if(computeentropy and fulldisplay)
         cout << std::setprecision(4) << er.computeShannon() << "\t";
-    if (fulldisplay)
+    if (fulldisplay and fulldisplay)
         cout << std::setprecision(4) << er.computeDataBits() << "\t";
 
     WallClockTimer z;
-    CPUTimer zcpu;
     CPUBenchmark cpu;
     vector < vector<uint32_t, cacheallocator> > outs(datas.size());
     vector < vector<uint32_t, cacheallocator> > recovereds(datas.size());
@@ -149,8 +142,10 @@ void process(vector<algostats> & myalgos,
         IntegerCODEC & c = *(i->algo);
         vector<vector<uint32_t, cacheallocator> > backupdatas (datas); // a safe copy
         size_t nvalue;
+        size_t totallength = 0;
         for (size_t k = 0; k < datas.size(); ++k) {
             auto & data = backupdatas[k];
+            totallength += data.size();
             data.reserve(data.size() + 1024);
             // ofk assumes the 1024 padding can accommodate an extra 60 bytes from alignment
             outs[k].clear();
@@ -158,7 +153,6 @@ void process(vector<algostats> & myalgos,
         }
         size_t totalcompressed = 0;
         z.reset();
-        zcpu.reset();
         cpu.start();
         for (size_t k = 0; k < backupdatas.size(); ++k) {
             vector<uint32_t, cacheallocator> &data = backupdatas[k];
@@ -177,19 +171,16 @@ void process(vector<algostats> & myalgos,
             totalcompressed += nvalue;
         }
         uint64_t timemscomp = z.split();
-        uint64_t cputimemscomp = zcpu.split();
-
-        i->compspeed.push_back(er.totallength * 1.0 / timemscomp);
-        i->cpucompspeed.push_back(er.totallength * 1.0 / cputimemscomp);
+        i->compspeed.push_back(totallength * 1.0 / timemscomp);
 
         if (fulldisplay)
-            cout << std::setprecision(4) << er.totallength * 1.0 / timemscomp
+            cout << std::setprecision(4) << totallength * 1.0 / timemscomp
                     << "\t";
         if (fulldisplay)
             cout << std::setprecision(4) << timemscomp * 1000.0
-                    / er.totallength << "\t";
+                    / totallength << "\t";
 
-        cout << std::setprecision(4) << cpu.stop() * 1.0 / er.totallength
+        cout << std::setprecision(4) << cpu.stop() * 1.0 / totallength
                 << "\t";
 
         for (size_t k = 0; k < backupdatas.size(); ++k) {
@@ -199,7 +190,6 @@ void process(vector<algostats> & myalgos,
         }
 
         z.reset();
-        zcpu.reset();
         cpu.start();
         for (size_t k = 0; k < backupdatas.size(); ++k) {
             const vector<uint32_t, cacheallocator> &data = backupdatas[k];
@@ -238,24 +228,22 @@ void process(vector<algostats> & myalgos,
         }
 
         uint64_t timemsdecomp = z.split();
-        uint64_t cputimemsdecomp = zcpu.split();
-
-        i->decompspeed.push_back(er.totallength * 1.0 / timemsdecomp);
-        i->cpudecompspeed.push_back(er.totallength * 1.0 / cputimemsdecomp);
+ 
+        i->decompspeed.push_back(totallength * 1.0 / timemsdecomp);
         if (fulldisplay)
-            cout << std::setprecision(4) << er.totallength * 1.0 / timemsdecomp
+            cout << std::setprecision(4) << totallength * 1.0 / timemsdecomp
                     << "\t";
         if (fulldisplay)
             cout << std::setprecision(4) << timemsdecomp * 1000.0
-                    / er.totallength << "\t";
+                    / totallength << "\t";
 
-        cout << std::setprecision(4) << cpu.stop() * 1.0 / er.totallength
+        cout << std::setprecision(4) << cpu.stop() * 1.0 / totallength
                 << "\t";
 
-        cout << std::setprecision(4) << totalcompressed * 32.0 / er.totallength
+        cout << std::setprecision(4) << totalcompressed * 32.0 / totallength
                 << "\t";
 
-        i->bitsperint.push_back(totalcompressed * 32.0 / er.totallength);
+        i->bitsperint.push_back(totalcompressed * 32.0 / totallength);
 
         for (size_t k = 0; k < datas.size(); ++k) {
             const vector<uint32_t, cacheallocator> &data = datas[k];

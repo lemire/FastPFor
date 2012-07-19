@@ -24,7 +24,7 @@ public:
             return;
         totallength += length;
         for (uint32_t k = 0; k < length; ++k, ++in) {
-            map<uint32_t, double>::iterator i = counter.find(*in);
+            maptype::iterator i = counter.find(*in);
             if (i != counter.end())
                 i->second += 1;
             else
@@ -34,7 +34,7 @@ public:
 
     double computeShannon() {
         double total = 0;
-        for (map<uint32_t, double>::iterator i = counter.begin(); i
+        for (maptype::iterator i = counter.begin(); i
                 != counter.end(); ++i) {
             const double x = i->second;
             total += x / totallength * log(totallength / x) / log(2);
@@ -45,13 +45,14 @@ public:
     __attribute__ ((pure))
     double computeDataBits() {
         double total = 0;
-        for (map<uint32_t, double>::const_iterator i = counter.begin(); i
+        for (maptype::const_iterator i = counter.begin(); i
                 != counter.end(); ++i) {
             total += i->second * 1.0 / totallength * gccbits(i->first);
         }
         return total;
     }
-    map<uint32_t, double> counter;
+    typedef unordered_map<uint32_t,size_t>  maptype;
+    maptype counter;
     size_t totallength;
 };
 
