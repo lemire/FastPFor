@@ -28,53 +28,44 @@ public:
     /*
      *  Input data is modified in the encoding process.
      */
-    void encode(IntegerCODEC & c, uint32_t *in, const size_t length,
+    void encodeWithPaging(IntegerCODEC & c, uint32_t *in, const size_t length,
             uint32_t * out, size_t &nvalue) {
         size_t initnvalue (nvalue);
         size_t nvaluesofar (0);
-        //int counter = 0;
         const uint32_t * const initout = out;
         for(size_t i = 0; i < length; i += PageSize) {
             size_t thisnvalue = initnvalue - nvaluesofar;
             size_t thislength = length-i < PageSize? length - i : PageSize;
             uint32_t * header = out++;
-            encodePage(c,in+i,thislength,out,thisnvalue);
+            encode(c,in+i,thislength,out,thisnvalue);
             *header = thisnvalue;
             out += thisnvalue;
             thisnvalue += 1;
             nvaluesofar += thisnvalue;
-//            cout<<"produced "<<nvaluesofar<<" so far and "<<thisnvalue<<" this round from "<<thislength<<" round = "<<(counter++)<<endl;
-  //          cout<<"writing 123 at "<<out-initout<<endl;
-           // *(out++) = 123; ++nvaluesofar;
         }
-    //    cout<<"how many written : "<<nvaluesofar<<endl;
         nvalue = nvaluesofar;
         assert(nvalue + initout == out);
     }
-    const uint32_t * decode(IntegerCODEC & c, const uint32_t *in, const size_t length,
+    const uint32_t * decodeWithPaging(IntegerCODEC & c, const uint32_t *in, const size_t length,
             uint32_t *out, size_t & nvalue) {
         size_t initnvalue (nvalue);
         size_t nvaluesofar (0);
         const uint32_t * const initin (in);
-       // int counter = 0;
-      //  cout<<"available to read : "<<length<<endl;
-      //  cout<<in[length-1]<<endl;
+
         for(const uint32_t * const finalin = in + length; in < finalin; ) {
             size_t lengthtoread = *in++;
             size_t thisnvalue = initnvalue - nvaluesofar < PageSize ? initnvalue - nvaluesofar : PageSize ;
-            const uint32_t * newin = decodePage(c, in, lengthtoread,out, thisnvalue);
+            const uint32_t * newin = decode(c, in, lengthtoread,out, thisnvalue);
             assert(newin == in + lengthtoread);
             in = newin;
             out += thisnvalue;
             nvaluesofar += thisnvalue;
-        //    cout<<"consummed "<<(in-initin)<<" so far at round "<<(counter++)<<endl;
-           // assert(*(in++) == 123);
         }
         assert(in  <= length + initin);
         return in;
     }
 
-    void encodePage(IntegerCODEC & c, uint32_t *in, const size_t length,
+    static void encode(IntegerCODEC & c, uint32_t *in, const size_t length,
             uint32_t * out, size_t &nvalue) {
         if (length == 0)
             throw runtime_error("delta coding impossible with no value!");
@@ -85,7 +76,7 @@ public:
         c.encodeArray(in + 1, length - 1, out + 1, nvalue);
         nvalue += 1;
     }
-    const uint32_t * decodePage(IntegerCODEC & c, const uint32_t *in, const size_t length,
+    static const uint32_t * decode(IntegerCODEC & c, const uint32_t *in, const size_t length,
             uint32_t *out, size_t & nvalue) {
         out[0] = in[0];
         const uint32_t * finalin = c.decodeArray(in + 1, length - 1, out + 1, nvalue);
