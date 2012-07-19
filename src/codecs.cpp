@@ -67,7 +67,7 @@ using namespace std;
 
 void process(vector<algostats> & myalgos,
         const vector<vector<uint32_t, cacheallocator> > & datas, const bool needtodelta,
-        const bool fulldisplay, const bool displayhistogram, const bool computeentropy,const bool withpaging, const string prefix = "") {
+        const bool fulldisplay, const bool displayhistogram, const bool computeentropy, const string prefix = "") {
     if(needtodelta) {
         cout<<"# delta coding requested... checking whether we have sorted arrays...";
         for(auto x : datas)
@@ -123,7 +123,6 @@ void process(vector<algostats> & myalgos,
                 << "# for each scheme we give compression time (clock cycles per integer),"
                     " decompression time and bits per integer" << endl;
     EntropyRecorder er;
-    PagedDelta pd;
     if(computeentropy) {
          for (uint k = 0; k < datas.size(); ++k)
            er.eat(&datas[k][0], datas[k].size());
@@ -155,33 +154,24 @@ void process(vector<algostats> & myalgos,
             vector<uint32_t, cacheallocator> backupdata (datas[k]); // making a copy to be safe
             backupdata.reserve(backupdata.size() + 1024);
             assert(datas[k].size() == backupdata.size());
-            nvalue = outs.capacity();// theoretically usafe
+            nvalue = outs.size();// theoretically usafe
 
             z.reset();
             if (needtodelta) {
-                if(withpaging)
-                    pd.encodeWithPaging(c,&backupdata[0],backupdata.size(),&outs[0],nvalue);
-                else
-                    PagedDelta::encode(c,&backupdata[0],backupdata.size(),&outs[0],nvalue);
+                    Delta::encode(c,&backupdata[0],backupdata.size(),&outs[0],nvalue);
             } else {
                 c.encodeArray(&backupdata[0], backupdata.size(), &outs[0], nvalue);
             }
             timemscomp += z.split();
-            //outs.resize(nvalue);
             totalcompressed += nvalue;
 
             size_t recoveredsize = backupdata.size();
-            assert(datas[k].size() == backupdata.size());
-            //recovereds.resize(recoveredsize);
 
             z.reset();
             if (needtodelta) {
-                            if(withpaging)
-                                pd.decodeWithPaging(c,&outs[0],nvalue,&recovereds[0],recoveredsize);
-                            else
-                                PagedDelta::decode(c,&outs[0],nvalue,&recovereds[0],recoveredsize);
+                    Delta::decode(c,&outs[0],nvalue,&recovereds[0],recoveredsize);
              } else {
-                            c.decodeArray(&outs[0], outs.size(),
+                    c.decodeArray(&outs[0], outs.size(),
                                     &recovereds[0], recoveredsize);
 
             }
@@ -268,7 +258,6 @@ int main(int argc, char **argv) {
     bool fulldisplay = true;
     bool displayhistogram = false;
     bool computeentropy = false;
-    bool withpaging = false;
 
     vector < shared_ptr<IntegerCODEC> > tmp = CODECFactory::allSchemes();// the default
     vector<algostats> myalgos;
@@ -277,7 +266,7 @@ int main(int argc, char **argv) {
     int c;
     while (1) {
         int option_index = 0;
-        c = getopt_long(argc, argv, "pec:", long_options, &option_index);
+        c = getopt_long(argc, argv, "ec:", long_options, &option_index);
         if (c == -1)
             break;
         switch (c) {
@@ -293,9 +282,6 @@ int main(int argc, char **argv) {
                 }
             }
         }
-            break;
-        case 'p':
-            withpaging = true;
             break;
         case 'e':
             computeentropy = true;
@@ -320,7 +306,7 @@ int main(int argc, char **argv) {
                 cout << "# zipfian 1 data generation..." << endl;
                 for (uint k = 0; k < (1U << 1); ++k)
                     datas.push_back(generateZipfianArray32(N, 1.0, 1U << 20));
-                process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy, withpaging);
+                process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy);
                 summarize(myalgos);
                 return 0;
             } else if (strcmp(parameter, "zipfian2") == 0) {
@@ -329,7 +315,7 @@ int main(int argc, char **argv) {
                 for (uint k = 0; k < (1U << 1); ++k)
                     cout << "# zipfian 2 data generation..." << endl;
                 datas.push_back(generateZipfianArray32(N, 2.0, 1U << 20));
-                process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy, withpaging);
+                process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy);
                 summarize(myalgos);
                 return 0;
             } else if (strcmp(parameter, "uniformdenseclassic") == 0) {
@@ -341,7 +327,7 @@ int main(int argc, char **argv) {
                                     clu.generateUniform((1U << 18) ,
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, withpaging);
+                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy);
                 summarize(myalgos);
                 return 0;
             } else if (strcmp(parameter, "uniformsparseclassic") == 0) {
@@ -353,7 +339,7 @@ int main(int argc, char **argv) {
                                     clu.generateUniform((1U << 9) ,
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, withpaging);
+                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy);
                 summarize(myalgos);
                 return 0;
             } else if (strcmp(parameter, "clusterdenseclassic") == 0) {
@@ -365,7 +351,7 @@ int main(int argc, char **argv) {
                                     clu.generateClustered((1U << 18) ,
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, withpaging);
+                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy);
                 summarize(myalgos);
                 return 0;
             } else if (strcmp(parameter, "clustersparseclassic") == 0) {
@@ -377,7 +363,7 @@ int main(int argc, char **argv) {
                                     clu.generateClustered((1U << 9) ,
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, withpaging);
+                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy);
                 summarize(myalgos);
                 return 0;
             } else if (strcmp(parameter, "uniformdense") == 0) {
@@ -389,7 +375,7 @@ int main(int argc, char **argv) {
                                     clu.generateUniform((1U << 22) ,
                                             1U << 29));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, withpaging);
+                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy);
                 summarize(myalgos);
                 return 0;
             } else if (strcmp(parameter, "uniformsparse") == 0) {
@@ -401,7 +387,7 @@ int main(int argc, char **argv) {
                                     clu.generateUniform((1U << 12) ,
                                             1U << 29));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, withpaging);
+                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy);
                 summarize(myalgos);
                 return 0;
             } else if (strcmp(parameter, "clusterdense") == 0) {
@@ -413,7 +399,7 @@ int main(int argc, char **argv) {
                                     clu.generateClustered((1U << 23) ,
                                             1U << 26));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, withpaging);
+                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy);
                 summarize(myalgos);
                 return 0;
             } else if (strcmp(parameter, "clustersparse") == 0) {
@@ -425,7 +411,7 @@ int main(int argc, char **argv) {
                                     clu.generateClustered((1U << 12) ,
                                             1U << 26));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, withpaging);
+                process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy);
                 summarize(myalgos);
                 return 0;
             } else if (strcmp(parameter, "clusterdynamic") == 0) {
@@ -442,7 +428,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, withpaging,
+                    process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy,
                             convert.str());
                 }
                 summarize(myalgos);
@@ -461,7 +447,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, withpaging,
+                    process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy,
                             convert.str());
                 }
                 summarize(myalgos);
@@ -480,7 +466,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, withpaging,
+                    process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy,
                             convert.str());
                 }
                 summarize(myalgos);
@@ -499,7 +485,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, withpaging,
+                    process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy,
                             convert.str());
                 }
                 summarize(myalgos);
@@ -519,7 +505,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy, withpaging,
+                    process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy,
                             convert.str());
                 }
                 summarize(myalgos);
@@ -539,7 +525,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy, withpaging,
+                    process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy,
                             convert.str());
                 }
                 summarize(myalgos);

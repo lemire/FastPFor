@@ -16,19 +16,50 @@
  * It organizes the data by pages to avoid cache
  * misses.
  */
-class PagedDelta {
+class Delta {
 public:
-    size_t PageSize;
 
-    PagedDelta(size_t ps = 65536 + 1) ://recommended to choose a power of 2 + 1
+    static void encode(IntegerCODEC & c, uint32_t *in, const size_t length,
+            uint32_t * out, size_t &nvalue) {
+        if (length == 0)
+            throw runtime_error("delta coding impossible with no value!");
+        for (size_t i = length - 1; i > 0; --i) {
+            in[i] -= in[i - 1];
+        }
+        out[0] = in[0];
+        c.encodeArray(in + 1, length - 1, out + 1, nvalue);
+        nvalue += 1;
+    }
+    static const uint32_t * decode(IntegerCODEC & c, const uint32_t *in, const size_t length,
+            uint32_t *out, size_t & nvalue) {
+        out[0] = in[0];
+        const uint32_t * finalin = c.decodeArray(in + 1, length - 1, out + 1, nvalue);
+        nvalue += 1;
+        size_t i = 1;
+        for (; i < nvalue - 1; i += 2) {
+            out[i] += out[i - 1];
+            out[i + 1] += out[i];
+        }
+        for (; i != nvalue; ++i) {
+            out[i] += out[i - 1];
+        }
+        return finalin;
+    }
+
+
+
+
+    /*size_t PageSize;
+
+    Delta(size_t ps = 65536 + 1) ://recommended to choose a power of 2 + 1
         PageSize(ps) {
 
-    }
+    }*/
 
     /*
      *  Input data is modified in the encoding process.
      */
-    void encodeWithPaging(IntegerCODEC & c, uint32_t *in, const size_t length,
+    /*void encodeWithPaging(IntegerCODEC & c, uint32_t *in, const size_t length,
             uint32_t * out, size_t &nvalue) {
         size_t initnvalue (nvalue);
         size_t nvaluesofar (0);
@@ -63,35 +94,7 @@ public:
         }
         assert(in  <= length + initin);
         return in;
-    }
-
-    static void encode(IntegerCODEC & c, uint32_t *in, const size_t length,
-            uint32_t * out, size_t &nvalue) {
-        if (length == 0)
-            throw runtime_error("delta coding impossible with no value!");
-        for (size_t i = length - 1; i > 0; --i) {
-            in[i] -= in[i - 1];
-        }
-        out[0] = in[0];
-        c.encodeArray(in + 1, length - 1, out + 1, nvalue);
-        nvalue += 1;
-    }
-    static const uint32_t * decode(IntegerCODEC & c, const uint32_t *in, const size_t length,
-            uint32_t *out, size_t & nvalue) {
-        out[0] = in[0];
-        const uint32_t * finalin = c.decodeArray(in + 1, length - 1, out + 1, nvalue);
-        nvalue += 1;
-        size_t i = 1;
-        for (; i < nvalue - 1; i += 2) {
-            out[i] += out[i - 1];
-            out[i + 1] += out[i];
-        }
-        for (; i != nvalue; ++i) {
-            out[i] += out[i - 1];
-        }
-        return finalin;
-    }
-
+    }*/
 
 };
 
