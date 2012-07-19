@@ -50,7 +50,7 @@ public:
     }
     // proxy for userelapsed
     uint64_t elapsed() {
-        return userelapsed();
+        return totalelapsed();
     }
 
     uint64_t totalelapsed() {
