@@ -78,7 +78,6 @@ void process(vector<algostats> & myalgos,
     if(needtodelta) {
         cout<<"# delta coding requested... checking whether we have sorted arrays...";
         for(auto x : datas)
-            if (x.size()>=1)
              for (size_t k = 1; k < x.size(); ++k) {
                 if(x[k]<x[k-1]) {
                     cerr<<"Delta coding requested, but data is not sorted!"<<endl;
@@ -86,7 +85,7 @@ void process(vector<algostats> & myalgos,
                     return;
                 }
              }
-        cout<<"good!"<<endl;
+        cout<<" arrays are indeed sorted. Good."<<endl;
     } else {
         cout<<"# compressing the arrays themselves, no delta coding applied."<<endl;
         // we check whether it could have been applied...
@@ -102,8 +101,11 @@ void process(vector<algostats> & myalgos,
                     }
 #pragma GCC diagnostic pop
         if(sorted) {
-            cout<<"#\n#\n# you are providing sorted arrays, but you are not requesting delta coding. Are you sure?\n #\n#\n"<<endl;
+            cout<<"#\n#\n# you are providing sorted arrays, but you are not requesting delta coding. Are you sure?\n#\n#\n"<<endl;
+        } else {
+            cout<<"# I verified that the arrays are not sorted so simple delta coding is unapplicable."<<endl;
         }
+
     }
     if (displayhistogram) {
         BitWidthHistoGram hist;
