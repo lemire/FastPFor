@@ -116,8 +116,7 @@ void process(vector<algostats> & myalgos,
     cout << endl;
     if (fulldisplay)
         cout
-                << "# for each scheme we give compression speed (million int./s, nano s/ int,"
-                    " cpu cycle/integer),"
+                << "# for each scheme we give compression speed (million int./s)"
                     " decompression speed and bits per integer" << endl;
     else
         cout
@@ -133,118 +132,86 @@ void process(vector<algostats> & myalgos,
     cout << prefix << "\t";
     if(computeentropy and fulldisplay)
         cout << std::setprecision(4) << er.computeShannon() << "\t";
-    if (fulldisplay and fulldisplay)
+    if (computeentropy and fulldisplay)
         cout << std::setprecision(4) << er.computeDataBits() << "\t";
 
     WallClockTimer z;
-    CPUBenchmark cpu;
-    vector < vector<uint32_t, cacheallocator> > outs(datas.size());
-    vector < vector<uint32_t, cacheallocator> > recovereds(datas.size());
     for (auto i = myalgos.begin(); i != myalgos.end(); ++i) {
         IntegerCODEC & c = *(i->algo);
-        vector<vector<uint32_t, cacheallocator> > backupdatas (datas); // a safe copy
         size_t nvalue;
         size_t totallength = 0;
+        size_t maxlength = 0;
         for (size_t k = 0; k < datas.size(); ++k) {
-            auto & data = backupdatas[k];
+            auto & data = datas[k];
             totallength += data.size();
-            data.reserve(data.size() + 1024);
-            outs[k].clear();
-            outs[k].resize(2 * data.size() + 1024);
-        }
+            if(maxlength < data.size()) maxlength = data.size();
+         }
+        vector<uint32_t, cacheallocator> outs(2 * maxlength + 1024);
+        vector<uint32_t, cacheallocator> recovereds(maxlength + 1024);
         size_t totalcompressed = 0;
-        z.reset();
-        cpu.start();
-        for (size_t k = 0; k < backupdatas.size(); ++k) {
-            vector<uint32_t, cacheallocator> &data = backupdatas[k];
-            nvalue = outs[k].size();
+        uint64_t timemsdecomp = 0;
+        uint64_t timemscomp = 0;
+        for (size_t k = 0; k < datas.size(); ++k) {
+            vector<uint32_t, cacheallocator> backupdata (datas[k]); // making a copy to be safe
+            backupdata.reserve(backupdata.size() + 1024);
+            assert(datas[k].size() == backupdata.size());
+            nvalue = outs.capacity();// theoretically usafe
+
+            z.reset();
             if (needtodelta) {
                 if(withpaging)
-                    pd.encodeWithPaging(c,&data[0],data.size(),&outs[k][0],nvalue);
+                    pd.encodeWithPaging(c,&backupdata[0],backupdata.size(),&outs[0],nvalue);
                 else
-                    PagedDelta::encode(c,&data[0],data.size(),&outs[k][0],nvalue);
+                    PagedDelta::encode(c,&backupdata[0],backupdata.size(),&outs[0],nvalue);
             } else {
-                c.encodeArray(&data[0], data.size(), &outs[k][0], nvalue);
+                c.encodeArray(&backupdata[0], backupdata.size(), &outs[0], nvalue);
             }
-            outs[k].resize(nvalue);
+            timemscomp += z.split();
+            //outs.resize(nvalue);
             totalcompressed += nvalue;
-        }
-        uint64_t timemscomp = z.split();
-        i->compspeed.push_back(totallength * 1.0 / timemscomp);
 
+            size_t recoveredsize = backupdata.size();
+            assert(datas[k].size() == backupdata.size());
+            //recovereds.resize(recoveredsize);
+
+            z.reset();
+            if (needtodelta) {
+                            if(withpaging)
+                                pd.decodeWithPaging(c,&outs[0],nvalue,&recovereds[0],recoveredsize);
+                            else
+                                PagedDelta::decode(c,&outs[0],nvalue,&recovereds[0],recoveredsize);
+             } else {
+                            c.decodeArray(&outs[0], outs.size(),
+                                    &recovereds[0], recoveredsize);
+
+            }
+            timemsdecomp += z.split();
+            if(recoveredsize!= datas[k].size()) {
+                cerr<<" expected size of "<<datas[k].size()<<" got "<<recoveredsize<<endl;
+                throw logic_error("arrays don't have same size: bug.");
+            }
+            if (!equal(datas[k].begin(),datas[k].end(), recovereds.begin()))  {
+                throw logic_error("we have a bug");
+            }
+
+        }
+        i->compspeed.push_back(totallength * 1.0 / timemscomp);
         if (fulldisplay)
             cout << std::setprecision(4) << totallength * 1.0 / timemscomp
                     << "\t";
-        if (fulldisplay)
-            cout << std::setprecision(4) << timemscomp * 1000.0
-                    / totallength << "\t";
-
-        cout << std::setprecision(4) << cpu.stop() * 1.0 / totallength
-                << "\t";
-
-        for (size_t k = 0; k < backupdatas.size(); ++k) {
-            auto &data = backupdatas[k];
-            recovereds[k].clear();
-            recovereds[k].resize(data.size() + 1024, 0);
-        }
-
-        z.reset();
-        cpu.start();
-        for (size_t k = 0; k < backupdatas.size(); ++k) {
-            const vector<uint32_t, cacheallocator> &data = backupdatas[k];
-            size_t recoveredsize = data.size();
-            uint32_t *aligned_buffer = &outs[k][0];
-            assert(!needPaddingTo64bytes(aligned_buffer));
-            if (needtodelta) {
-                if(withpaging)
-                    pd.decodeWithPaging(c,&outs[k][0],outs[k].size(),&recovereds[k][0],recoveredsize);
-                else
-                    PagedDelta::decode(c,&outs[k][0],outs[k].size(),&recovereds[k][0],recoveredsize);
-                recovereds[k].resize(recoveredsize);
-            } else {
-                c.decodeArray(aligned_buffer, outs[k].size(),
-                        &recovereds[k][0], recoveredsize);
-                recovereds[k].resize(recoveredsize);
-            }
-        }
-
-        uint64_t timemsdecomp = z.split();
- 
+        //if (fulldisplay)
+        //    cout << std::setprecision(4) << timemscomp * 1000.0
+        //            / totallength << "\t";
         i->decompspeed.push_back(totallength * 1.0 / timemsdecomp);
         if (fulldisplay)
             cout << std::setprecision(4) << totallength * 1.0 / timemsdecomp
                     << "\t";
-        if (fulldisplay)
-            cout << std::setprecision(4) << timemsdecomp * 1000.0
-                    / totallength << "\t";
-
-        cout << std::setprecision(4) << cpu.stop() * 1.0 / totallength
-                << "\t";
-
+        //if (fulldisplay)
+        //    cout << std::setprecision(4) << timemsdecomp * 1000.0
+        //            / totallength << "\t";
         cout << std::setprecision(4) << totalcompressed * 32.0 / totallength
                 << "\t";
-
         i->bitsperint.push_back(totalcompressed * 32.0 / totallength);
-
-        for (size_t k = 0; k < datas.size(); ++k) {
-            const vector<uint32_t, cacheallocator> &data = datas[k];
-            const vector<uint32_t, cacheallocator> &recovered = recovereds[k];
-
-            if (!equal(recovered.begin(), recovered.end(), data.begin())) {
-                uint32_t howmany = 0;
-                for (size_t k = 0; k < data.size(); ++k)
-                    if (recovered[k] != data[k]) {
-                        cout << "recovered[" << k << "] = " << recovered[k]
-                                << endl;
-                        cout << "data[" << k << "] = " << data[k] << endl;
-                        howmany++;
-                        if (howmany > 15)
-                            break;
-                    }
-                cerr << c.name() << endl;
-                throw logic_error("we have a bug");
-            }
-        }
         cout << "\t";
     }
     cout << endl;
