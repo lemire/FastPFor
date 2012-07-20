@@ -58,7 +58,13 @@ public:
         return true;
     }
 
+    bool eof () {
+        return feof(fd);
+    }
 
+    bool error () {
+        return ferror(fd);
+    }
 
     void open() {
 #ifdef USE_O_DIRECT
