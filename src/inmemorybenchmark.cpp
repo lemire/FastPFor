@@ -115,7 +115,7 @@ int main(int argc, char **argv) {
     //WallClockTimer z;
     //EntropyRecorder er;
     const size_t MAXBLOCKSIZE = 104857600;// 400 MB
-    while (counter < MAXCOUNTER) {
+    while (!reader.eof()) {
         // collecting the data up to MAXBLOCKSIZE integers
         vector < vector<uint32_t, cacheallocator> > datas;
         size_t datastotalsize = 0;
