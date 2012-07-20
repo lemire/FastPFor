@@ -150,11 +150,11 @@ void process(vector<algostats> & myalgos,
         size_t totalcompressed = 0;
         uint64_t timemsdecomp = 0;
         uint64_t timemscomp = 0;
+        bool alreadywarnedaboutsmallarray = false;
         for (size_t k = 0; k < datas.size(); ++k) {
             vector<uint32_t, cacheallocator> backupdata (datas[k]); // making a copy to be safe
             backupdata.reserve(backupdata.size() + 1024);
-            assert(datas[k].size() == backupdata.size());
-            nvalue = outs.size();// theoretically usafe
+            nvalue = outs.size();
 
             z.reset();
             if (needtodelta) {
@@ -162,7 +162,12 @@ void process(vector<algostats> & myalgos,
             } else {
                 c.encodeArray(&backupdata[0], backupdata.size(), &outs[0], nvalue);
             }
-            timemscomp += z.split();
+            const uint64_t elapsedcomp = z.split();
+            if((elapsedcomp < 10) and (!alreadywarnedaboutsmallarray)){
+                cerr<<"# your arrays are too small for accurate timing?"<<endl;
+                alreadywarnedaboutsmallarray = true;
+            }
+            timemscomp += elapsedcomp;
             totalcompressed += nvalue;
 
             size_t recoveredsize = backupdata.size();
@@ -175,7 +180,12 @@ void process(vector<algostats> & myalgos,
                                     &recovereds[0], recoveredsize);
 
             }
-            timemsdecomp += z.split();
+            const uint64_t elapseddecomp = z.split();
+            if((elapseddecomp < 10)and (!alreadywarnedaboutsmallarray)) {
+                cerr<<"# your arrays are too small for accurate timing?"<<endl;
+                alreadywarnedaboutsmallarray = true;
+            }
+            timemsdecomp += elapseddecomp;
             if(recoveredsize!= datas[k].size()) {
                 cerr<<" expected size of "<<datas[k].size()<<" got "<<recoveredsize<<endl;
                 throw logic_error("arrays don't have same size: bug.");
@@ -417,7 +427,7 @@ int main(int argc, char **argv) {
             } else if (strcmp(parameter, "clusterdynamic") == 0) {
                 cout << "# dynamic clustered data generation..." << endl;
                 ClusteredDataGenerator clu;
-                for (uint32_t K = 10; K <= 25; K += 5) {
+                for (uint32_t K = 15; K <= 25; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
                     for (uint k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
@@ -436,7 +446,7 @@ int main(int argc, char **argv) {
             } else if (strcmp(parameter, "uniformdynamic") == 0) {
                 cout << "# sparse uniform data generation..." << endl;
                 UniformDataGenerator clu;
-                for (uint32_t K = 10; K <= 25; K += 5) {
+                for (uint32_t K = 15; K <= 25; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
                     for (uint k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
@@ -455,7 +465,7 @@ int main(int argc, char **argv) {
             } else if (strcmp(parameter, "clusterdynamicsmall") == 0) {
                 cout << "# dynamic clustered data generation..." << endl;
                 ClusteredDataGenerator clu;
-                for (uint32_t K = 10; K <= 20; K += 5) {
+                for (uint32_t K = 15; K <= 20; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
                     for (uint k = 0; k < (1U << (20 - K)); ++k)
                         datas.push_back(
@@ -474,7 +484,7 @@ int main(int argc, char **argv) {
             } else if (strcmp(parameter, "uniformdynamicsmall") == 0) {
                 cout << "# sparse uniform data generation..." << endl;
                 UniformDataGenerator clu;
-                for (uint32_t K = 10; K <= 20; K += 5) {
+                for (uint32_t K = 15; K <= 20; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
                     for (uint k = 0; k < (1U << (20 - K)); ++k)
                         datas.push_back(
@@ -493,7 +503,7 @@ int main(int argc, char **argv) {
              } else if (strcmp(parameter, "clusterdynamicpredelta") == 0) {
                 cout << "# dynamic clustered data generation..." << endl;
                 ClusteredDataGenerator clu;
-                for (uint32_t K = 10; K <= 25; K += 5) {
+                for (uint32_t K = 15; K <= 25; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
                     for (uint k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
@@ -513,7 +523,7 @@ int main(int argc, char **argv) {
             } else if (strcmp(parameter, "uniformdynamicpredelta") == 0) {
                 cout << "# sparse uniform data generation..." << endl;
                 UniformDataGenerator clu;
-                for (uint32_t K = 10; K <= 25; K += 5) {
+                for (uint32_t K = 15; K <= 25; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
                     for (uint k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
