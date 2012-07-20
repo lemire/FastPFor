@@ -99,7 +99,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    if (argc - optind < 2) {
+    if (argc - optind < 1) {
         cerr << "  you must specify a file " << endl;
         return -1;
     }
@@ -120,6 +120,7 @@ int main(int argc, char **argv) {
         vector < vector<uint32_t, cacheallocator> > datas;
         size_t datastotalsize = 0;
         //size_t maxlength = 0;
+	cout<<"# Filling up a block "<<endl;
         while (reader.loadIntegers(rawdata)) {
             if (rawdata.size() < MINLENGTH)
                 continue;
@@ -136,6 +137,8 @@ int main(int argc, char **argv) {
             if (datastotalsize >= MAXBLOCKSIZE)
                 break;
         }
+        cout<<"# read "<<  std::setprecision(3)  << datastotalsize * 4 / (1024.0 * 1024.0) << " MB "<<endl;
+	cout<<"# processing block"<<endl;
         Delta::process(myalgos, datas, true,false, false, false, true);        // done collecting data, now allocating memory
         /*vector<uint32_t, cacheallocator> recovered(maxlength + 1024);
         vector<uint32_t, cacheallocator>  outs(2 * maxlength + 1024);
