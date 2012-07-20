@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
     int c;
     while (1) {
         int option_index = 0;
-        c = getopt_long(argc, argv, "ec:", long_options, &option_index);
+        c = getopt_long(argc, argv, "fec:", long_options, &option_index);
         if (c == -1)
             break;
         switch (c) {
@@ -109,6 +109,9 @@ int main(int argc, char **argv) {
         case 's':
             fulldisplay = false;
             break;
+        case 'f':
+            fulldisplay = true;
+            break;
         case 0: {
             if (optind < argc) {
                 cout << "There are some trailing flags...?" << endl;
@@ -124,7 +127,7 @@ int main(int argc, char **argv) {
                 for (uint k = 0; k < (1U << 1); ++k)
                     datas.push_back(generateZipfianArray32(N, 1.0, 1U << 20));
                 Delta::process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy, false);
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else if (strcmp(parameter, "zipfian2") == 0) {
                 const uint32_t N = 4194304 * 16;
@@ -133,7 +136,7 @@ int main(int argc, char **argv) {
                     cout << "# zipfian 2 data generation..." << endl;
                 datas.push_back(generateZipfianArray32(N, 2.0, 1U << 20));
                 Delta::process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy, false);
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else if (strcmp(parameter, "uniformdenseclassic") == 0) {
                 cout << "# dense uniform data generation..." << endl;
@@ -145,7 +148,7 @@ int main(int argc, char **argv) {
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else if (strcmp(parameter, "uniformsparseclassic") == 0) {
                 cout << "# sparse uniform data generation..." << endl;
@@ -157,7 +160,7 @@ int main(int argc, char **argv) {
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else if (strcmp(parameter, "clusterdenseclassic") == 0) {
                 cout << "# dense cluster data generation..." << endl;
@@ -169,7 +172,7 @@ int main(int argc, char **argv) {
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else if (strcmp(parameter, "clustersparseclassic") == 0) {
                 cout << "# sparse cluster data generation..." << endl;
@@ -181,7 +184,7 @@ int main(int argc, char **argv) {
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else if (strcmp(parameter, "uniformdense") == 0) {
                 cout << "# dense uniform data generation..." << endl;
@@ -193,7 +196,7 @@ int main(int argc, char **argv) {
                                             1U << 29));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else if (strcmp(parameter, "uniformsparse") == 0) {
                 cout << "# sparse uniform data generation..." << endl;
@@ -205,7 +208,7 @@ int main(int argc, char **argv) {
                                             1U << 29));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else if (strcmp(parameter, "clusterdense") == 0) {
                 cout << "# dense cluster data generation..." << endl;
@@ -217,7 +220,7 @@ int main(int argc, char **argv) {
                                             1U << 26));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else if (strcmp(parameter, "clustersparse") == 0) {
                 cout << "# sparse cluster data generation..." << endl;
@@ -229,7 +232,7 @@ int main(int argc, char **argv) {
                                             1U << 26));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else if (strcmp(parameter, "clusterdynamic") == 0) {
                 cout << "# dynamic clustered data generation..." << endl;
@@ -248,7 +251,7 @@ int main(int argc, char **argv) {
                     Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false,
                             convert.str());
                 }
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else if (strcmp(parameter, "uniformdynamic") == 0) {
                 cout << "# sparse uniform data generation..." << endl;
@@ -267,7 +270,7 @@ int main(int argc, char **argv) {
                     Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false,
                             convert.str());
                 }
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else if (strcmp(parameter, "clusterdynamicsmall") == 0) {
                 cout << "# dynamic clustered data generation..." << endl;
@@ -286,7 +289,7 @@ int main(int argc, char **argv) {
                     Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false,
                             convert.str());
                 }
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else if (strcmp(parameter, "uniformdynamicsmall") == 0) {
                 cout << "# sparse uniform data generation..." << endl;
@@ -305,7 +308,7 @@ int main(int argc, char **argv) {
                     Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false,
                             convert.str());
                 }
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
              } else if (strcmp(parameter, "clusterdynamicpredelta") == 0) {
                 cout << "# dynamic clustered data generation..." << endl;
@@ -325,7 +328,7 @@ int main(int argc, char **argv) {
                     Delta::process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy, false,
                             convert.str());
                 }
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else if (strcmp(parameter, "uniformdynamicpredelta") == 0) {
                 cout << "# sparse uniform data generation..." << endl;
@@ -345,7 +348,7 @@ int main(int argc, char **argv) {
                     Delta::process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy, false,
                             convert.str());
                 }
-                summarize(myalgos);
+                summarize(myalgos,"#");
                 return 0;
             } else {
                 cerr << "Support for " << parameter << " was not found."

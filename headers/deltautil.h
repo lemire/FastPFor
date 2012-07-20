@@ -39,11 +39,9 @@ struct algostats {
     double decomptime, comptime, output,input;
 
 };
-void summarize(vector<algostats> & v) {
+void summarize(vector<algostats> & v, string prefix ="#") {
     if (v.empty())
         return;
-    for (size_t k = 0; k < 10; ++k)
-        cout << "#" << endl;
     cout << "# building summary " << endl;
     size_t N = v[0].bitsperint.size();
     for (size_t k = 0; k < N; ++k) {
@@ -53,14 +51,14 @@ void summarize(vector<algostats> & v) {
         cout << "#wall clock (comp mis, decomp mis, bits per int)" << endl;
         cout << "#" << endl;
         for (auto i = v.begin(); i != v.end(); ++i)
-            cout << "# " << std::setprecision(4) << i->name(40) << " \t "
+            cout << prefix << std::setprecision(4) << i->name(40) << " \t "
                     << i->compspeed[k] << " \t " << i->decompspeed[k] << " \t "
                     << i->bitsperint[k] << endl;
-        cout << "#" << endl;
+        cout << prefix  << endl << prefix << endl;
     }
     for(algostats a : v) {
         if( (a.comptime != 0) and (a.decomptime !=0) and (a.input != 0)) {
-            cout << "# " << std::setprecision(4) << a.name(40) << " \t "
+            cout << " " << std::setprecision(4) << a.name(40) << " \t "
                     << a.input / a.comptime << " \t " << a.input / a.decomptime << " \t "
                     << a.output * 32 / a.input << endl;
         }
@@ -152,8 +150,9 @@ public:
     static void process(vector<algostats> & myalgos,
             const vector<vector<uint32_t, cacheallocator> > & datas, const bool needtodelta,
             const bool fulldisplay, const bool displayhistogram, const bool computeentropy, const bool cumulative, const string prefix = "") {
+        enum {verbose = false};
         if(needtodelta) {
-            cout<<"# delta coding requested... checking whether we have sorted arrays...";
+            if(verbose) cout<<"# delta coding requested... checking whether we have sorted arrays...";
             for(auto x : datas)
                  for (size_t k = 1; k < x.size(); ++k) {
                     if(x[k]<x[k-1]) {
@@ -162,9 +161,9 @@ public:
                         return;
                     }
                  }
-            cout<<" arrays are indeed sorted. Good."<<endl;
+            if(verbose) cout<<" arrays are indeed sorted. Good."<<endl;
         } else {
-            cout<<"# compressing the arrays themselves, no delta coding applied."<<endl;
+            if(verbose) cout<<"# compressing the arrays themselves, no delta coding applied."<<endl;
             // we check whether it could have been applied...
             bool sorted = true;
     #pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations" // otherwise I get bogus warning
@@ -180,7 +179,7 @@ public:
             if(sorted) {
                 cout<<"#\n#\n# you are providing sorted arrays, but you are not requesting delta coding. Are you sure?\n#\n#\n"<<endl;
             } else {
-                cout<<"# I verified that the arrays are not sorted so simple delta coding is unapplicable."<<endl;
+                if(verbose) cout<<"# I verified that the arrays are not sorted so simple delta coding is unapplicable."<<endl;
             }
 
         }
@@ -190,29 +189,27 @@ public:
                 hist.eatIntegers(*i);
             hist.display("#");
         }
-        cout << "#";
+        if (fulldisplay) cout << "#";
         if (fulldisplay and computeentropy)
             cout << " entropy  databits(entropy) ";
 
-        for (auto i = myalgos.begin(); i != myalgos.end(); ++i) {
-            cout << (*i).name() << "\t";
+        if (fulldisplay) {
+            for (auto i = myalgos.begin(); i != myalgos.end(); ++i) {
+                cout << (*i).name() << "\t";
+            }
+            cout << endl;
         }
-        cout << endl;
         if (fulldisplay)
             cout
                     << "# for each scheme we give compression speed (million int./s)"
                         " decompression speed and bits per integer" << endl;
-        else
-            cout
-                    << "# for each scheme we give compression time (clock cycles per integer),"
-                        " decompression time and bits per integer" << endl;
         EntropyRecorder er;
         if(computeentropy) {
              for (uint k = 0; k < datas.size(); ++k)
                er.eat(&datas[k][0], datas[k].size());
-             cout << "# generated " << er.totallength << " integers" << endl;
+             if (fulldisplay)    cout << "# generated " << er.totallength << " integers" << endl;
         }
-        cout << prefix << "\t";
+        if (fulldisplay)cout  << prefix << "\t";
         if(computeentropy and fulldisplay)
             cout << std::setprecision(4) << er.computeShannon() << "\t";
         if (computeentropy and fulldisplay)
@@ -299,16 +296,16 @@ public:
             //if (fulldisplay)
             //    cout << std::setprecision(4) << timemsdecomp * 1000.0
             //            / totallength << "\t";
-            cout << std::setprecision(4) << totalcompressed * 32.0 / totallength
+            if (fulldisplay)cout << std::setprecision(4) << totalcompressed * 32.0 / totallength
                     << "\t";
             if(cumulative) {
                 i->output += totalcompressed;
                 i->input += totallength;
             } else
                 i->bitsperint.push_back(totalcompressed * 32.0 / totallength);
-            cout << "\t";
+            if (fulldisplay) cout << "\t";
         }
-        cout << endl;
+        if (fulldisplay) cout << endl;
     }
 
 
