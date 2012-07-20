@@ -4,7 +4,7 @@
  *
  * (c) Daniel Lemire, http://lemire.me/en/
  */
-
+#include <getopt.h>
 #include <tr1/memory>
 #include <iomanip>
 #include <time.h>
@@ -13,10 +13,13 @@
 #include "util.h"
 #include "ztimer.h"
 #include "cpubenchmark.h"
-#include "deltaio.h"
+#include "deltautil.h"
+#include "stringutil.h"
+
+
 
 using namespace std;
-
+/*
 struct simplealgostats {
 
     simplealgostats(shared_ptr<IntegerCODEC> & a) :
@@ -40,7 +43,7 @@ struct simplealgostats {
     shared_ptr<IntegerCODEC> algo;
 
 };
-
+*/
 static struct option long_options[] = {
         { "codecs", required_argument, 0, 'c' }, { 0, 0, 0, 0 } };
 
@@ -63,8 +66,9 @@ int main(int argc, char **argv) {
         message(argv[0]);
         return -1;
     }
+    size_t MINLENGTH = 1;
     vector < shared_ptr<IntegerCODEC> > tmp = CODECFactory::allSchemes();// the default
-    vector<simplealgostats> myalgos;
+    vector<algostats> myalgos;
     for (auto i = tmp.begin(); i != tmp.end(); ++i)
         myalgos.push_back(algostats(*i));
     int c;
@@ -75,24 +79,24 @@ int main(int argc, char **argv) {
             break;
         switch (c) {
         case 'c':
-            myalgos.clear();
+        {   myalgos.clear();
             string codecsstr(optarg);
             if (codecsstr.compare("NONE") != 0) {
                 vector < string > codecslst = split(codecsstr, ",:;");
                 for (auto i = codecslst.begin(); i != codecslst.end(); ++i) {
                     cout << "# pretty name = " << *i << endl;
                     myalgos.push_back(
-                            simplealgostats(CODECFactory::getFromName(*i)));
+                            algostats(CODECFactory::getFromName(*i)));
                     cout << "# added '" << myalgos.back().name() << "'" << endl;
                 }
             }
-
-            break;
-
         }
+            break;
         default:
         cerr << "unrecognized flag" << endl;
         break;
+
+        }
     }
 
     if (argc - optind < 2) {
@@ -107,22 +111,24 @@ int main(int argc, char **argv) {
     vector<uint32_t, cacheallocator> rawdata;
     reader.open();
     size_t counter = 0;
-    size_t integers = 0;
-    CPUTimer cpuz;
-    EntropyRecorder er;
-    const uint32_t MAXBLOCKSIZE = 104857600;// 400 MB
+    //size_t integers = 0;
+    //WallClockTimer z;
+    //EntropyRecorder er;
+    const size_t MAXBLOCKSIZE = 104857600;// 400 MB
     while (counter < MAXCOUNTER) {
         // collecting the data up to MAXBLOCKSIZE integers
-        vector < vector<uint32_t, cacheallocator> > &datas;
-        uint32_t datastotalsize = 0;
+        vector < vector<uint32_t, cacheallocator> > datas;
+        size_t datastotalsize = 0;
+        //size_t maxlength = 0;
         while (reader.loadIntegers(rawdata)) {
             if (rawdata.size() < MINLENGTH)
                 continue;
+            //if(rawdata.size() > maxlength) maxlength = rawdata.size();
             ++counter;
-            integers += rawdata.size();
+            //integers += rawdata.size();
             datastotalsize += rawdata.size();
             datas.push_back(rawdata);
-            er.eat(&rawdata[0], rawdata.size());
+            //er.eat(&rawdata[0], rawdata.size());
             if (counter >= MAXCOUNTER) {
                 cout << "#breaking early" << endl;
                 break;
@@ -130,23 +136,11 @@ int main(int argc, char **argv) {
             if (datastotalsize >= MAXBLOCKSIZE)
                 break;
         }
-        // done collecting data, now allocating memory
-        vector < vector<uint32_t, cacheallocator> > recovered(datas.size());
-        vector < vector<uint32_t, cacheallocator> > outs(datas.size());
-        vector < size_t > outsize(datas.size());
-        for (size_t k = 0; k < datas.size(); ++k) {
-            recovered[k].reserve(data[k].size() + 1024);
-            recovered[k].resize(data[k].size());
-            outs[k].resize(data[k].size() + 1024);
-            outsize.push_back(outs[k].size());
-        }
-        // now compressing/uncompressing
+        Delta::process(myalgos, datas, true,false, false, false, true);        // done collecting data, now allocating memory
+        /*vector<uint32_t, cacheallocator> recovered(maxlength + 1024);
+        vector<uint32_t, cacheallocator>  outs(2 * maxlength + 1024);
         for (size_t i = 0; i < myalgos.size(); ++i) {
-            for (size_t k = 0; k < datas.size(); ++k) {
-                outsize[k] = outs[k].capacity();
-            }
-            // first compressing
-            cpuz.reset();
+            z.reset();
             for (int k = 0; k < datas.size(); ++k) {
                 vector<uint32_t, cacheallocator> & data = data[k];
                 for (size_t j = data.size() - 1; j > 0; --j) {
@@ -176,10 +170,13 @@ int main(int argc, char **argv) {
                 }
             }
             myalgos[i].decomptime += cpuz.split();
-        }
+        }*/
 
     }
     reader.close();
+
+    summarize(myalgos);
+    /**
     cout << "# integers = " << integers << endl;
     cout << "# arrays = " << counter << endl;
 
@@ -194,6 +191,6 @@ int main(int argc, char **argv) {
             << endl;
     for (simplealgostats sstats : v) {
         cout << v.name(40)<<"\t"<<totalints/comptime<<"\t"<<totalints/decomptime<<"\t"<<compressedsizeinints*32.0/totalints<<endl;
-    }
+    }**/
 
 }

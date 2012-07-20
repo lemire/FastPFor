@@ -1,3 +1,8 @@
+/*******************
+ * WARNING: As of July 2012, this file and its code are considered obsolete.
+ ****************/
+
+
 /**
  * This is code is released under the
  * Apache License Version 2.0 http://www.apache.org/licenses/.

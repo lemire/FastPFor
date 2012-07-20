@@ -13,7 +13,7 @@ CXXFLAGS = $(CXXFLAGSEXTRA) -ggdb -std=c++0x -Weffc++ -pedantic -O3 -Wold-style-
 
 HEADERS = ./headers/bitpackinghelpers.h ./headers/common.h ./headers/memutil.h ./headers/pfor.h ./headers/pfor2008.h ./headers/bitpackingunaligned.h ./headers/bitpackingaligned.h ./headers/blockpacking.h ./headers/deltaio.h ./headers/codecfactory.h ./headers/packingvectors.h ./headers/compositecodec.h ./headers/cpubenchmark.h  ./headers/maropuparser.h ./headers/bitpacking.h  ./headers/util.h ./headers/simple9.h ./headers/simple8b.h ./headers/simple16.h ./headers/optpfor.h ./headers/newpfor.h ./headers/vsencoding.h ./headers/mersenne.h  ./headers/ztimer.h ./headers/codecs.h ./headers/synthetic.h ./headers/fastpfor.h ./headers/variablebyte.h ./headers/stringutil.h ./headers/entropy.h ./headers/VarIntG8IU.h ./headers/deltautil.h 
 
-all: unit codecs iotests gapencoder gapdecoder csv2maropu
+all: unit codecs inmemorybenchmark
 
 test: unit
 	./unit
@@ -57,7 +57,7 @@ iotests:  $(HEADERS) src/iotests.cpp ./headers/common.h.gch $(COMMONBINARIES)
 	$(CXX) $(CXXFLAGS) $(GCCPARAMS) -Winvalid-pch  -o iotests src/iotests.cpp $(COMMONBINARIES)  -Iheaders
 
 cppcheck: 
-	cppcheck --std=c++11 --enable=all $(HEADERS) src/codecs.cpp src/iotests.cpp
+	cppcheck --std=c++11 --enable=all $(HEADERS) src/codecs.cpp src/inmemorybenchmark.cpp src/unit.cpp src/bitpacking.cpp src/bitpackingaligned.cpp src/bitpackingunaligned.cpp
 
 csv2maropu:  $(HEADERS) src/csv2maropu.cpp ./headers/externalvector.h ./headers/csv.h
 	$(CXX)  $(CXXFLAGS) -o csv2maropu src/csv2maropu.cpp  -Iheaders
@@ -66,7 +66,7 @@ gapdecoder: $(HEADERS) src/gapdecoder.cpp makefile ./headers/common.h.gch $(COMM
 	$(CXX) $(CXXFLAGS) $(GCCPARAMS)  -Winvalid-pch -o gapdecoder src/gapdecoder.cpp $(COMMONBINARIES) -Iheaders
 
 
-inmemorybenchmark.cpp: $(HEADERS)  src/inmemorybenchmark.cpp ./headers/common.h.gch makefile $(COMMONBINARIES)
+inmemorybenchmark: $(HEADERS)  src/inmemorybenchmark.cpp ./headers/common.h.gch makefile $(COMMONBINARIES)
 	$(CXX) $(CXXFLAGS) -Winvalid-pch  -o inmemorybenchmark  src/inmemorybenchmark.cpp $(COMMONBINARIES) -Iheaders 
 
 
