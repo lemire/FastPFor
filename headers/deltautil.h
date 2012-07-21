@@ -214,7 +214,7 @@ public:
             cout << std::setprecision(4) << er.computeShannon() << "\t";
         if (computeentropy and fulldisplay)
             cout << std::setprecision(4) << er.computeDataBits() << "\t";
-
+        bool alreadywarnedaboutsmallarray = false;
         WallClockTimer z;
         for (auto i = myalgos.begin(); i != myalgos.end(); ++i) {
             IntegerCODEC & c = *(i->algo);
@@ -231,7 +231,6 @@ public:
             size_t totalcompressed = 0;
             uint64_t timemsdecomp = 0;
             uint64_t timemscomp = 0;
-            bool alreadywarnedaboutsmallarray = false;
             for (size_t k = 0; k < datas.size(); ++k) {
                 vector<uint32_t, cacheallocator> backupdata (datas[k]); // making a copy to be safe
                 backupdata.reserve(backupdata.size() + 1024);
@@ -244,8 +243,8 @@ public:
                     c.encodeArray(&backupdata[0], backupdata.size(), &outs[0], nvalue);
                 }
                 const uint64_t elapsedcomp = z.split();
-                if((elapsedcomp < 10) and (!alreadywarnedaboutsmallarray)){
-                    cerr<<"# your arrays are too small for accurate timing?"<<endl;
+                if((elapsedcomp < 5) and (!alreadywarnedaboutsmallarray)) {
+                    cerr<<"# your arrays are too small for accurate timing? Recorded elapsed time = "<< elapsedcomp << " mu s"<<endl;
                     alreadywarnedaboutsmallarray = true;
                 }
                 timemscomp += elapsedcomp;
@@ -262,8 +261,8 @@ public:
 
                 }
                 const uint64_t elapseddecomp = z.split();
-                if((elapseddecomp < 10)and (!alreadywarnedaboutsmallarray)) {
-                    cerr<<"# your arrays are too small for accurate timing?"<<endl;
+                if((elapseddecomp < 5) and (!alreadywarnedaboutsmallarray)) {
+                    cerr<<"# your arrays are too small for accurate timing? Recorded elapsed time = "<< elapsedcomp << " mu s"<<endl;
                     alreadywarnedaboutsmallarray = true;
                 }
                 timemsdecomp += elapseddecomp;

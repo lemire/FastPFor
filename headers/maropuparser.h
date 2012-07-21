@@ -42,6 +42,10 @@ public:
     // return false if no more data can be loaded
     template <class container>
     bool loadIntegers(container & buffer) {
+        if(fd == NULL) {
+          cerr<<"You forgot to open the file."<<endl;
+          return false;
+        }
         uint32_t number;
         size_t result = fread(&number, sizeof(number), 1, fd);
         if (result != 1) {
@@ -58,21 +62,15 @@ public:
         return true;
     }
 
-    bool eof () {
-        return feof(fd);
-    }
-
-    bool error () {
-        return ferror(fd);
-    }
 
     void open() {
-#ifdef USE_O_DIRECT
-        int fdi = ::open(mFilename.c_str(), O_DIRECT | O_RDONLY);
-        fd = ::fdopen(fdi, "rb");
-#else
+        close();
+//#ifdef USE_O_DIRECT
+//        int fdi = ::open(mFilename.c_str(), O_DIRECT | O_RDONLY);
+//        fd = ::fdopen(fdi, "rb");
+//#else
         fd = ::fopen(mFilename.c_str(), "rb");
-#endif
+//#endif
         if (fd == NULL) {
             cerr << "IO status: " << strerror(errno) << endl;
             cerr << "Can't open " << mFilename << endl;

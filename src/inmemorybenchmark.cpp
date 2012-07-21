@@ -8,6 +8,7 @@
 #include <tr1/memory>
 #include <iomanip>
 #include <time.h>
+#include <limits>
 #include "codecfactory.h"
 #include "maropuparser.h"
 #include "util.h"
@@ -61,8 +62,8 @@ void message(const char * prog) {
 }
 
 int main(int argc, char **argv) {
-    uint32_t MAXCOUNTER = 1U << 31;
-    if (argc < 4) {
+    size_t MAXCOUNTER = std::numeric_limits<std::size_t>::max();
+    if (argc < 2) {
         message(argv[0]);
         return -1;
     }
@@ -115,7 +116,7 @@ int main(int argc, char **argv) {
     //WallClockTimer z;
     //EntropyRecorder er;
     const size_t MAXBLOCKSIZE = 104857600;// 400 MB
-    while (!reader.eof()) {
+    while (counter < MAXCOUNTER) {
         // collecting the data up to MAXBLOCKSIZE integers
         vector < vector<uint32_t, cacheallocator> > datas;
         size_t datastotalsize = 0;
@@ -137,6 +138,7 @@ int main(int argc, char **argv) {
             if (datastotalsize >= MAXBLOCKSIZE)
                 break;
         }
+        if(datastotalsize == 0) break;
         cout<<"# read "<<  std::setprecision(3)  << datastotalsize * 4 / (1024.0 * 1024.0) << " MB "<<endl;
 	cout<<"# processing block"<<endl;
         Delta::process(myalgos, datas, true,false, false, false, true);        // done collecting data, now allocating memory
