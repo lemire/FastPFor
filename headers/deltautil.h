@@ -50,10 +50,11 @@ void summarize(vector<algostats> & v, string prefix ="#") {
             cout << "#test " << (k + 1) << " of " << N << endl;
         cout << "#wall clock (comp mis, decomp mis, bits per int)" << endl;
         cout << "#" << endl;
-        for (auto i = v.begin(); i != v.end(); ++i)
+        for (auto i = v.begin(); i != v.end(); ++i) {
             cout << prefix << std::setprecision(4) << i->name(40) << " \t "
-                    << i->compspeed[k] << " \t " << i->decompspeed[k] << " \t "
-                    << i->bitsperint[k] << endl;
+                    << i->compspeed.at(k) << " \t " << i->decompspeed.at(k) << " \t "
+                    << i->bitsperint.at(k) << endl;
+        }
         cout << prefix  << endl << prefix << endl;
     }
     for(algostats a : v) {
@@ -62,7 +63,6 @@ void summarize(vector<algostats> & v, string prefix ="#") {
                     << a.input / a.comptime << " \t " << a.input / a.decomptime << " \t "
                     << a.output * 32 / a.input << endl;
         }
-
     }
 }
 
@@ -151,16 +151,19 @@ public:
             const vector<vector<uint32_t, cacheallocator> > & datas, const bool needtodelta,
             const bool fulldisplay, const bool displayhistogram, const bool computeentropy, const bool cumulative, const string prefix = "") {
         enum {verbose = false};
+        if(datas.empty() or myalgos.empty()) return;
         if(needtodelta) {
             if(verbose) cout<<"# delta coding requested... checking whether we have sorted arrays...";
-            for(auto x : datas)
-                 for (size_t k = 1; k < x.size(); ++k) {
-                    if(x[k]<x[k-1]) {
-                        cerr<<"Delta coding requested, but data is not sorted!"<<endl;
-                        cerr<<"Aborting!"<<endl;
-                        return;
-                    }
-                 }
+            for(auto x : datas) {
+                if(x.size() > 0)
+                    for (size_t k = 1; k < x.size(); ++k) {
+                        if(x[k]<x[k-1]) {
+                            cerr<<"Delta coding requested, but data is not sorted!"<<endl;
+                            cerr<<"Aborting!"<<endl;
+                            return;
+                        }
+                     }
+            }
             if(verbose) cout<<" arrays are indeed sorted. Good."<<endl;
         } else {
             if(verbose) cout<<"# compressing the arrays themselves, no delta coding applied."<<endl;
@@ -206,7 +209,7 @@ public:
         EntropyRecorder er;
         if(computeentropy) {
              for (uint k = 0; k < datas.size(); ++k)
-               er.eat(&datas[k][0], datas[k].size());
+               if(!datas[k].empty()) er.eat(&datas[k][0], datas[k].size());
              if (fulldisplay)    cout << "# generated " << er.totallength << " integers" << endl;
         }
         if (fulldisplay)cout  << prefix << "\t";
@@ -226,12 +229,13 @@ public:
                 totallength += data.size();
                 if(maxlength < data.size()) maxlength = data.size();
              }
-            vector<uint32_t, cacheallocator> outs(2 * maxlength + 1024);
+            vector<uint32_t, cacheallocator> outs(4 * maxlength + 1024);
             vector<uint32_t, cacheallocator> recovereds(maxlength + 1024);
             size_t totalcompressed = 0;
             uint64_t timemsdecomp = 0;
             uint64_t timemscomp = 0;
             for (size_t k = 0; k < datas.size(); ++k) {
+                if(datas[k].empty()) continue;
                 vector<uint32_t, cacheallocator> backupdata (datas[k]); // making a copy to be safe
                 backupdata.reserve(backupdata.size() + 1024);
                 nvalue = outs.size();
@@ -282,9 +286,6 @@ public:
             if (fulldisplay)
                 cout << std::setprecision(4) << totallength * 1.0 / timemscomp
                         << "\t";
-            //if (fulldisplay)
-            //    cout << std::setprecision(4) << timemscomp * 1000.0
-            //            / totallength << "\t";
             if(cumulative)
                 i->decomptime += timemsdecomp;
             else
@@ -292,9 +293,6 @@ public:
             if (fulldisplay)
                 cout << std::setprecision(4) << totallength * 1.0 / timemsdecomp
                         << "\t";
-            //if (fulldisplay)
-            //    cout << std::setprecision(4) << timemsdecomp * 1000.0
-            //            / totallength << "\t";
             if (fulldisplay)cout << std::setprecision(4) << totalcompressed * 32.0 / totallength
                     << "\t";
             if(cumulative) {
@@ -307,53 +305,6 @@ public:
         if (fulldisplay) cout << endl;
     }
 
-
-    /*size_t PageSize;
-
-     Delta(size_t ps = 65536 + 1) ://recommended to choose a power of 2 + 1
-     PageSize(ps) {
-
-     }*/
-
-    /*
-     *  Input data is modified in the encoding process.
-     */
-    /*void encodeWithPaging(IntegerCODEC & c, uint32_t *in, const size_t length,
-     uint32_t * out, size_t &nvalue) {
-     size_t initnvalue (nvalue);
-     size_t nvaluesofar (0);
-     const uint32_t * const initout = out;
-     for(size_t i = 0; i < length; i += PageSize) {
-     size_t thisnvalue = initnvalue - nvaluesofar;
-     size_t thislength = length-i < PageSize? length - i : PageSize;
-     uint32_t * header = out++;
-     encode(c,in+i,thislength,out,thisnvalue);
-     *header = thisnvalue;
-     out += thisnvalue;
-     thisnvalue += 1;
-     nvaluesofar += thisnvalue;
-     }
-     nvalue = nvaluesofar;
-     assert(nvalue + initout == out);
-     }
-     const uint32_t * decodeWithPaging(IntegerCODEC & c, const uint32_t *in, const size_t length,
-     uint32_t *out, size_t & nvalue) {
-     size_t initnvalue (nvalue);
-     size_t nvaluesofar (0);
-     const uint32_t * const initin (in);
-
-     for(const uint32_t * const finalin = in + length; in < finalin; ) {
-     size_t lengthtoread = *in++;
-     size_t thisnvalue = initnvalue - nvaluesofar < PageSize ? initnvalue - nvaluesofar : PageSize ;
-     const uint32_t * newin = decode(c, in, lengthtoread,out, thisnvalue);
-     assert(newin == in + lengthtoread);
-     in = newin;
-     out += thisnvalue;
-     nvaluesofar += thisnvalue;
-     }
-     assert(in  <= length + initin);
-     return in;
-     }*/
 
 };
 
