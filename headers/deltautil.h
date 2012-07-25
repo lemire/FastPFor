@@ -242,7 +242,7 @@ public:
 
                 z.reset();
                 if (needtodelta) {
-                        encode(c,&backupdata[0],backupdata.size(),&outs[0],nvalue);
+                    encode(c,&backupdata[0],backupdata.size(),&outs[0],nvalue);
                 } else {
                     c.encodeArray(&backupdata[0], backupdata.size(), &outs[0], nvalue);
                 }
@@ -260,7 +260,7 @@ public:
                 if (needtodelta) {
                         decode(c,&outs[0],nvalue,&recovereds[0],recoveredsize);
                  } else {
-                        c.decodeArray(&outs[0], outs.size(),
+                        c.decodeArray(&outs[0], nvalue,
                                         &recovereds[0], recoveredsize);
 
                 }
