@@ -64,18 +64,28 @@ const uint8_t * padTo32bits(const uint8_t * inbyte) {
             + 3) & ~3);
 }
 
+template <class T>
 __attribute__ ((const))
-uint8_t * padTo64bytes(uint8_t * inbyte) {
-    return reinterpret_cast<uint8_t *> ((reinterpret_cast<uintptr_t> (inbyte)
+T * padTo64bytes(T * inbyte) {
+    return reinterpret_cast<T *> ((reinterpret_cast<uintptr_t> (inbyte)
             + 63) & ~63);
 }
 
+
+template <class T>
+__attribute__ ((const))
+T * padTo128bytes(T * inbyte) {
+    return reinterpret_cast<T *> ((reinterpret_cast<uintptr_t> (inbyte)
+            + 127) & ~127);
+}
+
+/*
 __attribute__ ((const))
 const uint8_t * padTo64bytes(const uint8_t * inbyte) {
     return reinterpret_cast<const uint8_t *> ((reinterpret_cast<uintptr_t> (inbyte)
             + 63) & ~63);
 }
-
+*/
 
 template <class T>
 bool  needPaddingTo64bytes(T * inbyte) {
