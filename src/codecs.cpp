@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
     int c;
     while (1) {
         int option_index = 0;
-        c = getopt_long(argc, argv, "fec:", long_options, &option_index);
+        c = getopt_long(argc, argv, "Sfec:", long_options, &option_index);
         if (c == -1)
             break;
         switch (c) {
