@@ -81,9 +81,15 @@ void splitLongArrays(vector<T> & datas, size_t MAXSIZE = 65536) {
     // possibly inefficient
     for(size_t i = 0 ; i < datas.size() ; ++i) {
           if(datas[i].size()>MAXSIZE) {
-              T leftover(datas[i].begin()+MAXSIZE,datas[i].end());
+              const size_t howmany = (datas[i].size()+MAXSIZE-1)/MAXSIZE - 1;
+              datas.insert(datas.begin()+i+1,howmany,T());
+              for(size_t j = 0; j < howmany; ++j) {
+                  size_t begin = (j+1)*MAXSIZE;
+                  size_t end = (j+2)*MAXSIZE;
+                  if(end > datas[i].size()) end = datas[i].size();
+                  datas[i+j+1].assign(begin,end);
+              }
               datas[i].resize(MAXSIZE);
-              datas.insert(datas.begin()+i+1,leftover);
           }
      }
     // for safety, we check the result:
