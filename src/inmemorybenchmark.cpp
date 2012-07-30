@@ -22,7 +22,7 @@
 using namespace std;
 
 static struct option long_options[] = {
-        { "codecs", required_argument, 0, 'c' }, { 0, 0, 0, 0 } };
+        { "codecs", required_argument, 0, 'c' }, { "splitlongarrays", no_argument, 0, 'S' },{ 0, 0, 0, 0 } };
 
 void message(const char * prog) {
     cerr << " usage : " << prog << " scheme  maropubinaryfile " << endl;
@@ -43,6 +43,7 @@ int main(int argc, char **argv) {
         message(argv[0]);
         return -1;
     }
+    bool splitlongarrays = false;
     size_t MINLENGTH = 1;
     vector < shared_ptr<IntegerCODEC> > tmp = CODECFactory::allSchemes();// the default
     vector<algostats> myalgos;
@@ -55,6 +56,9 @@ int main(int argc, char **argv) {
         if (c == -1)
             break;
         switch (c) {
+        case 'S' :
+             splitlongarrays = true;
+             break;
         case 'c':
         {   myalgos.clear();
             string codecsstr(optarg);
@@ -110,7 +114,8 @@ int main(int argc, char **argv) {
         if(datastotalsize == 0) break;
         cout<<"# read "<<  std::setprecision(3)  << datastotalsize * 4 / (1024.0 * 1024.0) << " MB "<<endl;
 	cout<<"# processing block"<<endl;
-        Delta::process(myalgos, datas, true,false, false, false, true);        // done collecting data, now allocating memory
+	    if(splitlongarrays) splitLongArrays(datas);
+	    Delta::process(myalgos, datas, true,false, false, false, true);        // done collecting data, now allocating memory
     }
     reader.close();
     cout<<"# build summary..."<<endl;

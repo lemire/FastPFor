@@ -12,7 +12,10 @@
 #include "memutil.h"
 #include "entropy.h"
 
-
+/**
+ * This file is made of various convenient functions and structures.
+ * It is not necessarily very reusable though.
+ */
 
 struct algostats {
 
@@ -65,6 +68,30 @@ void summarize(vector<algostats> & v, string prefix ="#") {
         }
     }
 }
+
+
+/**
+ * This takes every vector and replaces it, if
+ * needed by a series of vectors having max
+ * size MAXSIZE. If a vector has size less than
+ * or equal to MAXSIZE, it remains unchanged.
+ */
+template <class T>
+void splitLongArrays(vector<T> & datas, size_t MAXSIZE = 65536) {
+    // possibly inefficient
+    for(size_t i = 0 ; i < datas.size() ; ++i) {
+          if(datas[i].size()>MAXSIZE) {
+              T leftover(datas[i].begin()+MAXSIZE,datas[i].end());
+              datas[i].resize(MAXSIZE);
+              datas.insert(datas.begin()+i+1,leftover);
+          }
+     }
+    // for safety, we check the result:
+    for(size_t i = 0 ; i < datas.size() ; ++i) {
+        assert(datas[i].size()<=MAXSIZE);
+     }
+}
+
 
 /**
  * This class encodes and decode data using
@@ -149,7 +176,8 @@ public:
     // a convenience function
     static void process(vector<algostats> & myalgos,
             const vector<vector<uint32_t, cacheallocator> > & datas, const bool needtodelta,
-            const bool fulldisplay, const bool displayhistogram, const bool computeentropy, const bool cumulative, const string prefix = "") {
+            const bool fulldisplay, const bool displayhistogram, const bool computeentropy,
+            const bool cumulative, const string prefix = "") {
         enum {verbose = false};
         if(datas.empty() or myalgos.empty()) return;
         if(needtodelta) {

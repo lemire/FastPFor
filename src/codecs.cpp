@@ -37,7 +37,7 @@ static struct option long_options[] = { { "uniformsparseclassic", no_argument,
         no_argument, 0, 0 }, { "uniformdynamic", no_argument, 0, 0 },{ "clusterdynamicpredelta",
                 no_argument, 0, 0 }, { "uniformdynamicpredelta", no_argument, 0, 0 }, {
         "sillyuniformdynamic", no_argument, 0, 0 }, { "codecs",
-        required_argument, 0, 'c' }, { "short", no_argument, 0, 's' }, { 0, 0,
+        required_argument, 0, 'c' }, { "splitlongarrays", no_argument, 0, 'S' }, { "short", no_argument, 0, 's' }, { 0, 0,
         0, 0 } };
 
 void message() {
@@ -76,6 +76,7 @@ int main(int argc, char **argv) {
     bool displayhistogram = false;
     bool computeentropy = false;
 
+    bool splitlongarrays = false;
     vector < shared_ptr<IntegerCODEC> > tmp = CODECFactory::allSchemes();// the default
     vector<algostats> myalgos;
     for (auto & i  : tmp)
@@ -87,6 +88,9 @@ int main(int argc, char **argv) {
         if (c == -1)
             break;
         switch (c) {
+        case 'S' :
+            splitlongarrays = true;
+            break;
         case 'c': {
             myalgos.clear();
             string codecsstr(optarg);
@@ -126,6 +130,7 @@ int main(int argc, char **argv) {
                 cout << "# zipfian 1 data generation..." << endl;
                 for (uint k = 0; k < (1U << 1); ++k)
                     datas.push_back(generateZipfianArray32(N, 1.0, 1U << 20));
+                if(splitlongarrays) splitLongArrays(datas);
                 Delta::process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy, false);
                 summarize(myalgos,"#");
                 return 0;
@@ -135,6 +140,7 @@ int main(int argc, char **argv) {
                 for (uint k = 0; k < (1U << 1); ++k)
                     cout << "# zipfian 2 data generation..." << endl;
                 datas.push_back(generateZipfianArray32(N, 2.0, 1U << 20));
+                if(splitlongarrays) splitLongArrays(datas);
                 Delta::process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy, false);
                 summarize(myalgos,"#");
                 return 0;
@@ -147,6 +153,7 @@ int main(int argc, char **argv) {
                                     clu.generateUniform((1U << 18) ,
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
+                if(splitlongarrays) splitLongArrays(datas);
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
                 summarize(myalgos,"#");
                 return 0;
@@ -159,6 +166,7 @@ int main(int argc, char **argv) {
                                     clu.generateUniform((1U << 9) ,
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
+                if(splitlongarrays) splitLongArrays(datas);
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
                 summarize(myalgos,"#");
                 return 0;
@@ -171,6 +179,7 @@ int main(int argc, char **argv) {
                                     clu.generateClustered((1U << 18) ,
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
+                if(splitlongarrays) splitLongArrays(datas);
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
                 summarize(myalgos,"#");
                 return 0;
@@ -183,6 +192,7 @@ int main(int argc, char **argv) {
                                     clu.generateClustered((1U << 9) ,
                                             1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
+                if(splitlongarrays) splitLongArrays(datas);
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
                 summarize(myalgos,"#");
                 return 0;
@@ -195,6 +205,7 @@ int main(int argc, char **argv) {
                                     clu.generateUniform((1U << 22) ,
                                             1U << 29));
                 cout << "# generated " << datas.size() << " arrays" << endl;
+                if(splitlongarrays) splitLongArrays(datas);
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
                 summarize(myalgos,"#");
                 return 0;
@@ -207,6 +218,7 @@ int main(int argc, char **argv) {
                                     clu.generateUniform((1U << 12) ,
                                             1U << 29));
                 cout << "# generated " << datas.size() << " arrays" << endl;
+                if(splitlongarrays) splitLongArrays(datas);
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
                 summarize(myalgos,"#");
                 return 0;
@@ -219,6 +231,7 @@ int main(int argc, char **argv) {
                                     clu.generateClustered((1U << 23) ,
                                             1U << 26));
                 cout << "# generated " << datas.size() << " arrays" << endl;
+                if(splitlongarrays) splitLongArrays(datas);
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
                 summarize(myalgos,"#");
                 return 0;
@@ -231,6 +244,7 @@ int main(int argc, char **argv) {
                                     clu.generateClustered((1U << 12) ,
                                             1U << 26));
                 cout << "# generated " << datas.size() << " arrays" << endl;
+                if(splitlongarrays) splitLongArrays(datas);
                 Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false);
                 summarize(myalgos,"#");
                 return 0;
@@ -248,6 +262,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
+                    if(splitlongarrays) splitLongArrays(datas);
                     Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false,
                             convert.str());
                 }
@@ -267,6 +282,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
+                    if(splitlongarrays) splitLongArrays(datas);
                     Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false,
                             convert.str());
                 }
@@ -286,6 +302,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
+                    if(splitlongarrays) splitLongArrays(datas);
                     Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false,
                             convert.str());
                 }
@@ -305,6 +322,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
+                    if(splitlongarrays) splitLongArrays(datas);
                     Delta::process(myalgos, datas, true, fulldisplay, displayhistogram, computeentropy, false,
                             convert.str());
                 }
@@ -325,6 +343,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
+                    if(splitlongarrays) splitLongArrays(datas);
                     Delta::process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy, false,
                             convert.str());
                 }
@@ -345,6 +364,7 @@ int main(int argc, char **argv) {
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
+                    if(splitlongarrays) splitLongArrays(datas);
                     Delta::process(myalgos, datas, false, fulldisplay, displayhistogram, computeentropy, false,
                             convert.str());
                 }
