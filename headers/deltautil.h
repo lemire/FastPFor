@@ -266,7 +266,7 @@ public:
                 if(maxlength < data.size()) maxlength = data.size();
              }
             container outs(4 * maxlength + 1024);
-            container recovereds(maxlength + 1024);
+            container recovereds(maxlength + 1024 + 64);
             size_t totalcompressed = 0;
             uint64_t timemsdecomp = 0;
             uint64_t timemscomp = 0;
@@ -274,13 +274,19 @@ public:
                 if(datas[k].empty()) continue;
                 container backupdata (datas[k]); // making a copy to be safe
                 backupdata.reserve(backupdata.size() + 1024);
+                uint32_t * outp = &outs[0];
                 nvalue = outs.size();
+                while(needPaddingTo64bytes(outp + (needtodelta ? 1 : 0))) {
+                    --nvalue;
+                    outp++;
+                }
+
 
                 z.reset();
                 if (needtodelta) {
-                    encode(c,&backupdata[0],backupdata.size(),&outs[0],nvalue);
+                    encode(c,&backupdata[0],backupdata.size(),outp,nvalue);
                 } else {
-                    c.encodeArray(&backupdata[0], backupdata.size(), &outs[0], nvalue);
+                    c.encodeArray(&backupdata[0], backupdata.size(), outp, nvalue);
                 }
                 const uint64_t elapsedcomp = z.split();
                 if((elapsedcomp < 5) and (!alreadywarnedaboutsmallarray)) {
@@ -291,13 +297,16 @@ public:
                 totalcompressed += nvalue;
 
                 size_t recoveredsize = backupdata.size();
-
+                uint32_t * recov = &recovereds[0];
+                while(needPaddingTo64bytes(recov)) {
+                    recov++;
+                }
                 z.reset();
                 if (needtodelta) {
-                        decode(c,&outs[0],nvalue,&recovereds[0],recoveredsize);
+                        decode(c,outp,nvalue,recov,recoveredsize);
                  } else {
-                        c.decodeArray(&outs[0], nvalue,
-                                        &recovereds[0], recoveredsize);
+                        c.decodeArray(outp, nvalue,
+                                recov, recoveredsize);
 
                 }
                 const uint64_t elapseddecomp = z.split();
@@ -310,7 +319,7 @@ public:
                     cerr<<" expected size of "<<datas[k].size()<<" got "<<recoveredsize<<endl;
                     throw logic_error("arrays don't have same size: bug.");
                 }
-                if (!equal(datas[k].begin(),datas[k].end(), recovereds.begin()))  {
+                if (!equal(datas[k].begin(),datas[k].end(), recov))  {
                     throw logic_error("we have a bug");
                 }
 
