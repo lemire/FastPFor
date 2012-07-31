@@ -23,7 +23,6 @@
 
 using namespace std;
 
-
 static struct option long_options[] = { { "uniformsparseclassic", no_argument,
         0, 0 }, { "displayhistogram", no_argument, 0, 'H' }, {
         "uniformdenseclassic", no_argument, 0, 0 }, { "clustersparseclassic",
@@ -33,12 +32,13 @@ static struct option long_options[] = { { "uniformsparseclassic", no_argument,
         no_argument, 0, 0 }, { "zipfian1", no_argument, 0, 0 }, { "zipfian2",
         no_argument, 0, 0 }, { "vclusterdynamic", no_argument, 0, 0 }, {
         "crazyclusterdynamic", no_argument, 0, 0 }, { "clusterdynamicsmall",
-        no_argument, 0, 0 }, { "uniformdynamicsmall", no_argument, 0, 0 },{ "clusterdynamic",
-        no_argument, 0, 0 }, { "uniformdynamic", no_argument, 0, 0 },{ "clusterdynamicpredelta",
-                no_argument, 0, 0 }, { "uniformdynamicpredelta", no_argument, 0, 0 }, {
-        "sillyuniformdynamic", no_argument, 0, 0 }, { "codecs",
-        required_argument, 0, 'c' }, { "splitlongarrays", no_argument, 0, 'S' }, { "short", no_argument, 0, 's' }, { 0, 0,
-        0, 0 } };
+        no_argument, 0, 0 }, { "uniformdynamicsmall", no_argument, 0, 0 }, {
+        "clusterdynamic", no_argument, 0, 0 }, { "uniformdynamic", no_argument,
+        0, 0 }, { "clusterdynamicpredelta", no_argument, 0, 0 }, {
+        "uniformdynamicpredelta", no_argument, 0, 0 }, { "sillyuniformdynamic",
+        no_argument, 0, 0 }, { "codecs", required_argument, 0, 'c' }, {
+        "splitlongarrays", no_argument, 0, 'S' }, { "short", no_argument, 0,
+        's' }, { 0, 0, 0, 0 } };
 
 void message() {
     int c = 0;
@@ -79,8 +79,10 @@ int main(int argc, char **argv) {
     bool splitlongarrays = false;
     vector < shared_ptr<IntegerCODEC> > tmp = CODECFactory::allSchemes();// the default
     vector<algostats> myalgos;
-    for (auto & i  : tmp)
+    for (auto & i : tmp) {
         myalgos.push_back(algostats(i));
+        myalgos.push_back(algostats(i,true));
+    }
     int c;
     while (1) {
         int option_index = 0;
@@ -88,7 +90,7 @@ int main(int argc, char **argv) {
         if (c == -1)
             break;
         switch (c) {
-        case 'S' :
+        case 'S':
             splitlongarrays = true;
             break;
         case 'c': {
@@ -98,7 +100,16 @@ int main(int argc, char **argv) {
                 vector < string > codecslst = split(codecsstr, ",:;");
                 for (auto i = codecslst.begin(); i != codecslst.end(); ++i) {
                     cout << "# pretty name = " << *i << endl;
-                    myalgos.push_back(algostats(CODECFactory::getFromName(*i)));
+                    if (i->at(0) == '@') {// SIMD
+                        myalgos.push_back(
+                                algostats(
+                                        CODECFactory::getFromName(
+                                                i->substr(1, i->size() - 1)),
+                                                true));
+                    } else {
+                        myalgos.push_back(
+                                algostats(CODECFactory::getFromName(*i)));
+                    }
                     cout << "# added '" << myalgos.back().name() << "'" << endl;
                 }
             }
@@ -130,10 +141,12 @@ int main(int argc, char **argv) {
                 cout << "# zipfian 1 data generation..." << endl;
                 for (uint k = 0; k < (1U << 1); ++k)
                     datas.push_back(generateZipfianArray32(N, 1.0, 1U << 20));
-                if(splitlongarrays) splitLongArrays(datas);
-                processparameters pp(false, fulldisplay, displayhistogram, computeentropy, false);
+                if (splitlongarrays)
+                    splitLongArrays( datas);
+                processparameters pp(false, fulldisplay, displayhistogram,
+                        computeentropy, false);
                 Delta::process(myalgos, datas, pp);
-                summarize(myalgos,"#");
+                summarize(myalgos, "#");
                 return 0;
             } else if (strcmp(parameter, "zipfian2") == 0) {
                 const uint32_t N = 4194304 * 16;
@@ -141,122 +154,124 @@ int main(int argc, char **argv) {
                 for (uint k = 0; k < (1U << 1); ++k)
                     cout << "# zipfian 2 data generation..." << endl;
                 datas.push_back(generateZipfianArray32(N, 2.0, 1U << 20));
-                if(splitlongarrays) splitLongArrays(datas);
-                processparameters pp(false, fulldisplay, displayhistogram, computeentropy, false);
+                if (splitlongarrays)
+                    splitLongArrays( datas);
+                processparameters pp(false, fulldisplay, displayhistogram,
+                        computeentropy, false);
                 Delta::process(myalgos, datas, pp);
-                summarize(myalgos,"#");
+                summarize(myalgos, "#");
                 return 0;
             } else if (strcmp(parameter, "uniformdenseclassic") == 0) {
                 cout << "# dense uniform data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 UniformDataGenerator clu;
                 for (uint k = 0; k < (1U << 5); ++k)
-                    datas.push_back(
-                                    clu.generateUniform((1U << 18) ,
-                                            1U << 27));
+                    datas.push_back(clu.generateUniform((1U << 18), 1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                if(splitlongarrays) splitLongArrays(datas);
-                processparameters pp(true, fulldisplay, displayhistogram, computeentropy, false);
-                Delta::process(myalgos, datas,pp );
-                summarize(myalgos,"#");
+                if (splitlongarrays)
+                    splitLongArrays( datas);
+                processparameters pp(true, fulldisplay, displayhistogram,
+                        computeentropy, false);
+                Delta::process(myalgos, datas, pp);
+                summarize(myalgos, "#");
                 return 0;
             } else if (strcmp(parameter, "uniformsparseclassic") == 0) {
                 cout << "# sparse uniform data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 UniformDataGenerator clu;
                 for (uint k = 0; k < (1U << 14); ++k)// by original paper should be 1U<<19
-                    datas.push_back(
-                                    clu.generateUniform((1U << 9) ,
-                                            1U << 27));
+                    datas.push_back(clu.generateUniform((1U << 9), 1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                if(splitlongarrays) splitLongArrays(datas);
-                processparameters pp(true, fulldisplay, displayhistogram, computeentropy, false);
+                if (splitlongarrays)
+                    splitLongArrays( datas);
+                processparameters pp(true, fulldisplay, displayhistogram,
+                        computeentropy, false);
                 Delta::process(myalgos, datas, pp);
-                summarize(myalgos,"#");
+                summarize(myalgos, "#");
                 return 0;
             } else if (strcmp(parameter, "clusterdenseclassic") == 0) {
                 cout << "# dense cluster data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 ClusteredDataGenerator clu;
                 for (uint k = 0; k < (1U << 5); ++k)// by original paper should be 1U<<10
-                    datas.push_back(
-                                    clu.generateClustered((1U << 18) ,
-                                            1U << 27));
+                    datas.push_back(clu.generateClustered((1U << 18), 1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                if(splitlongarrays) splitLongArrays(datas);
-                processparameters pp( true, fulldisplay, displayhistogram, computeentropy, false);
-                Delta::process(myalgos, datas,pp);
-                summarize(myalgos,"#");
+                if (splitlongarrays)
+                    splitLongArrays( datas);
+                processparameters pp(true, fulldisplay, displayhistogram,
+                        computeentropy, false);
+                Delta::process(myalgos, datas, pp);
+                summarize(myalgos, "#");
                 return 0;
             } else if (strcmp(parameter, "clustersparseclassic") == 0) {
                 cout << "# sparse cluster data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 ClusteredDataGenerator clu;
                 for (uint k = 0; k < (1U << 14); ++k)// by original paper should be 1U<<19
-                    datas.push_back(
-                                    clu.generateClustered((1U << 9) ,
-                                            1U << 27));
+                    datas.push_back(clu.generateClustered((1U << 9), 1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                if(splitlongarrays) splitLongArrays(datas);
-                processparameters pp(true, fulldisplay, displayhistogram, computeentropy, false);
+                if (splitlongarrays)
+                    splitLongArrays( datas);
+                processparameters pp(true, fulldisplay, displayhistogram,
+                        computeentropy, false);
                 Delta::process(myalgos, datas, pp);
-                summarize(myalgos,"#");
+                summarize(myalgos, "#");
                 return 0;
             } else if (strcmp(parameter, "uniformdense") == 0) {
                 cout << "# dense uniform data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 UniformDataGenerator clu;
                 for (uint k = 0; k < (1U << 3); ++k)// by original paper should be 1U<<10
-                    datas.push_back(
-                                    clu.generateUniform((1U << 22) ,
-                                            1U << 29));
+                    datas.push_back(clu.generateUniform((1U << 22), 1U << 29));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                if(splitlongarrays) splitLongArrays(datas);
-                processparameters pp(true, fulldisplay, displayhistogram, computeentropy, false);
-                Delta::process(myalgos, datas,pp );
-                summarize(myalgos,"#");
+                if (splitlongarrays)
+                    splitLongArrays( datas);
+                processparameters pp(true, fulldisplay, displayhistogram,
+                        computeentropy, false);
+                Delta::process(myalgos, datas, pp);
+                summarize(myalgos, "#");
                 return 0;
             } else if (strcmp(parameter, "uniformsparse") == 0) {
                 cout << "# sparse uniform data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 UniformDataGenerator clu;
                 for (uint k = 0; k < (1U << 13); ++k)
-                    datas.push_back(
-                                    clu.generateUniform((1U << 12) ,
-                                            1U << 29));
+                    datas.push_back(clu.generateUniform((1U << 12), 1U << 29));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                if(splitlongarrays) splitLongArrays(datas);
-                processparameters pp(true, fulldisplay, displayhistogram, computeentropy, false);
+                if (splitlongarrays)
+                    splitLongArrays( datas);
+                processparameters pp(true, fulldisplay, displayhistogram,
+                        computeentropy, false);
                 Delta::process(myalgos, datas, pp);
-                summarize(myalgos,"#");
+                summarize(myalgos, "#");
                 return 0;
             } else if (strcmp(parameter, "clusterdense") == 0) {
                 cout << "# dense cluster data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 ClusteredDataGenerator clu;
                 for (uint k = 0; k < 1; ++k)
-                    datas.push_back(
-                                    clu.generateClustered((1U << 23) ,
-                                            1U << 26));
+                    datas.push_back(clu.generateClustered((1U << 23), 1U << 26));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                if(splitlongarrays) splitLongArrays(datas);
-                processparameters pp(true, fulldisplay, displayhistogram, computeentropy, false);
+                if (splitlongarrays)
+                    splitLongArrays( datas);
+                processparameters pp(true, fulldisplay, displayhistogram,
+                        computeentropy, false);
                 Delta::process(myalgos, datas, pp);
-                summarize(myalgos,"#");
+                summarize(myalgos, "#");
                 return 0;
             } else if (strcmp(parameter, "clustersparse") == 0) {
                 cout << "# sparse cluster data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 ClusteredDataGenerator clu;
                 for (uint k = 0; k < (1U << 13); ++k)
-                    datas.push_back(
-                                    clu.generateClustered((1U << 12) ,
-                                            1U << 26));
+                    datas.push_back(clu.generateClustered((1U << 12), 1U << 26));
                 cout << "# generated " << datas.size() << " arrays" << endl;
-                if(splitlongarrays) splitLongArrays(datas);
-                processparameters pp(true, fulldisplay, displayhistogram, computeentropy, false);
+                if (splitlongarrays)
+                    splitLongArrays( datas);
+                processparameters pp(true, fulldisplay, displayhistogram,
+                        computeentropy, false);
                 Delta::process(myalgos, datas, pp);
-                summarize(myalgos,"#");
+                summarize(myalgos, "#");
                 return 0;
             } else if (strcmp(parameter, "clusterdynamic") == 0) {
                 cout << "# dynamic clustered data generation..." << endl;
@@ -265,19 +280,19 @@ int main(int argc, char **argv) {
                     vector < vector<uint32_t, cacheallocator> > datas;
                     for (uint k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
-                                        clu.generateClustered(
-                                                (1U << K) , 1U << 29));
+                                clu.generateClustered((1U << K), 1U << 29));
                     cout << "# generated " << datas.size() << " arrays" << endl;
                     cout << "# their size is  " << (1U << K) << endl;
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    if(splitlongarrays) splitLongArrays(datas);
-                    processparameters pp(true, fulldisplay, displayhistogram, computeentropy, false);
-                    Delta::process(myalgos, datas, pp,
-                            convert.str());
+                    if (splitlongarrays)
+                        splitLongArrays( datas);
+                    processparameters pp(true, fulldisplay, displayhistogram,
+                            computeentropy, false);
+                    Delta::process(myalgos, datas, pp, convert.str());
                 }
-                summarize(myalgos,"#");
+                summarize(myalgos, "#");
                 return 0;
             } else if (strcmp(parameter, "uniformdynamic") == 0) {
                 cout << "# sparse uniform data generation..." << endl;
@@ -286,19 +301,19 @@ int main(int argc, char **argv) {
                     vector < vector<uint32_t, cacheallocator> > datas;
                     for (uint k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
-                                        clu.generateUniform((1U << K) ,
-                                                1U << 29));
+                                clu.generateUniform((1U << K), 1U << 29));
                     cout << "# generated " << datas.size() << " arrays" << endl;
                     cout << "# their size is  " << (1U << K) << endl;
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    if(splitlongarrays) splitLongArrays(datas);
-                    processparameters pp(true, fulldisplay, displayhistogram, computeentropy, false);
-                    Delta::process(myalgos, datas, pp ,
-                            convert.str());
+                    if (splitlongarrays)
+                        splitLongArrays( datas);
+                    processparameters pp(true, fulldisplay, displayhistogram,
+                            computeentropy, false);
+                    Delta::process(myalgos, datas, pp, convert.str());
                 }
-                summarize(myalgos,"#");
+                summarize(myalgos, "#");
                 return 0;
             } else if (strcmp(parameter, "clusterdynamicsmall") == 0) {
                 cout << "# dynamic clustered data generation..." << endl;
@@ -307,19 +322,19 @@ int main(int argc, char **argv) {
                     vector < vector<uint32_t, cacheallocator> > datas;
                     for (uint k = 0; k < (1U << (20 - K)); ++k)
                         datas.push_back(
-                                        clu.generateClustered(
-                                                (1U << K) , 1U << 29));
+                                clu.generateClustered((1U << K), 1U << 29));
                     cout << "# generated " << datas.size() << " arrays" << endl;
                     cout << "# their size is  " << (1U << K) << endl;
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    if(splitlongarrays) splitLongArrays(datas);
-                    processparameters pp(true, fulldisplay, displayhistogram, computeentropy, false);
-                    Delta::process(myalgos, datas,pp ,
-                            convert.str());
+                    if (splitlongarrays)
+                        splitLongArrays( datas);
+                    processparameters pp(true, fulldisplay, displayhistogram,
+                            computeentropy, false);
+                    Delta::process(myalgos, datas, pp, convert.str());
                 }
-                summarize(myalgos,"#");
+                summarize(myalgos, "#");
                 return 0;
             } else if (strcmp(parameter, "uniformdynamicsmall") == 0) {
                 cout << "# sparse uniform data generation..." << endl;
@@ -328,21 +343,21 @@ int main(int argc, char **argv) {
                     vector < vector<uint32_t, cacheallocator> > datas;
                     for (uint k = 0; k < (1U << (20 - K)); ++k)
                         datas.push_back(
-                                        clu.generateUniform((1U << K) ,
-                                                1U << 29));
+                                clu.generateUniform((1U << K), 1U << 29));
                     cout << "# generated " << datas.size() << " arrays" << endl;
                     cout << "# their size is  " << (1U << K) << endl;
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    if(splitlongarrays) splitLongArrays(datas);
-                    processparameters pp(true, fulldisplay, displayhistogram, computeentropy, false);
-                    Delta::process(myalgos, datas, pp,
-                            convert.str());
+                    if (splitlongarrays)
+                        splitLongArrays( datas);
+                    processparameters pp(true, fulldisplay, displayhistogram,
+                            computeentropy, false);
+                    Delta::process(myalgos, datas, pp, convert.str());
                 }
-                summarize(myalgos,"#");
+                summarize(myalgos, "#");
                 return 0;
-             } else if (strcmp(parameter, "clusterdynamicpredelta") == 0) {
+            } else if (strcmp(parameter, "clusterdynamicpredelta") == 0) {
                 cout << "# dynamic clustered data generation..." << endl;
                 ClusteredDataGenerator clu;
                 for (uint32_t K = 15; K <= 25; K += 5) {
@@ -350,19 +365,21 @@ int main(int argc, char **argv) {
                     for (uint k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
                                 diffs(
-                                        clu.generateClustered(
-                                                (1U << K) , 1U << 29), false));
-                    cout << "# generated " << datas.size() << " arrays and applied delta coding" << endl;
+                                        clu.generateClustered((1U << K),
+                                                1U << 29), false));
+                    cout << "# generated " << datas.size()
+                            << " arrays and applied delta coding" << endl;
                     cout << "# their size is  " << (1U << K) << endl;
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    if(splitlongarrays) splitLongArrays(datas);
-                    processparameters pp( false, fulldisplay, displayhistogram, computeentropy, false);
-                    Delta::process(myalgos,datas,pp ,
-                            convert.str());
+                    if (splitlongarrays)
+                        splitLongArrays( datas);
+                    processparameters pp(false, fulldisplay, displayhistogram,
+                            computeentropy, false);
+                    Delta::process(myalgos, datas, pp, convert.str());
                 }
-                summarize(myalgos,"#");
+                summarize(myalgos, "#");
                 return 0;
             } else if (strcmp(parameter, "uniformdynamicpredelta") == 0) {
                 cout << "# sparse uniform data generation..." << endl;
@@ -371,20 +388,21 @@ int main(int argc, char **argv) {
                     vector < vector<uint32_t, cacheallocator> > datas;
                     for (uint k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
-                                diffs(
-                                        clu.generateUniform((1U << K) ,
-                                                1U << 29), false));
-                    cout << "# generated " << datas.size() << " arrays and applied delta coding" << endl;
+                                diffs(clu.generateUniform((1U << K), 1U << 29),
+                                        false));
+                    cout << "# generated " << datas.size()
+                            << " arrays and applied delta coding" << endl;
                     cout << "# their size is  " << (1U << K) << endl;
                     const uint32_t p = 29 - K;
                     ostringstream convert;
                     convert << p;
-                    if(splitlongarrays) splitLongArrays(datas);
-                    processparameters pp(false, fulldisplay, displayhistogram, computeentropy, false);
-                    Delta::process(myalgos, datas, pp,
-                            convert.str());
+                    if (splitlongarrays)
+                        splitLongArrays( datas);
+                    processparameters pp(false, fulldisplay, displayhistogram,
+                            computeentropy, false);
+                    Delta::process(myalgos, datas, pp, convert.str());
                 }
-                summarize(myalgos,"#");
+                summarize(myalgos, "#");
                 return 0;
             } else {
                 cerr << "Support for " << parameter << " was not found."

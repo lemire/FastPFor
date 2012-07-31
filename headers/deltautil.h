@@ -19,16 +19,22 @@
 
 struct algostats {
 
-    algostats(shared_ptr<IntegerCODEC> & a) :
+    algostats(shared_ptr<IntegerCODEC> & a, bool simd = false) :
         compspeed(), decompspeed(),
                 bitsperint(), algo(a),
-                decomptime(), comptime(), output(),input(){
+                decomptime(), comptime(), output(),input(), SIMDDeltas(simd){
     }
     string name() {
+        // if SIMDDeltas is "true", we prepend @
+        if(SIMDDeltas) {
+            ostringstream convert;
+            convert << "@" << algo->name();
+            return convert.str();
+        }
         return algo->name();
     }
     string name(size_t k) {
-        string n = algo->name();
+        string n = name();
         char space = ' ';
         n.resize(k, space);
         return n;
@@ -38,9 +44,10 @@ struct algostats {
     vector<double> bitsperint;
     shared_ptr<IntegerCODEC> algo;
 
+
     // maps from name to results
     double decomptime, comptime, output,input;
-
+    bool SIMDDeltas;
 };
 void summarize(vector<algostats> & v, string prefix ="#") {
     if (v.empty())
@@ -146,6 +153,44 @@ public:
                      data[i] -= data[i - 1];
           }
      }
+
+     // by Leonid Boytsov
+     template<class T>
+     void deltaForSIMD(int* pData, size_t TotalQty) {
+         if (TotalQty < 5) {
+             delta(pData,TotalQty); // no need for SIMD
+             return;
+         }
+         for (size_t i = TotalQty - 1; i >= 4; --i) {
+             pData[i] -= pData[i-4];
+         }
+     }
+
+     // by Leonid Boytsov
+     template<class T>
+     void inverseDeltaSIMD(T * pData, size_t TotalQty) {
+         if (TotalQty < 5) {
+             inverseDelta(pData, TotalQty);// no SIMD
+             return;
+         }
+         size_t Qty4 = TotalQty / 4;
+
+         if (Qty4 >= 2) {
+             register __m128i*       pCurr = reinterpret_cast<__m128i*>(pData);
+             register __m128i*       pEnd = pCurr + Qty4;
+             register __m128i        a = _mm_load_si128(pCurr++);
+             while (pCurr < pEnd) {
+                 register __m128i        b = _mm_load_si128(pCurr);
+                 a = _mm_add_epi32(a, b);
+                 *pCurr++ = a;
+             }
+         }
+
+         for (size_t i = Qty4 * 4; i < TotalQty; ++i) {
+             pData[i] += pData[i-4];
+         }
+     }
+
 
     //  by D. Lemire
     template<class T>

@@ -47,8 +47,10 @@ int main(int argc, char **argv) {
     size_t MINLENGTH = 1;
     vector < shared_ptr<IntegerCODEC> > tmp = CODECFactory::allSchemes();// the default
     vector<algostats> myalgos;
-    for (auto i = tmp.begin(); i != tmp.end(); ++i)
+    for (auto i = tmp.begin(); i != tmp.end(); ++i) {
         myalgos.push_back(algostats(*i));
+        myalgos.push_back(algostats(*i, true));
+    }
     int c;
     while (1) {
         int option_index = 0;
@@ -66,8 +68,14 @@ int main(int argc, char **argv) {
                 vector < string > codecslst = split(codecsstr, ",:;");
                 for (auto i = codecslst.begin(); i != codecslst.end(); ++i) {
                     cout << "# pretty name = " << *i << endl;
-                    myalgos.push_back(
+                    if(i->at(0) == '@') {// SIMD
+                        string namewithoutprefix = i->substr(1,i->size()-1);
+                        myalgos.push_back(
+                            algostats(CODECFactory::getFromName(namewithoutprefix),true));
+                    } else {
+                        myalgos.push_back(
                             algostats(CODECFactory::getFromName(*i)));
+                    }
                     cout << "# added '" << myalgos.back().name() << "'" << endl;
                 }
             }

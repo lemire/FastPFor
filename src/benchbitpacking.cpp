@@ -131,12 +131,11 @@ bool equalOnFirstBits(const container32bit & data,
     }
     return true;
 }
-void simplebenchmark(uint32_t N = 1U << 24) {
+void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
     vector<uint32_t, cacheallocator> data = generateArray32(N);
     vector<uint32_t, cacheallocator> compressed(N, 0);
     vector<uint32_t, cacheallocator> recovered(N, 0);
     WallClockTimer z;
-    const uint32_t T = 5;
     double packtime, packtimewm, unpacktime;
     double tightpacktime, tightpacktimewm, tightunpacktime;
     double simdpacktimewm, simdunpacktime;
@@ -146,7 +145,7 @@ void simplebenchmark(uint32_t N = 1U << 24) {
     for (uint32_t bitindex = 0; bitindex < 32; ++bitindex) {
         uint32_t bit = 32 - bitindex;
         maskfnc(data, bit);
-        for (uint32_t repeat = 0; repeat < 3; ++repeat) {
+        for (uint32_t repeat = 0; repeat < 1; ++repeat) {
             packtime = 0;
             packtimewm = 0;
             unpacktime = 0;
@@ -239,10 +238,8 @@ void simplebenchmark(uint32_t N = 1U << 24) {
 
 using namespace std;
 int main() {
-    //cout<<sizeof(Block3)<<endl;
-    //cout<<sizeof(Block5)<<endl;
 
-    simplebenchmark(1U << 25);
+    simplebenchmark(1U << 16, 1U<<9);
 
     return 0;
 }
