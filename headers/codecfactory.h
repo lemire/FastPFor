@@ -24,6 +24,7 @@
 #include "pfor.h"
 #include "pfor2008.h"
 #include "VarIntG8IU.h"
+#include "simdbinarypacking.h"
 
 using namespace std;
 
@@ -100,6 +101,7 @@ map<string, shared_ptr<IntegerCODEC> > CODECFactory::scodecmap = {
 #ifdef VARINTG8IU_H__
     {   "varintg8iu", shared_ptr<IntegerCODEC> (new VarIntG8IU ())},
 #endif
+    {  "simdbinarypacking", shared_ptr<IntegerCODEC>(new CompositeCodec<SIMDBinaryPacking,VariableByte>())},
     {   "copy", shared_ptr<IntegerCODEC> (new JustCopy())}
 };
 #endif /* CODECFACTORY_H_ */

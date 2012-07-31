@@ -52,17 +52,50 @@ uint32_t gcd() {
 }
 
 
+
+template <class T>
 __attribute__ ((const))
-uint8_t * padTo32bits(uint8_t * inbyte) {
-    return reinterpret_cast<uint8_t *> ((reinterpret_cast<uintptr_t> (inbyte)
+T * padTo32bits(T * inbyte) {
+    return reinterpret_cast< T *> ((reinterpret_cast<uintptr_t> (inbyte)
             + 3) & ~3);
 }
 
+template <class T>
 __attribute__ ((const))
-const uint8_t * padTo32bits(const uint8_t * inbyte) {
-    return reinterpret_cast<const uint8_t *> ((reinterpret_cast<uintptr_t> (inbyte)
+const T * padTo32bits(const T * inbyte) {
+    return reinterpret_cast<const T *> ((reinterpret_cast<uintptr_t> (inbyte)
             + 3) & ~3);
 }
+
+template <class T>
+__attribute__ ((const))
+T * padTo64bits(T * inbyte) {
+    return reinterpret_cast<T *> ((reinterpret_cast<uintptr_t> (inbyte)
+            + 7) & ~7);
+}
+
+template <class T>
+__attribute__ ((const))
+const T * padTo64bits(const  T * inbyte) {
+    return reinterpret_cast<const T *> ((reinterpret_cast<uintptr_t> (inbyte)
+            + 7) & ~7);
+}
+
+
+template <class T>
+__attribute__ ((const))
+T * padTo128bits(T * inbyte) {
+    return reinterpret_cast<T *> ((reinterpret_cast<uintptr_t> (inbyte)
+            + 15) & ~15);
+}
+
+template <class T>
+__attribute__ ((const))
+const T * padTo128bits(const T * inbyte) {
+    return reinterpret_cast<const T *> ((reinterpret_cast<uintptr_t> (inbyte)
+            + 15) & ~15);
+}
+
 
 template <class T>
 __attribute__ ((const))
@@ -72,35 +105,41 @@ T * padTo64bytes(T * inbyte) {
 }
 
 
+
 template <class T>
 __attribute__ ((const))
-T * padTo128bytes(T * inbyte) {
+const T * padTo64bytes(const T * inbyte) {
     return reinterpret_cast<T *> ((reinterpret_cast<uintptr_t> (inbyte)
-            + 127) & ~127);
-}
-
-/*
-__attribute__ ((const))
-const uint8_t * padTo64bytes(const uint8_t * inbyte) {
-    return reinterpret_cast<const uint8_t *> ((reinterpret_cast<uintptr_t> (inbyte)
             + 63) & ~63);
 }
-*/
+
 
 template <class T>
-bool  needPaddingTo64bytes(T * inbyte) {
+__attribute__ ((const))
+bool needPaddingTo32Bits(const T * inbyte) {
+    return reinterpret_cast<uintptr_t> (inbyte) & 3;
+}
+
+template <class T>
+__attribute__ ((const))
+bool needPaddingTo64Bits(const T * inbyte) {
+    return reinterpret_cast<uintptr_t> (inbyte) & 7;
+}
+
+
+template <class T>
+__attribute__ ((const))
+bool needPaddingTo128Bits(const T * inbyte) {
+    return reinterpret_cast<uintptr_t> (inbyte) & 15;
+}
+
+
+template <class T>
+bool  needPaddingTo64bytes(const T * inbyte) {
     return reinterpret_cast<uintptr_t> (inbyte) & 63;
 }
 
-__attribute__ ((const))
-bool needPaddingTo32Bits(uint8_t * inbyte) {
-    return reinterpret_cast<uintptr_t> (inbyte) & 3;
-}
 
-__attribute__ ((const))
-bool needPaddingTo32Bits(const uint8_t * inbyte) {
-    return reinterpret_cast<uintptr_t> (inbyte) & 3;
-}
 
 __attribute__ ((const))
 constexpr uint32_t gccbits(const uint32_t v) {

@@ -180,8 +180,9 @@ public:
 
 
     // a convenience function
+    template <class container>
     static void process(vector<algostats> & myalgos,
-            const vector<vector<uint32_t, cacheallocator> > & datas, const bool needtodelta,
+            const vector<container > & datas, const bool needtodelta,
             const bool fulldisplay, const bool displayhistogram, const bool computeentropy,
             const bool cumulative, const string prefix = "") {
         enum {verbose = false};
@@ -263,14 +264,14 @@ public:
                 totallength += data.size();
                 if(maxlength < data.size()) maxlength = data.size();
              }
-            vector<uint32_t, cacheallocator> outs(4 * maxlength + 1024);
-            vector<uint32_t, cacheallocator> recovereds(maxlength + 1024);
+            container outs(4 * maxlength + 1024);
+            container recovereds(maxlength + 1024);
             size_t totalcompressed = 0;
             uint64_t timemsdecomp = 0;
             uint64_t timemscomp = 0;
             for (size_t k = 0; k < datas.size(); ++k) {
                 if(datas[k].empty()) continue;
-                vector<uint32_t, cacheallocator> backupdata (datas[k]); // making a copy to be safe
+                container backupdata (datas[k]); // making a copy to be safe
                 backupdata.reserve(backupdata.size() + 1024);
                 nvalue = outs.size();
 

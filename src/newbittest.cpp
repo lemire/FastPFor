@@ -183,10 +183,8 @@ int main() {
         size_t DstQty = N * 32;
 
         uint32_t*   pSrc = new uint32_t[SrcQty];
-        //uint32_t*   pDst = new uint32_t[DstQty];
         uint32_t * unalignedpDst = new   uint32_t[DstQty + sizeof(__m128)/sizeof(uint32_t) - 1];
-        uint32_t*  pDst = padTo128bytes(unalignedpDst);
-//                reinterpret_cast<uint32_t*>(memalign(__alignof__(__m128), DstQty * sizeof(uint32_t)));
+        uint32_t*  pDst = padTo128bits(unalignedpDst);
 
         for (unsigned i = 0; i < SrcQty; ++i) {
             pSrc[i] = rand();
