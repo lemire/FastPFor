@@ -102,6 +102,7 @@ map<string, shared_ptr<IntegerCODEC> > CODECFactory::scodecmap = {
     {   "varintg8iu", shared_ptr<IntegerCODEC> (new VarIntG8IU ())},
 #endif
     {  "simdbinarypacking", shared_ptr<IntegerCODEC>(new CompositeCodec<SIMDBinaryPacking,VariableByte>())},
+    {  "simdglobalbinarypacking", shared_ptr<IntegerCODEC>(new CompositeCodec<SIMDGlobalBinaryPacking,VariableByte>())},
     {   "copy", shared_ptr<IntegerCODEC> (new JustCopy())}
 };
 #endif /* CODECFACTORY_H_ */

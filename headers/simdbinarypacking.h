@@ -96,6 +96,53 @@ public:
 };
 
 
+class SIMDGlobalBinaryPacking: public IntegerCODEC {
+public:
+    static const uint32_t CookiePadder = 123456;
+    static const uint32_t BlockSize = 128;
 
+    /**
+     * The way this code is written, it will automatically "pad" the
+     * header according to the alignment of the out pointer. So if you
+     * move the data around, you should preserve the alignment.
+     */
+    void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
+            size_t &nvalue) {
+        checkifdivisibleby(length, BlockSize);
+        const uint32_t * const initout(out);
+        *out++ = length;
+        uint32_t Bs = maxbits(in,in + length);
+        *out++ = Bs;
+        while(needPaddingTo128Bits(out)) *out++ = CookiePadder;
+        for (const uint32_t * const final = in + length; in + BlockSize
+                <= final; in += BlockSize, out +=  4 * Bs) {
+                SIMD_fastpackwithoutmask_32(in, reinterpret_cast<__m128i *>(out),
+                                Bs);
+        }
+        nvalue = out - initout;
+    }
+
+    const uint32_t * decodeArray(const uint32_t *in, const size_t /*length*/,
+            uint32_t *out, size_t & nvalue) {
+        const uint32_t actuallength = *in++;
+        const uint32_t Bs = *in++;
+        if(needPaddingTo128Bits(out)) throw runtime_error("bad initial output align");
+        while(needPaddingTo128Bits(in)) {
+            if(in[0] != CookiePadder) throw logic_error("SIMDBinaryPacking alignment issue.");
+            ++in;
+        }
+        const uint32_t * const initout(out);
+        for (; out < initout + actuallength; out += BlockSize, in += 4 * Bs) {
+                SIMD_fastunpack_32(reinterpret_cast<const __m128i *>(in), out , Bs);
+        }
+        nvalue = out - initout;
+        return in;
+    }
+
+    string name() const {
+        return "SIMDGlobalBinaryPacking";
+    }
+
+};
 
 #endif /* SIMDBINARYPACKING_H_ */
