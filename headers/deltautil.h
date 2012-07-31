@@ -77,7 +77,7 @@ void summarize(vector<algostats> & v, string prefix ="#") {
  * or equal to MAXSIZE, it remains unchanged.
  */
 template <class T>
-void splitLongArrays(vector<T> & datas, size_t MAXSIZE = 65536) {
+void splitLongArrays(vector<T> & datas, size_t MAXSIZE = 65536 + 1) {// choosing a power of two + 1 as the default
     // possibly inefficient
     for(size_t i = 0 ; i < datas.size() ; ++i) {
           if(datas[i].size()>MAXSIZE) {
