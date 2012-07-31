@@ -131,12 +131,17 @@ public:
             if(in[0] != CookiePadder) throw logic_error("SIMDBinaryPacking alignment issue.");
             ++in;
         }
-        const uint32_t * const initout(out);
+        for (uint32_t k = 0; k < actuallength / 128; ++k) {
+               SIMD_fastunpack_32(reinterpret_cast<const __m128i *>(in + 4 * Bs * k), out + 128 * k, Bs);
+        }
+        nvalue = actuallength;
+        return in + 4* Bs * actuallength / 128;
+        /*const uint32_t * const initout(out);
         for (; out < initout + actuallength; out += BlockSize, in += 4 * Bs) {
                 SIMD_fastunpack_32(reinterpret_cast<const __m128i *>(in), out , Bs);
         }
         nvalue = out - initout;
-        return in;
+        return in;*/
     }
 
     string name() const {
