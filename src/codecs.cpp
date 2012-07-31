@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
     bool displayhistogram = false;
     bool computeentropy = false;
 
-    bool splitlongarrays = false;
+    bool splitlongarrays = true;
     vector < shared_ptr<IntegerCODEC> > tmp = CODECFactory::allSchemes();// the default
     vector<algostats> myalgos;
     for (auto & i : tmp) {
@@ -91,7 +91,8 @@ int main(int argc, char **argv) {
             break;
         switch (c) {
         case 'S':
-            splitlongarrays = true;
+            cout<<"#\n# disabling partition of big arrays. Performance may suffer.#\n"<<endl;
+            splitlongarrays = false;
             break;
         case 'c': {
             myalgos.clear();

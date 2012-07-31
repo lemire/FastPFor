@@ -135,9 +135,12 @@ public:
     /**
      * This modifies the input.
      */
-    static void encode(IntegerCODEC & c, uint32_t *in, const size_t length,
+    static void encode(IntegerCODEC & c, bool SIMDmode, uint32_t *in, const size_t length,
             uint32_t * out, size_t &nvalue) {
-        delta(in,length);
+        if(SIMDmode)
+            deltaSIMD(in,length);
+        else
+            delta(in,length);
         out[0] = in[0];
         assert(!needPaddingTo64bytes(out + 1)); 
         c.encodeArray(in + 1, length - 1, out + 1, nvalue);
@@ -156,7 +159,7 @@ public:
 
      // by Leonid Boytsov
      template<class T>
-     void deltaForSIMD(int* pData, size_t TotalQty) {
+     static void deltaSIMD(T * pData, size_t TotalQty) {
          if (TotalQty < 5) {
              delta(pData,TotalQty); // no need for SIMD
              return;
@@ -168,7 +171,7 @@ public:
 
      // by Leonid Boytsov
      template<class T>
-     void inverseDeltaSIMD(T * pData, size_t TotalQty) {
+     static void inverseDeltaSIMD(T * pData, size_t TotalQty) {
          if (TotalQty < 5) {
              inverseDelta(pData, TotalQty);// no SIMD
              return;
@@ -229,7 +232,7 @@ public:
         }
     }
 
-    static const uint32_t * decode(IntegerCODEC & c, const uint32_t *in,
+    static const uint32_t * decode(IntegerCODEC & c, bool SIMDmode, const uint32_t *in,
             const size_t length, uint32_t *out, size_t & nvalue) {
         out[0] = in[0];
         assert(!needPaddingTo64bytes(in + 1)); 
@@ -237,7 +240,10 @@ public:
         const uint32_t * finalin = c.decodeArray(in + 1, length - 1, out + 1,
                 nvalue);
         nvalue += 1;
-        fastinverseDelta(out, nvalue);
+        if(SIMDmode)
+            inverseDeltaSIMD(out, nvalue);
+        else
+            fastinverseDelta(out, nvalue);
         return finalin;
     }
 
@@ -320,6 +326,7 @@ public:
         WallClockTimer z;
         for (auto i = myalgos.begin(); i != myalgos.end(); ++i) {
             IntegerCODEC & c = *(i->algo);
+            const bool SIMDDeltas = i->SIMDDeltas;
             size_t nvalue;
             size_t totallength = 0;
             size_t maxlength = 0;
@@ -354,7 +361,7 @@ public:
                     backupdata.reserve(backupdata.size() + 1024);
                     z.reset();
                     if (pp.needtodelta) {
-                        encode(c,&backupdata[0],backupdata.size(),outp,nvalue);
+                        encode(c,SIMDDeltas,&backupdata[0],backupdata.size(),outp,nvalue);
                     } else {
                         c.encodeArray(&backupdata[0], backupdata.size(), outp, nvalue);
                     }
@@ -373,7 +380,7 @@ public:
                 z.reset();
                 for(size_t t = 0; t < howmanyrepeats; ++t) {
                   if  (pp.needtodelta) {
-                        decode(c,outp,nvalue,recov,recoveredsize);
+                        decode(c,SIMDDeltas,outp,nvalue,recov,recoveredsize);
                    } else {
                         c.decodeArray(outp, nvalue,
                                 recov, recoveredsize);
