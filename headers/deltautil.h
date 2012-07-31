@@ -268,53 +268,60 @@ public:
             container outs(4 * maxlength + 1024);
             container recovereds(maxlength + 1024 + 64);
             size_t totalcompressed = 0;
-            uint64_t timemsdecomp = 0;
-            uint64_t timemscomp = 0;
+            double timemsdecomp = 0;
+            double timemscomp = 0;
             for (size_t k = 0; k < datas.size(); ++k) {
                 if(datas[k].empty()) continue;
-                container backupdata (datas[k]); // making a copy to be safe
-                backupdata.reserve(backupdata.size() + 1024);
+                size_t recoveredsize = datas[k].size();
+                assert(recoveredsize > 0);
+                size_t howmanyrepeats = 1000 * 1000/recoveredsize;
+                if(howmanyrepeats == 0) howmanyrepeats = 1;
+
                 uint32_t * outp = &outs[0];
                 nvalue = outs.size();
                 while(needPaddingTo64bytes(outp + (needtodelta ? 1 : 0))) {
                     --nvalue;
                     outp++;
                 }
-
-
-                z.reset();
-                if (needtodelta) {
-                    encode(c,&backupdata[0],backupdata.size(),outp,nvalue);
-                } else {
-                    c.encodeArray(&backupdata[0], backupdata.size(), outp, nvalue);
+                uint64_t elapsedcomp = 0;
+                const size_t orignvalue = nvalue;
+                for(size_t t = 0; t < howmanyrepeats; ++t) {
+                    nvalue = orignvalue;
+                    container backupdata (datas[k]); // making a copy to be safe
+                    backupdata.reserve(backupdata.size() + 1024);
+                    z.reset();
+                    if (needtodelta) {
+                        encode(c,&backupdata[0],backupdata.size(),outp,nvalue);
+                    } else {
+                        c.encodeArray(&backupdata[0], backupdata.size(), outp, nvalue);
+                    }
+                    elapsedcomp += z.split();
                 }
-                const uint64_t elapsedcomp = z.split();
                 if((elapsedcomp < 5) and (!alreadywarnedaboutsmallarray)) {
-                    cerr<<"# your arrays are too small for accurate timing? Recorded elapsed time = "<< elapsedcomp << " mu s"<<endl;
+                    cerr<<"# your arrays are too small for accurate timing during encoding? Recorded elapsed time = "<< elapsedcomp << " mu s"<<endl;
                     alreadywarnedaboutsmallarray = true;
                 }
-                timemscomp += elapsedcomp;
+                timemscomp += elapsedcomp  * 1.0  / howmanyrepeats;
                 totalcompressed += nvalue;
-
-                size_t recoveredsize = backupdata.size();
                 uint32_t * recov = &recovereds[0];
                 while(needPaddingTo64bytes(recov + (needtodelta ? 1 : 0))) {
                     recov++;
                 }
                 z.reset();
-                if (needtodelta) {
+                for(size_t t = 0; t < howmanyrepeats; ++t) {
+                  if (needtodelta) {
                         decode(c,outp,nvalue,recov,recoveredsize);
-                 } else {
+                   } else {
                         c.decodeArray(outp, nvalue,
                                 recov, recoveredsize);
-
+                  }
                 }
                 const uint64_t elapseddecomp = z.split();
                 if((elapseddecomp < 5) and (!alreadywarnedaboutsmallarray)) {
-                    cerr<<"# your arrays are too small for accurate timing? Recorded elapsed time = "<< elapsedcomp << " mu s"<<endl;
+                    cerr<<"# your arrays are too small for accurate timing during decoding (possible bug)? Recorded elapsed time = "<< elapsedcomp << " mu s"<<endl;
                     alreadywarnedaboutsmallarray = true;
                 }
-                timemsdecomp += elapseddecomp;
+                timemsdecomp += elapseddecomp * 1.0 / howmanyrepeats;
                 if(recoveredsize!= datas[k].size()) {
                     cerr<<" expected size of "<<datas[k].size()<<" got "<<recoveredsize<<endl;
                     throw logic_error("arrays don't have same size: bug.");
