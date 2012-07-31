@@ -26,13 +26,9 @@ template<uint32_t MiniBlockSize>
 class BinaryPacking: public IntegerCODEC {
 public:
 public:
-    enum {
-        HowManyMiniBlocks = 16,
-        // If you set HowManyMiniBlocks to a small value, then
-        // when you pack you have poor alignment on 32-bit boundaries.
-        BlockSize = HowManyMiniBlocks * MiniBlockSize
-    };
 
+    static const uint32_t HowManyMiniBlocks = 16;
+    static const uint32_t BlockSize = HowManyMiniBlocks * MiniBlockSize;
     static const uint32_t bits32 = gccbits(32);
 
     void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
@@ -81,7 +77,7 @@ public:
                 in = fastunpack_16(in, &Bs[0], bits32);
             else
                 throw logic_error("unsupported HowManyMiniBlocks");
-            for (int i = 0; i < HowManyMiniBlocks; ++i, out += MiniBlockSize) {
+            for (uint32_t i = 0; i < HowManyMiniBlocks; ++i, out += MiniBlockSize) {
                 if (MiniBlockSize == 8)
                     in = fastunpack_8(in, out, Bs[i]);
                 else if (MiniBlockSize == 16)
@@ -115,12 +111,8 @@ public:
 template<uint32_t MiniBlockSize>
 class FastBinaryPacking: public IntegerCODEC {
 public:
-public:
-    enum {
-        HowManyMiniBlocks = 4,
-        BlockSize = HowManyMiniBlocks * MiniBlockSize
-    };
-
+    static const uint32_t HowManyMiniBlocks = 4;
+    static const uint32_t BlockSize = HowManyMiniBlocks * MiniBlockSize;
     static const uint32_t bits32 = 8 ; // 8 > gccbits(32);
 
     void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
@@ -169,7 +161,7 @@ public:
             Bs[2] = static_cast<uint8_t>(in[0] >> 8);
             Bs[3] = static_cast<uint8_t>(in[0]);
             ++in;
-            for (int i = 0; i < HowManyMiniBlocks; ++i) {
+            for (uint32_t i = 0; i < HowManyMiniBlocks; ++i) {
                 if (MiniBlockSize == 8)
                     in = fastunpack_8(in, out + i * MiniBlockSize, Bs[i]);
                 else if (MiniBlockSize == 16)
@@ -201,12 +193,9 @@ public:
 // A simpler version of FastBinaryPacking32. (For sanity testing.)
 class BP32: public IntegerCODEC {
 public:
-public:
-    enum {
-        MiniBlockSize = 32,
-        HowManyMiniBlocks = 4,
-        BlockSize = HowManyMiniBlocks * MiniBlockSize
-    };
+    static const uint32_t MiniBlockSize = 32;
+    static const uint32_t HowManyMiniBlocks = 4;
+    static const uint32_t BlockSize = HowManyMiniBlocks * MiniBlockSize;
 
     void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
             size_t &nvalue) {
@@ -241,7 +230,7 @@ public:
             Bs[2] = static_cast<uint8_t>(in[0] >> 8);
             Bs[3] = static_cast<uint8_t>(in[0]);
             ++in;
-            for (int i = 0; i < HowManyMiniBlocks; ++i, out += MiniBlockSize) {
+            for (uint32_t i = 0; i < HowManyMiniBlocks; ++i, out += MiniBlockSize) {
                 fastunpack(in, out, Bs[i]);
                 in += Bs[i];
             }
@@ -266,12 +255,10 @@ public:
 template<uint32_t MiniBlockSize, bool align = false, bool prescan = false>
 class ByteAlignedPacking: public IntegerCODEC {
 public:
-    enum {
-        HowManyMiniBlocks = 16,
-        // If you set HowManyMiniBlocks to a small value, then
-        // when you pack you have poor alignment on 32-bit boundaries.
-        BlockSize = HowManyMiniBlocks * MiniBlockSize
-    };
+
+    static const uint32_t HowManyMiniBlocks = 16;
+    static const uint32_t BlockSize = HowManyMiniBlocks * MiniBlockSize;
+
 
     static const uint32_t bits32 = gccbits(32);
 
@@ -340,7 +327,7 @@ public:
                 inbyte = fastunalignedunpack_16(inbyte, &Bs[0],storageforbitwidth);
             else
                 throw logic_error("unsupported HowManyMiniBlocks");
-            for (int i = 0; i < HowManyMiniBlocks; ++i, out += MiniBlockSize) {
+            for (uint32_t i = 0; i < HowManyMiniBlocks; ++i, out += MiniBlockSize) {
                 if (align)
                     inbyte = padTo32bits(inbyte);
                 if (MiniBlockSize == 8)

@@ -22,19 +22,15 @@
  */
 class SIMDBinaryPacking: public IntegerCODEC {
 public:
-public:
-    enum {
-        MiniBlockSize = 128,
-        bits32 = 8,
-        HowManyMiniBlocks = 16,
-        BlockSize = HowManyMiniBlocks * MiniBlockSize,
-        CookiePadder = 123456
-    };
+    static const uint32_t CookiePadder = 123456;
+    static const uint32_t MiniBlockSize = 128;
+    static const uint32_t HowManyMiniBlocks = 16;
+    static const uint32_t BlockSize = HowManyMiniBlocks * MiniBlockSize;
 
     /**
      * The way this code is written, it will automatically "pad" the
      * header according to the alignment of the out pointer. So if you
-     * move the data around, you should preserve the alignmment.
+     * move the data around, you should preserve the alignment.
      */
     void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
             size_t &nvalue) {
@@ -77,27 +73,13 @@ public:
         const uint32_t * const initout(out);
         uint32_t Bs[HowManyMiniBlocks];
         for (; out < initout + actuallength; out += BlockSize) {
-            Bs[0] = static_cast<uint8_t>(in[0] >> 24);
-            Bs[1] = static_cast<uint8_t>(in[0] >> 16);
-            Bs[2] = static_cast<uint8_t>(in[0] >> 8);
-            Bs[3] = static_cast<uint8_t>(in[0]);
-            ++in;
-            Bs[4] = static_cast<uint8_t>(in[0] >> 24);
-            Bs[5] = static_cast<uint8_t>(in[0] >> 16);
-            Bs[6] = static_cast<uint8_t>(in[0] >> 8);
-            Bs[7] = static_cast<uint8_t>(in[0]);
-            ++in;
-            Bs[8] = static_cast<uint8_t>(in[0] >> 24);
-            Bs[9] = static_cast<uint8_t>(in[0] >> 16);
-            Bs[10] = static_cast<uint8_t>(in[0] >> 8);
-            Bs[11] = static_cast<uint8_t>(in[0]);
-            ++in;
-            Bs[12] = static_cast<uint8_t>(in[0] >> 24);
-            Bs[13] = static_cast<uint8_t>(in[0] >> 16);
-            Bs[14] = static_cast<uint8_t>(in[0] >> 8);
-            Bs[15] = static_cast<uint8_t>(in[0]);
-            ++in;
-            for (int i = 0; i < HowManyMiniBlocks; ++i) {
+            for(uint32_t i = 0; i < 4 ; ++i,++in) {
+                Bs[0 + 4 * i] = static_cast<uint8_t>(in[0] >> 24);
+                Bs[1 + 4 * i] = static_cast<uint8_t>(in[0] >> 16);
+                Bs[2 + 4 * i] = static_cast<uint8_t>(in[0] >> 8);
+                Bs[3 + 4 * i] = static_cast<uint8_t>(in[0]);
+            }
+            for (uint32_t i = 0; i < HowManyMiniBlocks; ++i) {
                 // D.L. : is the reinterpret_cast safe here?
                 SIMD_fastunpack_32(reinterpret_cast<const __m128i *>(in), out + i * MiniBlockSize, Bs[i]);
                 in += MiniBlockSize/32 * Bs[i];
