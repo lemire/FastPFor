@@ -100,6 +100,22 @@ void splitLongArrays(vector<T> & datas, size_t MAXSIZE = 65536 + 1) {// choosing
 }
 
 
+
+struct processparameters {
+    bool needtodelta;
+    bool fulldisplay;
+    bool displayhistogram;
+    bool computeentropy;
+    bool cumulative;
+
+    processparameters(bool ndelta,bool fdisplay, bool dhisto, bool compentropy, bool cumul):
+        needtodelta(ndelta),
+        fulldisplay(fdisplay),
+        displayhistogram(dhisto),
+        computeentropy(compentropy),
+        cumulative(cumul)
+    {}
+};
 /**
  * This class encodes and decode data using
  * an existing IntegerCODEC and delta coding.
@@ -179,16 +195,15 @@ public:
     }
 
 
-
     // a convenience function
     template <class container>
     static void process(vector<algostats> & myalgos,
-            const vector<container > & datas, const bool needtodelta,
+            const vector<container > & datas, processparameters & pp /*const bool needtodelta,
             const bool fulldisplay, const bool displayhistogram, const bool computeentropy,
-            const bool cumulative, const string prefix = "") {
+            const bool cumulative*/, const string prefix = "") {
         enum {verbose = false};
         if(datas.empty() or myalgos.empty()) return;
-        if(needtodelta) {
+        if(pp.needtodelta) {
             if(verbose) cout<<"# delta coding requested... checking whether we have sorted arrays...";
             for(auto x : datas) {
                 if(x.size() > 0)
@@ -222,36 +237,36 @@ public:
             }
 
         }
-        if (displayhistogram) {
+        if (pp.displayhistogram) {
             BitWidthHistoGram hist;
             for (auto i = datas.begin(); i != datas.end(); ++i)
                 hist.eatIntegers(*i);
             hist.display("#");
         }
-        if (fulldisplay) cout << "#";
-        if (fulldisplay and computeentropy)
+        if (pp.fulldisplay) cout << "#";
+        if (pp.fulldisplay and pp.computeentropy)
             cout << " entropy  databits(entropy) ";
 
-        if (fulldisplay) {
+        if (pp.fulldisplay) {
             for (auto i = myalgos.begin(); i != myalgos.end(); ++i) {
                 cout << (*i).name() << "\t";
             }
             cout << endl;
         }
-        if (fulldisplay)
+        if (pp.fulldisplay)
             cout
                     << "# for each scheme we give compression speed (million int./s)"
                         " decompression speed and bits per integer" << endl;
         EntropyRecorder er;
-        if(computeentropy) {
+        if(pp.computeentropy) {
              for (uint k = 0; k < datas.size(); ++k)
                if(!datas[k].empty()) er.eat(&datas[k][0], datas[k].size());
-             if (fulldisplay)    cout << "# generated " << er.totallength << " integers" << endl;
+             if (pp.fulldisplay)    cout << "# generated " << er.totallength << " integers" << endl;
         }
-        if (fulldisplay)cout  << prefix << "\t";
-        if(computeentropy and fulldisplay)
+        if (pp.fulldisplay)cout  << prefix << "\t";
+        if(pp.computeentropy and pp.fulldisplay)
             cout << std::setprecision(4) << er.computeShannon() << "\t";
-        if (computeentropy and fulldisplay)
+        if (pp.computeentropy and pp.fulldisplay)
             cout << std::setprecision(4) << er.computeDataBits() << "\t";
         bool alreadywarnedaboutsmallarray = false;
         WallClockTimer z;
@@ -279,7 +294,7 @@ public:
 
                 uint32_t * outp = &outs[0];
                 nvalue = outs.size();
-                while(needPaddingTo64bytes(outp + (needtodelta ? 1 : 0))) {
+                while(needPaddingTo64bytes(outp + (pp.needtodelta ? 1 : 0))) {
                     --nvalue;
                     outp++;
                 }
@@ -290,7 +305,7 @@ public:
                     container backupdata (datas[k]); // making a copy to be safe
                     backupdata.reserve(backupdata.size() + 1024);
                     z.reset();
-                    if (needtodelta) {
+                    if (pp.needtodelta) {
                         encode(c,&backupdata[0],backupdata.size(),outp,nvalue);
                     } else {
                         c.encodeArray(&backupdata[0], backupdata.size(), outp, nvalue);
@@ -304,12 +319,12 @@ public:
                 timemscomp += elapsedcomp  * 1.0  / howmanyrepeats;
                 totalcompressed += nvalue;
                 uint32_t * recov = &recovereds[0];
-                while(needPaddingTo64bytes(recov + (needtodelta ? 1 : 0))) {
+                while(needPaddingTo64bytes(recov + (pp.needtodelta ? 1 : 0))) {
                     recov++;
                 }
                 z.reset();
                 for(size_t t = 0; t < howmanyrepeats; ++t) {
-                  if (needtodelta) {
+                  if (pp.needtodelta) {
                         decode(c,outp,nvalue,recov,recoveredsize);
                    } else {
                         c.decodeArray(outp, nvalue,
@@ -331,30 +346,30 @@ public:
                 }
 
             }
-            if(cumulative)
+            if(pp.cumulative)
                 i->comptime += timemscomp;
             else
                 i->compspeed.push_back(totallength * 1.0 / timemscomp);
-            if (fulldisplay)
+            if (pp.fulldisplay)
                 cout << std::setprecision(4) << totallength * 1.0 / timemscomp
                         << "\t";
-            if(cumulative)
+            if(pp.cumulative)
                 i->decomptime += timemsdecomp;
             else
                 i->decompspeed.push_back(totallength * 1.0 / timemsdecomp);
-            if (fulldisplay)
+            if (pp.fulldisplay)
                 cout << std::setprecision(4) << totallength * 1.0 / timemsdecomp
                         << "\t";
-            if (fulldisplay)cout << std::setprecision(4) << totalcompressed * 32.0 / totallength
+            if (pp.fulldisplay)cout << std::setprecision(4) << totalcompressed * 32.0 / totallength
                     << "\t";
-            if(cumulative) {
+            if(pp.cumulative) {
                 i->output += totalcompressed;
                 i->input += totallength;
             } else
                 i->bitsperint.push_back(totalcompressed * 32.0 / totallength);
-            if (fulldisplay) cout << "\t";
+            if (pp.fulldisplay) cout << "\t";
         }
-        if (fulldisplay) cout << endl;
+        if (pp.fulldisplay) cout << endl;
     }
 
 

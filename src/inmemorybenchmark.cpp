@@ -115,7 +115,8 @@ int main(int argc, char **argv) {
         cout<<"# read "<<  std::setprecision(3)  << datastotalsize * 4 / (1024.0 * 1024.0) << " MB "<<endl;
 	cout<<"# processing block"<<endl;
 	    if(splitlongarrays) splitLongArrays(datas);
-	    Delta::process(myalgos, datas, true,false, false, false, true);        // done collecting data, now allocating memory
+	    processparameters pp(true,false, false, false, true);
+	    Delta::process(myalgos, datas, pp);        // done collecting data, now allocating memory
     }
     reader.close();
     cout<<"# build summary..."<<endl;
