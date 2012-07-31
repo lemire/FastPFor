@@ -99,9 +99,9 @@ public:
             ++in;
             for (int i = 0; i < HowManyMiniBlocks; ++i) {
                 // D.L. : is the reinterpret_cast safe here?
-                cout<<"Bs s["<<i<<"]="<<Bs[i]<<endl;
-                if(needPaddingTo128Bits(in)) throw new runtime_error("bad input align");
-                if(needPaddingTo128Bits(out+i*MiniBlockSize)) throw runtime_error("bad output align");
+                //cout<<"Bs s["<<i<<"]="<<Bs[i]<<endl;
+                //if(needPaddingTo128Bits(in)) throw new runtime_error("bad input align");
+                //if(needPaddingTo128Bits(out+i*MiniBlockSize)) throw runtime_error("bad output align");
                 SIMD_fastunpack_32(reinterpret_cast<const __m128i *>(in), out + i * MiniBlockSize, Bs[i]);
                 in += MiniBlockSize/32 * Bs[i];
             }

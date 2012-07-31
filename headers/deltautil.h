@@ -298,7 +298,7 @@ public:
 
                 size_t recoveredsize = backupdata.size();
                 uint32_t * recov = &recovereds[0];
-                while(needPaddingTo64bytes(recov)) {
+                while(needPaddingTo64bytes(recov + (needtodelta ? 1 : 0))) {
                     recov++;
                 }
                 z.reset();
