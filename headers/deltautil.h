@@ -132,6 +132,7 @@ public:
             uint32_t * out, size_t &nvalue) {
         delta(in,length);
         out[0] = in[0];
+        assert(!needPaddingTo64bytes(out + 1)); 
         c.encodeArray(in + 1, length - 1, out + 1, nvalue);
         nvalue += 1;
     }
@@ -141,7 +142,6 @@ public:
      static void delta(T * data, const size_t size) {
          if (size == 0)
              throw runtime_error("delta coding impossible with no value!");
-
           for (size_t i = size - 1; i > 0; --i) {
                      data[i] -= data[i - 1];
           }
@@ -187,6 +187,8 @@ public:
     static const uint32_t * decode(IntegerCODEC & c, const uint32_t *in,
             const size_t length, uint32_t *out, size_t & nvalue) {
         out[0] = in[0];
+        assert(!needPaddingTo64bytes(in + 1)); 
+        assert(!needPaddingTo64bytes(out + 1)); 
         const uint32_t * finalin = c.decodeArray(in + 1, length - 1, out + 1,
                 nvalue);
         nvalue += 1;
@@ -201,6 +203,7 @@ public:
             const vector<container > & datas, processparameters & pp /*const bool needtodelta,
             const bool fulldisplay, const bool displayhistogram, const bool computeentropy,
             const bool cumulative*/, const string prefix = "") {
+        // pp.needtodelta = false;
         enum {verbose = false};
         if(datas.empty() or myalgos.empty()) return;
         if(pp.needtodelta) {
@@ -324,7 +327,7 @@ public:
                 }
                 z.reset();
                 for(size_t t = 0; t < howmanyrepeats; ++t) {
-                  if (pp.needtodelta) {
+                  if  (pp.needtodelta) {
                         decode(c,outp,nvalue,recov,recoveredsize);
                    } else {
                         c.decodeArray(outp, nvalue,
