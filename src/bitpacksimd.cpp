@@ -87,7 +87,7 @@ __v4su  _NumMaskSIMD31{ 2147483647U ,2147483647U ,2147483647U ,2147483647U };
 __v4sf  NumMaskSIMD31 =  reinterpret_cast<__v4sf>(_NumMaskSIMD31);
 
 void SIMD_nullunpacker32(const __m128i *  __restrict__ , uint32_t *  __restrict__  out) {
-    memset(out,0,32 * 4);
+    memset(out,0,32 * 4 * sizeof(uint32_t));
 }
   
   
