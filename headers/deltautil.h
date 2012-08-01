@@ -20,13 +20,12 @@
 struct algostats {
 
     algostats(shared_ptr<IntegerCODEC> & a, bool simd = false) :
-        compspeed(), decompspeed(),
-                bitsperint(), algo(a),
-                decomptime(), comptime(), output(),input(), SIMDDeltas(simd){
+        compspeed(), decompspeed(), bitsperint(), algo(a), decomptime(),
+                comptime(), output(), input(), SIMDDeltas(simd) {
     }
     string name() {
         // if SIMDDeltas is "true", we prepend @
-        if(SIMDDeltas) {
+        if (SIMDDeltas) {
             ostringstream convert;
             convert << "@" << algo->name();
             return convert.str();
@@ -44,12 +43,11 @@ struct algostats {
     vector<double> bitsperint;
     shared_ptr<IntegerCODEC> algo;
 
-
     // maps from name to results
-    double decomptime, comptime, output,input;
+    double decomptime, comptime, output, input;
     bool SIMDDeltas;
 };
-void summarize(vector<algostats> & v, string prefix ="#") {
+void summarize(vector<algostats> & v, string prefix = "#") {
     if (v.empty())
         return;
     cout << "# building summary " << endl;
@@ -62,20 +60,19 @@ void summarize(vector<algostats> & v, string prefix ="#") {
         cout << "#" << endl;
         for (auto i = v.begin(); i != v.end(); ++i) {
             cout << prefix << std::setprecision(4) << i->name(40) << " \t "
-                    << i->compspeed.at(k) << " \t " << i->decompspeed.at(k) << " \t "
-                    << i->bitsperint.at(k) << endl;
+                    << i->compspeed.at(k) << " \t " << i->decompspeed.at(k)
+                    << " \t " << i->bitsperint.at(k) << endl;
         }
-        cout << prefix  << endl << prefix << endl;
+        cout << prefix << endl << prefix << endl;
     }
-    for(algostats a : v) {
-        if( (a.comptime != 0) and (a.decomptime !=0) and (a.input != 0)) {
-            cout << " " << std::setprecision(4) << a.name(40) << " \t "
-                    << a.input / a.comptime << " \t " << a.input / a.decomptime << " \t "
-                    << a.output * 32 / a.input << endl;
-        }
+for(algostats a : v) {
+    if( (a.comptime != 0) and (a.decomptime !=0) and (a.input != 0)) {
+        cout << " " << std::setprecision(4) << a.name(40) << " \t "
+        << a.input / a.comptime << " \t " << a.input / a.decomptime << " \t "
+        << a.output * 32 / a.input << endl;
     }
 }
-
+}
 
 /**
  * This takes every vector and replaces it, if
@@ -83,30 +80,31 @@ void summarize(vector<algostats> & v, string prefix ="#") {
  * size MAXSIZE. If a vector has size less than
  * or equal to MAXSIZE, it remains unchanged.
  */
-template <class T>
+template<class T>
 void splitLongArrays(vector<T> & datas, size_t MAXSIZE = 65536 + 1) {// choosing a power of two + 1 as the default
     // possibly inefficient
-    for(size_t i = 0 ; i < datas.size() ; ++i) {
-          if(datas[i].size()>MAXSIZE) {
-              const size_t howmany = (datas[i].size()+MAXSIZE-1)/MAXSIZE - 1;
-              datas.reserve(datas.size()+howmany);     
-              for(size_t j = 0; j < howmany; ++j) {
-                  size_t begin = (j+1)*MAXSIZE;
-                  size_t end = (j+2)*MAXSIZE;
-                  if(end > datas[i].size()) end = datas[i].size();
-                  assert(datas[i].begin()+end<=datas[i].end());
-                  datas.push_back(T(datas[i].begin()+begin,datas[i].begin()+end));
-              }
-              datas[i].resize(MAXSIZE);
-          }
-     }
+    for (size_t i = 0; i < datas.size(); ++i) {
+        if (datas[i].size() > MAXSIZE) {
+            const size_t howmany = (datas[i].size() + MAXSIZE - 1) / MAXSIZE
+                    - 1;
+            datas.reserve(datas.size() + howmany);
+            for (size_t j = 0; j < howmany; ++j) {
+                size_t begin = (j + 1) * MAXSIZE;
+                size_t end = (j + 2) * MAXSIZE;
+                if (end > datas[i].size())
+                    end = datas[i].size();
+                assert(datas[i].begin() + end <= datas[i].end());
+                datas.push_back(
+                        T(datas[i].begin() + begin, datas[i].begin() + end));
+            }
+            datas[i].resize(MAXSIZE);
+        }
+    }
     // for safety, we check the result:
-    for(size_t i = 0 ; i < datas.size() ; ++i) {
-        assert(datas[i].size()<=MAXSIZE);
-     }
+    for (size_t i = 0; i < datas.size(); ++i) {
+        assert(datas[i].size() <= MAXSIZE);
+    }
 }
-
-
 
 struct processparameters {
     bool needtodelta;
@@ -115,13 +113,11 @@ struct processparameters {
     bool computeentropy;
     bool cumulative;
 
-    processparameters(bool ndelta,bool fdisplay, bool dhisto, bool compentropy, bool cumul):
-        needtodelta(ndelta),
-        fulldisplay(fdisplay),
-        displayhistogram(dhisto),
-        computeentropy(compentropy),
-        cumulative(cumul)
-    {}
+    processparameters(bool ndelta, bool fdisplay, bool dhisto,
+            bool compentropy, bool cumul) :
+        needtodelta(ndelta), fulldisplay(fdisplay), displayhistogram(dhisto),
+                computeentropy(compentropy), cumulative(cumul) {
+    }
 };
 /**
  * This class encodes and decode data using
@@ -135,58 +131,69 @@ public:
     /**
      * This modifies the input.
      */
-    static void encode(IntegerCODEC & c, bool SIMDmode, uint32_t *in, const size_t length,
-            uint32_t * out, size_t &nvalue) {
-        if(SIMDmode)
-            deltaSIMD(in,length);
+    static void encode(IntegerCODEC & c, bool SIMDmode, uint32_t *in,
+            const size_t length, uint32_t * out, size_t &nvalue) {
+        assert(!needPaddingTo128Bits(in));
+        if (SIMDmode)
+            deltaSIMD(in, length);
         else
-            delta(in,length);
-        out[0] = in[0];
-        assert(!needPaddingTo64bytes(out + 1)); 
-        c.encodeArray(in + 1, length - 1, out + 1, nvalue);
-        nvalue += 1;
+            delta(in, length);
+        assert(!needPaddingTo128Bits(out));
+        c.encodeArray(in, length , out , nvalue);
     }
 
     //  by D. Lemire
-     template<class T>
-     static void delta(T * data, const size_t size) {
-         if (size == 0)
-             throw runtime_error("delta coding impossible with no value!");
-          for (size_t i = size - 1; i > 0; --i) {
-                     data[i] -= data[i - 1];
-          }
-     }
+    template<class T>
+    static void delta(T * data, const size_t size) {
+        if (size == 0)
+            throw runtime_error("delta coding impossible with no value!");
+        for (size_t i = size - 1; i > 0; --i) {
+            data[i] -= data[i - 1];
+        }
+    }
 
-     // by Leonid Boytsov
-     template<class T>
-     static void deltaSIMD(T * pData, size_t TotalQty) {
-         if (TotalQty < 5) {
-             delta(pData,TotalQty); // no need for SIMD
+
+    // by Leonid Boytsov, revised by D. Lemire
+    template<class T>
+    static void deltaSIMD(T * pData, const size_t TotalQty) {
+        if (TotalQty < 5) {
+             delta(pData, TotalQty); // no need for SIMD
              return;
-         }
-         for (size_t i = TotalQty - 1; i >= 4; --i) {
+        }
+        const size_t Qty4 = TotalQty / 4;
+#pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations" // GCC hates next loop
+        for (size_t i = TotalQty - 1; i >= 4 * Qty4; --i) {
              pData[i] -= pData[i-4];
-         }
+        }
+#pragma GCC diagnostic pop
+        __m128i* pCurr = reinterpret_cast<__m128i*>(pData) + Qty4 - 1;
+        const __m128i* pStart = reinterpret_cast<__m128i*>(pData);
+        __m128i a = _mm_load_si128(pCurr);
+        while (pCurr > pStart) {
+            register __m128i b = _mm_load_si128(pCurr - 1);
+            _mm_store_si128(pCurr-- , _mm_sub_epi32(a, b));
+            a = b;
+        }
      }
 
-     // by Leonid Boytsov
+
+
+     // by Leonid Boytsov, modified by D. Lemire
      template<class T>
-     static void inverseDeltaSIMD(T * pData, size_t TotalQty) {
+     static void inverseDeltaSIMD(T * pData,  const size_t TotalQty) {
          if (TotalQty < 5) {
              inverseDelta(pData, TotalQty);// no SIMD
              return;
          }
-         size_t Qty4 = TotalQty / 4;
+         const size_t Qty4 = TotalQty / 4;
 
-         if (Qty4 >= 2) {
-             __m128i*       pCurr = reinterpret_cast<__m128i*>(pData);
-             __m128i*       pEnd = pCurr + Qty4;
-             __m128i        a = _mm_loadu_si128(pCurr++);
-             while (pCurr < pEnd) {
-                 __m128i        b = _mm_loadu_si128(pCurr);
-                 a = _mm_add_epi32(a, b);
-                 _mm_storeu_si128(pCurr++ , a);
-             }
+         __m128i* pCurr = reinterpret_cast<__m128i*>(pData);
+         const __m128i* pEnd = pCurr + Qty4;
+         __m128i a = _mm_load_si128(pCurr++);
+         while (pCurr < pEnd) {
+             __m128i b = _mm_load_si128(pCurr);
+             a = _mm_add_epi32(a, b);
+             _mm_store_si128(pCurr++ , a);
          }
 
          for (size_t i = Qty4 * 4; i < TotalQty; ++i) {
@@ -216,7 +223,7 @@ public:
         if (size == 0)
             return;
         const size_t UnrollQty = 4;
-        size_t sz0 = (size / UnrollQty) * UnrollQty; // equal to 0, if size < UnrollQty
+        const size_t sz0 = (size / UnrollQty) * UnrollQty; // equal to 0, if size < UnrollQty
         size_t i = 1;
         if (sz0 >= UnrollQty) {
             T a = data[0];
@@ -232,14 +239,12 @@ public:
         }
     }
 
-    static const uint32_t * decode(IntegerCODEC & c, bool SIMDmode, const uint32_t *in,
+    static const uint32_t * decode(IntegerCODEC & c, const bool SIMDmode, const uint32_t *in,
             const size_t length, uint32_t *out, size_t & nvalue) {
-        out[0] = in[0];
-        assert(!needPaddingTo64bytes(in + 1)); 
-        assert(!needPaddingTo64bytes(out + 1)); 
-        const uint32_t * finalin = c.decodeArray(in + 1, length - 1, out + 1,
+        assert(!needPaddingTo128Bits(in));
+        assert(!needPaddingTo128Bits(out));
+        const uint32_t * finalin = c.decodeArray(in , length , out,
                 nvalue);
-        nvalue += 1;
         if(SIMDmode)
             inverseDeltaSIMD(out, nvalue);
         else
@@ -349,7 +354,7 @@ public:
 
                 uint32_t * outp = &outs[0];
                 nvalue = outs.size();
-                while(needPaddingTo64bytes(outp + (pp.needtodelta ? 1 : 0))) {
+                while(needPaddingTo128Bits(outp)) {
                     --nvalue;
                     outp++;
                 }
@@ -375,7 +380,7 @@ public:
                 timemscomp += elapsedcomp  * 1.0  / howmanyrepeats;
                 totalcompressed += nvalue;
                 uint32_t * recov = &recovereds[0];
-                while(needPaddingTo64bytes(recov + (pp.needtodelta ? 1 : 0))) {
+                while(needPaddingTo128Bits(recov)) {
                     recov++;
                 }
                 z.reset();
