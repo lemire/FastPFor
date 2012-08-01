@@ -179,13 +179,13 @@ public:
          size_t Qty4 = TotalQty / 4;
 
          if (Qty4 >= 2) {
-             register __m128i*       pCurr = reinterpret_cast<__m128i*>(pData);
-             register __m128i*       pEnd = pCurr + Qty4;
-             register __m128i        a = _mm_load_si128(pCurr++);
+             __m128i*       pCurr = reinterpret_cast<__m128i*>(pData);
+             __m128i*       pEnd = pCurr + Qty4;
+             __m128i        a = _mm_loadu_si128(pCurr++);
              while (pCurr < pEnd) {
-                 register __m128i        b = _mm_load_si128(pCurr);
+                 __m128i        b = _mm_loadu_si128(pCurr);
                  a = _mm_add_epi32(a, b);
-                 *pCurr++ = a;
+                 _mm_storeu_si128(pCurr++ , a);
              }
          }
 
@@ -335,8 +335,8 @@ public:
                 totallength += data.size();
                 if(maxlength < data.size()) maxlength = data.size();
              }
-            container outs(4 * maxlength + 1024);
-            container recovereds(maxlength + 1024 + 64);
+            container outs(4 * maxlength + 2048 + 64);
+            container recovereds(maxlength + 2048 + 64);
             size_t totalcompressed = 0;
             double timemsdecomp = 0;
             double timemscomp = 0;
@@ -355,10 +355,11 @@ public:
                 }
                 uint64_t elapsedcomp = 0;
                 const size_t orignvalue = nvalue;
+                container backupdata;
+                backupdata.reserve(datas[k].size() + 2048 + 64);
                 for(size_t t = 0; t < howmanyrepeats; ++t) {
                     nvalue = orignvalue;
-                    container backupdata (datas[k]); // making a copy to be safe
-                    backupdata.reserve(backupdata.size() + 1024);
+                    backupdata.assign(datas[k].begin(),datas[k].end()); // making a copy to be safe
                     z.reset();
                     if (pp.needtodelta) {
                         encode(c,SIMDDeltas,&backupdata[0],backupdata.size(),outp,nvalue);
