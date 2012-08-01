@@ -18,6 +18,7 @@
 #include "newpfor.h"
 #include "optpfor.h"
 #include "fastpfor.h"
+#include "simdfastpfor.h"
 #include "variablebyte.h"
 #include "compositecodec.h"
 #include "blockpacking.h"
@@ -89,6 +90,7 @@ map<string, shared_ptr<IntegerCODEC> > CODECFactory::scodecmap = {
     //             VariableByte>)},
     {   "vsencoding", shared_ptr<IntegerCODEC> (new vsencoding::VSEncodingBlocks(1U << 16))},
     {  "fastpfor", shared_ptr<IntegerCODEC> (new CompositeCodec<FastPFor , VariableByte> ())},
+    {  "simdfastpfor", shared_ptr<IntegerCODEC> (new CompositeCodec<SIMDFastPFor , VariableByte> ())},
     {  "simplepfor", shared_ptr<IntegerCODEC> (new CompositeCodec<SimplePFor<> , VariableByte> ())},
     {   "pfor", shared_ptr<IntegerCODEC> (new CompositeCodec<PFor , VariableByte> ())},
     {   "pfor2008", shared_ptr<IntegerCODEC> (new CompositeCodec<PFor2008 , VariableByte> ())},
