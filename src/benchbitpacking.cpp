@@ -137,12 +137,12 @@ bool equalOnFirstBits(const container32bit & data,
     return true;
 }
 void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
+    T = T + 1; // we have a warming up pass
     vector<uint32_t, cacheallocator> data = generateArray32(N);
     vector<uint32_t, cacheallocator> compressed(N, 0);
     vector<uint32_t, cacheallocator> recovered(N, 0);
     WallClockTimer z;
     double packtime, packtimewm, unpacktime;
-//    double tightpacktime, tightpacktimewm, tightunpacktime;
     double simdpacktime, simdpacktimewm, simdunpacktime;
 
     cout << "#million of integers per second: higher is better" << endl;
@@ -154,9 +154,6 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
             packtime = 0;
             packtimewm = 0;
             unpacktime = 0;
-//            tightpacktime = 0;
-  //          tightpacktimewm = 0;
-    //        tightunpacktime = 0;
             simdpacktime = 0;
             simdpacktimewm = 0;
             simdunpacktime = 0;
@@ -166,31 +163,6 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
                 compressed.resize(N * bit / 32, 0);
                 recovered.clear();
                 recovered.resize(N, 0);
-                /*                          z.reset();
-                 pack_tight(data, compressed, bit);
-                 if (t > 0)
-                 tightpacktime += z.split();
-                 unpack_tight(compressed, recovered, bit);
-                 if (!equalOnFirstBits(data, recovered, bit)) {
-                 cout << " Bug0!" <<bit << endl;
-                 return;
-                 }
-
-                 z.reset();
-                 pack_tightwithoutmask(data, compressed, bit);
-                 if (t > 0)
-                 tightpacktimewm += z.split();
-
-                 z.reset();
-                 unpack_tight(compressed, recovered, bit);
-                 if (t > 0)
-                 tightunpacktime += z.split();
-
-                 if (!equalOnFirstBits(data, recovered, bit)) {
-                 cout << " Bug0!" <<bit << endl;
-                 return;
-                 }
-                 */
                 simdpack(data, compressed, bit);
                 simdunpack(compressed, recovered, bit);
                 if (!equalOnFirstBits(data, recovered, bit)) {
@@ -259,10 +231,6 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
                     / (simdpacktimewm) << "\t\t" << N * (T - 1)
                     / (simdunpacktime) << "\t\t";
 
-            /*            cout << std::setprecision(4) << bit << "\t\t" << N * (T - 1)
-             / (tightpacktime) << "\t\t" << N * (T - 1)
-             / (tightpacktimewm) << "\t\t\t" << N * (T - 1)
-             / (tightunpacktime) << "\t\t";*/
 
             cout << endl;
         }
@@ -273,8 +241,11 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
 
 using namespace std;
 int main() {
-
+    cout<<"# cache-to-cache"<<endl; 
     simplebenchmark(1U << 16, 1U << 9);
+    cout<<endl;
+    cout<<"# ram-to-ram"<<endl;
+    simplebenchmark(1U << 25, 1U << 0);
 
     return 0;
 }
