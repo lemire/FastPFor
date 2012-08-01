@@ -60,6 +60,7 @@ public:
             const uint32_t bit) {
         const uint32_t size = *in;
         ++in;
+        in = padTo128bits(in);
         out.resize((size + 128 - 1) / 128 * 128);
         for (uint32_t j = 0; j != out.size(); j += 128) {
             SIMD_fastunpack_32(reinterpret_cast<const __m128i *>(in), &out[j], bit);
@@ -69,7 +70,7 @@ public:
         return in;
     }
 
-    template<class STLContainer>
+/*    template<class STLContainer>
     static uint32_t * packmeupsimd(STLContainer & source, uint32_t * out, const uint32_t bit) {
         const uint32_t size = source.size();
         *out = size;
@@ -83,7 +84,7 @@ public:
         }
         source.resize(size);
         return out;
-    }
+    }*/
 
     template<class STLContainer>
     static uint32_t * packmeupwithoutmasksimd(STLContainer & source, uint32_t * out,
@@ -91,6 +92,7 @@ public:
         const uint32_t size = source.size();
         *out = size;
         out++;
+        out = padTo128bits(out);
         if (source.size() == 0)
             return out;
         source.resize((source.size() + 128 - 1) / 128 * 128);
@@ -244,7 +246,6 @@ public:
                 bitmap |= (1U << (k - 1));
         }
         *(out++) = bitmap;
-        out = padTo128bits(out);
         for (uint32_t k = 1; k <= 32; ++k) {
             if (datatobepacked[k].size() > 0)
                 out = packmeupwithoutmasksimd(datatobepacked[k], out, k);
@@ -262,7 +263,6 @@ public:
         const uint8_t * bytep = reinterpret_cast<const uint8_t *> (inexcept);
         inexcept += (bytesize + sizeof(uint32_t) - 1) / sizeof(uint32_t);
         const uint32_t bitmap = *(inexcept++);
-        inexcept = padTo128bits(inexcept);
         for (uint32_t k = 1; k <= 32; ++k) {
             if ((bitmap & (1U << (k - 1))) != 0) {
                 inexcept = unpackmesimd(inexcept, datatobepacked[k], k);
