@@ -167,7 +167,6 @@ public:
      */
     int decodeBlock(const unsigned char*& src, size_t& srclength,
             uint32_t*& dest, size_t& dstlength) const {
-        static char buff[16];
 
         const unsigned char* pdesc = src;
         unsigned char desc = *pdesc;
@@ -181,6 +180,7 @@ public:
             // to avoid cache miss
             data = __builtin_ia32_lddqu(reinterpret_cast<const char*> (peek));
         } else {
+            static char buff[16];
             memcpy(buff, peek, 8);
             data = __builtin_ia32_lddqu(buff);
         }
