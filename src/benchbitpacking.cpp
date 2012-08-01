@@ -49,6 +49,15 @@ void fastunpack(const vector<uint32_t, cacheallocator> & data,
 
 
 
+void simdpack(const vector<uint32_t, cacheallocator> & data,
+        vector<uint32_t, cacheallocator> & out, const uint32_t bit) {
+    const uint32_t N = data.size();
+    for (uint32_t k = 0; k < N / 128; ++k) {
+        SIMD_fastpack_32(&data[0] + 128 * k, reinterpret_cast<__m128i *>(&out[0] + 4 * bit * k), bit);
+    }
+}
+
+
 
 void simdpackwithoutmask(const vector<uint32_t, cacheallocator> & data,
         vector<uint32_t, cacheallocator> & out, const uint32_t bit) {
@@ -138,7 +147,7 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
     WallClockTimer z;
     double packtime, packtimewm, unpacktime;
     double tightpacktime, tightpacktimewm, tightunpacktime;
-    double simdpacktimewm, simdunpacktime;
+    double simdpacktime, simdpacktimewm, simdunpacktime;
 
     cout << "#million of integers per second: higher is better" << endl;
     cout << "#bit, pack, pack without mask, unpack" << endl;
@@ -152,6 +161,7 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
             tightpacktime = 0;
             tightpacktimewm = 0;
             tightunpacktime = 0;
+            simdpacktime = 0;
             simdpacktimewm = 0;
             simdunpacktime = 0;
 
@@ -179,6 +189,11 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
                     cout << " Bug0!" <<bit << endl;
                     return;
                 }
+
+                z.reset();
+                simdpack(data, compressed, bit);
+                if (t > 0)
+                    simdpacktime += z.split();
 
                 z.reset();
                 simdpackwithoutmask(data, compressed, bit);
@@ -222,6 +237,7 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
                     << "\t\t\t" << N * (T - 1) / (unpacktime) << "\t\t";
 
             cout << std::setprecision(4) << bit << "\t\t" << N * (T - 1)
+                            / (simdpacktime) << "\t\t" << N * (T - 1)
                     / (simdpacktimewm) << "\t\t" << N * (T - 1) / (simdunpacktime) << "\t\t";
 
             cout << std::setprecision(4) << bit << "\t\t" << N * (T - 1)

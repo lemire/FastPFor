@@ -22,7 +22,6 @@
 
 using namespace std;
 
-
 __v4su  _NumMaskSIMD1{ 1U ,1U ,1U ,1U };
 __v4sf  NumMaskSIMD1 =  reinterpret_cast<__v4sf>(_NumMaskSIMD1);
 __v4su  _NumMaskSIMD2{ 3U ,3U ,3U ,3U };
@@ -85,9 +84,11 @@ __v4su  _NumMaskSIMD30{ 1073741823U ,1073741823U ,1073741823U ,1073741823U };
 __v4sf  NumMaskSIMD30 =  reinterpret_cast<__v4sf>(_NumMaskSIMD30);
 __v4su  _NumMaskSIMD31{ 2147483647U ,2147483647U ,2147483647U ,2147483647U };
 __v4sf  NumMaskSIMD31 =  reinterpret_cast<__v4sf>(_NumMaskSIMD31);
+__v4su  _NumMaskSIMD32{ 4294967295U ,4294967295U ,4294967295U ,4294967295U };
+__v4sf  NumMaskSIMD32 =  reinterpret_cast<__v4sf>(_NumMaskSIMD32);
 
 void SIMD_nullunpacker32(const __m128i *  __restrict__ , uint32_t *  __restrict__  out) {
-    memset(out,0,32 * 4 * sizeof(uint32_t));
+    memset(out,0,32 * 4 * 4);
 }
   
   
@@ -228,6 +229,144 @@ void __SIMD_fastpackwithoutmask1_32(const uint32_t *  __restrict__ _in, __m128i 
 
 
   
+void __SIMD_fastpack1_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD1;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
 void __SIMD_fastpackwithoutmask2_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
@@ -299,7 +438,7 @@ void __SIMD_fastpackwithoutmask2_32(const uint32_t *  __restrict__ _in, __m128i 
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -360,6 +499,146 @@ void __SIMD_fastpackwithoutmask2_32(const uint32_t *  __restrict__ _in, __m128i 
     InReg = _mm_load_si128(in);
 
     OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(InReg, 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
+void __SIMD_fastpack2_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD2;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
 
 
@@ -510,6 +789,150 @@ void __SIMD_fastpackwithoutmask3_32(const uint32_t *  __restrict__ _in, __m128i 
 
 
   
+void __SIMD_fastpack3_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD3;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 3 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 3 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
 void __SIMD_fastpackwithoutmask4_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
@@ -549,7 +972,7 @@ void __SIMD_fastpackwithoutmask4_32(const uint32_t *  __restrict__ _in, __m128i 
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -583,7 +1006,7 @@ void __SIMD_fastpackwithoutmask4_32(const uint32_t *  __restrict__ _in, __m128i 
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -617,7 +1040,7 @@ void __SIMD_fastpackwithoutmask4_32(const uint32_t *  __restrict__ _in, __m128i 
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -646,6 +1069,150 @@ void __SIMD_fastpackwithoutmask4_32(const uint32_t *  __restrict__ _in, __m128i 
     InReg = _mm_load_si128(in);
 
     OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(InReg, 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
+void __SIMD_fastpack4_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD4;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
 
 
@@ -802,6 +1369,156 @@ void __SIMD_fastpackwithoutmask5_32(const uint32_t *  __restrict__ _in, __m128i 
 
 
   
+void __SIMD_fastpack5_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD5;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 5 - 3));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 5 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 5 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 5 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
 void __SIMD_fastpackwithoutmask6_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
@@ -879,7 +1596,7 @@ void __SIMD_fastpackwithoutmask6_32(const uint32_t *  __restrict__ _in, __m128i 
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -946,6 +1663,158 @@ void __SIMD_fastpackwithoutmask6_32(const uint32_t *  __restrict__ _in, __m128i 
     InReg = _mm_load_si128(in);
 
     OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(InReg, 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
+void __SIMD_fastpack6_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD6;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 6 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 6 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 6 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 6 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
 
 
@@ -1108,6 +1977,162 @@ void __SIMD_fastpackwithoutmask7_32(const uint32_t *  __restrict__ _in, __m128i 
 
 
   
+void __SIMD_fastpack7_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD7;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 7 - 3));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 7 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 7 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 7 - 5));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 7 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 7 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
 void __SIMD_fastpackwithoutmask8_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
@@ -1131,7 +2156,7 @@ void __SIMD_fastpackwithoutmask8_32(const uint32_t *  __restrict__ _in, __m128i 
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -1149,7 +2174,7 @@ void __SIMD_fastpackwithoutmask8_32(const uint32_t *  __restrict__ _in, __m128i 
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -1167,7 +2192,7 @@ void __SIMD_fastpackwithoutmask8_32(const uint32_t *  __restrict__ _in, __m128i 
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -1185,7 +2210,7 @@ void __SIMD_fastpackwithoutmask8_32(const uint32_t *  __restrict__ _in, __m128i 
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -1203,7 +2228,7 @@ void __SIMD_fastpackwithoutmask8_32(const uint32_t *  __restrict__ _in, __m128i 
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -1221,7 +2246,7 @@ void __SIMD_fastpackwithoutmask8_32(const uint32_t *  __restrict__ _in, __m128i 
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -1239,7 +2264,7 @@ void __SIMD_fastpackwithoutmask8_32(const uint32_t *  __restrict__ _in, __m128i 
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -1252,6 +2277,158 @@ void __SIMD_fastpackwithoutmask8_32(const uint32_t *  __restrict__ _in, __m128i 
     InReg = _mm_load_si128(in);
 
     OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(InReg, 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
+void __SIMD_fastpack8_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD8;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
 
 
@@ -1420,6 +2597,168 @@ void __SIMD_fastpackwithoutmask9_32(const uint32_t *  __restrict__ _in, __m128i 
 
 
   
+void __SIMD_fastpack9_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD9;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 9 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 9 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 9 - 3));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 9 - 7));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 9 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 9 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 9 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 9 - 5));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
 void __SIMD_fastpackwithoutmask10_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
@@ -1503,7 +2842,7 @@ void __SIMD_fastpackwithoutmask10_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -1583,12 +2922,176 @@ void __SIMD_fastpackwithoutmask10_32(const uint32_t *  __restrict__ _in, __m128i
 
 
   
+void __SIMD_fastpack10_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD10;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 10 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 10 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 10 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 10 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 10 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 10 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 10 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 10 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask11_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -1749,13 +3252,181 @@ void __SIMD_fastpackwithoutmask11_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack11_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD11;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 11 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 11 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 11 - 3));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 11 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 11 - 5));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 11 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 11 - 7));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 11 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 11 - 9));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 11 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask12_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -1795,7 +3466,7 @@ void __SIMD_fastpackwithoutmask12_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -1835,7 +3506,7 @@ void __SIMD_fastpackwithoutmask12_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -1875,7 +3546,7 @@ void __SIMD_fastpackwithoutmask12_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -1916,13 +3587,181 @@ void __SIMD_fastpackwithoutmask12_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack12_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD12;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 12 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 12 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 12 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 12 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 12 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 12 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 12 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 12 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask13_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2089,13 +3928,187 @@ void __SIMD_fastpackwithoutmask13_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack13_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD13;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 13 - 7));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 13 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 13 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 13 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 13 - 9));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 13 - 3));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 13 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 13 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 13 - 11));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 13 - 5));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 13 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 13 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask14_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2179,7 +4192,7 @@ void __SIMD_fastpackwithoutmask14_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2264,13 +4277,189 @@ void __SIMD_fastpackwithoutmask14_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack14_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD14;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 14 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 14 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 14 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 14 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 14 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 14 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 14 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 14 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 14 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 14 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 14 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 14 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask15_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2443,13 +4632,193 @@ void __SIMD_fastpackwithoutmask15_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack15_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD15;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 15 - 13));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 15 - 11));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 15 - 9));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 15 - 7));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 15 - 5));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 15 - 3));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 15 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 15 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 15 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 15 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 15 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 15 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 15 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 15 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2459,7 +4828,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2469,7 +4838,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2479,7 +4848,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2489,7 +4858,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2499,7 +4868,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2509,7 +4878,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2519,7 +4888,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2529,7 +4898,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2539,7 +4908,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2549,7 +4918,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2559,7 +4928,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2569,7 +4938,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2579,7 +4948,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2589,7 +4958,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2599,7 +4968,7 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2610,13 +4979,181 @@ void __SIMD_fastpackwithoutmask16_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD16;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask17_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2795,13 +5332,199 @@ void __SIMD_fastpackwithoutmask17_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack17_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD17;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 3));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 5));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 7));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 9));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 11));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 13));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 17 - 15));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask18_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2891,7 +5614,7 @@ void __SIMD_fastpackwithoutmask18_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -2982,13 +5705,201 @@ void __SIMD_fastpackwithoutmask18_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack18_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD18;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 18 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask19_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -3173,13 +6084,205 @@ void __SIMD_fastpackwithoutmask19_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack19_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD19;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 18));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 5));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 11));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 17));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 3));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 9));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 15));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 7));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 19 - 13));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask20_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -3225,7 +6328,7 @@ void __SIMD_fastpackwithoutmask20_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -3271,7 +6374,7 @@ void __SIMD_fastpackwithoutmask20_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -3317,7 +6420,7 @@ void __SIMD_fastpackwithoutmask20_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -3364,13 +6467,205 @@ void __SIMD_fastpackwithoutmask20_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack20_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD20;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 20 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask21_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -3561,13 +6856,211 @@ void __SIMD_fastpackwithoutmask21_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack21_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD21;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 9));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 19));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 18));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 7));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 17));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 5));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 15));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 3));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 13));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 21 - 11));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask22_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -3663,7 +7156,7 @@ void __SIMD_fastpackwithoutmask22_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -3760,13 +7253,213 @@ void __SIMD_fastpackwithoutmask22_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack22_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD22;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 18));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 18));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 22 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask23_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -3963,13 +7656,217 @@ void __SIMD_fastpackwithoutmask23_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack23_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD23;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 5));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 19));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 15));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 11));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 7));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 21));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 3));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 17));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 22));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 13));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 18));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 23 - 9));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask24_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -3993,7 +7890,7 @@ void __SIMD_fastpackwithoutmask24_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -4017,7 +7914,7 @@ void __SIMD_fastpackwithoutmask24_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -4041,7 +7938,7 @@ void __SIMD_fastpackwithoutmask24_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -4065,7 +7962,7 @@ void __SIMD_fastpackwithoutmask24_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -4089,7 +7986,7 @@ void __SIMD_fastpackwithoutmask24_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -4113,7 +8010,7 @@ void __SIMD_fastpackwithoutmask24_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -4137,7 +8034,7 @@ void __SIMD_fastpackwithoutmask24_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -4162,13 +8059,213 @@ void __SIMD_fastpackwithoutmask24_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack24_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD24;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 24 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask25_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -4371,13 +8468,223 @@ void __SIMD_fastpackwithoutmask25_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack25_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD25;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 18));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 11));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 22));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 15));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 19));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 5));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 23));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 9));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 13));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 24));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 17));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 3));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 21));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 25 - 7));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask26_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -4479,7 +8786,7 @@ void __SIMD_fastpackwithoutmask26_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -4582,13 +8889,225 @@ void __SIMD_fastpackwithoutmask26_32(const uint32_t *  __restrict__ _in, __m128i
 }
 
 
-  
+
+void __SIMD_fastpack26_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+
+    register __v4sf mask =  NumMaskSIMD26;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 22));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 24));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 18));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 22));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 24));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 18));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 26 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+
 void __SIMD_fastpackwithoutmask27_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
     register __m128i    InReg = _mm_load_si128(in);
-      
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -4798,6 +9317,222 @@ void __SIMD_fastpackwithoutmask27_32(const uint32_t *  __restrict__ _in, __m128i
 
 
   
+void __SIMD_fastpack27_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD27;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 22));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 17));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 7));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 24));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 19));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 9));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 26));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 21));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 11));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 23));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 18));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 13));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 3));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 25));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 15));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 27 - 5));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
 void __SIMD_fastpackwithoutmask28_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
@@ -4855,7 +9590,7 @@ void __SIMD_fastpackwithoutmask28_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -4907,7 +9642,7 @@ void __SIMD_fastpackwithoutmask28_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -4959,7 +9694,7 @@ void __SIMD_fastpackwithoutmask28_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -5006,6 +9741,222 @@ void __SIMD_fastpackwithoutmask28_32(const uint32_t *  __restrict__ _in, __m128i
     InReg = _mm_load_si128(in);
 
     OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(InReg, 4)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
+void __SIMD_fastpack28_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD28;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 24));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 24));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 24));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 24));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 28 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
 
 
@@ -5234,6 +10185,228 @@ void __SIMD_fastpackwithoutmask29_32(const uint32_t *  __restrict__ _in, __m128i
 
 
   
+void __SIMD_fastpack29_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD29;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 26));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 23));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 17));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 11));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 5));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 28));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 25));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 22));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 19));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 13));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 7));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 27));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 24));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 21));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 18));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 15));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 9));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 29 - 3));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
 void __SIMD_fastpackwithoutmask30_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
@@ -5347,7 +10520,7 @@ void __SIMD_fastpackwithoutmask30_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     ++in;
     InReg = _mm_load_si128(in);
 
@@ -5450,6 +10623,230 @@ void __SIMD_fastpackwithoutmask30_32(const uint32_t *  __restrict__ _in, __m128i
     InReg = _mm_load_si128(in);
 
     OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(InReg, 2)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
+void __SIMD_fastpack30_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD30;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 28));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 26));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 24));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 22));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 18));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 28));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 26));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 24));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 22));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 18));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 30 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
 
 
@@ -5684,6 +11081,234 @@ void __SIMD_fastpackwithoutmask31_32(const uint32_t *  __restrict__ _in, __m128i
 
 
   
+void __SIMD_fastpack31_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD31;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 31)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 30));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 30)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 29));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 29)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 28));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 28)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 27));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 27)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 26));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 26)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 25));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 25)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 24));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 24)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 23));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 23)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 22));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 22)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 21));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 21)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 20));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 20)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 19));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 19)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 18));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 18)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 17));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 17)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 16));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 16)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 15));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 15)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 14));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 14)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 13));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 13)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 12));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 12)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 11));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 11)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 10));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 10)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 9));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 9)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 8));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 8)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 7));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 7)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 6));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 6)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 5));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 5)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 4));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 4)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 3));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 3)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 2));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 2)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    OutReg = reinterpret_cast<__v4sf>(_mm_srli_epi32(reinterpret_cast<__m128i>(InReg), 31 - 1));
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_or_ps(OutReg, reinterpret_cast<__v4sf>(_mm_slli_epi32(reinterpret_cast<__m128i>(InReg), 1)));
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
 void __SIMD_fastpackwithoutmask32_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
     register __v4sf     OutReg;
@@ -5695,187 +11320,387 @@ void __SIMD_fastpackwithoutmask32_32(const uint32_t *  __restrict__ _in, __m128i
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
     ++out;
     ++in;
     InReg = _mm_load_si128(in);
 
-    OutReg = reinterpret_cast<__v4sf>(InReg); 
+    OutReg = reinterpret_cast<__v4sf>(InReg);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+
+
+}
+
+
+  
+void __SIMD_fastpack32_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
+    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+    register __v4sf     OutReg;
+      
+    register __v4sf mask =  NumMaskSIMD32;
+    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
+    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
+    ++out;
+    ++in;
+    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
+
+    OutReg = _mm_and_ps(InReg, mask);
     _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
 
 
@@ -12330,7 +18155,6 @@ void __SIMD_fastunpack32_32(const  __m128i*  __restrict__ in, uint32_t *  __rest
 
 
 
-
 void SIMD_fastunpack_32(const __m128i *  __restrict__ in, uint32_t *  __restrict__  out, const uint32_t bit) {
     switch(bit) {
         case 0: SIMD_nullunpacker32(in,out); return;
@@ -12480,3 +18304,79 @@ void SIMD_fastpackwithoutmask_32(const uint32_t *  __restrict__ in, __m128i *  _
     throw logic_error("number of bits is unsupported");
 }
   
+
+
+  /*assumes that integers fit in the prescribed number of bits*/
+void SIMD_fastpack_32(const uint32_t *  __restrict__ in, __m128i *  __restrict__  out, const uint32_t bit) {
+    switch(bit) {
+        case 0: return;
+
+        case 1: __SIMD_fastpack1_32(in,out); return;
+
+        case 2: __SIMD_fastpack2_32(in,out); return;
+
+        case 3: __SIMD_fastpack3_32(in,out); return;
+
+        case 4: __SIMD_fastpack4_32(in,out); return;
+
+        case 5: __SIMD_fastpack5_32(in,out); return;
+
+        case 6: __SIMD_fastpack6_32(in,out); return;
+
+        case 7: __SIMD_fastpack7_32(in,out); return;
+
+        case 8: __SIMD_fastpack8_32(in,out); return;
+
+        case 9: __SIMD_fastpack9_32(in,out); return;
+
+        case 10: __SIMD_fastpack10_32(in,out); return;
+
+        case 11: __SIMD_fastpack11_32(in,out); return;
+
+        case 12: __SIMD_fastpack12_32(in,out); return;
+
+        case 13: __SIMD_fastpack13_32(in,out); return;
+
+        case 14: __SIMD_fastpack14_32(in,out); return;
+
+        case 15: __SIMD_fastpack15_32(in,out); return;
+
+        case 16: __SIMD_fastpack16_32(in,out); return;
+
+        case 17: __SIMD_fastpack17_32(in,out); return;
+
+        case 18: __SIMD_fastpack18_32(in,out); return;
+
+        case 19: __SIMD_fastpack19_32(in,out); return;
+
+        case 20: __SIMD_fastpack20_32(in,out); return;
+
+        case 21: __SIMD_fastpack21_32(in,out); return;
+
+        case 22: __SIMD_fastpack22_32(in,out); return;
+
+        case 23: __SIMD_fastpack23_32(in,out); return;
+
+        case 24: __SIMD_fastpack24_32(in,out); return;
+
+        case 25: __SIMD_fastpack25_32(in,out); return;
+
+        case 26: __SIMD_fastpack26_32(in,out); return;
+
+        case 27: __SIMD_fastpack27_32(in,out); return;
+
+        case 28: __SIMD_fastpack28_32(in,out); return;
+
+        case 29: __SIMD_fastpack29_32(in,out); return;
+
+        case 30: __SIMD_fastpack30_32(in,out); return;
+
+        case 31: __SIMD_fastpack31_32(in,out); return;
+
+        case 32: __SIMD_fastpack32_32(in,out); return;
+
+        default: break;
+    }
+    throw logic_error("number of bits is unsupported");
+}
+
