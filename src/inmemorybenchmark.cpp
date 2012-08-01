@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
     vector<algostats> myalgos;
     for (auto i = tmp.begin(); i != tmp.end(); ++i) {
         myalgos.push_back(algostats(*i));
-        //myalgos.push_back(algostats(*i, true));// not by default
+        myalgos.push_back(algostats(*i, true));// by default?
     }
     int c;
     while (1) {

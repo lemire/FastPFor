@@ -283,7 +283,7 @@ public:
     };
     VSEncodingBlocks(const size_t mVSENCODING_BLOCKSZ = 65536U) :
         VSENCODING_BLOCKSZ(mVSENCODING_BLOCKSZ),
-                __tmp(VSENCODING_BLOCKSZ * 2 + VSEncodingBlocks::TAIL_MERGIN) {
+                __tmp(VSENCODING_BLOCKSZ * 4 + VSEncodingBlocks::TAIL_MERGIN) {
     }
 
     void encodeVS(uint32_t len, const uint32_t *in, uint32_t &size,
