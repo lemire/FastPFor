@@ -235,7 +235,7 @@ void __SIMD_fastpack1_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
       
     register __v4sf mask =  NumMaskSIMD1;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -512,7 +512,7 @@ void __SIMD_fastpack2_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
       
     register __v4sf mask =  NumMaskSIMD2;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -578,7 +578,7 @@ void __SIMD_fastpack2_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -795,7 +795,7 @@ void __SIMD_fastpack3_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
       
     register __v4sf mask =  NumMaskSIMD3;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -1082,7 +1082,7 @@ void __SIMD_fastpack4_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
       
     register __v4sf mask =  NumMaskSIMD4;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -1116,7 +1116,7 @@ void __SIMD_fastpack4_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -1150,7 +1150,7 @@ void __SIMD_fastpack4_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -1184,7 +1184,7 @@ void __SIMD_fastpack4_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -1375,7 +1375,7 @@ void __SIMD_fastpack5_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
       
     register __v4sf mask =  NumMaskSIMD5;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -1676,7 +1676,7 @@ void __SIMD_fastpack6_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
       
     register __v4sf mask =  NumMaskSIMD6;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -1748,7 +1748,7 @@ void __SIMD_fastpack6_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -1983,7 +1983,7 @@ void __SIMD_fastpack7_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
       
     register __v4sf mask =  NumMaskSIMD7;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -2290,7 +2290,7 @@ void __SIMD_fastpack8_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
       
     register __v4sf mask =  NumMaskSIMD8;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -2308,7 +2308,7 @@ void __SIMD_fastpack8_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -2326,7 +2326,7 @@ void __SIMD_fastpack8_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -2344,7 +2344,7 @@ void __SIMD_fastpack8_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -2362,7 +2362,7 @@ void __SIMD_fastpack8_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -2380,7 +2380,7 @@ void __SIMD_fastpack8_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -2398,7 +2398,7 @@ void __SIMD_fastpack8_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -2416,7 +2416,7 @@ void __SIMD_fastpack8_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -2603,7 +2603,7 @@ void __SIMD_fastpack9_32(const uint32_t *  __restrict__ _in, __m128i *  __restri
       
     register __v4sf mask =  NumMaskSIMD9;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -2928,7 +2928,7 @@ void __SIMD_fastpack10_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
       
     register __v4sf mask =  NumMaskSIMD10;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -3006,7 +3006,7 @@ void __SIMD_fastpack10_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -3259,7 +3259,7 @@ void __SIMD_fastpack11_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD11;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -3594,7 +3594,7 @@ void __SIMD_fastpack12_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD12;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -3634,7 +3634,7 @@ void __SIMD_fastpack12_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -3674,7 +3674,7 @@ void __SIMD_fastpack12_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -3714,7 +3714,7 @@ void __SIMD_fastpack12_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -3935,7 +3935,7 @@ void __SIMD_fastpack13_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD13;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -4284,7 +4284,7 @@ void __SIMD_fastpack14_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD14;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -4368,7 +4368,7 @@ void __SIMD_fastpack14_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -4639,7 +4639,7 @@ void __SIMD_fastpack15_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD15;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -4986,7 +4986,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD16;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -4996,7 +4996,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5006,7 +5006,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5016,7 +5016,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5026,7 +5026,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5036,7 +5036,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5046,7 +5046,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5056,7 +5056,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5066,7 +5066,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5076,7 +5076,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5086,7 +5086,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5096,7 +5096,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5106,7 +5106,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5116,7 +5116,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5126,7 +5126,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5136,7 +5136,7 @@ void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5339,7 +5339,7 @@ void __SIMD_fastpack17_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD17;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5712,7 +5712,7 @@ void __SIMD_fastpack18_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD18;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -5802,7 +5802,7 @@ void __SIMD_fastpack18_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -6091,7 +6091,7 @@ void __SIMD_fastpack19_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD19;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -6474,7 +6474,7 @@ void __SIMD_fastpack20_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD20;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -6520,7 +6520,7 @@ void __SIMD_fastpack20_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -6566,7 +6566,7 @@ void __SIMD_fastpack20_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -6612,7 +6612,7 @@ void __SIMD_fastpack20_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -6863,7 +6863,7 @@ void __SIMD_fastpack21_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD21;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -7260,7 +7260,7 @@ void __SIMD_fastpack22_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD22;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -7356,7 +7356,7 @@ void __SIMD_fastpack22_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -7663,7 +7663,7 @@ void __SIMD_fastpack23_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD23;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -8066,7 +8066,7 @@ void __SIMD_fastpack24_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD24;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -8090,7 +8090,7 @@ void __SIMD_fastpack24_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -8114,7 +8114,7 @@ void __SIMD_fastpack24_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -8138,7 +8138,7 @@ void __SIMD_fastpack24_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -8162,7 +8162,7 @@ void __SIMD_fastpack24_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -8186,7 +8186,7 @@ void __SIMD_fastpack24_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -8210,7 +8210,7 @@ void __SIMD_fastpack24_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -8234,7 +8234,7 @@ void __SIMD_fastpack24_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -8475,7 +8475,7 @@ void __SIMD_fastpack25_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD25;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -8896,7 +8896,7 @@ void __SIMD_fastpack26_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
 
     register __v4sf mask =  NumMaskSIMD26;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -8998,7 +8998,7 @@ void __SIMD_fastpack26_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -9323,7 +9323,7 @@ void __SIMD_fastpack27_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
       
     register __v4sf mask =  NumMaskSIMD27;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -9754,7 +9754,7 @@ void __SIMD_fastpack28_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
       
     register __v4sf mask =  NumMaskSIMD28;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -9806,7 +9806,7 @@ void __SIMD_fastpack28_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -9858,7 +9858,7 @@ void __SIMD_fastpack28_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -9910,7 +9910,7 @@ void __SIMD_fastpack28_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -10191,7 +10191,7 @@ void __SIMD_fastpack29_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
       
     register __v4sf mask =  NumMaskSIMD29;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -10636,7 +10636,7 @@ void __SIMD_fastpack30_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
       
     register __v4sf mask =  NumMaskSIMD30;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -10744,7 +10744,7 @@ void __SIMD_fastpack30_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -11087,7 +11087,7 @@ void __SIMD_fastpack31_32(const uint32_t *  __restrict__ _in, __m128i *  __restr
       
     register __v4sf mask =  NumMaskSIMD31;
     register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
+    OutReg = InReg; // modif. by D. Lemire, was OutReg = _mm_and_ps(InReg, mask);
     ++in;
     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
 
@@ -11509,203 +11509,8 @@ void __SIMD_fastpackwithoutmask32_32(const uint32_t *  __restrict__ _in, __m128i
 
   
 void __SIMD_fastpack32_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
-    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
-    register __v4sf     OutReg;
-      
-    register __v4sf mask =  NumMaskSIMD32;
-    register __v4sf     InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-    ++out;
-    ++in;
-    InReg = _mm_and_ps(reinterpret_cast<__v4sf>(_mm_load_si128(in)), mask);
-
-    OutReg = _mm_and_ps(InReg, mask);
-    _mm_store_si128(out, reinterpret_cast<__m128i>(OutReg));
-
-
+    __SIMD_fastpackwithoutmask32_32(_in,out);
 }
-
 
 
 

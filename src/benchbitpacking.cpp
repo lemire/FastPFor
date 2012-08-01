@@ -13,7 +13,6 @@
 #include "synthetic.h"
 #include "ztimer.h"
 
-
 void maskfnc(vector<uint32_t, cacheallocator> & out, const uint32_t L) {
     if (L == 32)
         return;
@@ -29,7 +28,6 @@ void fastpack(const vector<uint32_t, cacheallocator> & data,
         fastpack(&data[0] + 32 * k, &out[0] + bit * k, bit);
     }
 }
-
 
 void fastpackwithoutmask(const vector<uint32_t, cacheallocator> & data,
         vector<uint32_t, cacheallocator> & out, const uint32_t bit) {
@@ -47,35 +45,33 @@ void fastunpack(const vector<uint32_t, cacheallocator> & data,
     }
 }
 
-
-
 void simdpack(const vector<uint32_t, cacheallocator> & data,
         vector<uint32_t, cacheallocator> & out, const uint32_t bit) {
     const uint32_t N = data.size();
     for (uint32_t k = 0; k < N / 128; ++k) {
-        SIMD_fastpack_32(&data[0] + 128 * k, reinterpret_cast<__m128i *>(&out[0] + 4 * bit * k), bit);
+        SIMD_fastpack_32(&data[0] + 128 * k,
+                reinterpret_cast<__m128i *> (&out[0] + 4 * bit * k), bit);
     }
 }
-
-
 
 void simdpackwithoutmask(const vector<uint32_t, cacheallocator> & data,
         vector<uint32_t, cacheallocator> & out, const uint32_t bit) {
     const uint32_t N = data.size();
     for (uint32_t k = 0; k < N / 128; ++k) {
-        SIMD_fastpackwithoutmask_32(&data[0] + 128 * k, reinterpret_cast<__m128i *>(&out[0] + 4 * bit * k), bit);
+        SIMD_fastpackwithoutmask_32(&data[0] + 128 * k,
+                reinterpret_cast<__m128i *> (&out[0] + 4 * bit * k), bit);
     }
 }
-
 
 void simdunpack(const vector<uint32_t, cacheallocator> & data,
         vector<uint32_t, cacheallocator> & out, const uint32_t bit) {
     const uint32_t N = out.size();
     for (uint32_t k = 0; k < N / 128; ++k) {
-        SIMD_fastunpack_32(reinterpret_cast<const __m128i *>(&data[0] + 4 * bit * k), &out[0] + 128 * k, bit);
+        SIMD_fastunpack_32(
+                reinterpret_cast<const __m128i *> (&data[0] + 4 * bit * k),
+                &out[0] + 128 * k, bit);
     }
 }
-
 
 void pack(const vector<uint32_t, cacheallocator> & data,
         vector<uint32_t, cacheallocator> & out, const uint32_t bit) {
@@ -146,7 +142,7 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
     vector<uint32_t, cacheallocator> recovered(N, 0);
     WallClockTimer z;
     double packtime, packtimewm, unpacktime;
-    double tightpacktime, tightpacktimewm, tightunpacktime;
+//    double tightpacktime, tightpacktimewm, tightunpacktime;
     double simdpacktime, simdpacktimewm, simdunpacktime;
 
     cout << "#million of integers per second: higher is better" << endl;
@@ -158,9 +154,9 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
             packtime = 0;
             packtimewm = 0;
             unpacktime = 0;
-            tightpacktime = 0;
-            tightpacktimewm = 0;
-            tightunpacktime = 0;
+//            tightpacktime = 0;
+  //          tightpacktimewm = 0;
+    //        tightunpacktime = 0;
             simdpacktime = 0;
             simdpacktimewm = 0;
             simdunpacktime = 0;
@@ -170,23 +166,35 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
                 compressed.resize(N * bit / 32, 0);
                 recovered.clear();
                 recovered.resize(N, 0);
-                            z.reset();
-                pack_tight(data, compressed, bit);
-                if (t > 0)
-                    tightpacktime += z.split();
+                /*                          z.reset();
+                 pack_tight(data, compressed, bit);
+                 if (t > 0)
+                 tightpacktime += z.split();
+                 unpack_tight(compressed, recovered, bit);
+                 if (!equalOnFirstBits(data, recovered, bit)) {
+                 cout << " Bug0!" <<bit << endl;
+                 return;
+                 }
 
-                z.reset();
-                pack_tightwithoutmask(data, compressed, bit);
-                if (t > 0)
-                    tightpacktimewm += z.split();
+                 z.reset();
+                 pack_tightwithoutmask(data, compressed, bit);
+                 if (t > 0)
+                 tightpacktimewm += z.split();
 
-                z.reset();
-                unpack_tight(compressed, recovered, bit);
-                if (t > 0)
-                    tightunpacktime += z.split();
+                 z.reset();
+                 unpack_tight(compressed, recovered, bit);
+                 if (t > 0)
+                 tightunpacktime += z.split();
 
+                 if (!equalOnFirstBits(data, recovered, bit)) {
+                 cout << " Bug0!" <<bit << endl;
+                 return;
+                 }
+                 */
+                simdpack(data, compressed, bit);
+                simdunpack(compressed, recovered, bit);
                 if (!equalOnFirstBits(data, recovered, bit)) {
-                    cout << " Bug0!" <<bit << endl;
+                    cout << " Bugs!" << bit << endl;
                     return;
                 }
 
@@ -194,6 +202,11 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
                 simdpack(data, compressed, bit);
                 if (t > 0)
                     simdpacktime += z.split();
+                simdunpack(compressed, recovered, bit);
+                if (!equalOnFirstBits(data, recovered, bit)) {
+                    cout << " Bugs!" << bit << endl;
+                    return;
+                }
 
                 z.reset();
                 simdpackwithoutmask(data, compressed, bit);
@@ -206,7 +219,7 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
                     simdunpacktime += z.split();
 
                 if (!equalOnFirstBits(data, recovered, bit)) {
-                    cout << " Bugs!" <<bit << endl;
+                    cout << " Bugs!" << bit << endl;
                     return;
                 }
 
@@ -214,6 +227,11 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
                 fastpack(data, compressed, bit);
                 if (t > 0)
                     packtime += z.split();
+                fastunpack(compressed, recovered, bit);
+                if (!equalOnFirstBits(data, recovered, bit)) {
+                    cout << " Bug1!" << endl;
+                    return;
+                }
 
                 z.reset();
                 fastpackwithoutmask(data, compressed, bit);
@@ -237,13 +255,14 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
                     << "\t\t\t" << N * (T - 1) / (unpacktime) << "\t\t";
 
             cout << std::setprecision(4) << bit << "\t\t" << N * (T - 1)
-                            / (simdpacktime) << "\t\t" << N * (T - 1)
-                    / (simdpacktimewm) << "\t\t" << N * (T - 1) / (simdunpacktime) << "\t\t";
+                    / (simdpacktime) << "\t\t" << N * (T - 1)
+                    / (simdpacktimewm) << "\t\t" << N * (T - 1)
+                    / (simdunpacktime) << "\t\t";
 
-            cout << std::setprecision(4) << bit << "\t\t" << N * (T - 1)
-                    / (tightpacktime) << "\t\t" << N * (T - 1)
-                    / (tightpacktimewm) << "\t\t\t" << N * (T - 1)
-                    / (tightunpacktime) << "\t\t";
+            /*            cout << std::setprecision(4) << bit << "\t\t" << N * (T - 1)
+             / (tightpacktime) << "\t\t" << N * (T - 1)
+             / (tightpacktimewm) << "\t\t\t" << N * (T - 1)
+             / (tightunpacktime) << "\t\t";*/
 
             cout << endl;
         }
@@ -255,7 +274,7 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
 using namespace std;
 int main() {
 
-    simplebenchmark(1U << 16, 1U<<9);
+    simplebenchmark(1U << 16, 1U << 9);
 
     return 0;
 }
