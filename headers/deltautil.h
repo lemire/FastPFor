@@ -349,7 +349,7 @@ public:
                 if(datas[k].empty()) continue;
                 size_t recoveredsize = datas[k].size();
                 assert(recoveredsize > 0);
-                size_t howmanyrepeats = 1000 * 1000/recoveredsize;
+                size_t howmanyrepeats = 65536/recoveredsize;
                 if(howmanyrepeats == 0) howmanyrepeats = 1;
 
                 uint32_t * outp = &outs[0];
