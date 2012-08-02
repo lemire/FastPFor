@@ -330,6 +330,7 @@ public:
         bool alreadywarnedaboutsmallarray = false;
         WallClockTimer z;
         for (auto i = myalgos.begin(); i != myalgos.end(); ++i) {
+            cout << "# "<<i->name()<<endl;
             IntegerCODEC & c = *(i->algo);
             const bool SIMDDeltas = i->SIMDDeltas;
             size_t nvalue;
