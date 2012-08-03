@@ -1,5 +1,5 @@
 The FastPFOR C++ library : Fast integer compression
-Daniel Lemire, Owen Kaser and Maxime Caron
+Daniel Lemire, Leonid Boytsov, Owen Kaser and Maxime Caron
 
 
 == What is this? ==
@@ -57,32 +57,52 @@ make
 
 == Simple benchmark ==
 
-make
-./testcodecs.sh
 
 
-$ ./codecs --codecs fastpfor,newpfor,optpfor,pfor,pfor2008 --zipfian2
 
-For a more lengthy test, do
-
-$ ./codecs --codecs fastpfor,newpfor,optpfor,pfor,pfor2008 --clusterdynamic
+make codecs
+./codecs --clusterdynamic
+./codecs --uniformdynamic
 
 
 == Processing data files ==
 
-Typing make will generate both a gapencoder and
-gapdecoder executable. You can use gapencoder to
-process some flat d-grap data files using the
-following 32-bit format: 1 unsigned integer 
-indicating array length followed by the corresponding
+Typing make will generate an inmemorybenchmark 
+executable that can process data files. 
+
+You can use it to process arrays on (sorted!) integers
+on disk using the following 32-bit format: 1 unsigned 32-bit
+integer  indicating array length followed by the corresponding
 number of 32-bit integer. Repeat.
  
- ( It is assumed that the integers are sorted and
- that there is no duplicate. That is the case
- with "d-gaps". To allow more general delta coding
- --- for arbitrary integers, containing duplicates,
- and maybe not always perfectly sorted --- use the "-notdgaps"
- flag for "modulo delta coding".)
+ ( It is assumed that the integers are sorted.)
+
+
+Once you have such a binary file somefilename you can
+process it with our inmemorybenchmark:
+
+./inmemorybenchmark --minlength 10000 somefilename
+
+The "minlength" flag skips short arrays. (Warning: timings over
+short arrays are unreliable.)
+
+
+== Testing with the ClueWeb09 data set ==
+
+Grab the data set from:
+
+ http://boytsov.info/datasets/mindthegap/
+
+Using the provided software, uncompress it and
+run the "toflat" executable to create a "clueweb09.bin" file
+then run:
+
+
+./inmemorybenchmark --minlength 10000 clueweb09.bin
+
+Note: processing can take over an hour.
+
+== Testing with the Gov2 data set ==
  
 You can test the library over d-gaps data
 from the TREC GOV2 data set that was made graciously
@@ -107,23 +127,14 @@ You may want to make the newly generated files non-writeable
 Build the software (you need the decoders executable)
 and 
 
-
 You need to run this command
 
 ./decoders 3 gov2.sort somefilename
 
 where "3" is for delta.
 
-Once you have the uncompressed file somefilename you can
-process it with our gapdencoder:
+Then you should be able to test with out inmemorybenchmark:
 
-./gapencoder vbyte somefilename.DEC vbyte.bin
+./inmemorybenchmark --minlength 10000 somefilename.DEC
 
-This will encode the content using variable byte encoding.
-
-To decode, simply do
-
-./gapdecoder vbyte vbyte.bin recover.bin
-
-(If you omit recover.bin, it will simply uncompress the
-data in memory.)
+Note: processing can take over an hour.
