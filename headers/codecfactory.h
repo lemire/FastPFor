@@ -97,8 +97,8 @@ map<string, shared_ptr<IntegerCODEC> > CODECFactory::scodecmap = {
     {   "newpfor", shared_ptr<IntegerCODEC> (new CompositeCodec<NewPFor<4, Simple16<false>> , VariableByte> ())},
     {   "optpfor", shared_ptr<IntegerCODEC> (new CompositeCodec<OPTPFor<4, Simple16<false> > , VariableByte> ())},
     {   "vbyte", shared_ptr<IntegerCODEC> (new VariableByte())},
-    {   "simple16", shared_ptr<IntegerCODEC> (new Simple16<true> ())},
-    {   "simple9", shared_ptr<IntegerCODEC> (new Simple9<true> ())},
+    //{   "simple16", shared_ptr<IntegerCODEC> (new Simple16<true> ())},
+    //{   "simple9", shared_ptr<IntegerCODEC> (new Simple9<true> ())},
     {   "simple8b", shared_ptr<IntegerCODEC> (new Simple8b<true> ())},
 #ifdef VARINTG8IU_H__
     {   "varintg8iu", shared_ptr<IntegerCODEC> (new VarIntG8IU ())},

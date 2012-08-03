@@ -327,21 +327,23 @@ public:
             cout << std::setprecision(4) << er.computeShannon() << "\t";
         if (pp.computeentropy and pp.fulldisplay)
             cout << std::setprecision(4) << er.computeDataBits() << "\t";
-        bool alreadywarnedaboutsmallarray = false;
         WallClockTimer z;
+        size_t totallength = 0;
+        size_t maxlength = 0;
+        for (size_t k = 0; k < datas.size(); ++k) {
+                auto & data = datas[k];
+                totallength += data.size();
+                if(maxlength < data.size()) maxlength = data.size();
+        }
+        container outs(4 * maxlength + 2048 + 64);
+        container recovereds(maxlength + 2048 + 64);
+        container backupdata;
+        backupdata.reserve(maxlength + 2048 + 64);
+        //cout<<"# processing "<<datas.size()<<" arrays, maxlength is "<<maxlength<<endl;
         for (auto i = myalgos.begin(); i != myalgos.end(); ++i) {
             IntegerCODEC & c = *(i->algo);
             const bool SIMDDeltas = i->SIMDDeltas;
             size_t nvalue;
-            size_t totallength = 0;
-            size_t maxlength = 0;
-            for (size_t k = 0; k < datas.size(); ++k) {
-                auto & data = datas[k];
-                totallength += data.size();
-                if(maxlength < data.size()) maxlength = data.size();
-             }
-            container outs(4 * maxlength + 2048 + 64);
-            container recovereds(maxlength + 2048 + 64);
             size_t totalcompressed = 0;
             double timemsdecomp = 0;
             double timemscomp = 0;
@@ -349,20 +351,13 @@ public:
                 if(datas[k].empty()) continue;
                 size_t recoveredsize = datas[k].size();
                 assert(recoveredsize > 0);
-                size_t howmanyrepeats = 1000 * 1000/recoveredsize;
-                if(howmanyrepeats == 0) howmanyrepeats = 1;
-
+                const size_t howmanyrepeats = 1;// hard coded
                 uint32_t * outp = &outs[0];
                 nvalue = outs.size();
-                while(needPaddingTo128Bits(outp)) {
-                    --nvalue;
-                    outp++;
-                }
+                assert(!needPaddingTo128Bits(outp));
                 uint64_t elapsedcomp = 0;
                 const size_t orignvalue = nvalue;
-                container backupdata;
-                backupdata.reserve(datas[k].size() + 2048 + 64);
-                for(size_t t = 0; t < howmanyrepeats; ++t) {
+               for(size_t t = 0; t < howmanyrepeats; ++t) {
                     nvalue = orignvalue;
                     backupdata.assign(datas[k].begin(),datas[k].end()); // making a copy to be safe
                     z.reset();
@@ -373,16 +368,10 @@ public:
                     }
                     elapsedcomp += z.split();
                 }
-                if((elapsedcomp < 5) and (!alreadywarnedaboutsmallarray)) {
-                    cerr<<"# your arrays are too small for accurate timing during encoding? Recorded elapsed time = "<< elapsedcomp << " mu s"<<endl;
-                    alreadywarnedaboutsmallarray = true;
-                }
                 timemscomp += elapsedcomp  * 1.0  / howmanyrepeats;
                 totalcompressed += nvalue;
                 uint32_t * recov = &recovereds[0];
-                while(needPaddingTo128Bits(recov)) {
-                    recov++;
-                }
+                assert(!needPaddingTo128Bits(recov));
                 z.reset();
                 for(size_t t = 0; t < howmanyrepeats; ++t) {
                   if  (pp.needtodelta) {
@@ -393,10 +382,6 @@ public:
                   }
                 }
                 const uint64_t elapseddecomp = z.split();
-                if((elapseddecomp < 5) and (!alreadywarnedaboutsmallarray)) {
-                    cerr<<"# your arrays are too small for accurate timing during decoding (possible bug)? Recorded elapsed time = "<< elapsedcomp << " mu s"<<endl;
-                    alreadywarnedaboutsmallarray = true;
-                }
                 timemsdecomp += elapseddecomp * 1.0 / howmanyrepeats;
                 if(recoveredsize!= datas[k].size()) {
                     cerr<<" expected size of "<<datas[k].size()<<" got "<<recoveredsize<<endl;
