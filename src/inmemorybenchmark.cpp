@@ -22,7 +22,7 @@
 using namespace std;
 
 static struct option long_options[] = {
-        { "codecs", required_argument, 0, 'c' }, { "splitlongarrays", no_argument, 0, 'S' },{ 0, 0, 0, 0 } };
+        { "codecs", required_argument, 0, 'c' },{ "minlength", required_argument, 0, 'm' },{ "maxlength", required_argument, 0, 'M' }, { "splitlongarrays", no_argument, 0, 'S' },{ 0, 0, 0, 0 } };
 
 void message(const char * prog) {
     cerr << " usage : " << prog << " scheme  maropubinaryfile " << endl;
@@ -45,6 +45,7 @@ int main(int argc, char **argv) {
     }
     bool splitlongarrays = true;
     size_t MINLENGTH = 1;
+    size_t MAXLENGTH =  std::numeric_limits<uint32_t>::max();
     vector < shared_ptr<IntegerCODEC> > tmp = CODECFactory::allSchemes();// the default
     vector<algostats> myalgos;
     for (auto i = tmp.begin(); i != tmp.end(); ++i) {
@@ -61,6 +62,14 @@ int main(int argc, char **argv) {
         case 'S' :
              cout<<"#\n# disabling partition of big arrays. Performance may suffer.#\n"<<endl;
              splitlongarrays = false;
+             break;
+        case 'm' :
+            istringstream ( optarg ) >> MINLENGTH;
+             cout<<"# MINLENGTH = "<<MINLENGTH<<endl;
+             break;
+        case 'M' :
+            istringstream ( optarg ) >> MAXLENGTH;
+            cout<<"# MAXLENGTH = "<<MAXLENGTH<<endl;
              break;
         case 'c':
         {   myalgos.clear();
@@ -108,7 +117,7 @@ int main(int argc, char **argv) {
         size_t datastotalsize = 0;
 	    cout<<"# Filling up a block "<<endl;
         while (reader.loadIntegers(rawdata)) {
-            if (rawdata.size() < MINLENGTH)
+            if ((rawdata.size() < MINLENGTH) or (rawdata.size() > MAXLENGTH))
                 continue;
             ++counter;
             datastotalsize += rawdata.size();
