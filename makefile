@@ -56,7 +56,7 @@ benchbitpacking: $(HEADERS) src/benchbitpacking.cpp ./headers/rolledbitpacking.h
 partitionbylength: $(HEADERS) src/partitionbylength.cpp
 	$(CXX) $(CXXFLAGS) -o partitionbylength src/partitionbylength.cpp -Iheaders
 
-codecs:  $(HEADERS) src/codecs.cpp ./headers/common.h.gch makefile $(COMMONBINARIES)
+codecssnappy:  $(HEADERS) src/codecs.cpp ./headers/common.h.gch makefile $(COMMONBINARIES)
 	$(CXX) $(CXXFLAGS) $(GCCPARAMS) -Winvalid-pch  -o codecssnappy src/codecs.cpp $(COMMONBINARIES) -Iheaders  -lsnappy -DUSESNAPPY
 
 
