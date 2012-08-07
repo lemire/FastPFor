@@ -26,6 +26,7 @@
 #include "pfor2008.h"
 #include "VarIntG8IU.h"
 #include "simdbinarypacking.h"
+#include "snappydelta.h"
 
 using namespace std;
 
@@ -102,6 +103,9 @@ map<string, shared_ptr<IntegerCODEC> > CODECFactory::scodecmap = {
     {   "simple8b", shared_ptr<IntegerCODEC> (new Simple8b<true> ())},
 #ifdef VARINTG8IU_H__
     {   "varintg8iu", shared_ptr<IntegerCODEC> (new VarIntG8IU ())},
+#endif
+#ifdef USESNAPPY
+    {   "snappy", shared_ptr<IntegerCODEC> (new JustSnappy ())},
 #endif
     {  "simdbinarypacking", shared_ptr<IntegerCODEC>(new CompositeCodec<SIMDBinaryPacking,VariableByte>())},
 //    {  "simdglobalbinarypacking", shared_ptr<IntegerCODEC>(new CompositeCodec<SIMDGlobalBinaryPacking,VariableByte>())},
