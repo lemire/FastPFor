@@ -56,7 +56,7 @@ benchbitpacking: $(HEADERS) src/benchbitpacking.cpp ./headers/rolledbitpacking.h
 partitionbylength: $(HEADERS) src/partitionbylength.cpp
 	$(CXX) $(CXXFLAGS) -o partitionbylength src/partitionbylength.cpp -Iheaders
 
-codecssnappy:  $(HEADERS) src/codecs.cpp ./headers/common.h.gch makefile $(COMMONBINARIES)
+codecssnappy:  $(HEADERS) src/codecs.cpp ./headers/common.h.gch  ./headers/snappydelta.h makefile $(COMMONBINARIES)
 	$(CXX) $(CXXFLAGS) $(GCCPARAMS) -Winvalid-pch  -o codecssnappy src/codecs.cpp $(COMMONBINARIES) -Iheaders  -lsnappy -DUSESNAPPY
 
 
@@ -75,9 +75,12 @@ csv2maropu:  $(HEADERS) src/csv2maropu.cpp ./headers/externalvector.h ./headers/
 gapdecoder: $(HEADERS) src/gapdecoder.cpp makefile ./headers/common.h.gch $(COMMONBINARIES)
 	$(CXX) $(CXXFLAGS) $(GCCPARAMS)  -Winvalid-pch -o gapdecoder src/gapdecoder.cpp $(COMMONBINARIES) -Iheaders
 
-
 inmemorybenchmark: $(HEADERS)  src/inmemorybenchmark.cpp ./headers/common.h.gch makefile $(COMMONBINARIES)
 	$(CXX) $(CXXFLAGS) -Winvalid-pch  -o inmemorybenchmark  src/inmemorybenchmark.cpp $(COMMONBINARIES) -Iheaders 
+
+
+inmemorybenchmarksnappy: $(HEADERS)  src/inmemorybenchmark.cpp ./headers/common.h.gch ./headers/snappydelta.h makefile $(COMMONBINARIES)
+	$(CXX) $(CXXFLAGS) -Winvalid-pch  -o inmemorybenchmarksnappy  src/inmemorybenchmark.cpp $(COMMONBINARIES) -Iheaders  -lsnappy -DUSESNAPPY
 
 
 gapencoder: $(HEADERS)  src/gapencoder.cpp ./headers/common.h.gch makefile $(COMMONBINARIES)
