@@ -333,7 +333,7 @@ public:
         vector<container > outs(datas.size());
         for (size_t k = 0; k < datas.size(); ++k) {
                 auto & data = datas[k];
-                outs.resize(4*data.size() + 2048 + 64);
+                outs[k].resize(4*data.size() + 2048 + 64);
                 totallength += data.size();
                 if(maxlength < data.size()) maxlength = data.size();
         }
