@@ -330,16 +330,17 @@ public:
         WallClockTimer z;
         size_t totallength = 0;
         size_t maxlength = 0;
+        vector<container > outs(datas.size());
         for (size_t k = 0; k < datas.size(); ++k) {
                 auto & data = datas[k];
+                outs.resize(4*data.size() + 2048 + 64);
                 totallength += data.size();
                 if(maxlength < data.size()) maxlength = data.size();
         }
-        container outs(4 * maxlength + 2048 + 64);
+        vector<size_t> nvalues(datas.size());
         container recovereds(maxlength + 2048 + 64);
         container backupdata;
         backupdata.reserve(maxlength + 2048 + 64);
-        //cout<<"# processing "<<datas.size()<<" arrays, maxlength is "<<maxlength<<endl;
         for (auto i = myalgos.begin(); i != myalgos.end(); ++i) {
             IntegerCODEC & c = *(i->algo);
             const bool SIMDDeltas = i->SIMDDeltas;
@@ -349,15 +350,12 @@ public:
             double timemscomp = 0;
             for (size_t k = 0; k < datas.size(); ++k) {
                 if(datas[k].empty()) continue;
-                size_t recoveredsize = datas[k].size();
-                assert(recoveredsize > 0);
-                const size_t howmanyrepeats = 1;// hard coded
-                uint32_t * outp = &outs[0];
-                nvalue = outs.size();
+                uint32_t * outp = &outs[k][0];
+                nvalue = outs[k].size();
                 assert(!needPaddingTo128Bits(outp));
                 uint64_t elapsedcomp = 0;
                 const size_t orignvalue = nvalue;
-               for(size_t t = 0; t < howmanyrepeats; ++t) {
+                {
                     nvalue = orignvalue;
                     backupdata.assign(datas[k].begin(),datas[k].end()); // making a copy to be safe
                     z.reset();
@@ -367,13 +365,20 @@ public:
                         c.encodeArray(&backupdata[0], backupdata.size(), outp, nvalue);
                     }
                     elapsedcomp += z.split();
+                    nvalues[k] = nvalue;
                 }
-                timemscomp += elapsedcomp  * 1.0  / howmanyrepeats;
+                timemscomp += elapsedcomp;
                 totalcompressed += nvalue;
+            }
+            for (size_t k = 0; k < datas.size(); ++k) {
+                const uint32_t * outp = &outs[k][0];
+                nvalue = nvalues[k];
+                size_t recoveredsize = datas[k].size();
+                assert(recoveredsize > 0);
                 uint32_t * recov = &recovereds[0];
                 assert(!needPaddingTo128Bits(recov));
                 z.reset();
-                for(size_t t = 0; t < howmanyrepeats; ++t) {
+                {
                   if  (pp.needtodelta) {
                         decode(c,SIMDDeltas,outp,nvalue,recov,recoveredsize);
                    } else {
@@ -382,7 +387,7 @@ public:
                   }
                 }
                 const uint64_t elapseddecomp = z.split();
-                timemsdecomp += elapseddecomp * 1.0 / howmanyrepeats;
+                timemsdecomp += elapseddecomp;
                 if(recoveredsize!= datas[k].size()) {
                     cerr<<" expected size of "<<datas[k].size()<<" got "<<recoveredsize<<endl;
                     throw logic_error("arrays don't have same size: bug.");
