@@ -23,7 +23,9 @@ e.g., under bash type
 
 export YOURCXX=g++-4.7
 
-== GCC 4.7 under Linux ==
+Below is a description of how to install GCC 4.7:
+
+==== GCC 4.7 under Linux ====
 
 
 Under Linux, installing GCC 4.7 is not difficult. For example,
@@ -36,16 +38,35 @@ then type
 
 sudo apt-get install gcc-4.7 g++-4.7
 
-== GCC 4.7 under Mac ==
+==== GCC 4.7 under Mac ====
 
 Mac Ports supports gcc 4.7.
 
 http://www.macports.org/
 
+== Why C++11? ==
+
+With minor changes, all schemes will compile fine under
+compilers that do not support C++11. And porting the code
+to C should not be a challenge.
+
+== What if I prefer Java? ==
+
+Many schemes cannot be efficiently ported to Java. However
+some have been. Please see:
+
+https://github.com/lemire/JavaFastPFOR
+
 == Requirements ==
 
 You need GNU GCC 4.7 or better. The code
 was tested under Linux and MacOS. 
+
+== What about LLVM/clang++? ==
+
+Clang 3.1 very nearly can compile everything, but its support
+for C++11 is still insufficient. We hope that the next release
+of Clang (3.2?) will correct these limitations.
 
 
 == Building and testing ==
@@ -53,17 +74,14 @@ was tested under Linux and MacOS.
 make
 ./unit
 
-
+Note that we are thorough in the unit tests so it can
+take several minutes to run through them all.
 
 == Simple benchmark ==
-
-
-
 
 make codecs
 ./codecs --clusterdynamic
 ./codecs --uniformdynamic
-
 
 == Processing data files ==
 
@@ -91,12 +109,11 @@ short arrays are unreliable.)
 
 Grab the data set from:
 
- http://boytsov.info/datasets/mindthegap/
+ http://boytsov.info/datasets/clueweb09gap/
 
 Using the provided software, uncompress it and
 run the "toflat" executable to create a "clueweb09.bin" file
 then run:
-
 
 ./inmemorybenchmark --minlength 10000 clueweb09.bin
 
@@ -138,3 +155,20 @@ Then you should be able to test with out inmemorybenchmark:
 ./inmemorybenchmark --minlength 10000 somefilename.DEC
 
 Note: processing can take over an hour.
+
+
+
+== I used your code and I get segmentation faults  ==
+
+Our code is thoroughly tested.
+
+One common issue is that people do not provide large enough buffers.
+Some schemes can have such small compression rates that the compressed data 
+generated will be much larger than the input data.
+
+Also, make sure that all provided buffers are 16-byte aligned or else,
+some SSE instructions may fail.
+
+== Is any of this code subject to patents?  ==
+
+I (D. Lemire) do not think so. 

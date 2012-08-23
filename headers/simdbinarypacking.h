@@ -3,7 +3,6 @@
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  *
  * (c) Daniel Lemire, http://lemire.me/en/
- * and Owen Kaser
  */
 
 #ifndef SIMDBINARYPACKING_H_
