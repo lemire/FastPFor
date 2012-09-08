@@ -6,6 +6,9 @@
  *
  * Implementation of varint-G8IU taken from
  * Stepanov et al., SIMD-Based Decoding of Posting Lists, CIKM 2011
+ * 
+ * Update: D. Lemire believes that this scheme was patented by Rose, Stepanov et al. (patent 20120221539).
+ * We wrote this code before the patent was published (August 2012). 
  *
  * By Maxime Caron
  * From

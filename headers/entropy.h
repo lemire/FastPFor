@@ -19,6 +19,11 @@ public:
     EntropyRecorder() :
         counter(), totallength(0) {
     }
+
+    void clear() {
+        counter.clear();
+        totallength = 0;
+    }
     void eat(const uint32_t * in, const size_t length) {
         if (length == 0)
             return;

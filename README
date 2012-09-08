@@ -171,4 +171,8 @@ some SSE instructions may fail.
 
 == Is any of this code subject to patents?  ==
 
-I (D. Lemire) do not think so. 
+I (D. Lemire) did not
+patent anything. 
+
+However, we implemented
+varint-G8UI which was patented by its authors. 

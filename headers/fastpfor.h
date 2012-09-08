@@ -18,7 +18,7 @@
  * FastPFor 
  *
  *
- * Designed by D. Lemire.
+ * Designed by D. Lemire. This scheme is NOT patented.
  */
 
 class FastPFor: public IntegerCODEC {

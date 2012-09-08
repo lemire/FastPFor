@@ -14,6 +14,9 @@
 
 
 /**
+ * 
+ * Designed by D. Lemire with ideas from Leonid Boystov. This scheme is NOT patented.
+ *
  * Code data in miniblocks of 128 integers.
  * To preserve alignment, we use regroup
  * 8 such miniblocks into a block of 8 * 128 = 1024
