@@ -18,7 +18,7 @@
  * SIMDFastPFor
  *
  *
- * Designed by D. Lemire with ideas from Leonid Boystov. This scheme is NOT patented.
+ * Designed by D. Lemire with ideas from Leonid Boytsov. This scheme is NOT patented.
  */
 class SIMDFastPFor: public IntegerCODEC {
 public:

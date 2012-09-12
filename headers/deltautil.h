@@ -11,7 +11,7 @@
 #include "codecs.h"
 #include "memutil.h"
 #include "entropy.h"
-
+#include "ztimer.h"
 /**
  * This file is made of various convenient functions and structures.
  * It is not necessarily very reusable though.
