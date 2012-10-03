@@ -25,7 +25,6 @@
 template<uint32_t MiniBlockSize>
 class BinaryPacking: public IntegerCODEC {
 public:
-public:
 
     static const uint32_t HowManyMiniBlocks = 16;
     static const uint32_t BlockSize = HowManyMiniBlocks * MiniBlockSize;
