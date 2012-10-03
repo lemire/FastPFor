@@ -23,7 +23,7 @@ test: unit
 
 #GCCPARAMS=  --param max-completely-peel-times=64  --param max-completely-peeled-insns=5000 --param max-peeled-insns=6000  --param max-unrolled-insns=6000 --param max-average-unrolled-insns=4000  --param max-unroll-times=64 --param max-peel-times=64
 GCCPARAMS=
-./headers/common.h.gch: 
+./headers/common.h.gch: ./headers/common.h 
 	$(CXX) $(CXXFLAGS) -x c++-header  -c ./headers/common.h -Iheaders
 
 COMMONBINARIES= bitpacking.o bitpackingaligned.o bitpackingunaligned.o bitpacksimd.o
