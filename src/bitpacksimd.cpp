@@ -20,7 +20,7 @@
 #include "bitpacksimd.h"
 
 using namespace std;
-
+typedef unsigned __v4su __attribute__ ((__vector_size__ (16)));
 __v4su  _NumMaskSIMD1{ 1U ,1U ,1U ,1U };
 __v4sf  NumMaskSIMD1 =  reinterpret_cast<__v4sf>(_NumMaskSIMD1);
 __v4su  _NumMaskSIMD2{ 3U ,3U ,3U ,3U };
