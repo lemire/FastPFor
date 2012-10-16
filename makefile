@@ -26,7 +26,7 @@ GCCPARAMS=
 ./headers/common.h.gch: ./headers/common.h 
 	$(CXX) $(CXXFLAGS) -x c++-header  -c ./headers/common.h -Iheaders
 
-COMMONBINARIES= bitpacking.o bitpackingaligned.o bitpackingunaligned.o bitpacksimd.o
+COMMONBINARIES= bitpacking.o bitpackingaligned.o bitpackingunaligned.o simdbitpacking.o
 
 bitpacking.o: ./headers/bitpacking.h ./src/bitpacking.cpp
 	$(CXX) $(CXXFLAGS) -c ./src/bitpacking.cpp -Iheaders
@@ -37,8 +37,12 @@ bitpackingunaligned.o: ./headers/bitpacking.h ./src/bitpackingunaligned.cpp
 bitpackingaligned.o: ./headers/bitpacking.h ./src/bitpackingaligned.cpp
 	$(CXX) $(CXXFLAGS) -c ./src/bitpackingaligned.cpp -Iheaders
 
-bitpacksimd.o: ./headers/common.h ./headers/bitpacksimd.h ./src/bitpacksimd.cpp
-	$(CXX) $(CXXFLAGS) -c ./src/bitpacksimd.cpp -Iheaders
+simdbitpacking.o: ./headers/common.h ./headers/simdbitpacking.h ./src/simdbitpacking.cpp
+	$(CXX) $(CXXFLAGS) -c ./src/simdbitpacking.cpp -Iheaders
+
+horizontalbitpacking.o: ./headers/common.h ./headers/horizontalbitpacking.h ./src/horizontalbitpacking.cpp
+	$(CXX) $(CXXFLAGS) -msse4.1 -c ./src/horizontalbitpacking.cpp -Iheaders
+
 
 entropy: $(HEADERS) src/entropy.cpp
 	$(CXX) $(CXXFLAGS) -o entropy src/entropy.cpp $(COMMONBINARIES) -Iheaders
@@ -46,11 +50,8 @@ entropy: $(HEADERS) src/entropy.cpp
 gapstats: $(HEADERS) src/gapstats.cpp
 	$(CXX) $(CXXFLAGS) -o gapstats src/gapstats.cpp -Iheaders
 
-newbittest: $(HEADERS) src/newbittest.cpp ./headers/common.h.gch makefile $(COMMONBINARIES)
-	$(CXX) $(CXXFLAGS) $(GCCPARAMS) -Winvalid-pch  -o newbittest src/newbittest.cpp $(COMMONBINARIES) -Iheaders
-
-benchbitpacking: $(HEADERS) src/benchbitpacking.cpp ./headers/rolledbitpacking.h ./headers/common.h.gch makefile $(COMMONBINARIES)
-	$(CXX) $(CXXFLAGS) $(GCCPARAMS) -Winvalid-pch  -o benchbitpacking src/benchbitpacking.cpp $(COMMONBINARIES) -Iheaders
+benchbitpacking: $(HEADERS) src/benchbitpacking.cpp ./headers/rolledbitpacking.h ./headers/common.h.gch makefile $(COMMONBINARIES) horizontalbitpacking.o
+	$(CXX) $(CXXFLAGS) $(GCCPARAMS) -Winvalid-pch  -o benchbitpacking src/benchbitpacking.cpp $(COMMONBINARIES) horizontalbitpacking.o -Iheaders
 
 partitionbylength: $(HEADERS) src/partitionbylength.cpp
 	$(CXX) $(CXXFLAGS) -o partitionbylength src/partitionbylength.cpp -Iheaders

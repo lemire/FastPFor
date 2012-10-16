@@ -74,7 +74,6 @@ int main() {
                     cerr << length << endl;
                     throw logic_error("we have a bug");
                 }
-                //cout<<"ok."<<endl;
             }
         }
 

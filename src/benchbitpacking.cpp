@@ -8,10 +8,11 @@
 #include <iomanip>
 #include "util.h"
 #include "bitpackinghelpers.h"
-#include "bitpacksimd.h"
+#include "simdbitpacking.h"
 #include "rolledbitpacking.h"
 #include "synthetic.h"
 #include "ztimer.h"
+#include "horizontalbitpacking.h"
 
 void maskfnc(vector<uint32_t, cacheallocator> & out, const uint32_t L) {
     if (L == 32)
@@ -73,6 +74,17 @@ void simdunpack(const vector<uint32_t, cacheallocator> & data,
     }
 }
 
+
+void horizontalunpack(const vector<uint32_t, cacheallocator> & data,
+        vector<uint32_t, cacheallocator> & out, const uint32_t bit) {
+    const uint32_t N = out.size();
+    for (uint32_t k = 0; k < N / 128; ++k) {
+        simdhunpack(
+                reinterpret_cast<const uint8_t *> (&data[0] + 4 * bit * k),
+                &out[0] + 128 * k, bit);
+    }
+}
+
 void pack(const vector<uint32_t, cacheallocator> & data,
         vector<uint32_t, cacheallocator> & out, const uint32_t bit) {
     const uint32_t N = data.size();
@@ -121,6 +133,7 @@ void unpack(const vector<uint32_t, cacheallocator> & data,
     }
 }
 
+
 template<class container32bit>
 bool equalOnFirstBits(const container32bit & data,
         const container32bit & recovered, uint32_t bit) {
@@ -144,6 +157,7 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
     WallClockTimer z;
     double packtime, packtimewm, unpacktime;
     double simdpacktime, simdpacktimewm, simdunpacktime;
+    double horizontalunpacktime;
 
     cout << "#million of integers per second: higher is better" << endl;
     cout << "#bit, pack, pack without mask, unpack" << endl;
@@ -157,6 +171,7 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
             simdpacktime = 0;
             simdpacktimewm = 0;
             simdunpacktime = 0;
+            horizontalunpacktime = 0;
 
             for (uint32_t t = 0; t < T; ++t) {
                 compressed.clear();
@@ -220,6 +235,16 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
                     return;
                 }
 
+                z.reset();
+                horizontalunpack(compressed, recovered, bit);
+                if (t > 0)
+                    horizontalunpacktime += z.split();
+
+                if (!equalOnFirstBits(data, recovered, bit)) {
+                    cout << " Bug1!" << endl;
+                    return;
+                }
+
             }
 
             cout << std::setprecision(4) << bit << "\t\t" << N * (T - 1)
@@ -230,6 +255,8 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
                     / (simdpacktime) << "\t\t" << N * (T - 1)
                     / (simdpacktimewm) << "\t\t" << N * (T - 1)
                     / (simdunpacktime) << "\t\t";
+            cout<< N * (T - 1)
+                            / (horizontalunpacktime) << "\t\t";
 
 
             cout << endl;

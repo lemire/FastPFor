@@ -9,7 +9,7 @@
 #define SIMDBINARYPACKING_H_
 
 #include "codecs.h"
-#include "bitpacksimd.h"
+#include "simdbitpacking.h"
 #include "util.h"
 
 

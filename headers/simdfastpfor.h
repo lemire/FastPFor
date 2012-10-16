@@ -9,7 +9,7 @@
 
 #include "common.h"
 #include "codecs.h"
-#include "bitpacksimd.h"
+#include "simdbitpacking.h"
 #include "memutil.h"
 #include "util.h"
 
