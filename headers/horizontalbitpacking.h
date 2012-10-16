@@ -4,6 +4,17 @@
  *
  * (c) Daniel Lemire
  */
+/**
+ * This is purely for technical comparisons.
+ *
+ * Implementation of
+ *
+ * Willhalm T, Popovici N, Boshmaf Y, Plattner H, Zeier A, Schaffner J.
+ * SIMD-scan: ultra fast in-memory table scan using on-chip vector processing units.
+ * Proceedings of the VLDB Endowment Aug 2009; 2(1):385-394.
+ *
+ * Optimized for a recent Intel core i7 processor by D. Lemire on Oct. 2012.
+ */
 
 #ifndef HORIZONTALBITPACKING_H_
 #define HORIZONTALBITPACKING_H_
