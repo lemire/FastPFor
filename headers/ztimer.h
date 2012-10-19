@@ -45,7 +45,6 @@ public:
     }
     void reset() {
         getrusage(RUSAGE_SELF, &t1);
-        //t1 = clock();
         t2 = t1;
     }
     // proxy for userelapsed

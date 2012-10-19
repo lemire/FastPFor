@@ -71,7 +71,6 @@ public:
 private:
 
     inline void tokenize(const string& str) {
-        //size_t counter(0);
         string::size_type lastPos = str.find_first_not_of(mDelimiterPlusSpace,
                 0);
         string::size_type pos = str.find_first_of(mDelimiter, lastPos);
@@ -80,15 +79,10 @@ private:
             const string::size_type fieldlength = pos == string::npos ? pos_w
                     + 1 - lastPos : pos_w - lastPos;
             currentData.push_back(str.substr(lastPos, fieldlength));
-            //if (currentData.size() < ++counter)
-            //    currentData.resize(counter);
-            //currentData[counter - 1].resize(fieldlength);
-            //currentData[counter - 1].assign(str, lastPos, fieldlength);
             lastPos = str.find_first_not_of(mDelimiterPlusSpace, pos);
             pos = str.find_first_of(mDelimiter, lastPos);
             pos_w = str.find_last_not_of(' ', pos);
         }
-        ///currentData.resize(counter);
     }
 
     string mDelimiter;

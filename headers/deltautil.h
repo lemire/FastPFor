@@ -16,7 +16,6 @@
  * This file is made of various convenient functions and structures.
  * It is not necessarily very reusable though.
  */
-
 struct algostats {
 
     algostats(shared_ptr<IntegerCODEC> & a, bool simd = false) :

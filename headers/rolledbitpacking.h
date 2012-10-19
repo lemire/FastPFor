@@ -12,14 +12,17 @@
 
 /***
  * The idea here is not to unroll the loops and to let the
- * compiler decide how to best do it.
+ * compiler decide how to best do it. It turns out to be
+ * very difficult to get the same performance as manually
+ * generated functions. Still, we leave this code here to
+ * show that we made a significant effort to do it the
+ * "proper" way from a software engineering perspective.
  */
 
 /* need something similar for other compilers, eg CLANG */
 #pragma GCC push_options
 #pragma GCC optimize("O3")
 #pragma GCC optimize("unroll-loops")  // use cmd-line --param max-unroll-times=32?
-//#pragma GCC optimize("peel-loops")
 
 
 // crazy function that basically just does

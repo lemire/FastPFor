@@ -65,12 +65,7 @@ public:
 
     void open() {
         close();
-//#ifdef USE_O_DIRECT
-//        int fdi = ::open(mFilename.c_str(), O_DIRECT | O_RDONLY);
-//        fd = ::fdopen(fdi, "rb");
-//#else
         fd = ::fopen(mFilename.c_str(), "rb");
-//#endif
         if (fd == NULL) {
             cerr << "IO status: " << strerror(errno) << endl;
             cerr << "Can't open " << mFilename << endl;

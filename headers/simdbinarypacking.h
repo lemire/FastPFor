@@ -21,6 +21,11 @@
  * To preserve alignment, we use regroup
  * 8 such miniblocks into a block of 8 * 128 = 1024
  * integers.
+ * 
+ * Reference and documentation: 
+ * 
+ * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization
+ * http://arxiv.org/abs/1209.2137
  */
 class SIMDBinaryPacking: public IntegerCODEC {
 public:

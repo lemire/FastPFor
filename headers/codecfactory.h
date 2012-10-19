@@ -67,19 +67,7 @@ public:
 };
 
 map<string, shared_ptr<IntegerCODEC> > CODECFactory::scodecmap = {
-    // unaligned
-    //{   "binarypacking8", shared_ptr<IntegerCODEC> (
-    //                    new CompositeCodec<ByteAlignedPacking<8> , VariableByte> ) },
-    //{   "binarypacking16", shared_ptr<IntegerCODEC> (
-    //                    new CompositeCodec<ByteAlignedPacking<16> , VariableByte> ) },
-    // aligned
-    //{   "alignedbinarypacking8", shared_ptr<IntegerCODEC> (new CompositeCodec<BinaryPacking<8> ,
-    //            VariableByte>)},
-    //{   "alignedbinarypacking16", shared_ptr<IntegerCODEC> (new CompositeCodec<BinaryPacking<16> ,
-    //            VariableByte>)},
-    //{   "binarypacking32", shared_ptr<IntegerCODEC> (new CompositeCodec<BinaryPacking<32> ,
-    //            VariableByte>)},
-    {   "fastbinarypacking8", shared_ptr<IntegerCODEC> (new CompositeCodec<FastBinaryPacking<8> ,
+   {   "fastbinarypacking8", shared_ptr<IntegerCODEC> (new CompositeCodec<FastBinaryPacking<8> ,
                 VariableByte>)},
     {   "fastbinarypacking16", shared_ptr<IntegerCODEC> (new CompositeCodec<FastBinaryPacking<16> ,
                 VariableByte>)},
@@ -87,8 +75,6 @@ map<string, shared_ptr<IntegerCODEC> > CODECFactory::scodecmap = {
                 VariableByte>)},
     {   "BP32", shared_ptr<IntegerCODEC> (new CompositeCodec<BP32 ,
                         VariableByte>)},
-  //  {   "globalbinarypacking32", shared_ptr<IntegerCODEC> (new CompositeCodec<PackedCODEC ,
-    //             VariableByte>)},
     {   "vsencoding", shared_ptr<IntegerCODEC> (new vsencoding::VSEncodingBlocks(1U << 16))},
     {  "fastpfor", shared_ptr<IntegerCODEC> (new CompositeCodec<FastPFor , VariableByte> ())},
     {  "simdfastpfor", shared_ptr<IntegerCODEC> (new CompositeCodec<SIMDFastPFor , VariableByte> ())},
@@ -98,8 +84,6 @@ map<string, shared_ptr<IntegerCODEC> > CODECFactory::scodecmap = {
     {   "newpfor", shared_ptr<IntegerCODEC> (new CompositeCodec<NewPFor<4, Simple16<false>> , VariableByte> ())},
     {   "optpfor", shared_ptr<IntegerCODEC> (new CompositeCodec<OPTPFor<4, Simple16<false> > , VariableByte> ())},
     {   "vbyte", shared_ptr<IntegerCODEC> (new VariableByte())},
-    //{   "simple16", shared_ptr<IntegerCODEC> (new Simple16<true> ())},
-    //{   "simple9", shared_ptr<IntegerCODEC> (new Simple9<true> ())},
     {   "simple8b", shared_ptr<IntegerCODEC> (new Simple8b<true> ())},
 #ifdef VARINTG8IU_H__
     {   "varintg8iu", shared_ptr<IntegerCODEC> (new VarIntG8IU ())},
@@ -108,7 +92,7 @@ map<string, shared_ptr<IntegerCODEC> > CODECFactory::scodecmap = {
     {   "snappy", shared_ptr<IntegerCODEC> (new JustSnappy ())},
 #endif
     {  "simdbinarypacking", shared_ptr<IntegerCODEC>(new CompositeCodec<SIMDBinaryPacking,VariableByte>())},
-//    {  "simdglobalbinarypacking", shared_ptr<IntegerCODEC>(new CompositeCodec<SIMDGlobalBinaryPacking,VariableByte>())},
     {   "copy", shared_ptr<IntegerCODEC> (new JustCopy())}
 };
+
 #endif /* CODECFACTORY_H_ */

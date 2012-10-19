@@ -17,8 +17,13 @@
 /**
  * SIMDFastPFor
  *
+ * Reference and documentation: 
+ * 
+ * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization
+ * http://arxiv.org/abs/1209.2137
  *
  * Designed by D. Lemire with ideas from Leonid Boytsov. This scheme is NOT patented.
+ *
  */
 class SIMDFastPFor: public IntegerCODEC {
 public:

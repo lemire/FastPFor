@@ -16,10 +16,6 @@ const uint32_t * unpackme(const uint32_t * in, STLContainer & out,
         const uint32_t bit) {
     const uint32_t size = *in;
     ++in;
-    /*if (size == 0) {
-        out.resize(0);
-        return in;
-    }*/
     out.resize((size + PACKSIZE - 1) / PACKSIZE * PACKSIZE);
     for (uint32_t j = 0; j != out.size(); j += PACKSIZE) {
         fastunpack(in, &out[j], bit);

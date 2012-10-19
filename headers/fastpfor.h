@@ -19,8 +19,13 @@
  *
  *
  * Designed by D. Lemire. This scheme is NOT patented.
+ *
+ * Reference and documentation: 
+ * 
+ * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization   
+ * http://arxiv.org/abs/1209.2137
+ *
  */
-
 class FastPFor: public IntegerCODEC {
 public:
     /**
@@ -243,7 +248,18 @@ public:
 
 
 
-
+/**
+ * SimplePFor 
+ *
+ *
+ * Designed by D. Lemire. This scheme is NOT patented.
+ *
+ * Reference and documentation: 
+ * 
+ * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization   
+ * http://arxiv.org/abs/1209.2137
+ *
+ */
 template <class EXCEPTIONCODER=Simple8b<true> >
 class SimplePFor: public IntegerCODEC {
 public:

@@ -4,6 +4,7 @@
  *
  * (c) Daniel Lemire
  */
+
 /**
  * This is purely for technical comparisons.
  *

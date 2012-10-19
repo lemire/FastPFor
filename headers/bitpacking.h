@@ -7,10 +7,6 @@
 #ifndef BITPACKING
 #define BITPACKING
 #include <cstdint>
-//void fastunpack(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out, const uint32_t bit);
-//void fastpack(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out, const uint32_t bit);
-//void fastpackwithoutmask(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out, const uint32_t bit);
-
 
 void __fastunpack0(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out);
 void __fastunpack1(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out);
@@ -114,13 +110,5 @@ void __fastpackwithoutmask29(const uint32_t *  __restrict__ in, uint32_t *  __re
 void __fastpackwithoutmask30(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out);
 void __fastpackwithoutmask31(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out);
 void __fastpackwithoutmask32(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out);
-
-
-
-
-
-
-
-
 
 #endif // BITPACKING

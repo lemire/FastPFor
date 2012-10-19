@@ -8,6 +8,12 @@ A research library with integer compression schemes.
 It should be suitable for applications to d-gap
 compression and delta coding in general.
 
+== Reference and documentation ==
+
+Please see:
+
+Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization 
+http://arxiv.org/abs/1209.2137
 
 == License ==
 

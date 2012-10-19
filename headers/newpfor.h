@@ -24,7 +24,6 @@
  *
  * Follows
  *
- *
  * H. Yan, S. Ding, T. Suel, Inverted index compression and query processing with
  * optimized document ordering, in: WWW Õ09, 2009, pp. 401Ð410.
  */

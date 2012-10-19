@@ -105,8 +105,6 @@ public:
  * This is an attempt to make BinaryPacking faster, at the expense
  * of some compression.
  */
-
-
 template<uint32_t MiniBlockSize>
 class FastBinaryPacking: public IntegerCODEC {
 public:
@@ -257,8 +255,6 @@ public:
 
     static const uint32_t HowManyMiniBlocks = 16;
     static const uint32_t BlockSize = HowManyMiniBlocks * MiniBlockSize;
-
-
     static const uint32_t bits32 = gccbits(32);
 
     void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
@@ -363,9 +359,6 @@ public:
     }
 
 };
-
-
-
 
 
 

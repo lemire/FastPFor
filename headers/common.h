@@ -38,7 +38,4 @@
 #include <numeric>
 #include <iomanip>
 
-
-
-
 #endif /* COMMON_H_ */
