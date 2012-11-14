@@ -193,3 +193,36 @@ int main() {
     cout << endl << endl << "testing...ok. Your code is good." << endl;
 }
 
+// Compile-time unit tests for the leading_zeros constexpr.
+static_assert(leading_zeros(1 << 31) == 0, "");
+static_assert(leading_zeros(1 << 30) == 1, "");
+static_assert(leading_zeros(1 << 29) == 2, "");
+static_assert(leading_zeros(1 << 28) == 3, "");
+static_assert(leading_zeros(1 << 27) == 4, "");
+static_assert(leading_zeros(1 << 26) == 5, "");
+static_assert(leading_zeros(1 << 25) == 6, "");
+static_assert(leading_zeros(1 << 24) == 7, "");
+static_assert(leading_zeros(1 << 23) == 8, "");
+static_assert(leading_zeros(1 << 22) == 9, "");
+static_assert(leading_zeros(1 << 21) == 10, "");
+static_assert(leading_zeros(1 << 20) == 11, "");
+static_assert(leading_zeros(1 << 19) == 12, "");
+static_assert(leading_zeros(1 << 18) == 13, "");
+static_assert(leading_zeros(1 << 17) == 14, "");
+static_assert(leading_zeros(1 << 16) == 15, "");
+static_assert(leading_zeros(1 << 15) == 16, "");
+static_assert(leading_zeros(1 << 14) == 17, "");
+static_assert(leading_zeros(1 << 13) == 18, "");
+static_assert(leading_zeros(1 << 12) == 19, "");
+static_assert(leading_zeros(1 << 11) == 20, "");
+static_assert(leading_zeros(1 << 10) == 21, "");
+static_assert(leading_zeros(1 << 9) == 22, "");
+static_assert(leading_zeros(1 << 8) == 23, "");
+static_assert(leading_zeros(1 << 7) == 24, "");
+static_assert(leading_zeros(1 << 6) == 25, "");
+static_assert(leading_zeros(1 << 5) == 26, "");
+static_assert(leading_zeros(1 << 4) == 27, "");
+static_assert(leading_zeros(1 << 3) == 28, "");
+static_assert(leading_zeros(1 << 2) == 29, "");
+static_assert(leading_zeros(1 << 1) == 30, "");
+static_assert(leading_zeros(1 << 0) == 31, "");

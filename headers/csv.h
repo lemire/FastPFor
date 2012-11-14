@@ -11,7 +11,6 @@
 #include "common.h"
 
 using namespace std;
-using namespace std::tr1;
 
 enum {
     INCREASINGCARDINALITY, DECREASINGCARDINALITY

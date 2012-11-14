@@ -5,7 +5,7 @@
  * (c) Daniel Lemire, http://lemire.me/en/
  */
 #include <getopt.h>
-#include <tr1/memory>
+#include <memory>
 #include <iomanip>
 #include <time.h>
 #include <limits>
@@ -26,7 +26,7 @@ static struct option long_options[] = {
 
 void message(const char * prog) {
     cerr << " usage : " << prog << " scheme  maropubinaryfile " << endl;
-    cerr << "By default, is assumes that the original data is made of "
+    cerr << "By default, it assumes that the original data is made of "
         "sorted distinct integers." << endl;
     cerr << "Use the --codecs flag to specify the schemes." << endl;
     cerr << " schemes include:" << endl;

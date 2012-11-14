@@ -14,8 +14,8 @@
 void message(const char * prog) {
     cerr << " usage : " << prog << "  maropubinaryfile "
             << endl;
-    cerr << "By default, is assumes that the original data is made of "
-        "sorted distinct integers, to process the more general case,"
+    cerr << "By default, it assumes that the original data is made of "
+        "sorted distinct integers. To process the more general case,"
         "add the -notdgaps flag." << endl;
     cerr << "The -nodelta flag disables delta coding." << endl;
     cerr << "The -minlength ignores all arrays smaller than a threshold."
