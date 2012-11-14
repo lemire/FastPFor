@@ -5,7 +5,7 @@
  * (c) Daniel Lemire, http://lemire.me/en/
  */
 #include <getopt.h>
-#include <tr1/memory>
+#include <memory>
 #include <iomanip>
 #include <time.h>
 #include <limits>
