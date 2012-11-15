@@ -38,21 +38,6 @@ uint32_t gcd(uint32_t x, uint32_t y) {
     return (x % y) == 0 ? y :  gcd(y,x % y);
 }
 
-template<uint32_t _x,uint32_t _y>
-__attribute__ ((const))
-uint32_t gcd() {
-    uint32_t x = _x;
-    uint32_t y = _y;
-    while(true) {
-        uint32_t c = x % y;
-        if(c == 0 ) return y;
-        x = y;
-        y = c;
-    }
-}
-
-
-
 template <class T>
 __attribute__ ((const))
 T * padTo32bits(T * inbyte) {
@@ -81,7 +66,6 @@ const T * padTo64bits(const  T * inbyte) {
             + 7) & ~7);
 }
 
-
 template <class T>
 __attribute__ ((const))
 T * padTo128bits(T * inbyte) {
@@ -96,7 +80,6 @@ const T * padTo128bits(const T * inbyte) {
             + 15) & ~15);
 }
 
-
 template <class T>
 __attribute__ ((const))
 T * padTo64bytes(T * inbyte) {
@@ -104,15 +87,12 @@ T * padTo64bytes(T * inbyte) {
             + 63) & ~63);
 }
 
-
-
 template <class T>
 __attribute__ ((const))
 const T * padTo64bytes(const T * inbyte) {
     return reinterpret_cast<T *> ((reinterpret_cast<uintptr_t> (inbyte)
             + 63) & ~63);
 }
-
 
 template <class T>
 __attribute__ ((const))
@@ -126,20 +106,16 @@ bool needPaddingTo64Bits(const T * inbyte) {
     return reinterpret_cast<uintptr_t> (inbyte) & 7;
 }
 
-
 template <class T>
 __attribute__ ((const))
 bool needPaddingTo128Bits(const T * inbyte) {
     return reinterpret_cast<uintptr_t> (inbyte) & 15;
 }
 
-
 template <class T>
 bool  needPaddingTo64bytes(const T * inbyte) {
     return reinterpret_cast<uintptr_t> (inbyte) & 63;
 }
-
-
 
 __attribute__ ((const))
 uint32_t gccbits(const uint32_t v) {
@@ -177,14 +153,12 @@ void checkifdivisibleby(size_t a, uint32_t x) {
     }
 }
 
-
 template<class iter>
 void printme(iter i, iter b) {
     for (iter j = i; j != b; ++j)
         cout << *j << " ";
     cout << endl;
 }
-
 
 __attribute__ ((const))
 uint32_t asmbits(const uint32_t v) {
@@ -256,8 +230,6 @@ uint32_t maxbits(const iterator & begin, const iterator & end) {
     return gccbits(accumulator);
 }
 
-
-
 template<class iterator>
 uint32_t slowmaxbits(const iterator & begin, const iterator & end) {
     uint32_t accumulator = 0;
@@ -288,23 +260,18 @@ uint32_t slowmaxbits(const iterator & begin, const iterator & end) {
   //t operator()(t x, t y) { return x|y; }
 //};
 
-// 
+//
 template<int b, class t, class iterator>
-int greedy_bit_size_lookahead( const iterator &begin, 
+int greedy_bit_size_lookahead( const iterator &begin,
        const iterator &end) {
   //  assert(end- begin <= b);
   vector<t> prefixOrBuffer(end-begin);  // consider a  preallocated buffer...
-  
+
   partial_sum(begin, end, prefixOrBuffer.begin(),
 	      [](t x, t y) { return x | y; }  // change dl's + to |
           //bitwise_or<t>()
           );
   // do the bitwise or-ing once only.
-
-  // cout << " prefixOrBuffer is ";
-  // for (int i=0; i < prefixOrBuffer.size(); ++i) cout << prefixOrBuffer[i] << " "                                                  ;
-  //  cout << endl;
-  
   if (end-begin == b) { // expected case, to help out compiler.  Should be unrolled
     for (int i=1; i < 31; ++i)
       if (prefixOrBuffer[ b/i -1] < (static_cast<t>(1)<<i)) return i;
@@ -314,12 +281,12 @@ int greedy_bit_size_lookahead( const iterator &begin,
   else { // general case, maybe less data than we could pack with 1-bit fields
     for (int i=1; i < 31; ++i) {
       uint64_t indexToCheck = b/i - 1;
-      if (indexToCheck >= prefixOrBuffer.size())  
+      if (indexToCheck >= prefixOrBuffer.size())
         indexToCheck = prefixOrBuffer.size()-1;
 
       if (prefixOrBuffer[indexToCheck] < (static_cast<t>(1)<<i)) return i;
     }
-    // assert(false); 
+    // assert(false);
     return -1;
   }
 }
@@ -327,9 +294,9 @@ int greedy_bit_size_lookahead( const iterator &begin,
 
 // assume the previous bit size is close to the required bit size
 template<int b, class t, class iterator>
-int greedy_bit_size_lookahead( const iterator &begin, 
+int greedy_bit_size_lookahead( const iterator &begin,
 			       const iterator &end, uint32_t previous_size) {
-  
+
   uint32_t  span_length = end-begin;
   if (span_length == b) {  // work on the specialization later...
     // try previous size
@@ -337,7 +304,7 @@ int greedy_bit_size_lookahead( const iterator &begin,
       // previous_size is too small; go until you find something bigger that works
       for (uint32_t i=previous_size+1; i < previous_size+32 /* was nothing */ ; ++i)  // upper bound is only to encourage compiler to unroll
 	if (maxbits(begin, begin+(b/i)) <= i) return i;
-      return -1; // impossible 
+      return -1; // impossible
     }
     else { // previous_size works, but perhaps we can find something smaller that also works
       uint32_t i;
@@ -352,31 +319,26 @@ int greedy_bit_size_lookahead( const iterator &begin,
     // same thing with careful checks to avoid reading past end of buffer
     uint32_t endIdx = b/previous_size;
     if (endIdx >= span_length) endIdx=span_length;
-    
+
     if (maxbits(begin, begin+endIdx) > previous_size) {
       for (uint32_t i=previous_size+1; ; ++i) {
 	endIdx = b/i;
 	if (endIdx >= span_length) endIdx=span_length;
 	if (maxbits(begin, begin+endIdx) <= i) return i;
-      } 
+      }
       return -1; // impossible
     }
-    else { 
+    else {
       uint32_t i;
       for (i=previous_size-1; i > 0; --i) {
 	endIdx = b/i;
 	if (endIdx >= span_length) endIdx=span_length;
 	if (maxbits(begin, begin+endIdx) > i) break;
       }
-      return i+1;  
+      return i+1;
     }
   }
-}    
-
-
-
-
-
+}
 
 class BitWidthHistoGram {
 public:
