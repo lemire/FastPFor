@@ -32,7 +32,7 @@ public:
         BlockSizeInUnitsOfPackSize = 4,
         PACKSIZE = 32,
         BlockSize = BlockSizeInUnitsOfPackSize * PACKSIZE,
-        blocksizeinbits = gccbits(BlockSize)
+        blocksizeinbits = constexprbits(BlockSize)
     };
     // these are reusable buffers
     vector<uint32_t> codedcopy;

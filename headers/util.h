@@ -142,7 +142,7 @@ bool  needPaddingTo64bytes(const T * inbyte) {
 
 
 __attribute__ ((const))
-constexpr uint32_t gccbits(const uint32_t v) {
+uint32_t gccbits(const uint32_t v) {
     return v == 0 ? 0 : 32 - __builtin_clz(v);
 }
 
@@ -230,6 +230,17 @@ uint32_t bits(uint32_t v) {
     }
     return r;
 }
+
+__attribute__ ((const))
+constexpr uint32_t constexprbits(uint32_t v) {
+    return v >= (1U << 15) ? 16 + constexprbits(v>>16) :
+            (v >= (1U << 7)) ? 8 + constexprbits(v>>8) :
+                    (v >= (1U << 3)) ? 4 + constexprbits(v>>4) :
+                            (v >= (1U << 1)) ? 2 + constexprbits(v>>2) :
+                                    (v >= (1U << 0)) ? 1 + constexprbits(v>>1) :
+                                            0;
+}
+
 
 constexpr uint32_t div_roundup(uint32_t v, uint32_t divisor) {
     return (v + (divisor - 1)) / divisor;

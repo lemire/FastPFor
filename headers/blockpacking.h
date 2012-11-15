@@ -28,7 +28,7 @@ public:
 
     static const uint32_t HowManyMiniBlocks = 16;
     static const uint32_t BlockSize = HowManyMiniBlocks * MiniBlockSize;
-    static const uint32_t bits32 = gccbits(32);
+    static const uint32_t bits32 = constexprbits(32);
 
     void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
             size_t &nvalue) {
@@ -255,7 +255,7 @@ public:
 
     static const uint32_t HowManyMiniBlocks = 16;
     static const uint32_t BlockSize = HowManyMiniBlocks * MiniBlockSize;
-    static const uint32_t bits32 = gccbits(32);
+    static const uint32_t bits32 = constexprbits(32);
 
     void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
             size_t &nvalue) {
