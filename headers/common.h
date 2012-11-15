@@ -7,33 +7,37 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
-#include <sys/resource.h>
-#include <sys/types.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <time.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
+// C headers (sorted)
+#include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include <errno.h>
+#include <stdlib.h>
 #include <string.h>
-#include <cmath>
-#include <map>
-#include <unordered_map>
-#include <set>
-#include <queue>
-#include <cstdint>
-#include <stdexcept>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
+#include <sys/mman.h>
+#include <sys/resource.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <time.h>
+
+// C++ headers (sorted)
 #include <algorithm>
-#include <sstream>
 #include <cassert>
-#include <numeric>
+#include <cmath>
+#include <cstdint>
+#include <fstream>
 #include <iomanip>
+#include <iostream>
+#include <map>
+#include <memory>
+#include <numeric>
+#include <queue>
+#include <set>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <unordered_map>
+
+
 
 #endif /* COMMON_H_ */

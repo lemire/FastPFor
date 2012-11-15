@@ -5,10 +5,7 @@
  * (c) Daniel Lemire, http://lemire.me/en/
  */
 #include <getopt.h>
-#include <tr1/memory>
-#include <iomanip>
-#include <time.h>
-#include <limits>
+#include "common.h"
 #include "codecfactory.h"
 #include "maropuparser.h"
 #include "util.h"
