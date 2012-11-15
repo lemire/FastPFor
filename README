@@ -78,6 +78,14 @@ make codecs
 ./codecs --clusterdynamic
 ./codecs --uniformdynamic
 
+== optional : Snappy ==
+
+Typing "make allallall" will install some testing binaries that depend
+on Google Snappy. If you want to build these, you need to install
+Google snappy. You can do so on a recent ubuntu machine as :
+
+sudo apt-get install libsnappy-dev
+
 == Processing data files ==
 
 Typing make will generate an inmemorybenchmark 
