@@ -1,6 +1,12 @@
-cmake_minimum_required(VERSION 2.8)
+# This is code is released under the
+# Apache License Version 2.0 http://www.apache.org/licenses/.
+#
+# Copyright (c) 2012 Louis Dionne
+#
 
+cmake_minimum_required(VERSION 2.8)
 project(FastPFor)
+list(APPEND CMAKE_MODULE_PATH ${FastPFor_SOURCE_DIR}/cmake_modules)
 
 set(warnings -Wall -Wextra -pedantic -Weffc++ -Wcast-align -Wunsafe-loop-optimizations -Wcast-qual)
 add_definitions(-std=c++0x -O3 -mssse3 ${warnings})
@@ -30,19 +36,28 @@ set_source_files_properties(src/horizontalbitpacking.cpp PROPERTIES COMPILE_FLAG
 add_executable(benchbitpacking src/benchbitpacking.cpp src/horizontalbitpacking.cpp)
 target_link_libraries(benchbitpacking FastPFor_lib)
 
-add_executable(codecssnappy src/codecs.cpp)
-set_target_properties(codecssnappy PROPERTIES DEFINE_SYMBOL USESNAPPY LINK_FLAGS snappy)
-target_link_libraries(codecssnappy FastPFor_lib)
+find_package(snappy)
+if(NOT ${snappy_FOUND})
+    message(STATUS "Snappy was not found. codecssnappy and "
+                   "inmemorybenchmarksnappy targets are not available.")
+else()
+    message(STATUS "Snappy was found. Building additional targets "
+                   "codecssnappy and inmemorybenchmarksnappy.")
+    include_directories(${snappy_INCLUDE_DIRS})
+    add_executable(codecssnappy src/codecs.cpp)
+    set_target_properties(codecssnappy PROPERTIES DEFINE_SYMBOL USESNAPPY)
+    target_link_libraries(codecssnappy FastPFor_lib ${snappy_LIBRARIES})
+
+    add_executable(inmemorybenchmarksnappy src/inmemorybenchmark.cpp)
+    set_target_properties(inmemorybenchmarksnappy PROPERTIES DEFINE_SYMBOL USESNAPPY)
+    target_link_libraries(inmemorybenchmarksnappy FastPFor_lib ${snappy_LIBRARIES})
+endif()
 
 add_executable(codecs src/codecs.cpp)
 target_link_libraries(codecs FastPFor_lib)
 
 add_executable(inmemorybenchmark src/inmemorybenchmark.cpp)
 target_link_libraries(inmemorybenchmark FastPFor_lib)
-
-add_executable(inmemorybenchmarksnappy src/inmemorybenchmark.cpp)
-set_target_properties(inmemorybenchmarksnappy PROPERTIES DEFINE_SYMBOL USESNAPPY LINK_FLAGS snappy)
-target_link_libraries(inmemorybenchmarksnappy FastPFor_lib)
 
 add_executable(unit src/unit.cpp)
 target_link_libraries(unit FastPFor_lib)
