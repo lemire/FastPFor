@@ -22,8 +22,10 @@ This code is licensed under Apache License, Version 2.0 (ASL2.0).
 == Warning ==
 
 This code requires a (recent as of 2012) compiler supporting
-C++11. This was a design decision. You can specify which
-C++ compiler you are using with the YOURCXX variable.
+C++11. This was a design decision. 
+It builds under both clang++ 3.2 (LLVM 3.2) and GCC 4.7.
+
+You can specify which C++ compiler you are using with the YOURCXX variable.
 
 e.g., under bash type
 
@@ -33,14 +35,8 @@ Below is a description of how to install GCC 4.7:
 
 ==== GCC 4.7 under Linux ====
 
-
-Under Linux, installing GCC 4.7 is not difficult. For example,
-for Linux Mint you need to edit two files to include "debian
-experimental":
-
-http://community.linuxmint.com/tutorial/view/250
-
-then type 
+Under a recent version of Ubuntu (12.10), you can install
+GCC 4.7 by typing:
 
 sudo apt-get install gcc-4.7 g++-4.7
 
@@ -65,15 +61,8 @@ https://github.com/lemire/JavaFastPFOR
 
 == Requirements ==
 
-You need GNU GCC 4.7 or better. The code
+You need GNU GCC 4.7 or better, or LLVM clang++ 32. The code
 was tested under Linux and MacOS. 
-
-== What about LLVM/clang++? ==
-
-Clang 3.1 very nearly can compile everything, but its support
-for C++11 is still insufficient. We hope that the next release
-of Clang (3.2?) will correct these limitations.
-
 
 == Building and testing ==
 
