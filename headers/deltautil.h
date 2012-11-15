@@ -160,11 +160,15 @@ public:
              return;
         }
         const size_t Qty4 = TotalQty / 4;
+#ifndef __clang__
 #pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations" // GCC hates next loop
+#endif
         for (size_t i = TotalQty - 1; i >= 4 * Qty4; --i) {
              pData[i] -= pData[i-4];
         }
+#ifndef __clang__
 #pragma GCC diagnostic pop
+#endif 
         __m128i* pCurr = reinterpret_cast<__m128i*>(pData) + Qty4 - 1;
         const __m128i* pStart = reinterpret_cast<__m128i*>(pData);
         __m128i a = _mm_load_si128(pCurr);
@@ -278,7 +282,9 @@ public:
             if(verbose) cout<<"# compressing the arrays themselves, no delta coding applied."<<endl;
             // we check whether it could have been applied...
             bool sorted = true;
-    #pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations" // otherwise I get bogus warning
+#ifndef __clang__
+#pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations" // otherwise I get bogus warning
+#endif 
             for(auto & x : datas)
                 if(sorted and (x.size()>=1))
                         for (size_t k = 1; k < x.size(); ++k) {
@@ -287,7 +293,9 @@ public:
                                 break;
                             }
                         }
-    #pragma GCC diagnostic pop
+#ifndef __clang__
+#pragma GCC diagnostic pop
+#endif
             if(sorted) {
                 cout<<"#\n#\n# you are providing sorted arrays, but you are not requesting delta coding. Are you sure?\n#\n#\n"<<endl;
             } else {
