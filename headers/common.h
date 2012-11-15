@@ -20,10 +20,8 @@
 #include <errno.h>
 #include <string.h>
 #include <cmath>
-#include <tr1/memory>
 #include <map>
 #include <unordered_map>
-#include <tr1/unordered_map>
 #include <set>
 #include <queue>
 #include <cstdint>
