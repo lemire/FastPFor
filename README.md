@@ -1,129 +1,152 @@
-The FastPFOR C++ library : Fast integer compression
-Daniel Lemire, Leonid Boytsov, Owen Kaser, Maxime Caron and Luc Dionne
+# The FastPFOR C++ library : Fast integer compression
+by Daniel Lemire, Leonid Boytsov, Owen Kaser, Maxime Caron, Louis Dionne
 
 
-== What is this? ==
+## What is this?
 
 A research library with integer compression schemes.
 It should be suitable for applications to d-gap
 compression and delta coding in general.
 
-== Reference and documentation ==
+## Reference and documentation
 
 Please see:
 
-Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization 
+Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization
 http://arxiv.org/abs/1209.2137
 
-== License ==
+## License
 
 This code is licensed under Apache License, Version 2.0 (ASL2.0).
 
-== Warning ==
+## Requirements
 
-This code requires a (recent as of 2012) compiler supporting
-C++11. This was a design decision. 
+This code requires a (recent as of 2012) compiler supporting C++11. This was
+a design decision.
 It builds under both clang++ 3.2 (LLVM 3.2) and GCC 4.7.
+The code was tested under Linux and MacOS.
+
+## Building with CMake
+
+At the root of the project:
+
+- Create a directory to contain the out-of-source build.
+
+        mkdir build
+        cd build
+
+- Generate the files to actually perform the build. Many build systems are
+supported by CMake, so you may want to look at the [documentation](http://www.cmake.org).
+
+        cmake ..
+
+- Given you generated Unix Makefiles (the default), you can now build the
+library.
+
+        make
+
+## Building with make
 
 You can specify which C++ compiler you are using with the YOURCXX variable.
 
 e.g., under bash type
 
-export YOURCXX=g++-4.7
+    export YOURCXX=g++-4.7
+    make
 
-Below is a description of how to install GCC 4.7:
-
-==== GCC 4.7 under Linux ====
+### Installing GCC 4.7 under Linux
 
 Under a recent version of Ubuntu (12.10), you can install
 GCC 4.7 by typing:
 
-sudo apt-get install gcc-4.7 g++-4.7
+    sudo apt-get install gcc-4.7 g++-4.7
 
-==== GCC 4.7 under Mac ====
+### Installing GCC 4.7 under Mac
 
-Mac Ports supports gcc 4.7.
+Mac Ports supports GCC 4.7. You can install it by typing:
 
-http://www.macports.org/
+    sudo port install gcc47
 
-== Why C++11? ==
+## Why C++11?
 
 With minor changes, all schemes will compile fine under
 compilers that do not support C++11. And porting the code
 to C should not be a challenge.
 
-== What if I prefer Java? ==
+## What if I prefer Java?
 
 Many schemes cannot be efficiently ported to Java. However
 some have been. Please see:
 
 https://github.com/lemire/JavaFastPFOR
 
-== Requirements ==
+## Testing
 
-You need GNU GCC 4.7 or better, or LLVM clang++ 32. The code
-was tested under Linux and MacOS. 
+If you used CMake to generate the build files, the `check` target will
+run the unit tests. For example , if you generated Unix Makefiles
 
-== Building and testing ==
+    make check
 
-make
-./unit
+will do it. If you used raw make, type the following:
+
+    make
+    ./unit
 
 Note that we are thorough in the unit tests so it can
 take several minutes to run through them all.
 
-== Simple benchmark ==
+## Simple benchmark
 
-make codecs
-./codecs --clusterdynamic
-./codecs --uniformdynamic
+    make codecs
+    ./codecs --clusterdynamic
+    ./codecs --uniformdynamic
 
-== optional : Snappy ==
+## Optional : Snappy
 
 Typing "make allallall" will install some testing binaries that depend
 on Google Snappy. If you want to build these, you need to install
-Google snappy. You can do so on a recent ubuntu machine as :
+Google snappy. You can do so on a recent ubuntu machine as:
 
-sudo apt-get install libsnappy-dev
+    sudo apt-get install libsnappy-dev
 
-== Processing data files ==
+## Processing data files
 
-Typing make will generate an inmemorybenchmark 
-executable that can process data files. 
+Typing make will generate an inmemorybenchmark
+executable that can process data files.
 
 You can use it to process arrays on (sorted!) integers
 on disk using the following 32-bit format: 1 unsigned 32-bit
 integer  indicating array length followed by the corresponding
 number of 32-bit integer. Repeat.
- 
+
  ( It is assumed that the integers are sorted.)
 
 
 Once you have such a binary file somefilename you can
 process it with our inmemorybenchmark:
 
-./inmemorybenchmark --minlength 10000 somefilename
+    ./inmemorybenchmark --minlength 10000 somefilename
 
 The "minlength" flag skips short arrays. (Warning: timings over
 short arrays are unreliable.)
 
 
-== Testing with the ClueWeb09 data set ==
+## Testing with the ClueWeb09 data set
 
 Grab the data set from:
 
- http://boytsov.info/datasets/clueweb09gap/
+http://boytsov.info/datasets/clueweb09gap/
 
 Using the provided software, uncompress it and
 run the "toflat" executable to create a "clueweb09.bin" file
 then run:
 
-./inmemorybenchmark --minlength 10000 clueweb09.bin
+    ./inmemorybenchmark --minlength 10000 clueweb09.bin
 
 Note: processing can take over an hour.
 
-== Testing with the Gov2 data set ==
- 
+## Testing with the Gov2 data set
+
 You can test the library over d-gaps data
 from the TREC GOV2 data set that was made graciously
 available by   Fabrizio Silvestri,  Takeshi Yamamuro
@@ -137,45 +160,44 @@ Download both the software and the gov.sort.tar file.
 
 Untar the tar file:
 
-$ tar xvf gov2.sort.tar
+    tar xvf gov2.sort.tar
 
 You may want to make the newly generated files non-writeable
 (I'm paranoid):
 
- $ chmod -w gov2.sort.Delta gov2.sort.Delta.TOC 
+    chmod -w gov2.sort.Delta gov2.sort.Delta.TOC
 
 Build the software (you need the decoders executable)
-and 
+and
 
 You need to run this command
 
-./decoders 3 gov2.sort somefilename
+    ./decoders 3 gov2.sort somefilename
 
 where "3" is for delta.
 
 Then you should be able to test with out inmemorybenchmark:
 
-./inmemorybenchmark --minlength 10000 somefilename.DEC
+    ./inmemorybenchmark --minlength 10000 somefilename.DEC
 
 Note: processing can take over an hour.
 
 
-
-== I used your code and I get segmentation faults  ==
+## I used your code and I get segmentation faults
 
 Our code is thoroughly tested.
 
 One common issue is that people do not provide large enough buffers.
-Some schemes can have such small compression rates that the compressed data 
+Some schemes can have such small compression rates that the compressed data
 generated will be much larger than the input data.
 
 Also, make sure that all provided buffers are 16-byte aligned or else,
 some SSE instructions may fail.
 
-== Is any of this code subject to patents?  ==
+## Is any of this code subject to patents?
 
 I (D. Lemire) did not
-patent anything. 
+patent anything.
 
 However, we implemented
-varint-G8UI which was patented by its authors. 
+varint-G8UI which was patented by its authors.
