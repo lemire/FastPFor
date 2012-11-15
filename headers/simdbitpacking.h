@@ -8,7 +8,6 @@
 #define SIMDBITPACKING_H_
 
 #include "common.h"
-#include <immintrin.h>
 
 void simdpack(const uint32_t * __restrict__ in,__m128i * __restrict__ out, uint32_t bit);
 void simdpackwithoutmask(const uint32_t * __restrict__ in,__m128i * __restrict__ out, uint32_t bit);

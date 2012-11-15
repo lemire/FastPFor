@@ -26,7 +26,6 @@
 #endif
 #include "common.h"
 
-#include <immintrin.h>
 
 
 void simdhunpack(const uint8_t * __restrict__ in,uint32_t * __restrict__ out, uint32_t bit);

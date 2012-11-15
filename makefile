@@ -7,13 +7,15 @@ YOURCXX ?= g++-4.7
 CXX := $(YOURCXX)
 
 # todo: allow custom architectures , e.g., -march=nocona -march=corei7
-CXXFLAGSEXTRA = -mssse3 # necessary for varintg8iu 
+CXXFLAGSEXTRA = -mssse3 -msse4.1 # mssse3 necessary for varintg8iu and msse4.1 necessary for horizontal bit packing
 CXXFLAGS = $(CXXFLAGSEXTRA)  -std=c++0x -Weffc++ -pedantic -O3 -Wold-style-cast -Wall -Wextra -Wcast-align -Wunsafe-loop-optimizations -Wcast-qual
 #-ggdb
 
 HEADERS = ./headers/simdfastpfor.h ./headers/simdbinarypacking.h ./headers/bitpackinghelpers.h ./headers/common.h ./headers/memutil.h ./headers/pfor.h ./headers/pfor2008.h ./headers/bitpackingunaligned.h ./headers/bitpackingaligned.h ./headers/blockpacking.h  ./headers/codecfactory.h ./headers/packingvectors.h ./headers/compositecodec.h ./headers/cpubenchmark.h  ./headers/maropuparser.h ./headers/bitpacking.h  ./headers/util.h ./headers/simple9.h ./headers/simple8b.h ./headers/simple16.h ./headers/optpfor.h ./headers/newpfor.h ./headers/vsencoding.h ./headers/mersenne.h  ./headers/ztimer.h ./headers/codecs.h ./headers/synthetic.h ./headers/fastpfor.h ./headers/variablebyte.h ./headers/stringutil.h ./headers/entropy.h ./headers/VarIntG8IU.h ./headers/deltautil.h 
 
-all: unit codecs inmemorybenchmark
+all: unit codecs inmemorybenchmark  
+
+allallall: unit codecs inmemorybenchmark entropy gapstats benchbitpacking partitionbylength codecssnappy csv2maropu inmemorybenchmarksnappy
 
 test: unit
 	./unit
@@ -83,4 +85,4 @@ unit: $(HEADERS) src/unit.cpp makefile ./headers/common.h.gch $(COMMONBINARIES)
 	$(CXX) $(CXXFLAGS) $(GCCPARAMS) -Winvalid-pch  -o unit src/unit.cpp $(COMMONBINARIES) -Iheaders
 
 clean:
-	rm -f *.o ./headers/*.gch codecs inmemorybenchmark inmemorybenchmarksnappy codecssnappy unit  csv2maropu unrolledvsrolledbitpacking
+	rm -f *.o ./headers/*.gch codecs inmemorybenchmark inmemorybenchmarksnappy codecssnappy unit  csv2maropu entropy gapstats benchbitpacking partitionbylength

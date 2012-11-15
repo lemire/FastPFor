@@ -5,18 +5,17 @@
  * (c) Daniel Lemire, http://lemire.me/en/
  */
 
-#include <vector>
+#include "common.h"
 #include "maropuparser.h"
 #include "util.h"
 #include "entropy.h"
-#include "deltaio.h"
+#include "deltautil.h"
 
 void message(const char * prog) {
     cerr << " usage : " << prog << "  maropubinaryfile "
             << endl;
     cerr << "By default, is assumes that the original data is made of "
-        "sorted distinct integers, to process the more general case,"
-        "add the -notdgaps flag." << endl;
+        "sorted integers." << endl;
     cerr << "The -nodelta flag disables delta coding." << endl;
     cerr << "The -minlength ignores all arrays smaller than a threshold."
             << endl;
@@ -28,8 +27,8 @@ int main(int argc, char **argv) {
         message(argv[0]);
         return -1;
     }
-    int mode = DeltaIO::DeltaDGapMode;
-
+    enum{DELTA,NODELTA};
+    int mode = DELTA;
     uint32_t MINLENGTH = 2;
     int argindex = 1;
     while (true) {
@@ -37,10 +36,7 @@ int main(int argc, char **argv) {
             ++argindex;
             MINLENGTH = atoi(argv[argindex++]);
         } else if (strcmp(argv[argindex], "-nodelta") == 0) {
-            mode = DeltaIO::NoDeltaMode;
-            ++argindex;
-        } else if (strcmp(argv[argindex], "-notdgaps") == 0) {
-            mode = DeltaIO::DeltaMode;
+            mode = NODELTA;
             ++argindex;
         } else
             break;
@@ -59,7 +55,8 @@ int main(int argc, char **argv) {
     while (reader.loadIntegers(rawdata)) {
         if (rawdata.size() < MINLENGTH)
             continue;
-        DeltaIO::inplacedeltas(rawdata,mode);
+        if(mode == DELTA)
+            Delta::delta(&rawdata[0],rawdata.size());
         er.eat(&rawdata[0],rawdata.size());
         ++counter;
         integers += rawdata.size();

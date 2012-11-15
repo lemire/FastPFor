@@ -10,6 +10,7 @@
 // C headers (sorted)
 #include <errno.h>
 #include <fcntl.h>
+#include <immintrin.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
