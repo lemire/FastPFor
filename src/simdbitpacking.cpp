@@ -9077,113 +9077,25 @@ static void __SIMD_fastpack16_32(const uint32_t *  __restrict__ _in, __m128i *  
 }
 
 
-
-
 static void __SIMD_fastunpack1_32(const  __m128i*  __restrict__ in, uint32_t *  __restrict__  _out) {
-      
     __m128i*   out = reinterpret_cast<__m128i*>(_out);
-    __m128i    InReg = _mm_load_si128(in);
-    __m128i    OutReg;    
-    
-    OutReg = _mm_and_si128( InReg , mask1);
-    _mm_store_si128(out++, OutReg);
+    __m128i    InReg1 = _mm_load_si128(in);
+    __m128i    InReg2 = InReg1;
+    __m128i    OutReg1, OutReg2, OutReg3, OutReg4;    
 
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,1) , mask1);
-    _mm_store_si128(out++, OutReg);
+    unsigned shift = 0;
 
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,2) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,3) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,4) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,5) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,6) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,7) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,8) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,9) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,10) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,11) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,12) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,13) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,14) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,15) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,16) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,17) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,18) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,19) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,20) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,21) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,22) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,23) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,24) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,25) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,26) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,27) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,28) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,29) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg = _mm_and_si128(  _mm_srli_epi32(InReg,30) , mask1);
-    _mm_store_si128(out++, OutReg);
-
-    OutReg =   _mm_srli_epi32(InReg,31) ;
-    _mm_store_si128(out++, OutReg);
-
-
+    for (unsigned i = 0; i < 8; ++i) {
+        OutReg1 = _mm_and_si128(  _mm_srli_epi32(InReg1,shift++) , mask1);
+        OutReg2 = _mm_and_si128(  _mm_srli_epi32(InReg2,shift++) , mask1);
+        OutReg3 = _mm_and_si128(  _mm_srli_epi32(InReg1,shift++) , mask1);
+        OutReg4 = _mm_and_si128(  _mm_srli_epi32(InReg2,shift++) , mask1);
+        _mm_store_si128(out++, OutReg1);
+        _mm_store_si128(out++, OutReg2);
+        _mm_store_si128(out++, OutReg3);
+        _mm_store_si128(out++, OutReg4);
+    }
 }
-
 
 
 
