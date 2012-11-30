@@ -19,12 +19,19 @@ http://arxiv.org/abs/1209.2137
 
 This code is licensed under Apache License, Version 2.0 (ASL2.0).
 
-## Requirements
+## Software Requirements
 
 This code requires a (recent as of 2012) compiler supporting C++11. This was
 a design decision.
 It builds under both clang++ 3.2 (LLVM 3.2) and GCC 4.7.
 The code was tested under Linux and MacOS.
+
+## Hardware Requirements
+
+Your processor should support SSSE3. This includes almost every Intel or AMD processor
+sold after 2006.
+
+Some specific binaries will only run if your processor supports SSE4.1. 
 
 ## Building with CMake
 

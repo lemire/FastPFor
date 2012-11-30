@@ -7,7 +7,7 @@ YOURCXX ?= g++-4.7
 CXX := $(YOURCXX)
 
 # todo: allow custom architectures , e.g., -march=nocona -march=corei7
-CXXFLAGSEXTRA = -mssse3 -msse4.1 # mssse3 necessary for varintg8iu and msse4.1 necessary for horizontal bit packing
+CXXFLAGSEXTRA = -mssse3 # mssse3 necessary for varintg8iu and msse4.1 necessary for horizontal bit packing
 CXXFLAGS = $(CXXFLAGSEXTRA)  -std=c++0x -Weffc++ -pedantic -O3 -Wold-style-cast -Wall -Wextra -Wcast-align -Wunsafe-loop-optimizations -Wcast-qual
 #-ggdb
 
@@ -53,7 +53,7 @@ gapstats: $(HEADERS) src/gapstats.cpp
 	$(CXX) $(CXXFLAGS) -o gapstats src/gapstats.cpp -Iheaders
 
 benchbitpacking: $(HEADERS) src/benchbitpacking.cpp ./headers/rolledbitpacking.h ./headers/common.h.gch makefile $(COMMONBINARIES) horizontalbitpacking.o
-	$(CXX) $(CXXFLAGS) $(GCCPARAMS) -Winvalid-pch  -o benchbitpacking src/benchbitpacking.cpp $(COMMONBINARIES) horizontalbitpacking.o -Iheaders
+	$(CXX) $(CXXFLAGS) $(GCCPARAMS) -msse4.1  -Winvalid-pch  -o benchbitpacking src/benchbitpacking.cpp $(COMMONBINARIES) horizontalbitpacking.o -Iheaders
 
 partitionbylength: $(HEADERS) src/partitionbylength.cpp
 	$(CXX) $(CXXFLAGS) -o partitionbylength src/partitionbylength.cpp -Iheaders
