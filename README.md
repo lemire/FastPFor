@@ -8,6 +8,8 @@ A research library with integer compression schemes.
 It should be suitable for applications to d-gap
 compression and delta coding in general.
 
+It is used by the zsearch engine (http://victorparmar.github.com/zsearch/).
+
 ## Reference and documentation
 
 Please see:
