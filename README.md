@@ -6,7 +6,7 @@ by Daniel Lemire, Leonid Boytsov, Owen Kaser, Maxime Caron, Louis Dionne
 
 A research library with integer compression schemes.
 It should be suitable for applications to d-gap
-compression and delta coding in general.
+compression and differential coding in general.
 
 It is used by the zsearch engine (http://victorparmar.github.com/zsearch/).
 
@@ -14,7 +14,8 @@ It is used by the zsearch engine (http://victorparmar.github.com/zsearch/).
 
 Please see:
 
-Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization
+Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization,
+Software Practice & Experience (to appear)
 http://arxiv.org/abs/1209.2137
 
 ## License
