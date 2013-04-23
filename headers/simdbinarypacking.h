@@ -1,5 +1,5 @@
 /**
- * This is code is released under the
+ * This code is released under the
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  *
  * (c) Daniel Lemire, http://lemire.me/en/
@@ -14,16 +14,16 @@
 
 
 /**
- * 
+ *
  * Designed by D. Lemire with ideas from Leonid Boystov. This scheme is NOT patented.
  *
  * Code data in miniblocks of 128 integers.
  * To preserve alignment, we use regroup
  * 8 such miniblocks into a block of 8 * 128 = 1024
  * integers.
- * 
- * Reference and documentation: 
- * 
+ *
+ * Reference and documentation:
+ *
  * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization
  * http://arxiv.org/abs/1209.2137
  */

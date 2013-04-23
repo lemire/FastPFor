@@ -1,5 +1,5 @@
 /**
- * This is code is released under the
+ * This code is released under the
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  */
 
@@ -14,7 +14,7 @@
 #define VSENCODING_H_
 #ifndef __clang__
 #pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations"
-#endif 
+#endif
 #include "common.h"
 
 /***

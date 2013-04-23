@@ -1,5 +1,5 @@
 /**
- * This is code is released under the
+ * This code is released under the
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  *
  * (c) Daniel Lemire, http://lemire.me/en/
@@ -168,7 +168,7 @@ public:
         }
 #ifndef __clang__
 #pragma GCC diagnostic pop
-#endif 
+#endif
         __m128i* pCurr = reinterpret_cast<__m128i*>(pData) + Qty4 - 1;
         const __m128i* pStart = reinterpret_cast<__m128i*>(pData);
         __m128i a = _mm_load_si128(pCurr);
@@ -284,7 +284,7 @@ public:
             bool sorted = true;
 #ifndef __clang__
 #pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations" // otherwise I get bogus warning
-#endif 
+#endif
             for(auto & x : datas)
                 if(sorted and (x.size()>=1))
                         for (size_t k = 1; k < x.size(); ++k) {

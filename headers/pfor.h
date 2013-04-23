@@ -1,5 +1,5 @@
 /**
- * This is code is released under the
+ * This code is released under the
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  *
  * (c) Daniel Lemire, http://lemire.me/en/
@@ -58,8 +58,8 @@ public:
             const DATATYPE * in, size_t size) {
         if (size == 0) return 0;
         const size_t defaultsamplesize = 64 * 1024;
-        // the original paper describes sorting 
-        // a sample, but this only makes sense if you 
+        // the original paper describes sorting
+        // a sample, but this only makes sense if you
         // are coding a frame of reference.
         size_t samplesize = size > defaultsamplesize ? defaultsamplesize : size;
         uint32_t freqs[33];
@@ -94,7 +94,7 @@ public:
                 bestcost = thiscost;
                 bestb = b;
             }
-        } 
+        }
         return bestb;
     }
 

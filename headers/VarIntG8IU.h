@@ -1,14 +1,14 @@
 /**
- * This is code is released under the
+ * This code is released under the
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  */
 /**
  *
  * Implementation of varint-G8IU taken from
  * Stepanov et al., SIMD-Based Decoding of Posting Lists, CIKM 2011
- * 
+ *
  * Update: D. Lemire believes that this scheme was patented by Rose, Stepanov et al. (patent 20120221539).
- * We wrote this code before the patent was published (August 2012). 
+ * We wrote this code before the patent was published (August 2012).
  *
  * By Maxime Caron
  * From
@@ -148,7 +148,7 @@ public:
             numInt++;
         }
 
-        
+
         dest[0] = desc;
         int written = 1;
         for (int i = 0; i < numInt; i++) {

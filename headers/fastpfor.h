@@ -1,5 +1,5 @@
 /**
- * This is code is released under the
+ * This code is released under the
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  *
  * (c) Daniel Lemire, http://lemire.me/en/
@@ -15,14 +15,14 @@
 #include "simple8b.h"
 
 /**
- * FastPFor 
+ * FastPFor
  *
  *
  * Designed by D. Lemire. This scheme is NOT patented.
  *
- * Reference and documentation: 
- * 
- * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization   
+ * Reference and documentation:
+ *
+ * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization
  * http://arxiv.org/abs/1209.2137
  *
  */
@@ -249,14 +249,14 @@ public:
 
 
 /**
- * SimplePFor 
+ * SimplePFor
  *
  *
  * Designed by D. Lemire. This scheme is NOT patented.
  *
- * Reference and documentation: 
- * 
- * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization   
+ * Reference and documentation:
+ *
+ * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization
  * http://arxiv.org/abs/1209.2137
  *
  */

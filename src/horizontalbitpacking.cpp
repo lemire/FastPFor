@@ -1,5 +1,5 @@
 /**
- * This is code is released under the
+ * This code is released under the
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  *
  * (c) Daniel Lemire
@@ -27,7 +27,7 @@ static void SIMD_nullunpacker32(const uint8_t *   , uint32_t *    out) {
 
 
 
-             //Did not get good results with this:  
+             //Did not get good results with this:
 /*
 
 
@@ -59,8 +59,8 @@ static void simdhunpack1(const uint8_t *  in,uint32_t *  out) {
     }
 }
 
-                
- */ 
+
+ */
 const static __m128i shufkey1_1 = {-9187202500191551488,-9187202500191551488};
 const static __m128i shufkey2_1 = {-9187202500191551488,-9187202500191551488};
 const static __m128i multi1_1 = {17179869192,4294967298};
@@ -139,7 +139,7 @@ static void simdhunpack3(const uint8_t *  in,uint32_t *  out) {
         _mm_store_si128(pCurr++ , ca);
     }
 }
- //Did not get good results with this: 
+ //Did not get good results with this:
 /*
 
 
@@ -187,8 +187,8 @@ static  void simdhunpack4(const uint8_t *  in,uint32_t *  out) {
     }
 }
 
-                
- */ 
+
+ */
 const static __m128i shufkey1_4 = {-9187202500191551488,-9187202495896584191};
 const static __m128i shufkey2_4 = {-9187202500191551488,-9187202495896584191};
 const static __m128i multi1_4 = {4294967312,4294967312};
@@ -891,7 +891,7 @@ static void simdhunpack31(const uint8_t *  in,uint32_t *  out) {
 }
 
 
-            
+
 const static __m128i shufkey1_32 = {506097522914230528,1084818905618843912};
 const static __m128i shufkey2_32 = {506097522914230528,1084818905618843912};
 

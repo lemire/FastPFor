@@ -1,5 +1,5 @@
 /**
- * This is code is released under the
+ * This code is released under the
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  *
  * (c) Daniel Lemire, http://lemire.me/en/
@@ -268,7 +268,7 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
 
 using namespace std;
 int main() {
-    cout<<"# cache-to-cache"<<endl; 
+    cout<<"# cache-to-cache"<<endl;
     simplebenchmark(1U << 16, 1U << 9);
     cout<<endl;
     cout<<"# ram-to-ram"<<endl;

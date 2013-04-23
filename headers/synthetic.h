@@ -1,5 +1,5 @@
 /**
- * This is code is released under the
+ * This code is released under the
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  */
 
@@ -190,4 +190,4 @@ vector<uint32_t,cacheallocator> generateZipfianArray32(uint32_t N, double power,
     return ans;
 }
 
-#endif 
+#endif
