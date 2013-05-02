@@ -44,25 +44,16 @@ public:
         ans.reserve(N);
         assert(Max >= 1);
         if (N == Max) {
+        	ans.resize(Max);
             for (uint32_t k = 0; k < Max; ++k)
-                ans.push_back(k);
+                ans[k] = k;
             return ans;
         }
-        if (N > Max / 2) {
-            set < uint32_t > s;
-            while (s.size() < N)
+        unordered_set <uint32_t> s;
+        while (s.size() < N )
                 s.insert(rand.getValue(Max - 1) );
-            ans.assign(s.begin(), s.end());
-            return ans;
-        }
-        while (ans.size() < N) {
-            while (ans.size() < N) {
-                ans.push_back(rand.getValue(Max - 1) );
-            }
-            sort(ans.begin(), ans.end());
-            auto it = unique(ans.begin(), ans.end());
-            ans.resize(it - ans.begin());
-        }
+        ans.assign(s.begin(), s.end());
+        sort(ans.begin(),ans.end());
         return ans;
     }
 
