@@ -43,17 +43,32 @@ public:
         if(N==0) return ans; // nothing to do
         ans.reserve(N);
         assert(Max >= 1);
-        if (N == Max) {
-        	ans.resize(Max);
-            for (uint32_t k = 0; k < Max; ++k)
-                ans[k] = k;
-            return ans;
-        }
-        unordered_set <uint32_t> s;
-        while (s.size() < N )
+        if (2*N > Max) {
+            unordered_set <uint32_t> s;
+            while (s.size() < Max - N )
+                    s.insert(rand.getValue(Max - 1) );
+            vector<uint32_t> tmp(s.begin(), s.end());
+            s.clear();
+            sort(tmp.begin(),tmp.end());
+            tmp.push_back(Max);
+            ans.resize(N);
+            size_t i = 0;
+            size_t c = 0;
+            for(size_t j = 0; j < tmp.size() ; ++j) {
+            	const uint32_t v = tmp[j];
+            	for(; i<v; ++i)
+            	  ans[c++] = i;
+            	++i;
+            }
+            assert(c == ans.size());
+        } else {
+        	unordered_set <uint32_t> s;
+        	while (s.size() < N )
                 s.insert(rand.getValue(Max - 1) );
-        ans.assign(s.begin(), s.end());
-        sort(ans.begin(),ans.end());
+        	ans.assign(s.begin(), s.end());
+        	sort(ans.begin(),ans.end());
+            assert(N == ans.size());
+        }
         return ans;
     }
 
