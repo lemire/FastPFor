@@ -8,7 +8,8 @@ A research library with integer compression schemes.
 It should be suitable for applications to d-gap
 compression and differential coding in general.
 
-It is used by the zsearch engine (http://victorparmar.github.com/zsearch/).
+It is used by the zsearch engine (http://victorparmar.github.com/zsearch/)
+as well as in GMAP and GSNAP (http://research-pub.gene.com/gmap/).
 
 ## Reference and documentation
 
