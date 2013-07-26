@@ -9033,27 +9033,26 @@ static void __SIMD_fastpack4_32(const uint32_t *  __restrict__ _in, __m128i *  _
 
 
 static void __SIMD_fastpack8_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
-    const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
-    __m128i     OutReg;
+	   const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
+	    __m128i     OutReg, InReg;
 
-    __m128i InReg = _mm_and_si128(_mm_load_si128(in), mask8);
-  for(uint32_t outer=0; outer< 8 ;++outer) {
-    OutReg = InReg;
-    InReg = _mm_and_si128(_mm_load_si128(++in), mask8);
+	  for(uint32_t outer=0; outer< 8 ;++outer) {
+		InReg   = _mm_and_si128(_mm_load_si128(in), mask8);
+		OutReg = InReg;
+	    InReg = _mm_and_si128(_mm_load_si128(in+1), mask8);
 
-    OutReg =  _mm_or_si128(OutReg,_mm_slli_epi32(InReg, 8));
-    InReg = _mm_and_si128(_mm_load_si128(++in), mask8);
+	    OutReg =  _mm_or_si128(OutReg,_mm_slli_epi32(InReg, 8));
+	    InReg = _mm_and_si128(_mm_load_si128(in+2), mask8);
 
-    OutReg =  _mm_or_si128(OutReg,_mm_slli_epi32(InReg, 16));
-    InReg = _mm_and_si128(_mm_load_si128(++in), mask8);
+	    OutReg =  _mm_or_si128(OutReg,_mm_slli_epi32(InReg, 16));
+	    InReg = _mm_and_si128(_mm_load_si128(in+3), mask8);
 
-    OutReg =  _mm_or_si128(OutReg,_mm_slli_epi32(InReg, 24));
-    _mm_store_si128(out, OutReg);
-    ++out;
-    InReg = _mm_and_si128(_mm_load_si128(++in), mask8);
+	    OutReg =  _mm_or_si128(OutReg,_mm_slli_epi32(InReg, 24));
+	    _mm_store_si128(out, OutReg);
+	    ++out;
+	    in += 4;
 
-  }
-
+	  }
 }
 
 
