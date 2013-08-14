@@ -38,40 +38,38 @@ public:
      * if it is not possible, an exception is thrown
      */
     vector<uint32_t,cacheallocator> generateUniform(uint32_t N, uint32_t Max) {
-        if(Max < N) throw runtime_error("can't generate enough distinct elements in small interval");
-        vector < uint32_t,cacheallocator > ans;
-        if(N==0) return ans; // nothing to do
-        ans.reserve(N);
-        assert(Max >= 1);
-        if (2*N > Max) {
-            unordered_set <uint32_t> s;
-            while (s.size() < Max - N )
-                    s.insert(rand.getValue(Max - 1) );
-            vector<uint32_t> tmp(s.begin(), s.end());
-            s.clear();
-            sort(tmp.begin(),tmp.end());
-            tmp.push_back(Max);
-            ans.resize(N);
-            size_t i = 0;
-            size_t c = 0;
-            for(size_t j = 0; j < tmp.size() ; ++j) {
-            	const uint32_t v = tmp[j];
-            	for(; i<v; ++i)
-            	  ans[c++] = i;
-            	++i;
-            }
-            assert(c == ans.size());
-        } else {
-        	unordered_set <uint32_t> s;
-        	while (s.size() < N )
-                s.insert(rand.getValue(Max - 1) );
-        	ans.assign(s.begin(), s.end());
-        	sort(ans.begin(),ans.end());
-            assert(N == ans.size());
-        }
-        return ans;
-    }
+		if (Max < N)
+			throw runtime_error(
+					"can't generate enough distinct elements in small interval");
+		vector < uint32_t,cacheallocator > ans;
+		if (N == 0)
+			return ans; // nothing to do
+		ans.reserve(N);
+		assert(Max >= 1);
 
+		if (2 * N > Max) {
+			set < uint32_t > s;
+			while (s.size() < Max - N)
+				s.insert(rand.getValue(Max - 1));
+			s.insert(Max);
+			ans.resize(N);
+			size_t i = 0;
+			size_t c = 0;
+			for(uint32_t v : s) {
+				for(; i<v; ++i)
+				ans[c++] = i;
+				++i;
+			}
+			assert(c == ans.size());
+		} else {
+			set < uint32_t > s;
+			while (s.size() < N)
+				s.insert(rand.getValue(Max - 1));
+			ans.assign(s.begin(), s.end());
+			assert(N == ans.size());
+		}
+		return ans;
+	}
     ZRandom rand;
 
 };
