@@ -20,7 +20,12 @@
  * Reference and documentation:
  *
  * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization
+ * Software: Practice & Experience
  * http://arxiv.org/abs/1209.2137
+ * http://onlinelibrary.wiley.com/doi/10.1002/spe.2203/abstract
+ *
+ * Note: the algorithms were slightly revised in Sept. 2013 to improve the compression
+ * ratios. You can expect the same compression ratios as the scalar FastPFOR (up to a difference of 1%).
  *
  * Designed by D. Lemire with ideas from Leonid Boytsov. This scheme is NOT patented.
  *
@@ -66,30 +71,19 @@ public:
         const uint32_t size = *in;
         ++in;
         in = padTo128bits(in);
-        out.resize((size + 128 - 1) / 128 * 128);
-        for (uint32_t j = 0; j != out.size(); j += 128) {
+        out.resize((size + 32 - 1) / 32 * 32);
+        uint32_t j = 0;
+        for (; j + 128 <= out.size(); j += 128) {
             SIMD_fastunpack_32(reinterpret_cast<const __m128i *>(in), &out[j], bit);
             in += 4 * bit;
+        }
+        for(; j < out.size(); j += 32) {
+        	fastunpack(in, &out[j], bit);
+        	in += bit;
         }
         out.resize(size);
         return in;
     }
-
-/*    template<class STLContainer>
-    static uint32_t * packmeupsimd(STLContainer & source, uint32_t * out, const uint32_t bit) {
-        const uint32_t size = source.size();
-        *out = size;
-        out++;
-        if (source.size() == 0)
-            return out;
-        source.resize((source.size() + 128 - 1) / 128 * 128);
-        for (uint32_t j = 0; j != source.size(); j += 128) {
-            SIMD_fastpack_32(&source[j], reinterpret_cast<__m128i *>(out), bit);
-            out += 4 * bit;
-        }
-        source.resize(size);
-        return out;
-    }*/
 
     template<class STLContainer>
     static uint32_t * packmeupwithoutmasksimd(STLContainer & source, uint32_t * out,
@@ -100,10 +94,15 @@ public:
         out = padTo128bits(out);
         if (source.size() == 0)
             return out;
-        source.resize((source.size() + 128 - 1) / 128 * 128);
-        for (uint32_t j = 0; j != source.size(); j += 128) {
+        source.resize((source.size() + 32 - 1) / 32 * 32);
+        uint32_t j = 0;
+        for (; j + 128 <= source.size(); j += 128) {
             SIMD_fastpackwithoutmask_32(&source[j], reinterpret_cast<__m128i *>(out), bit);
             out += 4 * bit;
+        }
+        for(; j < source.size(); j += 32) {
+        	fastpackwithoutmask(&source[j], out, bit);
+        	out += bit;
         }
         source.resize(size);
         return out;

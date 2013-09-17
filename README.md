@@ -18,6 +18,8 @@ Please see:
 Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization,
 Software Practice & Experience (to appear)
 http://arxiv.org/abs/1209.2137
+http://onlinelibrary.wiley.com/doi/10.1002/spe.2203/abstract
+
 
 ## License
 
