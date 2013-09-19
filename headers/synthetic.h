@@ -30,7 +30,7 @@ vector<uint32_t,cacheallocator> generateArray32(uint32_t N, const uint32_t mask 
 
 class UniformDataGenerator {
 public:
-    UniformDataGenerator(uint32_t seed = time(NULL)) :
+    UniformDataGenerator(uint32_t seed = static_cast<uint32_t>(time(NULL))) :
         rand(seed) {
     }
     /**
@@ -53,7 +53,7 @@ public:
 				s.insert(rand.getValue(Max - 1));
 			s.insert(Max);
 			ans.resize(N);
-			size_t i = 0;
+			uint32_t i = 0;
 			size_t c = 0;
 			for(uint32_t v : s) {
 				for(; i<v; ++i)
@@ -78,14 +78,14 @@ public:
 class ClusteredDataGenerator {
 public:
     UniformDataGenerator unidg;
-    ClusteredDataGenerator(uint32_t seed = time(NULL)) :
+    ClusteredDataGenerator(uint32_t seed = static_cast<uint32_t>(time(NULL))) :
         unidg(seed) {
     }
 
     // Max value is excluded from range
     template<class iterator>
     void fillUniform(iterator begin, iterator end, uint32_t Min, uint32_t Max) {
-        vector < uint32_t,cacheallocator > v = unidg.generateUniform(end - begin, Max - Min);
+        vector < uint32_t,cacheallocator > v = unidg.generateUniform(static_cast<uint32_t>(end - begin), Max - Min);
         for (size_t k = 0; k < v.size(); ++k)
             *(begin + k) = Min + v[k];
     }
@@ -95,7 +95,7 @@ public:
     // throws exception if impossible
     template<class iterator>
     void fillClustered(iterator begin, iterator end, uint32_t Min, uint32_t Max) {
-        const size_t N = end - begin;
+        const uint32_t N = static_cast<uint32_t>(end - begin);
         const uint32_t range = Max - Min;
         if(range < N) throw runtime_error("can't generate that many in small interval.");
         assert(range >= N);
@@ -138,7 +138,7 @@ public:
     vector<double> proba;
 
     ZRandom rand;
-    ZipfianGenerator(uint32_t seed = time(NULL)) :
+    ZipfianGenerator(uint32_t seed = static_cast<uint32_t>(time(NULL))) :
         n(0), zetan(0), theta(0), proba(n), rand(seed) {
     }
 
@@ -178,7 +178,7 @@ public:
     int nextInt() {
         // Map z to the value
         const double u = rand.getDouble();
-        return lower_bound(proba.begin(), proba.end(), u) - proba.begin();
+        return static_cast<int>(lower_bound(proba.begin(), proba.end(), u) - proba.begin());
     }
 
 };

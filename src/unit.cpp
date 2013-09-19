@@ -27,7 +27,7 @@ int main() {
             vector<uint32_t, cacheallocator> data(length);
             data.reserve(length + 1024);
             for (size_t i = 0; i < data.size(); ++i) {
-                data[i] = (i + (24 - i) * (12 - i)) % (1U << b);
+                data[i] = (static_cast<uint32_t>(i) + (24 - static_cast<uint32_t>(i)) * (12 - static_cast<uint32_t>(i))) % (1U << b);
             }
             for (vector<shared_ptr<IntegerCODEC> >::iterator i =
                     myalgos.begin(); i != myalgos.end(); ++i) {
@@ -81,7 +81,7 @@ int main() {
             vector<uint32_t, cacheallocator> data(length);
             data.reserve(length + 1024);
             for (size_t i = 0; i < data.size(); ++i) {
-                data[i] = (33231 - i + i * i) % (1U << b);
+                data[i] = (33231 - static_cast<uint32_t>(i) + static_cast<uint32_t>(i * i)) % (1U << b);
             }
             for (vector<shared_ptr<IntegerCODEC> >::iterator i =
                     myalgos.begin(); i != myalgos.end(); ++i) {
@@ -132,7 +132,7 @@ int main() {
     }
     cout << " testing large zipfian arrays..." << endl;
     for (size_t lengthb = 5; lengthb <= 25; lengthb += 5) {
-        size_t length = 1U << lengthb;
+        uint32_t length = 1U << lengthb;
         cout << endl << "length = " << length << endl;
         vector<uint32_t, cacheallocator> data = generateZipfianArray32(length,
                 2, (1U << 9) - 1);

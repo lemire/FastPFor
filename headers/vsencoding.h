@@ -59,7 +59,7 @@ void BitsWriter::bit_flush() {
 
     if (Fill > 32) {
         buffer <<= 64 - Fill;
-        *data++ = buffer >> 32;
+        *data++ = static_cast<uint32_t>(buffer >> 32);
         *data++ = buffer & ((1ULL << 32) - 1);
         written += 2;
         Fill = 0;
@@ -283,7 +283,7 @@ public:
         VSEBLOCKS_LENS_LEN = (1 << VSEBLOCKS_LOGLEN),
         VSEBLOCKS_LOGS_LEN = (1 << VSEBLOCKS_LOGLOG)
     };
-    VSEncodingBlocks(const size_t mVSENCODING_BLOCKSZ = 65536U) :
+    VSEncodingBlocks(const uint32_t mVSENCODING_BLOCKSZ = 65536U) :
         VSENCODING_BLOCKSZ(mVSENCODING_BLOCKSZ),
                 __tmp(VSENCODING_BLOCKSZ * 4 + VSEncodingBlocks::TAIL_MERGIN) {
     }
@@ -310,7 +310,7 @@ public:
 
     const uint32_t * decodeArray(const uint32_t *in, const size_t len,
             uint32_t *out, size_t &nvalue);
-    size_t VSENCODING_BLOCKSZ;//     = 65536U
+    uint32_t VSENCODING_BLOCKSZ;//     = 65536U
 
     vector<uint32_t> __tmp;// = new uint32_t[VSENCODING_BLOCKSZ * 2 + VSEncodingBlocks::TAIL_MERGIN];
 
@@ -666,14 +666,14 @@ const uint32_t * VSEncodingBlocks::decodeVS(uint32_t len, const uint32_t *in,
 void VSEncodingBlocks::encodeArray(const uint32_t *in, const size_t len,
         uint32_t *out, size_t &nvalue) {
     const uint32_t * const initout(out);
-    *(out++) = len;
+    *(out++) = static_cast<uint32_t>(len);
 
     uint32_t res;
     const uint32_t *lin;
     uint32_t *lout;
     uint32_t csize;
 
-    for (nvalue = 0, res = len, lin = in, lout = out; res > VSENCODING_BLOCKSZ; res
+    for (nvalue = 0, res = static_cast<uint32_t>(len), lin = in, lout = out; res > VSENCODING_BLOCKSZ; res
             -= VSENCODING_BLOCKSZ, lin += VSENCODING_BLOCKSZ, lout += csize, nvalue
             += csize + 1) {
         encodeVS(VSENCODING_BLOCKSZ, lin, csize, &__tmp[0]);
@@ -703,7 +703,7 @@ const uint32_t * VSEncodingBlocks::decodeArray(const uint32_t *in,
     // __validate(in, (len << 2));
     //__validate(out, ((nvalue + TAIL_MERGIN) << 2));
 
-    for (res = nvalue; res > VSENCODING_BLOCKSZ; out += VSENCODING_BLOCKSZ, in
+    for (res = static_cast<uint32_t>(nvalue); res > VSENCODING_BLOCKSZ; out += VSENCODING_BLOCKSZ, in
             += sum, res -= VSENCODING_BLOCKSZ) {
         sum = *in++;
         decodeVS(VSENCODING_BLOCKSZ, in, out, &__tmp[0]);

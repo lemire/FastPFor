@@ -75,7 +75,7 @@ public:
 
     template<uint32_t num1, uint32_t log1>
     static bool tryme(const uint32_t *n, size_t len) {
-        const uint32_t min = (len < num1) ? len : num1;
+        const uint32_t min = (len < num1) ? static_cast<uint32_t>(len) : num1;
         for (uint32_t i = 0; i < min; i++) {
             if ((n[i]) >= (1U << log1))
                 return false;
@@ -85,12 +85,12 @@ public:
 
     template<uint32_t num1, uint32_t log1, uint32_t num2, uint32_t log2>
     static bool tryme(const uint32_t *n, size_t len) {
-        const uint32_t min1 = (len < num1) ? len : num1;
+        const uint32_t min1 = (len < num1) ? static_cast<uint32_t>(len) : num1;
         for (uint32_t i = 0; i < min1; i++) {
             if ((n[i]) >= (1U << log1))
                 return false;
         }
-        const uint32_t min2 = (len - min1 < num2) ? len - min1 : num2;
+        const uint32_t min2 = (len - min1 < num2) ? static_cast<uint32_t>(len - min1) : num2;
         for (uint32_t i = min1; i < min1 + min2; i++) {
             if ((n[i]) >= (1U << log2))
                 return false;
@@ -101,20 +101,20 @@ public:
     template<uint32_t num1, uint32_t log1, uint32_t num2, uint32_t log2,
             uint32_t num3, uint32_t log3>
     static bool tryme(const uint32_t *n, size_t len) {
-        const uint32_t min1 = (len < num1) ? len : num1;
+        const uint32_t min1 = (len < num1) ? static_cast<uint32_t>(len) : num1;
         for (uint32_t i = 0; i < min1; i++) {
             if ((n[i]) >= (1U << log1))
                 return false;
         }
         len -= min1;
-        const uint32_t min2 = (len < num2) ? len : num2;
+        const uint32_t min2 = (len < num2) ? static_cast<uint32_t>(len) : num2;
 
         for (uint32_t i = min1; i < min1 + min2; i++) {
             if ((n[i]) >= (1U << log2))
                 return false;
         }
         len -= min2;
-        const uint32_t min3 = (len < num3) ? len : num3;
+        const uint32_t min3 = (len < num3) ? static_cast<uint32_t>(len) : num3;
         for (uint32_t i = min1 + min2; i < min1 + min2 + min3; i++) {
             if ((n[i]) >= (1U << log3))
                 return false;
@@ -191,7 +191,7 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
     const uint32_t * const initin(in);
     const uint32_t * const initout(out);
     if (MarkLength)
-        *(out++) = length;
+        *(out++) = static_cast<uint32_t>(length);
     size_t ValuesRemaining(length);
     const bool becareful = false;
     while (ValuesRemaining >= 28) {
@@ -400,7 +400,7 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
     while (ValuesRemaining > 0) {
         if (tryme<28, 1> (in, ValuesRemaining)) {
             out[0] = 0;
-            NumberOfValuesCoded = (ValuesRemaining < 28) ? ValuesRemaining : 28;
+            NumberOfValuesCoded = (ValuesRemaining < 28) ? static_cast<uint32_t>(ValuesRemaining) : 28;
             for (uint32_t i = 0; i < NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 1);
             *out <<= 28 - NumberOfValuesCoded;
@@ -408,13 +408,13 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
                 assert(which(out) == 0);
         } else if (tryme<7, 2, 14, 1> (in, ValuesRemaining)) {
             out[0] = 1;
-            NumberOfValuesCoded = (ValuesRemaining < 7) ? ValuesRemaining : 7;
+            NumberOfValuesCoded = (ValuesRemaining < 7) ? static_cast<uint32_t>(ValuesRemaining) : 7;
             for (uint32_t i = 0; i < NumberOfValuesCoded; i++) {
                 bit_writer(out, *in++, 2);
             }
             const uint32_t base = NumberOfValuesCoded;
             NumberOfValuesCoded
-                    = ((ValuesRemaining - base) < 14) ? ValuesRemaining - base
+                    = ((ValuesRemaining - base) < 14) ? static_cast<uint32_t>(ValuesRemaining - base)
                             : 14;
             for (uint32_t i = base; i < base + NumberOfValuesCoded; i++) {
                 bit_writer(out, *in++, 1);
@@ -426,19 +426,19 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
                 assert(which(out) == 1);
         } else if (tryme<7, 1, 7, 2, 7, 1> (in, ValuesRemaining)) {
             out[0] = 2;
-            NumberOfValuesCoded = (ValuesRemaining < 7) ? ValuesRemaining : 7;
+            NumberOfValuesCoded = (ValuesRemaining < 7) ? static_cast<uint32_t>(ValuesRemaining) : 7;
             for (uint32_t i = 0; i < NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 1);
             uint32_t fill = NumberOfValuesCoded;
             uint32_t base = NumberOfValuesCoded;
             NumberOfValuesCoded
-                    = (ValuesRemaining - base < 7) ? ValuesRemaining - base : 7;
+                    = (ValuesRemaining - base < 7) ? static_cast<uint32_t>(ValuesRemaining - base) : 7;
             for (uint32_t i = base; i < base + NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 2);
             fill += 2 * NumberOfValuesCoded;
             base += NumberOfValuesCoded;
             NumberOfValuesCoded
-                    = (ValuesRemaining - base < 7) ? ValuesRemaining - base : 7;
+                    = (ValuesRemaining - base < 7) ? static_cast<uint32_t>(ValuesRemaining - base) : 7;
             for (uint32_t i = base; i < base + NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 1);
             fill += NumberOfValuesCoded;
@@ -448,12 +448,12 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
                 assert(which(out) == 2);
         } else if (tryme<14, 1, 7, 2> (in, ValuesRemaining)) {
             out[0] = 3;
-            NumberOfValuesCoded = (ValuesRemaining < 14) ? ValuesRemaining : 14;
+            NumberOfValuesCoded = (ValuesRemaining < 14) ? static_cast<uint32_t>(ValuesRemaining) : 14;
             for (uint32_t i = 0; i < NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 1);
             const uint32_t base = NumberOfValuesCoded;
             NumberOfValuesCoded
-                    = ((ValuesRemaining - base) < 7) ? ValuesRemaining - base
+                    = ((ValuesRemaining - base) < 7) ? static_cast<uint32_t>(ValuesRemaining - base)
                             : 7;
             for (uint32_t i = base; i < base + NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 2);
@@ -463,7 +463,7 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
                 assert(which(out) == 3);
         } else if (tryme<14, 2> (in, ValuesRemaining)) {
             out[0] = 4;
-            NumberOfValuesCoded = (ValuesRemaining < 14) ? ValuesRemaining : 14;
+            NumberOfValuesCoded = (ValuesRemaining < 14) ? static_cast<uint32_t>(ValuesRemaining) : 14;
             for (uint32_t i = 0; i < NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 2);
             *out <<= 28 - 2 * NumberOfValuesCoded;
@@ -471,12 +471,12 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
                 assert(which(out) == 4);
         } else if (tryme<1, 4, 8, 3> (in, ValuesRemaining)) {
             out[0] = 5;
-            NumberOfValuesCoded = (ValuesRemaining < 1) ? ValuesRemaining : 1;
+            NumberOfValuesCoded = (ValuesRemaining < 1) ? static_cast<uint32_t>(ValuesRemaining) : 1;
             for (uint32_t i = 0; i < NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 4);
             const uint32_t base = NumberOfValuesCoded;
             NumberOfValuesCoded
-                    = ((ValuesRemaining - base) < 8) ? ValuesRemaining - base
+                    = ((ValuesRemaining - base) < 8) ? static_cast<uint32_t>(ValuesRemaining - base)
                             : 8;
             for (uint32_t i = base; i < base + NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 3);
@@ -492,13 +492,13 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
             uint32_t fill = 3 * NumberOfValuesCoded;
             uint32_t base = NumberOfValuesCoded;
             NumberOfValuesCoded
-                    = (ValuesRemaining - base < 4) ? ValuesRemaining - base : 4;
+                    = (ValuesRemaining - base < 4) ? static_cast<uint32_t>(ValuesRemaining - base) : 4;
             for (uint32_t i = base; i < base + NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 4);
             base += NumberOfValuesCoded;
             fill += 4 * NumberOfValuesCoded;
             NumberOfValuesCoded
-                    = (ValuesRemaining - base < 3) ? ValuesRemaining - base : 3;
+                    = (ValuesRemaining - base < 3) ? static_cast<uint32_t>(ValuesRemaining - base) : 3;
             for (uint32_t i = base; i < base + NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 3);
             fill += 3 * NumberOfValuesCoded;
@@ -508,7 +508,7 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
             NumberOfValuesCoded += base;
         } else if (tryme<7, 4> (in, ValuesRemaining)) {
             out[0] = 7;
-            NumberOfValuesCoded = (ValuesRemaining < 7) ? ValuesRemaining : 7;
+            NumberOfValuesCoded = (ValuesRemaining < 7) ? static_cast<uint32_t>(ValuesRemaining) : 7;
             for (uint32_t i = 0; i < NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 4);
             *out <<= 28 - 4 * NumberOfValuesCoded;
@@ -516,12 +516,12 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
                 assert(which(out) == 7);
         } else if (tryme<4, 5, 2, 4> (in, ValuesRemaining)) {
             out[0] = 8;
-            NumberOfValuesCoded = (ValuesRemaining < 4) ? ValuesRemaining : 4;
+            NumberOfValuesCoded = (ValuesRemaining < 4) ? static_cast<uint32_t>(ValuesRemaining) : 4;
             for (uint32_t i = 0; i < NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 5);
             const uint32_t base = NumberOfValuesCoded;
             NumberOfValuesCoded
-                    = ((ValuesRemaining - base) < 2) ? ValuesRemaining - base
+                    = ((ValuesRemaining - base) < 2) ? static_cast<uint32_t>(ValuesRemaining - base)
                             : 2;
             for (uint32_t i = base; i < base + NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 4);
@@ -531,12 +531,12 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
             NumberOfValuesCoded += base;
         } else if (tryme<2, 4, 4, 5> (in, ValuesRemaining)) {
             out[0] = 9;
-            NumberOfValuesCoded = (ValuesRemaining < 2) ? ValuesRemaining : 2;
+            NumberOfValuesCoded = (ValuesRemaining < 2) ? static_cast<uint32_t>(ValuesRemaining) : 2;
             for (uint32_t i = 0; i < NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 4);
             const uint32_t base = NumberOfValuesCoded;
             NumberOfValuesCoded
-                    = ((ValuesRemaining - base) < 4) ? ValuesRemaining - base
+                    = ((ValuesRemaining - base) < 4) ? static_cast<uint32_t>(ValuesRemaining - base)
                             : 4;
             for (uint32_t i = base; i < base + NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 5);
@@ -546,12 +546,12 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
             NumberOfValuesCoded += base;
         } else if (tryme<3, 6, 2, 5> (in, ValuesRemaining)) {
             out[0] = 10;
-            NumberOfValuesCoded = (ValuesRemaining < 3) ? ValuesRemaining : 3;
+            NumberOfValuesCoded = (ValuesRemaining < 3) ? static_cast<uint32_t>(ValuesRemaining) : 3;
             for (uint32_t i = 0; i < NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 6);
             const uint32_t base = NumberOfValuesCoded;
             NumberOfValuesCoded
-                    = ((ValuesRemaining - base) < 2) ? ValuesRemaining - base
+                    = ((ValuesRemaining - base) < 2) ? static_cast<uint32_t>(ValuesRemaining - base)
                             : 2;
             for (uint32_t i = base; i < base + NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 5);
@@ -561,12 +561,12 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
             NumberOfValuesCoded += base;
         } else if (tryme<2, 5, 3, 6> (in, ValuesRemaining)) {
             out[0] = 11;
-            NumberOfValuesCoded = (ValuesRemaining < 2) ? ValuesRemaining : 2;
+            NumberOfValuesCoded = (ValuesRemaining < 2) ? static_cast<uint32_t>(ValuesRemaining) : 2;
             for (uint32_t i = 0; i < NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 5);
             const uint32_t base = NumberOfValuesCoded;
             NumberOfValuesCoded
-                    = ((ValuesRemaining - base) < 3) ? ValuesRemaining - base
+                    = ((ValuesRemaining - base) < 3) ? static_cast<uint32_t>(ValuesRemaining - base)
                             : 3;
             for (uint32_t i = base; i < base + NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 6);
@@ -576,7 +576,7 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
             NumberOfValuesCoded += base;
         } else if (tryme<4, 7> (in, ValuesRemaining)) {
             out[0] = 12;
-            NumberOfValuesCoded = (ValuesRemaining < 4) ? ValuesRemaining : 4;
+            NumberOfValuesCoded = (ValuesRemaining < 4) ? static_cast<uint32_t>(ValuesRemaining) : 4;
             for (uint32_t i = 0; i < NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 7);
             *out <<= 28 - 7 * NumberOfValuesCoded;
@@ -589,7 +589,7 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
                 bit_writer(out, *in++, 10);
             const uint32_t base = NumberOfValuesCoded;
             NumberOfValuesCoded
-                    = ((ValuesRemaining - base) < 2) ? ValuesRemaining - base
+                    = ((ValuesRemaining - base) < 2) ? static_cast<uint32_t>(ValuesRemaining - base)
                             : 2;
             for (uint32_t i = base; i < base + NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 9);
@@ -599,7 +599,7 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
             NumberOfValuesCoded += base;
         } else if (tryme<2, 14> (in, ValuesRemaining)) {
             out[0] = 14;
-            NumberOfValuesCoded = (ValuesRemaining < 2) ? ValuesRemaining : 2;
+            NumberOfValuesCoded = (ValuesRemaining < 2) ? static_cast<uint32_t>(ValuesRemaining) : 2;
             for (uint32_t i = 0; i < NumberOfValuesCoded; i++)
                 bit_writer(out, *in++, 14);
             *out <<= 28 - 14 * NumberOfValuesCoded;
@@ -636,35 +636,35 @@ void Simple16<MarkLength>::fakeencodeArray(const uint32_t *in, const size_t leng
     size_t ValuesRemaining(length);
     while (ValuesRemaining > 0) {
         if (tryme<28, 1> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 28) ? ValuesRemaining : 28;
+            NumberOfValuesCoded = (ValuesRemaining < 28) ? static_cast<uint32_t>(ValuesRemaining) : 28;
         } else if (tryme<7, 2, 14, 1> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 7 + 14) ? ValuesRemaining : 7 + 14;
+            NumberOfValuesCoded = (ValuesRemaining < 7 + 14) ? static_cast<uint32_t>(ValuesRemaining) : 7 + 14;
         } else if (tryme<7, 1, 7, 2, 7, 1> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 7*3) ? ValuesRemaining : 7*3;
+            NumberOfValuesCoded = (ValuesRemaining < 7*3) ? static_cast<uint32_t>(ValuesRemaining) : 7*3;
         } else if (tryme<14, 1, 7, 2> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 14 + 7) ? ValuesRemaining : 14 + 7;
+            NumberOfValuesCoded = (ValuesRemaining < 14 + 7) ? static_cast<uint32_t>(ValuesRemaining) : 14 + 7;
         } else if (tryme<14, 2> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 14) ? ValuesRemaining : 14;
+            NumberOfValuesCoded = (ValuesRemaining < 14) ? static_cast<uint32_t>(ValuesRemaining) : 14;
         } else if (tryme<1, 4, 8, 3> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 9) ? ValuesRemaining : 9;
+            NumberOfValuesCoded = (ValuesRemaining < 9) ? static_cast<uint32_t>(ValuesRemaining) : 9;
         } else if (tryme<1, 3, 4, 4, 3, 3> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 1+4+3) ? ValuesRemaining : 1+4+3;
+            NumberOfValuesCoded = (ValuesRemaining < 1+4+3) ? static_cast<uint32_t>(ValuesRemaining) : 1+4+3;
         } else if (tryme<7, 4> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 7) ? ValuesRemaining : 7;
+            NumberOfValuesCoded = (ValuesRemaining < 7) ? static_cast<uint32_t>(ValuesRemaining) : 7;
         } else if (tryme<4, 5, 2, 4> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 4+2) ? ValuesRemaining : 4+2;
+            NumberOfValuesCoded = (ValuesRemaining < 4+2) ? static_cast<uint32_t>(ValuesRemaining) : 4+2;
         } else if (tryme<2, 4, 4, 5> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 2+4) ? ValuesRemaining : 2+4;
+            NumberOfValuesCoded = (ValuesRemaining < 2+4) ? static_cast<uint32_t>(ValuesRemaining) : 2+4;
         } else if (tryme<3, 6, 2, 5> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 3+2) ? ValuesRemaining : 3+2;
+            NumberOfValuesCoded = (ValuesRemaining < 3+2) ? static_cast<uint32_t>(ValuesRemaining) : 3+2;
         } else if (tryme<2, 5, 3, 6> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 2+3) ? ValuesRemaining : 2+3;
+            NumberOfValuesCoded = (ValuesRemaining < 2+3) ? static_cast<uint32_t>(ValuesRemaining) : 2+3;
         } else if (tryme<4, 7> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 4) ? ValuesRemaining : 4;
+            NumberOfValuesCoded = (ValuesRemaining < 4) ? static_cast<uint32_t>(ValuesRemaining) : 4;
         } else if (tryme<1, 10, 2, 9> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 3) ? ValuesRemaining : 3;
+            NumberOfValuesCoded = (ValuesRemaining < 3) ? static_cast<uint32_t>(ValuesRemaining) : 3;
         } else if (tryme<2, 14> (in, ValuesRemaining)) {
-            NumberOfValuesCoded = (ValuesRemaining < 2) ? ValuesRemaining : 2;
+            NumberOfValuesCoded = (ValuesRemaining < 2) ? static_cast<uint32_t>(ValuesRemaining) : 2;
         } else {
             NumberOfValuesCoded = 1;
         }
@@ -688,7 +688,7 @@ const uint32_t * Simple16<MarkLength>::decodeArray(const uint32_t *in,
     if (MarkLength)
         if ((*in) > nvalue)
             throw NotEnoughStorage(*in);
-    const uint32_t actualvalue = MarkLength ? *(in++) : nvalue;
+    const uint32_t actualvalue = MarkLength ? *(in++) : static_cast<uint32_t>(nvalue);
     if (nvalue < actualvalue)
         cerr << " possible overrun" << endl;
     nvalue = actualvalue;

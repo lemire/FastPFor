@@ -374,7 +374,7 @@ public:
                     elapsedcomp += z.split();
                     nvalues[k] = nvalue;
                 }
-                timemscomp += elapsedcomp;
+                timemscomp += static_cast<double>(elapsedcomp);
                 totalcompressed += nvalue;
             }
             for (size_t k = 0; k < datas.size(); ++k) {
@@ -394,7 +394,7 @@ public:
                   }
                 }
                 const uint64_t elapseddecomp = z.split();
-                timemsdecomp += elapseddecomp;
+                timemsdecomp += static_cast<double>(elapseddecomp);
                 if(recoveredsize!= datas[k].size()) {
                     cerr<<" expected size of "<<datas[k].size()<<" got "<<recoveredsize<<endl;
                     throw logic_error("arrays don't have same size: bug.");
@@ -407,24 +407,24 @@ public:
             if(pp.cumulative)
                 i->comptime += timemscomp;
             else
-                i->compspeed.push_back(totallength * 1.0 / timemscomp);
+                i->compspeed.push_back(static_cast<double>(totallength)  / timemscomp);
             if (pp.fulldisplay)
-                cout << std::setprecision(4) << totallength * 1.0 / timemscomp
+                cout << std::setprecision(4) << static_cast<double>(totallength) / timemscomp
                         << "\t";
             if(pp.cumulative)
                 i->decomptime += timemsdecomp;
             else
-                i->decompspeed.push_back(totallength * 1.0 / timemsdecomp);
+                i->decompspeed.push_back(static_cast<double>(totallength) / timemsdecomp);
             if (pp.fulldisplay)
-                cout << std::setprecision(4) << totallength * 1.0 / timemsdecomp
+                cout << std::setprecision(4) << static_cast<double>(totallength) / timemsdecomp
                         << "\t";
-            if (pp.fulldisplay)cout << std::setprecision(4) << totalcompressed * 32.0 / totallength
+            if (pp.fulldisplay)cout << std::setprecision(4) << static_cast<double>(totalcompressed) * 32.0 / static_cast<double>(totallength)
                     << "\t";
             if(pp.cumulative) {
-                i->output += totalcompressed;
-                i->input += totallength;
+                i->output += static_cast<double>(totalcompressed);
+                i->input += static_cast<double>(totallength);
             } else
-                i->bitsperint.push_back(totalcompressed * 32.0 / totallength);
+                i->bitsperint.push_back(static_cast<double>(totalcompressed) * 32.0 / static_cast<double>(totallength));
             if (pp.fulldisplay) cout << "\t";
         }
         if (pp.fulldisplay) cout << endl;

@@ -62,7 +62,7 @@ public:
             for (int i = 0; i < complete; i++) {
                 for (int n = 0; n < 4; n++) {
                     if (n < ithSize[i]) {
-                        mask[desc][k] = j;
+                        mask[desc][k] = static_cast<unsigned char>(j);
                         j = j + 1;
                     } else {
                         mask[desc][k] = -1;
@@ -136,9 +136,9 @@ public:
             }
 
             //flip the correct bit in desc
-            bitmask = bitmask << (byteNeeded - 1);
+            bitmask = static_cast<unsigned char>(bitmask << (byteNeeded - 1));
             desc = desc ^ bitmask;
-            bitmask = bitmask << 1;
+            bitmask = static_cast<unsigned char>(bitmask << 1);
 
             ithSize[numInt] = byteNeeded;
             length += byteNeeded;
@@ -155,7 +155,7 @@ public:
             int size = ithSize[i];
             uint32_t value = buffer[i];
             for (int j = 0; j < size; j++) {
-                dest[written] = value >> (j * 8);
+                dest[written] = static_cast<unsigned char>(value >> (j * 8));
                 written++;
             }
         }

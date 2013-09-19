@@ -97,7 +97,7 @@ uint32_t OPTPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::tryB(uint32_t b,
         NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::ecoder.fakeencodeArray(
                 &NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::exceptions[0],
                 2 * curExcept, /*&encodedExceptions[0], */encodedExceptions_sz);
-        size += encodedExceptions_sz;
+        size += static_cast<uint32_t>(encodedExceptions_sz);
     }
     return size;
 

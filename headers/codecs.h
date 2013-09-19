@@ -146,7 +146,7 @@ public:
             size_t &nvalue) {
         checkifdivisibleby(length, 32);
         const uint32_t b = maxbits(in, in + length);
-        out[0] = length;
+        out[0] = static_cast<uint32_t>(length);
         out[1] = b;
         out+=2;
         for(uint32_t run = 0; run < length / 32; ++run, in += 32, out += b) {

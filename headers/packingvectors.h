@@ -44,7 +44,7 @@ uint32_t * packmeup(STLContainer & source, uint32_t * out, const uint32_t bit) {
 template<class STLContainer, uint32_t PACKSIZE = 32>
 uint32_t * packmeupwithoutmask(STLContainer & source, uint32_t * out,
         const uint32_t bit) {
-    const uint32_t size = source.size();
+    const uint32_t size = static_cast<uint32_t>(source.size());
     *out = size;
     out++;
     if (source.size() == 0)

@@ -41,8 +41,8 @@ public:
         double total = 0;
         for (maptype::iterator i = counter.begin(); i
                 != counter.end(); ++i) {
-            const double x = i->second;
-            total += x / totallength * log(totallength / x) / log(2);
+            const double x = static_cast<double>(i->second);
+            total += x / static_cast<double>(totallength) * log(static_cast<double>(totallength) / x) / log(2.0);
         }
         return total;
     }
@@ -52,7 +52,7 @@ public:
         double total = 0;
         for (maptype::const_iterator i = counter.begin(); i
                 != counter.end(); ++i) {
-            total += i->second * 1.0 / totallength * gccbits(i->first);
+            total += static_cast<double>(i->second) / static_cast<double>(totallength) * static_cast<double>(gccbits(i->first));
         }
         return total;
     }
@@ -71,7 +71,7 @@ __attribute__ ((pure))
 double databits(const uint32_t * in, const size_t length) {
     double sum = 0.0;
     for (size_t k = 0; k < length; ++k) {
-        sum += gccbits(in[k]) * 1.0 / length;
+        sum += static_cast<double>(gccbits(in[k]))  / static_cast<double>(length);
     }
     return sum;
 }
@@ -91,7 +91,7 @@ double entropy(const uint32_t * in, const size_t length) {
     for (map<uint32_t, double>::iterator i = counter.begin(); i
             != counter.end(); ++i) {
         double x = i->second;
-        total += x / length * log(length / x) / log(2);
+        total += x / static_cast<double>(length) * log(static_cast<double>(length) / x) / log(2.0);
     }
     return total;
 }

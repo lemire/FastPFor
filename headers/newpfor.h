@@ -156,11 +156,11 @@ void NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::encodeBlock(
             ecoder.encodeArray(&exceptions[0], 2 * nExceptions, out + 1,
                     encodedExceptions_sz);
         *out++ = (b << (PFORDELTA_NEXCEPT + PFORDELTA_EXCEPTSZ)) | (nExceptions
-                << PFORDELTA_EXCEPTSZ) | encodedExceptions_sz;
+                << PFORDELTA_EXCEPTSZ) | static_cast<uint32_t>(encodedExceptions_sz);
         /* Write exceptional values */
 
 
-        out += encodedExceptions_sz;
+        out += static_cast<uint32_t>(encodedExceptions_sz);
         for (uint32_t i = 0; i < len; i += 32) {
             fastpackwithoutmask(&tobecoded[i], out, b);
             out += b;
@@ -185,7 +185,7 @@ void NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::encodeArray(
     checkifdivisibleby(len, BlockSize);
     const size_t initnvalue = nvalue;
 
-    uint32_t numBlocks = div_roundup(len, BlockSize);
+    uint32_t numBlocks = div_roundup(static_cast<uint32_t>(len), BlockSize);
 
     /* Output the number of blocks */
     *out++ = numBlocks;

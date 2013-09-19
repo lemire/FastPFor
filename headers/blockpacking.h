@@ -116,7 +116,7 @@ public:
             size_t &nvalue) {
         checkifdivisibleby(length, BlockSize);
         const uint32_t * const initout(out);
-        *out++ = length;
+        *out++ = static_cast<uint32_t>(length);
         uint32_t Bs[HowManyMiniBlocks];
         for (const uint32_t * const final = in + length; in + BlockSize
                 <= final; in += BlockSize) {
@@ -198,7 +198,7 @@ public:
             size_t &nvalue) {
         checkifdivisibleby(length, BlockSize);
         const uint32_t * const initout(out);
-        *out++ = length;
+        *out++ = static_cast<uint32_t>(length);
         uint32_t Bs[HowManyMiniBlocks];
         for (const uint32_t * const final = in + length; in + BlockSize
                 <= final; in += BlockSize) {

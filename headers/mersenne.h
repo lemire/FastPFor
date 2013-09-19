@@ -90,8 +90,8 @@ unsigned int ZRandom::getValue() {
     }
     register unsigned y = MT[N - nValues--];
     y ^= y >> 11;
-    y ^= (y << 7) & 2636928640;
-    y ^= (y << 15) & 4022730752;
+    y ^= (y << 7) & 2636928640U;
+    y ^= (y << 15) & 4022730752U;
     y ^= y >> 18;
     return y;
 }

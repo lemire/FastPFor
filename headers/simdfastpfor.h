@@ -88,7 +88,7 @@ public:
     template<class STLContainer>
     static uint32_t * packmeupwithoutmasksimd(STLContainer & source, uint32_t * out,
             const uint32_t bit) {
-        const uint32_t size = source.size();
+        const uint32_t size = static_cast<uint32_t>(source.size());
         *out = size;
         out++;
         out = padTo128bits(out);
@@ -160,7 +160,7 @@ public:
         const uint32_t * const initout(out);
         const uint32_t * const finalin(in + length);
 
-        *out++ = length;
+        *out++ = static_cast<uint32_t>(length);
         const size_t oldnvalue = nvalue;
         nvalue = 1;
         while (in != finalin) {
@@ -194,15 +194,15 @@ public:
         maxb = bestb;
         uint32_t bestcost = bestb * BlockSize;
         uint32_t cexcept = 0;
-        bestcexcept = cexcept;
+        bestcexcept = static_cast<uint8_t>(cexcept);
         for (uint32_t b = bestb - 1; b < 32; --b) {
             cexcept += freqs[b + 1];
             uint32_t thiscost = cexcept * overheadofeachexcept + cexcept
                     * (maxb - b) + b * BlockSize + 8;// the  extra 8 is the cost of storing maxbits
             if (thiscost < bestcost) {
                 bestcost = thiscost;
-                bestb = b;
-                bestcexcept = cexcept;
+                bestb = static_cast<uint8_t>(b);
+                bestcexcept = static_cast<uint8_t>(cexcept);
             }
         }
     }
@@ -232,14 +232,14 @@ public:
                     if (in[k] >= maxval) {
                         // we have an exception
                         thisexceptioncontainer.push_back(in[k] >> bestb);
-                        *bc++ = k;
+                        *bc++ = static_cast<uint8_t>(k);
                     }
                 }
             }
             out = packblockupsimd(in, out, bestb);
         }
         headerout[0] = static_cast<uint32_t> (out - headerout);
-        const uint32_t bytescontainersize = bc - &bytescontainer[0];
+        const uint32_t bytescontainersize = static_cast<uint32_t>(bc - &bytescontainer[0]);
         *(out++) = bytescontainersize;
         memcpy(out, &bytescontainer[0], bytescontainersize);
         out += (bytescontainersize + sizeof(uint32_t) - 1)

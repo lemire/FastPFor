@@ -127,7 +127,7 @@ int main(int argc, char **argv) {
                 break;
         }
         if(datastotalsize == 0) break;
-        cout<<"# read "<<  std::setprecision(3)  << datastotalsize * 4 / (1024.0 * 1024.0) << " MB "<<endl;
+        cout<<"# read "<<  std::setprecision(3)  << static_cast<double>(datastotalsize) * 4.0 / (1024.0 * 1024.0) << " MB "<<endl;
 	cout<<"# processing block"<<endl;
 	    if(splitlongarrays) splitLongArrays(datas);
 	    processparameters pp(true,false, false, false, true);

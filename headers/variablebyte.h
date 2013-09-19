@@ -13,13 +13,13 @@
 class VariableByte: public IntegerCODEC {
 public:
     template<uint32_t i>
-    uint32_t extract7bits(const uint32_t val) {
-        return (val >> (7 * i)) & ((1U << 7) - 1);
+    uint8_t extract7bits(const uint32_t val) {
+        return static_cast<uint8_t>((val >> (7 * i)) & ((1U << 7) - 1));
     }
 
     template<uint32_t i>
-    uint32_t extract7bitsmaskless(const uint32_t val) {
-        return (val >> (7 * i));
+    uint8_t extract7bitsmaskless(const uint32_t val) {
+        return static_cast<uint8_t>((val >> (7 * i)));
     }
 
     void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
@@ -33,7 +33,7 @@ public:
              * depends on your compiler and machine.
              */
             if (val < (1U << 7)) {
-                *bout = val | (1U << 7);
+                *bout = static_cast<uint8_t>(val | (1U << 7));
                 ++bout;
             } else if (val < (1U << 14)) {
                 *bout = extract7bits<0> (val);
