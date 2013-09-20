@@ -29,10 +29,10 @@ This code is licensed under Apache License, Version 2.0 (ASL2.0).
 
 This code requires a (recent as of 2012) compiler supporting C++11. This was
 a design decision.
-It builds under both clang++ 3.2 (LLVM 3.2) and GCC 4.7.
+It builds under both clang++ 3.2 (LLVM 3.2), Intel icpc (ICC) 13.0.1 and GNU GCC 4.7.
 The code was tested under Linux and MacOS.
 
-Other compilers (e.g., Intel and Microsoft) are NOT supported right now: please
+Other compilers (e.g., Microsoft) are NOT supported right now: please
 help us make the code more portable.
 
 ## Hardware Requirements
