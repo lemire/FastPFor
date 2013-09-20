@@ -396,7 +396,7 @@ public:
         out += (bytescontainersize + sizeof(uint32_t) - 1)
                 / sizeof(uint32_t);
         size_t outcap = 0;
-        ecoder.encodeArray(&datatobepacked[0],datatobepacked.size(),out,outcap);
+        ecoder.encodeArray(datatobepacked.data(),datatobepacked.size(),out,outcap);
         out += outcap;
         nvalue = out - initout;
     }
