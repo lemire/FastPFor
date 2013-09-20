@@ -19,7 +19,7 @@
  * "proper" way from a software engineering perspective.
  */
 
-#ifndef _MSC_VER
+#if  !defined(_MSC_VER) && !defined(__INTEL_COMPILER)
 #pragma GCC push_options
 #pragma GCC optimize("O3")
 #pragma GCC optimize("unroll-loops")  // use cmd-line --param max-unroll-times=32?
@@ -298,7 +298,7 @@ void __unpack(const uint32_t * __restrict__ in, uint32_t * __restrict__ out) {
             inwordpointer = 0;
     }
 }
-#ifndef _MSC_VER
+#if  !defined(_MSC_VER) && !defined(__INTEL_COMPILER)
 #pragma GCC pop_options
 #endif
 
