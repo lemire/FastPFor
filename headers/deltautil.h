@@ -160,13 +160,13 @@ public:
              return;
         }
         const size_t Qty4 = TotalQty / 4;
-#if !defined(__clang__) && !defined(_MSC_VER)
+#if !defined(__clang__) && !defined(_MSC_VER) && !defined(__INTEL_COMPILER)
 #pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations" // GCC hates next loop
 #endif
         for (size_t i = TotalQty - 1; i >= 4 * Qty4; --i) {
              pData[i] -= pData[i-4];
         }
-#if !defined(__clang__) && !defined(_MSC_VER)
+#if !defined(__clang__) && !defined(_MSC_VER) && !defined(__INTEL_COMPILER)
 #pragma GCC diagnostic pop
 #endif
         __m128i* pCurr = reinterpret_cast<__m128i*>(pData) + Qty4 - 1;
@@ -282,7 +282,7 @@ public:
             if(verbose) cout<<"# compressing the arrays themselves, no delta coding applied."<<endl;
             // we check whether it could have been applied...
             bool sorted = true;
-#if !defined(__clang__) && !defined(_MSC_VER)
+#if !defined(__clang__) && !defined(_MSC_VER) && !defined(__INTEL_COMPILER)
 #pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations" // otherwise I get bogus warning
 #endif
             for(auto & x : datas)
@@ -293,7 +293,7 @@ public:
                                 break;
                             }
                         }
-#if !defined(__clang__) && !defined(_MSC_VER)
+#if !defined(__clang__) && !defined(_MSC_VER) && !defined(__INTEL_COMPILER)
 #pragma GCC diagnostic pop
 #endif
             if(sorted) {
