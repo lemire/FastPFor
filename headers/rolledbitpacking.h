@@ -19,11 +19,11 @@
  * "proper" way from a software engineering perspective.
  */
 
-/* need something similar for other compilers, eg CLANG */
+#ifndef _MSC_VER
 #pragma GCC push_options
 #pragma GCC optimize("O3")
 #pragma GCC optimize("unroll-loops")  // use cmd-line --param max-unroll-times=32?
-
+#endif
 
 // crazy function that basically just does
 // x -> x % (1U<<bit)
@@ -298,8 +298,9 @@ void __unpack(const uint32_t * __restrict__ in, uint32_t * __restrict__ out) {
             inwordpointer = 0;
     }
 }
-
+#ifndef _MSC_VER
 #pragma GCC pop_options
+#endif
 
 void unpack(const uint32_t * __restrict__ in, uint32_t * __restrict__ out,
         const uint32_t bit) {

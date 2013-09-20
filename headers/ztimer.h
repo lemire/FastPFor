@@ -11,7 +11,29 @@
 /**
  *  author: Preston Bannister
  */
-class WallClockTimer {
+ class WallClockTimer {
+ public:
+    typedef std::chrono::high_resolution_clock clock;
+    std::chrono::time_point<clock> t1, t2;
+     WallClockTimer() :
+         t1(), t2() {
+        t1 = std::chrono::high_resolution_clock::now();
+         t2 = t1;
+     }
+     void reset() {
+        t1 = std::chrono::high_resolution_clock::now();
+         t2 = t1;
+     }
+     uint64_t elapsed() {
+       std::chrono::microseconds delta = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
+        return delta.count();
+     }
+     uint64_t split() {
+        t2 = std::chrono::high_resolution_clock::now();
+         return elapsed();
+     }
+ };
+/*class WallClockTimer {
 public:
     struct timeval t1, t2;
     WallClockTimer() :
@@ -31,6 +53,8 @@ public:
         return elapsed();
     }
 };
+*/
+#ifndef _MSC_VER
 
 class CPUTimer {
 public:
@@ -72,6 +96,6 @@ public:
         return elapsed();
     }
 };
-
+#endif
 #endif
 

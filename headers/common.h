@@ -14,16 +14,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef _MSC_VER
 #include <sys/mman.h>
 #include <sys/resource.h>
+#endif
 #include <sys/stat.h>
+#ifndef _MSC_VER
 #include <sys/time.h>
+#endif
 #include <sys/types.h>
 #include <time.h>
 
 // C++ headers (sorted)
 #include <algorithm>
 #include <cassert>
+#include <chrono>
 #include <cmath>
 #include <cstdint>
 #include <fstream>
@@ -40,6 +45,14 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#ifdef _MSC_VER
 
+#include <stdint.h>
+
+#define __attribute__(n)
+#define __restrict__
+#define constexpr inline
+
+#endif
 
 #endif /* COMMON_H_ */

@@ -12,7 +12,7 @@
 
 #ifndef VSENCODING_H_
 #define VSENCODING_H_
-#ifndef __clang__
+#if !defined(__clang__) && !defined(_MSC_VER)
 #pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations"
 #endif
 #include "common.h"
@@ -316,6 +316,18 @@ public:
 
 };
 
+#ifdef _MSC_VER
+inline void __vseblocks_copy16(const uint32_t* src, uint32_t* dest)
+{
+    memcpy(dest, src, 16 * sizeof(uint32_t));
+}
+
+inline void __vseblocks_zero32(uint32_t* dest)
+{
+    memset(dest, 0, 32 * sizeof(uint32_t));
+}
+#else
+
 #define __vseblocks_copy16(src, dest)   \
 		__asm__ __volatile__(           \
 				"movdqu %4, %%xmm0\n\t"         \
@@ -344,6 +356,7 @@ public:
 				:"=m" (dest[0]), "=m" (dest[4]), "=m" (dest[8]), "=m" (dest[12]) ,               \
 				 "=m" (dest[16]), "=m" (dest[20]), "=m" (dest[24]), "=m" (dest[28])       \
 				 ::"memory", "%xmm0")
+#endif
 
 /* A set of unpacking functions */
 static void
@@ -1325,7 +1338,7 @@ void __vseblocks_unpack32(uint32_t * __restrict__ out,
 }
 
 }
-#ifndef __clang__
+#if !defined(__clang__) && !defined(_MSC_VER)
 #pragma GCC diagnostic pop
 #endif
 #endif /* VSENCODING_H_ */

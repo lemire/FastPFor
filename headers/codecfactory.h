@@ -32,7 +32,8 @@ using namespace std;
 
 class CODECFactory {
 public:
-    static map<string, shared_ptr<IntegerCODEC> > scodecmap;
+	typedef map<string, shared_ptr<IntegerCODEC> > CodecMap;
+	static CodecMap scodecmap;
 
     // hacked for convenience
     static vector<shared_ptr<IntegerCODEC> > allSchemes() {
@@ -65,6 +66,8 @@ public:
     }
 
 };
+
+
 
 map<string, shared_ptr<IntegerCODEC> > CODECFactory::scodecmap = {
    {   "fastbinarypacking8", shared_ptr<IntegerCODEC> (new CompositeCodec<FastBinaryPacking<8> ,

@@ -6,10 +6,8 @@
  */
 #ifndef BITPACKINGALIGNED
 #define BITPACKINGALIGNED
-#include <stdio.h>
-#include <string.h>
-#include <cstdint>
-#include <stdexcept>
+
+#include "common.h"
 
 using namespace std;
 

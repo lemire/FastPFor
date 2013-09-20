@@ -6,10 +6,7 @@
  */
 #ifndef BITPACKINGUNALIGNED
 #define BITPACKINGUNALIGNED
-#include <stdio.h>
-#include <string.h>
-#include <cstdint>
-#include <stdexcept>
+ #include "common.h"
 
 using namespace std;
 typedef uint8_t byte;

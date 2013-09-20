@@ -220,7 +220,7 @@ public:
         checkifdivisibleby(len, BlockSize);
         const uint32_t * const initout(out);
         vector<DATATYPE> exceptions;
-        exceptions.reserve(len);// possibly unsafe but can be faster than resize
+        exceptions.resize(len);
         DATATYPE * __restrict__ i = &exceptions[0];
         const uint32_t b = determineBestBase(in,len);
         *out++ = static_cast<uint32_t>(len);

@@ -6,7 +6,7 @@
  */
 #ifndef BITPACKING
 #define BITPACKING
-#include <cstdint>
+#include "common.h"
 
 void __fastunpack0(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out);
 void __fastunpack1(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out);

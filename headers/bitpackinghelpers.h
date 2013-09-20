@@ -10,7 +10,7 @@
 
 #include "bitpacking.h"
 
-void fastunpack(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out, const uint32_t bit) {
+inline void fastunpack(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out, const uint32_t bit) {
     // Could have used function pointers instead of switch.
     // Switch calls do offer the compiler more opportunities for optimization in
     // theory. In this case, it makes no difference with a good compiler.
@@ -121,7 +121,7 @@ void fastunpack(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out
 
 
 
-void fastpack(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out, const uint32_t bit) {
+inline void fastpack(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out, const uint32_t bit) {
     // Could have used function pointers instead of switch.
     // Switch calls do offer the compiler more opportunities for optimization in
     // theory. In this case, it makes no difference with a good compiler.
@@ -233,7 +233,7 @@ void fastpack(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out, 
 
 
 /*assumes that integers fit in the prescribed number of bits*/
-void fastpackwithoutmask(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out, const uint32_t bit) {
+inline void fastpackwithoutmask(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out, const uint32_t bit) {
     // Could have used function pointers instead of switch.
     // Switch calls do offer the compiler more opportunities for optimization in
     // theory. In this case, it makes no difference with a good compiler.

@@ -116,14 +116,22 @@ template <class T>
 bool  needPaddingTo64bytes(const T * inbyte) {
     return reinterpret_cast<uintptr_t> (inbyte) & 63;
 }
-
 __attribute__ ((const))
-uint32_t gccbits(const uint32_t v) {
+inline uint32_t gccbits(const uint32_t v) {
+#ifdef _MSC_VER
+    if (v == 0) {
+        return 0;
+    }
+    unsigned long answer;
+    _BitScanReverse(&answer, v);
+    return answer + 1;
+#else
     return v == 0 ? 0 : 32 - __builtin_clz(v);
+#endif
 }
 
 __attribute__ ((const))
-bool divisibleby(size_t a, uint32_t x) {
+inline bool divisibleby(size_t a, uint32_t x) {
     return (a % x == 0);
 }
 
@@ -161,16 +169,20 @@ void printme(iter i, iter b) {
 }
 
 __attribute__ ((const))
-uint32_t asmbits(const uint32_t v) {
+inline uint32_t asmbits(const uint32_t v) {
+#ifdef _MSC_VER
+	    return gccbits(v);
+#else
     if (v == 0)
         return 0;
     uint32_t answer;
     __asm__("bsr %1, %0;" :"=r"(answer) :"r"(v));
     return answer + 1;
+#endif
 }
 
 __attribute__ ((const))
-uint32_t slowbits(uint32_t v) {
+inline uint32_t slowbits(uint32_t v) {
     uint32_t r = 0;
     while (v) {
         r++;
@@ -180,7 +192,7 @@ uint32_t slowbits(uint32_t v) {
 }
 
 __attribute__ ((const))
-uint32_t bits(uint32_t v) {
+inline uint32_t bits(uint32_t v) {
     uint32_t r(0);
     if (v >= (1U << 15)) {
         v >>= 16;

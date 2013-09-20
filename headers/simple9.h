@@ -98,7 +98,7 @@ void Simple9<MarkLength, hacked>::encodeArray(const uint32_t *in,
     const bool becareful = false;
 
     while (ValuesRemaining >= 28) {
-        if (hacked and trymefull<28, 0> (in)) {
+        if (hacked && trymefull<28, 0> (in)) {
             out[0] = 9 << (32 - SIMPLE9_LOGDESC);
             NumberOfValuesCoded = 28;
             in+=28;
@@ -186,7 +186,7 @@ void Simple9<MarkLength, hacked>::encodeArray(const uint32_t *in,
         ValuesRemaining -= NumberOfValuesCoded;
     }
     while (ValuesRemaining > 0) {
-        if (hacked and trymefull<28, 0> (in)) {
+        if (hacked && trymefull<28, 0> (in)) {
             out[0] = 9 << (32 - SIMPLE9_LOGDESC);
             NumberOfValuesCoded = (ValuesRemaining < 28) ? ValuesRemaining : 28;
             in+=NumberOfValuesCoded;

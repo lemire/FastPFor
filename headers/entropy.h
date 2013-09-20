@@ -80,7 +80,7 @@ double entropy(const uint32_t * in, const size_t length) {
     if (length == 0)
         return 0;
     map<uint32_t, double> counter;
-    for (uint32_t k = 0; k < length; ++k, ++in) {
+    for (size_t k = 0; k < length; ++k, ++in) {
         map<uint32_t, double>::iterator i = counter.find(*in);
         if (i != counter.end())
             i->second += 1;

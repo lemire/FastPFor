@@ -65,7 +65,7 @@ void summarize(vector<algostats> & v, string prefix = "#") {
         cout << prefix << endl << prefix << endl;
     }
 for(algostats a : v) {
-    if( (a.comptime != 0) and (a.decomptime !=0) and (a.input != 0)) {
+    if( (a.comptime != 0) && (a.decomptime !=0) && (a.input != 0)) {
         cout << " " << std::setprecision(4) << a.name(40) << " \t "
         << a.input / a.comptime << " \t " << a.input / a.decomptime << " \t "
         << a.output * 32 / a.input << endl;
@@ -160,13 +160,13 @@ public:
              return;
         }
         const size_t Qty4 = TotalQty / 4;
-#ifndef __clang__
+#if !defined(__clang__) && !defined(_MSC_VER)
 #pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations" // GCC hates next loop
 #endif
         for (size_t i = TotalQty - 1; i >= 4 * Qty4; --i) {
              pData[i] -= pData[i-4];
         }
-#ifndef __clang__
+#if !defined(__clang__) && !defined(_MSC_VER)
 #pragma GCC diagnostic pop
 #endif
         __m128i* pCurr = reinterpret_cast<__m128i*>(pData) + Qty4 - 1;
@@ -264,7 +264,7 @@ public:
             const bool cumulative*/, const string prefix = "") {
         // pp.needtodelta = false;
         enum {verbose = false};
-        if(datas.empty() or myalgos.empty()) return;
+        if(datas.empty() || myalgos.empty()) return;
         if(pp.needtodelta) {
             if(verbose) cout<<"# delta coding requested... checking whether we have sorted arrays...";
             for(auto x : datas) {
@@ -282,18 +282,18 @@ public:
             if(verbose) cout<<"# compressing the arrays themselves, no delta coding applied."<<endl;
             // we check whether it could have been applied...
             bool sorted = true;
-#ifndef __clang__
+#if !defined(__clang__) && !defined(_MSC_VER)
 #pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations" // otherwise I get bogus warning
 #endif
             for(auto & x : datas)
-                if(sorted and (x.size()>=1))
+                if(sorted && (x.size()>=1))
                         for (size_t k = 1; k < x.size(); ++k) {
                             if(x[k]<x[k-1]) {
                                 sorted = false;
                                 break;
                             }
                         }
-#ifndef __clang__
+#if !defined(__clang__) && !defined(_MSC_VER)
 #pragma GCC diagnostic pop
 #endif
             if(sorted) {
@@ -310,7 +310,7 @@ public:
             hist.display("#");
         }
         if (pp.fulldisplay) cout << "#";
-        if (pp.fulldisplay and pp.computeentropy)
+        if (pp.fulldisplay && pp.computeentropy)
             cout << " entropy  databits(entropy) ";
 
         if (pp.fulldisplay) {
@@ -325,14 +325,14 @@ public:
                         " decompression speed and bits per integer" << endl;
         EntropyRecorder er;
         if(pp.computeentropy) {
-             for (uint k = 0; k < datas.size(); ++k)
+             for (size_t k = 0; k < datas.size(); ++k)
                if(!datas[k].empty()) er.eat(&datas[k][0], datas[k].size());
              if (pp.fulldisplay)    cout << "# generated " << er.totallength << " integers" << endl;
         }
         if (pp.fulldisplay)cout  << prefix << "\t";
-        if(pp.computeentropy and pp.fulldisplay)
+        if(pp.computeentropy && pp.fulldisplay)
             cout << std::setprecision(4) << er.computeShannon() << "\t";
-        if (pp.computeentropy and pp.fulldisplay)
+        if (pp.computeentropy && pp.fulldisplay)
             cout << std::setprecision(4) << er.computeDataBits() << "\t";
         WallClockTimer z;
         size_t totallength = 0;
