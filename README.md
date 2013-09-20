@@ -32,12 +32,15 @@ a design decision.
 It builds under both clang++ 3.2 (LLVM 3.2) and GCC 4.7.
 The code was tested under Linux and MacOS.
 
+Other compilers (e.g., Intel and Microsoft) are NOT supported right now: please
+help us make the code more portable.
+
 ## Hardware Requirements
 
-Your processor should support SSSE3. This includes almost every Intel or AMD processor
-sold after 2006.
+To fully use the library, your processor should support SSSE3. This includes almost every Intel or AMD processor
+sold after 2006. (Note: the key schemes require merely SSE2.) 
 
-Some specific binaries will only run if your processor supports SSE4.1. 
+Some specific binaries will only run if your processor supports SSE4.1. They have been purely used for specific tests however.
 
 ## Building with CMake
 
@@ -213,4 +216,9 @@ I (D. Lemire) did not
 patent anything.
 
 However, we implemented
-varint-G8UI which was patented by its authors.
+varint-G8UI which was patented by its authors. DO NOT use vartin-G8UI if you
+want to avoid patents.
+
+The rest of the library *should be* patent-free.
+
+
