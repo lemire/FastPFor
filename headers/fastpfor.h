@@ -395,9 +395,9 @@ public:
         memcpy(out, &bytescontainer[0], bytescontainersize);
         out += (bytescontainersize + sizeof(uint32_t) - 1)
                 / sizeof(uint32_t);
-        size_t outcap = 10000;
+        size_t outcap = 0;
         ecoder.encodeArray(&datatobepacked[0],datatobepacked.size(),out,outcap);
-        out+=outcap;
+        out += outcap;
         nvalue = out - initout;
     }
 
@@ -410,7 +410,8 @@ public:
         const uint32_t bytesize = *inexcept++;
         const uint8_t * bytep = reinterpret_cast<const uint8_t *> (inexcept);
         inexcept += (bytesize + sizeof(uint32_t) - 1) / sizeof(uint32_t);
-        size_t cap = datatobepacked.capacity();// theoretically unsafe
+        datatobepacked.resize(datatobepacked.capacity());
+        size_t cap = datatobepacked.size();
         size_t le = initin+length - inexcept;
         inexcept = ecoder.decodeArray(inexcept, le,&datatobepacked[0],cap );
 

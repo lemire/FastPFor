@@ -13,7 +13,12 @@ CXX := $(YOURCXX)
 
 # todo: allow custom architectures , e.g., -march=nocona -march=corei7
 CXXFLAGSEXTRA = -mssse3 # mssse3 necessary for varintg8iu and msse4.1 necessary for horizontal bit packing
+
+ifeq ($(DEBUG),1)
+CXXFLAGS = $(CXXFLAGSEXTRA) -Wconversion  -std=c++0x -Weffc++ -pedantic -O3 -ggdb -D_GLIBCXX_DEBUG -Wold-style-cast -Wall -Wextra -Wcast-align -Wunsafe-loop-optimizations -Wcast-qual
+else
 CXXFLAGS = $(CXXFLAGSEXTRA) -Wconversion  -std=c++0x -Weffc++ -pedantic -O3 -Wold-style-cast -Wall -Wextra -Wcast-align -Wunsafe-loop-optimizations -Wcast-qual
+endif
 #-ggdb
 endif
 CXX := $(YOURCXX)
