@@ -25,7 +25,7 @@
          t2 = t1;
      }
      uint64_t elapsed() {
-       std::chrono::nanoseconds delta = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1);
+       std::chrono::microseconds delta = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
        return delta.count();
      }
      uint64_t split() {

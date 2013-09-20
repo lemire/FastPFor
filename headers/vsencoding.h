@@ -12,7 +12,7 @@
 
 #ifndef VSENCODING_H_
 #define VSENCODING_H_
-#if !defined(__clang__) && !defined(_MSC_VER)
+#if !defined(__clang__) && !defined(_MSC_VER) && !defined(__INTEL_COMPILER)
 #pragma GCC diagnostic ignored "-Wunsafe-loop-optimizations"
 #endif
 #include "common.h"
@@ -1338,7 +1338,7 @@ void __vseblocks_unpack32(uint32_t * __restrict__ out,
 }
 
 }
-#if !defined(__clang__) && !defined(_MSC_VER)
+#if !defined(__clang__) && !defined(_MSC_VER) && !defined(__INTEL_COMPILER)
 #pragma GCC diagnostic pop
 #endif
 #endif /* VSENCODING_H_ */
