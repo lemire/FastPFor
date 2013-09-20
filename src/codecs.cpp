@@ -44,7 +44,7 @@ void message() {
     int c = 0;
     cout << "You must select one of these options:" << endl;
     while (long_options[c].name != 0) {
-        if ((strcmp(long_options[c].name, "codecs") == 0) or ((strcmp(
+        if ((strcmp(long_options[c].name, "codecs") == 0) || ((strcmp(
                 long_options[c].name, "short") == 0)))
             ++c;
         else
@@ -140,7 +140,7 @@ int main(int argc, char **argv) {
                 const uint32_t N = 4194304 * 16;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 cout << "# zipfian 1 data generation..." << endl;
-                for (uint k = 0; k < (1U << 1); ++k)
+                for (uint32_t k = 0; k < (1U << 1); ++k)
                     datas.push_back(generateZipfianArray32(N, 1.0, 1U << 20));
                 if (splitlongarrays)
                     splitLongArrays( datas);
@@ -152,7 +152,7 @@ int main(int argc, char **argv) {
             } else if (strcmp(parameter, "zipfian2") == 0) {
                 const uint32_t N = 4194304 * 16;
                 vector < vector<uint32_t, cacheallocator> > datas;
-                for (uint k = 0; k < (1U << 1); ++k)
+                for (uint32_t k = 0; k < (1U << 1); ++k)
                     cout << "# zipfian 2 data generation..." << endl;
                 datas.push_back(generateZipfianArray32(N, 2.0, 1U << 20));
                 if (splitlongarrays)
@@ -166,7 +166,7 @@ int main(int argc, char **argv) {
                 cout << "# dense uniform data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 UniformDataGenerator clu;
-                for (uint k = 0; k < (1U << 5); ++k)
+                for (uint32_t k = 0; k < (1U << 5); ++k)
                     datas.push_back(clu.generateUniform((1U << 18), 1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 if (splitlongarrays)
@@ -180,7 +180,7 @@ int main(int argc, char **argv) {
                 cout << "# sparse uniform data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 UniformDataGenerator clu;
-                for (uint k = 0; k < (1U << 14); ++k)// by original paper should be 1U<<19
+                for (uint32_t k = 0; k < (1U << 14); ++k)// by original paper should be 1U<<19
                     datas.push_back(clu.generateUniform((1U << 9), 1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 if (splitlongarrays)
@@ -194,7 +194,7 @@ int main(int argc, char **argv) {
                 cout << "# dense cluster data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 ClusteredDataGenerator clu;
-                for (uint k = 0; k < (1U << 5); ++k)// by original paper should be 1U<<10
+                for (uint32_t k = 0; k < (1U << 5); ++k)// by original paper should be 1U<<10
                     datas.push_back(clu.generateClustered((1U << 18), 1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 if (splitlongarrays)
@@ -208,7 +208,7 @@ int main(int argc, char **argv) {
                 cout << "# sparse cluster data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 ClusteredDataGenerator clu;
-                for (uint k = 0; k < (1U << 14); ++k)// by original paper should be 1U<<19
+                for (uint32_t k = 0; k < (1U << 14); ++k)// by original paper should be 1U<<19
                     datas.push_back(clu.generateClustered((1U << 9), 1U << 27));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 if (splitlongarrays)
@@ -222,7 +222,7 @@ int main(int argc, char **argv) {
                 cout << "# dense uniform data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 UniformDataGenerator clu;
-                for (uint k = 0; k < (1U << 3); ++k)// by original paper should be 1U<<10
+                for (uint32_t k = 0; k < (1U << 3); ++k)// by original paper should be 1U<<10
                     datas.push_back(clu.generateUniform((1U << 22), 1U << 29));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 if (splitlongarrays)
@@ -236,7 +236,7 @@ int main(int argc, char **argv) {
                 cout << "# sparse uniform data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 UniformDataGenerator clu;
-                for (uint k = 0; k < (1U << 13); ++k)
+                for (uint32_t k = 0; k < (1U << 13); ++k)
                     datas.push_back(clu.generateUniform((1U << 12), 1U << 29));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 if (splitlongarrays)
@@ -250,7 +250,7 @@ int main(int argc, char **argv) {
                 cout << "# dense cluster data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 ClusteredDataGenerator clu;
-                for (uint k = 0; k < 1; ++k)
+                for (uint32_t k = 0; k < 1; ++k)
                     datas.push_back(clu.generateClustered((1U << 23), 1U << 26));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 if (splitlongarrays)
@@ -264,7 +264,7 @@ int main(int argc, char **argv) {
                 cout << "# sparse cluster data generation..." << endl;
                 vector < vector<uint32_t, cacheallocator> > datas;
                 ClusteredDataGenerator clu;
-                for (uint k = 0; k < (1U << 13); ++k)
+                for (uint32_t k = 0; k < (1U << 13); ++k)
                     datas.push_back(clu.generateClustered((1U << 12), 1U << 26));
                 cout << "# generated " << datas.size() << " arrays" << endl;
                 if (splitlongarrays)
@@ -279,7 +279,7 @@ int main(int argc, char **argv) {
                 ClusteredDataGenerator clu;
                 for (uint32_t K = 15; K <= 25; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
-                    for (uint k = 0; k < (1U << (25 - K)); ++k)
+                    for (uint32_t k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
                                 clu.generateClustered((1U << K), 1U << 29));
                     cout << "# generated " << datas.size() << " arrays" << endl;
@@ -300,7 +300,7 @@ int main(int argc, char **argv) {
                 UniformDataGenerator clu;
                 for (uint32_t K = 15; K <= 25; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
-                    for (uint k = 0; k < (1U << (25 - K)); ++k)
+                    for (uint32_t k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
                                 clu.generateUniform((1U << K), 1U << 29));
                     cout << "# generated " << datas.size() << " arrays" << endl;
@@ -321,7 +321,7 @@ int main(int argc, char **argv) {
                 ClusteredDataGenerator clu;
                 for (uint32_t K = 15; K <= 20; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
-                    for (uint k = 0; k < (1U << (20 - K)); ++k)
+                    for (uint32_t k = 0; k < (1U << (20 - K)); ++k)
                         datas.push_back(
                                 clu.generateClustered((1U << K), 1U << 29));
                     cout << "# generated " << datas.size() << " arrays" << endl;
@@ -342,7 +342,7 @@ int main(int argc, char **argv) {
                 UniformDataGenerator clu;
                 for (uint32_t K = 15; K <= 20; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
-                    for (uint k = 0; k < (1U << (20 - K)); ++k)
+                    for (uint32_t k = 0; k < (1U << (20 - K)); ++k)
                         datas.push_back(
                                 clu.generateUniform((1U << K), 1U << 29));
                     cout << "# generated " << datas.size() << " arrays" << endl;
@@ -363,7 +363,7 @@ int main(int argc, char **argv) {
                 ClusteredDataGenerator clu;
                 for (uint32_t K = 15; K <= 25; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
-                    for (uint k = 0; k < (1U << (25 - K)); ++k)
+                    for (uint32_t k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
                                 diffs(
                                         clu.generateClustered((1U << K),
@@ -387,7 +387,7 @@ int main(int argc, char **argv) {
                 UniformDataGenerator clu;
                 for (uint32_t K = 15; K <= 25; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
-                    for (uint k = 0; k < (1U << (25 - K)); ++k)
+                    for (uint32_t k = 0; k < (1U << (25 - K)); ++k)
                         datas.push_back(
                                 diffs(clu.generateUniform((1U << K), 1U << 29),
                                         false));

@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
         size_t datastotalsize = 0;
 	    cout<<"# Filling up a block "<<endl;
         while (reader.loadIntegers(rawdata)) {
-            if ((rawdata.size() < MINLENGTH) or (rawdata.size() > MAXLENGTH))
+            if ((rawdata.size() < MINLENGTH) || (rawdata.size() > MAXLENGTH))
                 continue;
             ++counter;
             datastotalsize += rawdata.size();

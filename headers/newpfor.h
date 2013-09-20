@@ -69,9 +69,38 @@ public:
     static vector<uint32_t> possLogs;
 
 };
+
+/// nice compilers support this
+//template<uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder>
+//vector<uint32_t> NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs =
+//        { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 20, 32 };
+
+
+/// this is for brain dead compilers:
+static inline vector<uint32_t> __ihatestupidcompilers() {
+	vector<uint32_t> ans;
+	ans.push_back(0); // I
+	ans.push_back(1); // hate
+	ans.push_back(2); // stupid
+	ans.push_back(3); // compilers
+	ans.push_back(4);
+	ans.push_back(5);
+	ans.push_back(6);
+	ans.push_back(7);
+	ans.push_back(8);
+	ans.push_back(9);
+	ans.push_back(10);
+	ans.push_back(11);
+	ans.push_back(12);
+	ans.push_back(13);
+	ans.push_back(16);
+	ans.push_back(20);
+	ans.push_back(32);
+	return ans;
+}
+
 template<uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder>
-vector<uint32_t> NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs =
-        { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 20, 32 };
+vector<uint32_t> NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs = __ihatestupidcompilers();
 
 template<uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder>
 __attribute__ ((pure))
