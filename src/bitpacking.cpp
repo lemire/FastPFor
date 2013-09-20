@@ -5640,38 +5640,232 @@ void __fastpack31(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  o
 
 
 
-
 void __fastpack4(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out) {
-  for(uint32_t outer=0; outer< 4 ;++outer) {
-    *out = ((*(in++))   % (1U << 4 )  ) ;
-    for( uint32_t inwordpointer =  4 ;inwordpointer<32; inwordpointer +=  4 )
-      *out |= ((*(in++))   % (1U << 4 )  ) << inwordpointer  ;
+    *out = (*in)   % (1U << 4 ) ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  4 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  12 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  20 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  24 ;
+    ++in;
+    *out |= ( (*in) ) <<  28 ;
     ++out;
-  }
+    ++in;
+    *out = (*in)   % (1U << 4 ) ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  4 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  12 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  20 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  24 ;
+    ++in;
+    *out |= ( (*in) ) <<  28 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 4 ) ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  4 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  12 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  20 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  24 ;
+    ++in;
+    *out |= ( (*in) ) <<  28 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 4 ) ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  4 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  12 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  20 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 4 )  ) <<  24 ;
+    ++in;
+    *out |= ( (*in) ) <<  28 ;
 }
 
 
 
-
 void __fastpack8(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out) {
-  for(uint32_t outer=0; outer< 8 ;++outer) {
-    *out = ((*(in++))   % (1U << 8 )  ) ;
-    for( uint32_t inwordpointer =  8 ;inwordpointer<32; inwordpointer +=  8 )
-      *out |= ((*(in++))   % (1U << 8 )  ) << inwordpointer  ;
+    *out = (*in)   % (1U << 8 ) ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  16 ;
+    ++in;
+    *out |= ( (*in) ) <<  24 ;
     ++out;
-  }
+    ++in;
+    *out = (*in)   % (1U << 8 ) ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  16 ;
+    ++in;
+    *out |= ( (*in) ) <<  24 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 8 ) ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  16 ;
+    ++in;
+    *out |= ( (*in) ) <<  24 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 8 ) ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  16 ;
+    ++in;
+    *out |= ( (*in) ) <<  24 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 8 ) ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  16 ;
+    ++in;
+    *out |= ( (*in) ) <<  24 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 8 ) ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  16 ;
+    ++in;
+    *out |= ( (*in) ) <<  24 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 8 ) ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  16 ;
+    ++in;
+    *out |= ( (*in) ) <<  24 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 8 ) ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)   % (1U << 8 )  ) <<  16 ;
+    ++in;
+    *out |= ( (*in) ) <<  24 ;
 }
 
 
 
 
 void __fastpack16(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out) {
-  for(uint32_t outer=0; outer< 16 ;++outer) {
-    *out = ((*(in++))   % (1U << 16 )  ) ;
-    for( uint32_t inwordpointer =  16 ;inwordpointer<32; inwordpointer +=  16 )
-      *out |= ((*(in++))   % (1U << 16 )  ) << inwordpointer  ;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
     ++out;
-  }
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in)   % (1U << 16 ) ;
+    ++in;
+    *out |= ( (*in) ) <<  16 ;
 }
 
 
@@ -8465,39 +8659,234 @@ void __fastpack16(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  o
 
 
 
-  /*assumes that integers fit in the prescribed number of bits*/
+  /*assumes that integers fit in the prescribed number of bits */
   void __fastpackwithoutmask4(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out) {
-  for(uint32_t outer=0; outer< 4 ;++outer) {
-    *out = ((*(in++))  )   ;
-    for( uint32_t inwordpointer =  4 ;inwordpointer<32; inwordpointer +=  4 )
-      *out |= ((*(in++))  ) << inwordpointer  ;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  4 ;
+    ++in;
+    *out |= ( (*in)  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)  ) <<  12 ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)  ) <<  20 ;
+    ++in;
+    *out |= ( (*in)  ) <<  24 ;
+    ++in;
+    *out |= ( (*in)  ) <<  28 ;
     ++out;
-  }
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  4 ;
+    ++in;
+    *out |= ( (*in)  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)  ) <<  12 ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)  ) <<  20 ;
+    ++in;
+    *out |= ( (*in)  ) <<  24 ;
+    ++in;
+    *out |= ( (*in)  ) <<  28 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  4 ;
+    ++in;
+    *out |= ( (*in)  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)  ) <<  12 ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)  ) <<  20 ;
+    ++in;
+    *out |= ( (*in)  ) <<  24 ;
+    ++in;
+    *out |= ( (*in)  ) <<  28 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  4 ;
+    ++in;
+    *out |= ( (*in)  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)  ) <<  12 ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)  ) <<  20 ;
+    ++in;
+    *out |= ( (*in)  ) <<  24 ;
+    ++in;
+    *out |= ( (*in)  ) <<  28 ;
 }
 
 
 
-
-  /*assumes that integers fit in the prescribed number of bits*/
+  /*assumes that integers fit in the prescribed number of bits */
   void __fastpackwithoutmask8(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out) {
-  for(uint32_t outer=0; outer< 8 ;++outer) {
-    *out = ((*(in++))  )   ;
-    for( uint32_t inwordpointer =  8 ;inwordpointer<32; inwordpointer +=  8 )
-      *out |= ((*(in++))  ) << inwordpointer  ;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)  ) <<  24 ;
     ++out;
-  }
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)  ) <<  24 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)  ) <<  24 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)  ) <<  24 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)  ) <<  24 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)  ) <<  24 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)  ) <<  24 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  8 ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++in;
+    *out |= ( (*in)  ) <<  24 ;
 }
 
 
 
-
-  /*assumes that integers fit in the prescribed number of bits*/
+  /*assumes that integers fit in the prescribed number of bits */
   void __fastpackwithoutmask16(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out) {
-  for(uint32_t outer=0; outer< 16 ;++outer) {
-    *out = ((*(in++))  )   ;
-    for( uint32_t inwordpointer =  16 ;inwordpointer<32; inwordpointer +=  16 )
-      *out |= ((*(in++))  ) << inwordpointer  ;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
     ++out;
-  }
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
+    ++out;
+    ++in;
+    *out = (*in) ;
+    ++in;
+    *out |= ( (*in)  ) <<  16 ;
 }
+
 

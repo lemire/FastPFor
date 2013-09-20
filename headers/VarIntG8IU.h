@@ -15,7 +15,6 @@
  * https://github.com/maximecaron/SIMD-Based-Posting-lists
  * with minor modifications by D. Lemire.
  */
-
 #ifndef __SSSE3__
 #ifndef _MSC_VER
  #pragma message "Disabling varintg8iu due to lack of SSSE3 support, try adding -mssse3"
