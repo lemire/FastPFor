@@ -17,11 +17,7 @@
  */
 #ifndef __SSSE3__
 #ifndef _MSC_VER
-#ifndef __INTEL_COMPILER
- #pragma message "Disabling varintg8iu due to lack of SSSE3 support, try adding -mssse3"
-#else
-#pragma message "D. Lemire could not get this implementation of varintg8iu to compile under the Intel compiler. Please help."
-#endif
+#pragma message "Disabling varintg8iu due to lack of SSSE3 support, try adding -mssse3 or the equivalent on your compiler"
 #else
 #pragma message("Disabling varintg8iu due to lack of SSSE3 support")
 #endif
@@ -37,7 +33,7 @@
 #define PREDICT_FALSE(x) x
 #define PREDICT_TRUE(x) x
 #endif
-typedef char v16qi __attribute__ ((vector_size (16)));
+//typedef char v16qi __attribute__ ((vector_size (16)));
 
 class VarIntG8IU: public IntegerCODEC {
 
@@ -185,28 +181,28 @@ public:
         srclength -= 1;
 
         const unsigned char* peek = src;
-        v16qi data;
+        __m128i data;//v16qi data;
         if (PREDICT_TRUE(srclength >= 16)) {
             // read 16 byte of data only if we need
             // to avoid cache miss
-            data = __builtin_ia32_lddqu(reinterpret_cast<const char*> (peek));
+            data = _mm_lddqu_si128 (reinterpret_cast<__m128i const* > (peek)) ;//__builtin_ia32_lddqu(reinterpret_cast<const char*> (peek));
         } else {
             static char buff[16];
             memcpy(buff, peek, 8);
-            data = __builtin_ia32_lddqu(buff);
+            data = _mm_lddqu_si128 (reinterpret_cast<__m128i const*> (buff)) ;//__builtin_ia32_lddqu(buff);
         }
 
         // load de required mask
-        v16qi shf = __builtin_ia32_lddqu(mask[desc]);
-        v16qi result = __builtin_ia32_pshufb128(data, shf);
+        __m128i shf = _mm_lddqu_si128 (reinterpret_cast<__m128i const*> (mask[desc])) ;//__builtin_ia32_lddqu(mask[desc]);
+        __m128i result =  _mm_shuffle_epi8 (data, shf);//__builtin_ia32_pshufb128(data, shf);
         char* dst = reinterpret_cast<char*> (dest);
-        __builtin_ia32_storedqu(dst, result);
+        _mm_storeu_si128(reinterpret_cast<__m128i*> (dst), result);//__builtin_ia32_storedqu(dst, result);
         int readSize = maskOutputSize[desc];
 
         if (PREDICT_TRUE( readSize >= 4)) {
-            v16qi shf2 = __builtin_ia32_lddqu(mask[desc] + 16);
-            v16qi result2 = __builtin_ia32_pshufb128(data, shf2);
-            __builtin_ia32_storedqu(dst + (16), result2);
+        	__m128i shf2 = _mm_lddqu_si128 (reinterpret_cast<__m128i const*> (mask[desc] + 16));//__builtin_ia32_lddqu(mask[desc] + 16);
+        	__m128i result2 = _mm_shuffle_epi8 (data, shf2);//__builtin_ia32_pshufb128(data, shf2);
+            _mm_storeu_si128(reinterpret_cast<__m128i *> (dst + (16)), result2);//__builtin_ia32_storedqu(dst + (16), result2);
         }
         // pop 8 input char
         src += 8;
