@@ -2,7 +2,11 @@
 .SUFFIXES:
 #
 .SUFFIXES: .cpp .o .c .h
-
+ifeq ($(INTEL), 1)
+# if you wish to use the Intel compiler, please do "make INTEL=1".
+    YOURCXX ?= /opt/intel/bin/icpc
+    CXXFLAGS = -std=c++0x -O3 -Wall -xSSSE3 -DNDEBUG=1  -ggdb
+else 
 # replace the YOURCXX variable with a path to a C++11 compatible compiler.
 YOURCXX ?= g++-4.7
 CXX := $(YOURCXX)
@@ -11,13 +15,17 @@ CXX := $(YOURCXX)
 CXXFLAGSEXTRA = -mssse3 # mssse3 necessary for varintg8iu and msse4.1 necessary for horizontal bit packing
 CXXFLAGS = $(CXXFLAGSEXTRA) -Wconversion  -std=c++0x -Weffc++ -pedantic -O3 -Wold-style-cast -Wall -Wextra -Wcast-align -Wunsafe-loop-optimizations -Wcast-qual
 #-ggdb
+endif
 CXX := $(YOURCXX)
 
 HEADERS = ./headers/simdfastpfor.h ./headers/simdbinarypacking.h ./headers/bitpackinghelpers.h ./headers/common.h ./headers/memutil.h ./headers/pfor.h ./headers/pfor2008.h ./headers/bitpackingunaligned.h ./headers/bitpackingaligned.h ./headers/blockpacking.h  ./headers/codecfactory.h ./headers/packingvectors.h ./headers/compositecodec.h ./headers/cpubenchmark.h  ./headers/maropuparser.h ./headers/bitpacking.h  ./headers/util.h ./headers/simple9.h ./headers/simple8b.h ./headers/simple16.h ./headers/optpfor.h ./headers/newpfor.h ./headers/vsencoding.h ./headers/mersenne.h  ./headers/ztimer.h ./headers/codecs.h ./headers/synthetic.h ./headers/fastpfor.h ./headers/variablebyte.h ./headers/stringutil.h ./headers/entropy.h ./headers/VarIntG8IU.h ./headers/deltautil.h 
 
 all: unit codecs inmemorybenchmark  
 
-allallall: unit codecs inmemorybenchmark entropy gapstats benchbitpacking partitionbylength codecssnappy csv2maropu inmemorybenchmarksnappy
+allallall: unit codecs inmemorybenchmark entropy gapstats benchbitpacking partitionbylength csv2maropu  
+
+#snappy requires that the snappy lib be installed!!!
+snap: codecssnappy inmemorybenchmarksnappy
 
 test: unit
 	./unit
