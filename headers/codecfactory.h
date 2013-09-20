@@ -29,10 +29,10 @@
 #include "snappydelta.h"
 
 using namespace std;
+typedef map<string, shared_ptr<IntegerCODEC> > CodecMap;
 
 class CODECFactory {
 public:
-	typedef map<string, shared_ptr<IntegerCODEC> > CodecMap;
 	static CodecMap scodecmap;
 
     // hacked for convenience
@@ -68,34 +68,48 @@ public:
 };
 
 
-
-map<string, shared_ptr<IntegerCODEC> > CODECFactory::scodecmap = {
-   {   "fastbinarypacking8", shared_ptr<IntegerCODEC> (new CompositeCodec<FastBinaryPacking<8> ,
-                VariableByte>)},
-    {   "fastbinarypacking16", shared_ptr<IntegerCODEC> (new CompositeCodec<FastBinaryPacking<16> ,
-                VariableByte>)},
-    {   "fastbinarypacking32", shared_ptr<IntegerCODEC> (new CompositeCodec<FastBinaryPacking<32> ,
-                VariableByte>)},
-    {   "BP32", shared_ptr<IntegerCODEC> (new CompositeCodec<BP32 ,
-                        VariableByte>)},
-    {   "vsencoding", shared_ptr<IntegerCODEC> (new vsencoding::VSEncodingBlocks(1U << 16))},
-    {  "fastpfor", shared_ptr<IntegerCODEC> (new CompositeCodec<FastPFor , VariableByte> ())},
-    {  "simdfastpfor", shared_ptr<IntegerCODEC> (new CompositeCodec<SIMDFastPFor , VariableByte> ())},
-    {  "simplepfor", shared_ptr<IntegerCODEC> (new CompositeCodec<SimplePFor<> , VariableByte> ())},
-    {   "pfor", shared_ptr<IntegerCODEC> (new CompositeCodec<PFor , VariableByte> ())},
-    {   "pfor2008", shared_ptr<IntegerCODEC> (new CompositeCodec<PFor2008 , VariableByte> ())},
-    {   "newpfor", shared_ptr<IntegerCODEC> (new CompositeCodec<NewPFor<4, Simple16<false>> , VariableByte> ())},
-    {   "optpfor", shared_ptr<IntegerCODEC> (new CompositeCodec<OPTPFor<4, Simple16<false> > , VariableByte> ())},
-    {   "vbyte", shared_ptr<IntegerCODEC> (new VariableByte())},
-    {   "simple8b", shared_ptr<IntegerCODEC> (new Simple8b<true> ())},
+// C++11 allows better than this, but neither Microsoft nor Intel support C++11 fully.
+static inline CodecMap initializefactory() {
+	CodecMap map;
+	map["fastbinarypacking8"] = shared_ptr<IntegerCODEC> (
+			new CompositeCodec<FastBinaryPacking<8> , VariableByte> );
+	map["fastbinarypacking16"] = shared_ptr<IntegerCODEC> (
+			new CompositeCodec<FastBinaryPacking<16> , VariableByte> );
+	map["fastbinarypacking32"] = shared_ptr<IntegerCODEC> (
+			new CompositeCodec<FastBinaryPacking<32> , VariableByte> );
+	map["BP32"] =  shared_ptr<IntegerCODEC> (new CompositeCodec<BP32 ,
+			VariableByte>);
+	map["vsencoding"] = shared_ptr<IntegerCODEC> (
+			new vsencoding::VSEncodingBlocks(1U << 16));
+	map["fastpfor"] = shared_ptr<IntegerCODEC> (
+			new CompositeCodec<FastPFor, VariableByte> ());
+	map["simdfastpfor"] = shared_ptr<IntegerCODEC> (
+			new CompositeCodec<SIMDFastPFor, VariableByte> ());
+	map["simplepfor"] = shared_ptr<IntegerCODEC> (
+			new CompositeCodec<SimplePFor<> , VariableByte> ());
+	map["pfor"] = shared_ptr<IntegerCODEC> (
+			new CompositeCodec<PFor, VariableByte> ());
+	map["pfor2008"] = shared_ptr<IntegerCODEC> (
+			new CompositeCodec<PFor2008, VariableByte> ());
+	map["newpfor"] = shared_ptr<IntegerCODEC> (
+			new CompositeCodec<NewPFor<4, Simple16<false>> , VariableByte> ());
+	map["optpfor"] = shared_ptr<IntegerCODEC> (
+			new CompositeCodec<OPTPFor<4, Simple16<false> > , VariableByte> ());
+	map["vbyte"] = shared_ptr<IntegerCODEC> (new VariableByte());
+	map["simple8b"] = shared_ptr<IntegerCODEC> (new Simple8b<true> ());
 #ifdef VARINTG8IU_H__
-    {   "varintg8iu", shared_ptr<IntegerCODEC> (new VarIntG8IU ())},
+	map["varintg8iu"] = shared_ptr<IntegerCODEC> (new VarIntG8IU ());
 #endif
 #ifdef USESNAPPY
-    {   "snappy", shared_ptr<IntegerCODEC> (new JustSnappy ())},
+	map["snappy"] = shared_ptr<IntegerCODEC> (new JustSnappy ());
 #endif
-    {  "simdbinarypacking", shared_ptr<IntegerCODEC>(new CompositeCodec<SIMDBinaryPacking,VariableByte>())},
-    {   "copy", shared_ptr<IntegerCODEC> (new JustCopy())}
-};
+	map["simdbinarypacking"] = shared_ptr<IntegerCODEC> (
+			new CompositeCodec<SIMDBinaryPacking, VariableByte> ());
+	map["copy"] = shared_ptr<IntegerCODEC> (new JustCopy());
+	return map;
+}
+
+
+CodecMap CODECFactory::scodecmap = initializefactory();
 
 #endif /* CODECFACTORY_H_ */

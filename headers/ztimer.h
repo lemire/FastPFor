@@ -17,43 +17,22 @@
     std::chrono::time_point<clock> t1, t2;
      WallClockTimer() :
          t1(), t2() {
-        t1 = std::chrono::high_resolution_clock::now();
+         t1 = std::chrono::high_resolution_clock::now();
          t2 = t1;
      }
      void reset() {
-        t1 = std::chrono::high_resolution_clock::now();
+         t1 = std::chrono::high_resolution_clock::now();
          t2 = t1;
      }
      uint64_t elapsed() {
-       std::chrono::microseconds delta = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
-        return delta.count();
+       std::chrono::nanoseconds delta = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1);
+       return delta.count();
      }
      uint64_t split() {
         t2 = std::chrono::high_resolution_clock::now();
          return elapsed();
      }
  };
-/*class WallClockTimer {
-public:
-    struct timeval t1, t2;
-    WallClockTimer() :
-        t1(), t2() {
-        gettimeofday(&t1, 0);
-        t2 = t1;
-    }
-    void reset() {
-        gettimeofday(&t1, 0);
-        t2 = t1;
-    }
-    uint64_t elapsed() {
-        return ((t2.tv_sec - t1.tv_sec) * 1000ULL * 1000ULL) + ((t2.tv_usec - t1. tv_usec));
-    }
-    uint64_t split() {
-        gettimeofday(&t2, 0);
-        return elapsed();
-    }
-};
-*/
 #ifndef _MSC_VER
 
 class CPUTimer {
