@@ -29,7 +29,13 @@ This code is licensed under Apache License, Version 2.0 (ASL2.0).
 
 This code requires a (recent as of 2012) compiler supporting C++11. This was
 a design decision.
-It builds under both clang++ 3.2 (LLVM 3.2), Intel icpc (ICC) 13.0.1 and GNU GCC 4.7.
+
+It builds under 
+
+*  clang++ 3.2 (LLVM 3.2) or better,
+*  Intel icpc (ICC) 13.0.1 or better
+* and GNU GCC 4.7 or better.
+
 The code was tested under Linux and MacOS.
 
 Other compilers (e.g., Microsoft) are NOT supported right now: please
@@ -70,7 +76,9 @@ e.g., under bash type
     export YOURCXX=g++-4.7
     make
 
-### Installing GCC 4.7 under Linux
+### Installing GCC 4.7 under Linux 
+
+We support CLANG and the Intel compiler, but a common default is GCC 4.7 or better.
 
 Under a recent version of Ubuntu (12.10), you can install
 GCC 4.7 by typing:
@@ -88,6 +96,9 @@ Mac Ports supports GCC 4.7. You can install it by typing:
 With minor changes, all schemes will compile fine under
 compilers that do not support C++11. And porting the code
 to C should not be a challenge.
+
+In any case, we already support 3 major C++ compilers so portability
+is not a major issue.
 
 ## What if I prefer Java?
 
