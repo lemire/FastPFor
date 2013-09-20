@@ -17,8 +17,12 @@
  */
 #ifndef __SSSE3__
 #ifndef _MSC_VER
+#ifndef __INTEL_COMPILER
  #pragma message "Disabling varintg8iu due to lack of SSSE3 support, try adding -mssse3"
- #else
+#else
+#pragma message "D. Lemire could not get this implementation of varintg8iu to compile under the Intel compiler. Please help."
+#endif
+#else
 #pragma message("Disabling varintg8iu due to lack of SSSE3 support")
 #endif
 #else
