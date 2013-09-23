@@ -279,14 +279,10 @@ public:
          const __m128i* pEnd = pCurr + Qty4;
          while (pCurr < pEnd) {
              __m128i a0 = _mm_load_si128(pCurr);
-             __m128i a1 = _mm_slli_si128(a0, 4);
-             __m128i a2 = _mm_slli_si128(a1, 4);
-             __m128i a3 = _mm_slli_si128(a2, 4);
-             a0 = _mm_add_epi32(_mm_add_epi32(a3, runningCount),
-                                _mm_add_epi32(a2, _mm_add_epi32(a1, a0)));
-
+             __m128i a1 = _mm_add_epi32(_mm_slli_si128(a0, 8),a0);
+             __m128i a2 = _mm_add_epi32(_mm_slli_si128(a1, 4),a1);
+             a0 = _mm_add_epi32(a2,runningCount);
              runningCount = _mm_shuffle_epi32(a0, 0xFF);
-            
              _mm_store_si128(pCurr++ , a0);
          }
 
@@ -471,28 +467,28 @@ public:
                 i->output += totalcompressed;
                 i->input += totallength;
             } else {
-                i->compspeed.push_back(totallength * 1.0 / timemscomp);
-                i->decompspeed.push_back(totallength * 1.0 / timemsdecomp);
+                i->compspeed.push_back(static_cast<double>(totallength) / static_cast<double>(timemscomp));
+                i->decompspeed.push_back(static_cast<double>(totallength) / static_cast<double>(timemsdecomp));
                 if (pp.separatetimes) {
-                    i->deltaspeed.push_back(totallength * 1.0 / timemsdelta);
-                    i->inversedeltaspeed.push_back(totallength * 1.0 / timemsinversedelta);
+                    i->deltaspeed.push_back(static_cast<double>(totallength) / static_cast<double>(timemsdelta));
+                    i->inversedeltaspeed.push_back(static_cast<double>(totallength) / static_cast<double>(timemsinversedelta));
                 }
-                i->bitsperint.push_back(totalcompressed * 32.0 / totallength);
+                i->bitsperint.push_back(static_cast<double>(totalcompressed) * 32.0 / static_cast<double>(totallength));
             }
             if (pp.fulldisplay) {
                 if (pp.separatetimes) {
-                    cout << std::setprecision(4) << totallength * 1.0 / timemsdelta
+                    cout << std::setprecision(4) << static_cast<double>(totallength) / static_cast<double>(timemsdelta)
                          << "\t";
                 }
-                cout << std::setprecision(4) << totallength * 1.0 / timemscomp
+                cout << std::setprecision(4) << static_cast<double>(totallength) / static_cast<double>(timemscomp)
                      << "\t";
-                cout << std::setprecision(4) << totallength * 1.0 / timemsdecomp
+                cout << std::setprecision(4) << static_cast<double>(totallength) / static_cast<double>(timemsdecomp)
                      << "\t";
                 if (pp.separatetimes) {
-                    cout << std::setprecision(4) << totallength * 1.0 / timemsinversedelta
+                    cout << std::setprecision(4) << static_cast<double>(totallength) / static_cast<double>(timemsinversedelta)
                          << "\t";
                 }
-                cout << std::setprecision(4) << totalcompressed * 32.0 / totallength
+                cout << std::setprecision(4) << static_cast<double>(totalcompressed) * 32.0 / static_cast<double>(totallength)
                      << "\t";
                 cout << "\t";
             }
