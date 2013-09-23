@@ -25,13 +25,14 @@
 #pragma GCC optimize("unroll-loops")  // use cmd-line --param max-unroll-times=32?
 #endif
 
+
 // crazy function that basically just does
 // x -> x % (1U<<bit)
 // should be nearly optimized away by the compiler.
-template<uint32_t bit, bool mask = true>
+template<uint32_t bit, bool mask>
 constexpr uint32_t __bitmask(uint32_t val) {
     return
-    ((mask == false) or (bit == 32)) ?
+    ((mask == false) || (bit == 32)) ?
     val :
     (bit == 0 ? 0 : val & ((1U << (bit>=31?31:bit))-1)); // trust compiler to optimize away the modulo
 }
@@ -39,7 +40,7 @@ constexpr uint32_t __bitmask(uint32_t val) {
 /**
  * This code does not assume that the output has been zeroed.
  */
-template<uint32_t bit, bool mask = true>
+template<uint32_t bit, bool mask>
 void __pack(const uint32_t * __restrict__ in, uint32_t * __restrict__ out) {
     uint32_t inwordpointer = 0; // indicates where we are reading
     // k iterates over the output
@@ -78,7 +79,7 @@ void __pack(const uint32_t * __restrict__ in, uint32_t * __restrict__ out) {
 /**
  * Alternative to __pack
  */
-template<uint32_t bit, bool mask = true>
+template<uint32_t bit, bool mask>
 void __pack_tight(const uint32_t * __restrict__ in, uint32_t * __restrict__ out) {
     assert(bit <= 32);
     if (bit == 32) {
@@ -143,7 +144,7 @@ void __pack_tight(const uint32_t * __restrict__ in, uint32_t * __restrict__ out)
 /**
  * Alternative to __unpack
  */
-template<uint32_t bit, bool mask = true>
+template<uint32_t bit, bool mask>
 void __unpack_tight(const uint32_t * __restrict__ in,
         uint32_t * __restrict__ out) {
     assert(bit <= 32);
@@ -252,7 +253,7 @@ uint8_t * __pack_vl(const uint32_t * __restrict__ in,
 /**
  * variable length
  */
-template<uint32_t bit, uint32_t length, bool mask = true>
+template<uint32_t bit, uint32_t length, bool mask>
 const uint8_t * __unpack_vl(const uint8_t * __restrict__ inbyte,
         uint32_t * __restrict__ out) {
     assert(bit <= 32);
@@ -302,13 +303,13 @@ void __unpack(const uint32_t * __restrict__ in, uint32_t * __restrict__ out) {
         for (uint32_t i = 0; i < 1 + 32 / bit; ++i) {
             if (inwordpointer > 32 - bit)
                 break;
-            *out++ = __bitmask<bit> ((*in) >> inwordpointer);
+            *out++ = __bitmask<bit,true> ((*in) >> inwordpointer);
             inwordpointer += bit;
         }
         // end ofk grunge
 
         if (inwordpointer < 32) {
-            *out++ = (in[0] >> inwordpointer) | __bitmask<bit> (
+            *out++ = (in[0] >> inwordpointer) | __bitmask<bit,true> (
                     in[1] << (32 - inwordpointer));
             inwordpointer += bit - 32;
         } else
@@ -654,100 +655,100 @@ void unpack_tight(const uint32_t * __restrict__ in,
             out[k] = 0;
         break;
     case 1:
-        __unpack_tight<1> (in, out);
+        __unpack_tight<1,true> (in, out);
         break;
     case 2:
-        __unpack_tight<2> (in, out);
+        __unpack_tight<2,true> (in, out);
         break;
     case 3:
-        __unpack_tight<3> (in, out);
+        __unpack_tight<3,true> (in, out);
         break;
     case 4:
-        __unpack_tight<4> (in, out);
+        __unpack_tight<4,true> (in, out);
         break;
     case 5:
-        __unpack_tight<5> (in, out);
+        __unpack_tight<5,true> (in, out);
         break;
     case 6:
-        __unpack_tight<6> (in, out);
+        __unpack_tight<6,true> (in, out);
         break;
     case 7:
-        __unpack_tight<7> (in, out);
+        __unpack_tight<7,true> (in, out);
         break;
     case 8:
-        __unpack_tight<8> (in, out);
+        __unpack_tight<8,true> (in, out);
         break;
     case 9:
-        __unpack_tight<9> (in, out);
+        __unpack_tight<9,true> (in, out);
         break;
     case 10:
-        __unpack_tight<10> (in, out);
+        __unpack_tight<10,true> (in, out);
         break;
     case 11:
-        __unpack_tight<11> (in, out);
+        __unpack_tight<11,true> (in, out);
         break;
     case 12:
-        __unpack_tight<12> (in, out);
+        __unpack_tight<12,true> (in, out);
         break;
     case 13:
-        __unpack_tight<13> (in, out);
+        __unpack_tight<13,true> (in, out);
         break;
     case 14:
-        __unpack_tight<14> (in, out);
+        __unpack_tight<14,true> (in, out);
         break;
     case 15:
-        __unpack_tight<15> (in, out);
+        __unpack_tight<15,true> (in, out);
         break;
     case 16:
-        __unpack_tight<16> (in, out);
+        __unpack_tight<16,true> (in, out);
         break;
     case 17:
-        __unpack_tight<17> (in, out);
+        __unpack_tight<17,true> (in, out);
         break;
     case 18:
-        __unpack_tight<18> (in, out);
+        __unpack_tight<18,true> (in, out);
         break;
     case 19:
-        __unpack_tight<19> (in, out);
+        __unpack_tight<19,true> (in, out);
         break;
     case 20:
-        __unpack_tight<20> (in, out);
+        __unpack_tight<20,true> (in, out);
         break;
     case 21:
-        __unpack_tight<21> (in, out);
+        __unpack_tight<21,true> (in, out);
         break;
     case 22:
-        __unpack_tight<22> (in, out);
+        __unpack_tight<22,true> (in, out);
         break;
     case 23:
-        __unpack_tight<23> (in, out);
+        __unpack_tight<23,true> (in, out);
         break;
     case 24:
-        __unpack_tight<24> (in, out);
+        __unpack_tight<24,true> (in, out);
         break;
     case 25:
-        __unpack_tight<25> (in, out);
+        __unpack_tight<25,true> (in, out);
         break;
     case 26:
-        __unpack_tight<26> (in, out);
+        __unpack_tight<26,true> (in, out);
         break;
     case 27:
-        __unpack_tight<27> (in, out);
+        __unpack_tight<27,true> (in, out);
         break;
     case 28:
-        __unpack_tight<28> (in, out);
+        __unpack_tight<28,true> (in, out);
         break;
     case 29:
-        __unpack_tight<29> (in, out);
+        __unpack_tight<29,true> (in, out);
         break;
     case 30:
-        __unpack_tight<30> (in, out);
+        __unpack_tight<30,true> (in, out);
         break;
     case 31:
-        __unpack_tight<31> (in, out);
+        __unpack_tight<31,true> (in, out);
         break;
     case 32:
-        __unpack_tight<32> (in, out);
+        __unpack_tight<32,true> (in, out);
         break;
     default:
         throw runtime_error("Unsupported number of bits");

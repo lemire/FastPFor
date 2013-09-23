@@ -14,12 +14,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef _MSC_VER
+#ifndef _WIN32
 #include <sys/mman.h>
 #include <sys/resource.h>
 #endif
 #include <sys/stat.h>
-#ifndef _MSC_VER
+#ifndef _WIN32
 #include <sys/time.h>
 #endif
 #include <sys/types.h>

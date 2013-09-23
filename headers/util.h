@@ -97,25 +97,26 @@ const T * padTo64bytes(const T * inbyte) {
 template <class T>
 __attribute__ ((const))
 bool needPaddingTo32Bits(const T * inbyte) {
-    return reinterpret_cast<uintptr_t> (inbyte) & 3;
+    return (reinterpret_cast<uintptr_t> (inbyte) & 3) != 0;
 }
 
 template <class T>
 __attribute__ ((const))
 bool needPaddingTo64Bits(const T * inbyte) {
-    return reinterpret_cast<uintptr_t> (inbyte) & 7;
+    return (reinterpret_cast<uintptr_t> (inbyte) & 7) != 0;
 }
 
 template <class T>
 __attribute__ ((const))
 bool needPaddingTo128Bits(const T * inbyte) {
-    return reinterpret_cast<uintptr_t> (inbyte) & 15;
+    return (reinterpret_cast<uintptr_t> (inbyte) & 15) != 0;
 }
 
 template <class T>
 bool  needPaddingTo64bytes(const T * inbyte) {
-    return reinterpret_cast<uintptr_t> (inbyte) & 63;
+    return (reinterpret_cast<uintptr_t> (inbyte) & 63) != 0;
 }
+
 __attribute__ ((const))
 inline uint32_t gccbits(const uint32_t v) {
 #ifdef _MSC_VER
@@ -153,7 +154,7 @@ container diffs(const container & in, const bool aredistinct) {
     return out;
 }
 
-void checkifdivisibleby(size_t a, uint32_t x) {
+inline void checkifdivisibleby(size_t a, uint32_t x) {
     if (!divisibleby(a, x)) {
         ostringstream convert;
         convert << a << " not divisible by " << x;
@@ -171,7 +172,7 @@ void printme(iter i, iter b) {
 __attribute__ ((const))
 inline uint32_t asmbits(const uint32_t v) {
 #ifdef _MSC_VER
-	    return gccbits(v);
+    return gccbits(v);
 #else
     if (v == 0)
         return 0;
@@ -217,6 +218,7 @@ inline uint32_t bits(uint32_t v) {
     return r;
 }
 
+#ifndef _MSC_VER
 __attribute__ ((const))
 constexpr uint32_t constexprbits(uint32_t v) {
     return v >= (1U << 15) ? 16 + constexprbits(v>>16) :
@@ -226,7 +228,23 @@ constexpr uint32_t constexprbits(uint32_t v) {
                                     (v >= (1U << 0)) ? 1 + constexprbits(v>>1) :
                                             0;
 }
+#else
 
+template <int N>
+struct exprbits
+{
+    enum { value = 1 + exprbits<(N >> 1)>::value };
+};
+
+template <>
+struct exprbits<0>
+{
+    enum { value = 0 };
+};
+
+#define constexprbits(n) exprbits<n>::value
+
+#endif
 
 constexpr uint32_t div_roundup(uint32_t v, uint32_t divisor) {
     return (v + (divisor - 1)) / divisor;

@@ -99,7 +99,7 @@ public:
         const uint32_t range = Max - Min;
         if(range < N) throw runtime_error("can't generate that many in small interval.");
         assert(range >= N);
-        if ((range == N) or (N < 10)) {
+        if ((range == N) || (N < 10)) {
             fillUniform(begin, end, Min, Max);
             return;
         }
@@ -163,7 +163,7 @@ public:
     }
 
     ZipfianGenerator(int _items, double _zipfianconstant,
-            uint32_t seed = time(NULL)) :
+            uint32_t seed = static_cast<uint32_t>(time(NULL))) :
         n(_items), zetan(0), theta(_zipfianconstant), proba(n), rand(seed) {
         init(_items, _zipfianconstant);
     }

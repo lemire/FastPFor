@@ -114,7 +114,7 @@ public:
                 return false;
         }
         len -= min2;
-        const uint32_t min3 = (len < num3) ? static_cast<uint32_t>(len) : num3;
+        const uint32_t min3 = static_cast<uint32_t>((len < num3) ? len : num3);
         for (uint32_t i = min1 + min2; i < min1 + min2 + min3; i++) {
             if ((n[i]) >= (1U << log3))
                 return false;

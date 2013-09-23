@@ -187,7 +187,7 @@ public:
         *(out++) = bitmap;
         for (uint32_t k = 1; k <= 32; ++k) {
             if (datatobepacked[k].size() > 0)
-                out = packmeupwithoutmask(datatobepacked[k], out, k);
+                out = packingvector<32>::packmeupwithoutmask(datatobepacked[k], out, k);
         }
         nvalue = out - initout;
     }
@@ -204,7 +204,7 @@ public:
         const uint32_t bitmap = *(inexcept++);
         for (uint32_t k = 1; k <= 32; ++k) {
             if ((bitmap & (1U << (k - 1))) != 0) {
-                inexcept = unpackme(inexcept, datatobepacked[k], k);
+                inexcept = packingvector<32>::unpackme(inexcept, datatobepacked[k], k);
             }
         }
         length = inexcept - initin;
