@@ -11,29 +11,29 @@
 /**
  *  author: Preston Bannister
  */
- class WallClockTimer {
- public:
+class WallClockTimer {
+public:
     typedef std::chrono::high_resolution_clock clock;
     std::chrono::time_point<clock> t1, t2;
-     WallClockTimer() :
-         t1(), t2() {
-         t1 = std::chrono::high_resolution_clock::now();
-         t2 = t1;
-     }
-     void reset() {
-         t1 = std::chrono::high_resolution_clock::now();
-         t2 = t1;
-     }
-     uint64_t elapsed() {
-       std::chrono::microseconds delta = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
-       return delta.count();
-     }
-     uint64_t split() {
+    WallClockTimer() :
+        t1(), t2() {
+        t1 = std::chrono::high_resolution_clock::now();
+        t2 = t1;
+    }
+    void reset() {
+        t1 = std::chrono::high_resolution_clock::now();
+        t2 = t1;
+    }
+    uint64_t elapsed() {
+    	std::chrono::microseconds delta = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
+        return delta.count();
+    }
+    uint64_t split() {
         t2 = std::chrono::high_resolution_clock::now();
-         return elapsed();
-     }
- };
-#ifndef _MSC_VER
+        return elapsed();
+    }
+};
+#ifndef _WIN32
 
 class CPUTimer {
 public:
@@ -76,5 +76,6 @@ public:
     }
 };
 #endif
+
 #endif
 

@@ -19,8 +19,10 @@
 struct algostats {
 
     algostats(shared_ptr<IntegerCODEC> & a, bool simd = false) :
-        compspeed(), decompspeed(), bitsperint(), algo(a), decomptime(),
-                comptime(), output(), input(), SIMDDeltas(simd) {
+        algo(a), 
+        deltaspeed(), compspeed(), decompspeed(), inversedeltaspeed(), bitsperint(), 
+        deltatime(0), comptime(0), decomptime(0), inversedeltatime(0), output(), input(), 
+        SIMDDeltas(simd) {
     }
     string name() {
         // if SIMDDeltas is "true", we prepend @
@@ -37,13 +39,22 @@ struct algostats {
         n.resize(k, space);
         return n;
     }
-    vector<double> compspeed;
-    vector<double> decompspeed;
-    vector<double> bitsperint;
+
     shared_ptr<IntegerCODEC> algo;
 
-    // maps from name to results
-    double decomptime, comptime, output, input;
+    vector<double> deltaspeed;
+    vector<double> compspeed;
+    vector<double> decompspeed;
+    vector<double> inversedeltaspeed;
+    vector<double> bitsperint;
+
+    double deltatime;
+    double comptime;
+    double decomptime;
+    double inversedeltatime;
+    uint64_t output;
+    uint64_t input;
+
     bool SIMDDeltas;
 };
 void summarize(vector<algostats> & v, string prefix = "#") {
@@ -55,22 +66,48 @@ void summarize(vector<algostats> & v, string prefix = "#") {
         cout << "###################" << endl;
         if (N > 1)
             cout << "#test " << (k + 1) << " of " << N << endl;
-        cout << "#wall clock (comp mis, decomp mis, bits per int)" << endl;
+        cout << "#wall clock (delta mis, comp mis, decomp mis, idelta mis, bits per int)" << endl;
         cout << "#" << endl;
         for (auto i = v.begin(); i != v.end(); ++i) {
-            cout << prefix << std::setprecision(4) << i->name(40) << " \t "
-                    << i->compspeed.at(k) << " \t " << i->decompspeed.at(k)
-                    << " \t " << i->bitsperint.at(k) << endl;
+            cout << prefix << std::setprecision(4) << i->name(40)
+                 << " \t " << i->deltaspeed.at(k)
+                 << " \t " << i->compspeed.at(k)
+                 << " \t " << i->decompspeed.at(k)
+                 << " \t " << i->inversedeltaspeed.at(k)
+                 << " \t " << i->bitsperint.at(k)
+                 << endl;
         }
         cout << prefix << endl << prefix << endl;
     }
-for(algostats a : v) {
-    if( (a.comptime != 0) && (a.decomptime !=0) && (a.input != 0)) {
-        cout << " " << std::setprecision(4) << a.name(40) << " \t "
-        << a.input / a.comptime << " \t " << a.input / a.decomptime << " \t "
-        << a.output * 32 / a.input << endl;
+    for(algostats a : v) {
+        double deltaTime = a.deltatime + a.inversedeltatime;
+        double totTime = deltaTime + a.comptime + a.decomptime;
+        if (totTime > 0 && a.input > 0) {
+            cout << " " << std::setprecision(4) << a.name(40);
+            double input = static_cast<double>(a.input);
+            if (deltaTime > 0) {
+                cout << input / a.deltatime << " \t "
+                     << input / a.comptime << " \t "
+                     << input / a.decomptime << " \t "
+                     << input / a.inversedeltatime << " \t "
+                     << static_cast<double>(a.output) * 32.0 / input << " \t\t"
+                     << "TotalTimes (ms):  "
+                     << static_cast<size_t>(a.deltatime / 1000) << " \t "
+                     << static_cast<size_t>(a.comptime / 1000) << " \t "
+                     << static_cast<size_t>(a.decomptime / 1000) << " \t "
+                     << static_cast<size_t>(a.inversedeltatime / 1000)
+                     << endl;
+            } else {
+                cout << input / a.comptime << " \t "
+                     << input / a.decomptime << " \t "
+                     << static_cast<double>(a.output) * 32.0 / input << " \t\t"
+                     << "TotalTimes (ms):  "
+                     << static_cast<size_t>(a.comptime / 1000) << " \t "
+                     << static_cast<size_t>(a.decomptime / 1000)
+                     << endl;
+            }
+        }
     }
-}
 }
 
 /**
@@ -111,11 +148,12 @@ struct processparameters {
     bool displayhistogram;
     bool computeentropy;
     bool cumulative;
+    bool separatetimes;
 
     processparameters(bool ndelta, bool fdisplay, bool dhisto,
-            bool compentropy, bool cumul) :
+            bool compentropy, bool cumul, bool separate = false) :
         needtodelta(ndelta), fulldisplay(fdisplay), displayhistogram(dhisto),
-                computeentropy(compentropy), cumulative(cumul) {
+                computeentropy(compentropy), cumulative(cumul), separatetimes(separate) {
     }
 };
 /**
@@ -126,20 +164,6 @@ struct processparameters {
  */
 class Delta {
 public:
-
-    /**
-     * This modifies the input.
-     */
-    static void encode(IntegerCODEC & c, bool SIMDmode, uint32_t *in,
-            const size_t length, uint32_t * out, size_t &nvalue) {
-        assert(!needPaddingTo128Bits(in));
-        if (SIMDmode)
-            deltaSIMD(in, length);
-        else
-            delta(in, length);
-        assert(!needPaddingTo128Bits(out));
-        c.encodeArray(in, length , out , nvalue);
-    }
 
     //  by D. Lemire
     template<class T>
@@ -242,19 +266,34 @@ public:
         }
     }
 
-    static const uint32_t * decode(IntegerCODEC & c, const bool SIMDmode, const uint32_t *in,
-            const size_t length, uint32_t *out, size_t & nvalue) {
-        assert(!needPaddingTo128Bits(in));
-        assert(!needPaddingTo128Bits(out));
-        const uint32_t * finalin = c.decodeArray(in , length , out,
-                nvalue);
-        if(SIMDmode)
-            inverseDeltaSIMD(out, nvalue);
-        else
-            fastinverseDelta(out, nvalue);
-        return finalin;
-    }
+    template<class T>
+    static void fastinverseDelta2(T * pData, const size_t TotalQty) {
+         if (TotalQty < 5) {
+             inverseDelta(pData, TotalQty);// no SIMD
+             return;
+         }
+         const size_t Qty4 = TotalQty / 4;
 
+         __m128i runningCount = _mm_setzero_si128();
+         __m128i* pCurr = reinterpret_cast<__m128i*>(pData);
+         const __m128i* pEnd = pCurr + Qty4;
+         while (pCurr < pEnd) {
+             __m128i a0 = _mm_load_si128(pCurr);
+             __m128i a1 = _mm_slli_si128(a0, 4);
+             __m128i a2 = _mm_slli_si128(a1, 4);
+             __m128i a3 = _mm_slli_si128(a2, 4);
+             a0 = _mm_add_epi32(_mm_add_epi32(a3, runningCount),
+                                _mm_add_epi32(a2, _mm_add_epi32(a1, a0)));
+
+             runningCount = _mm_shuffle_epi32(a0, 0xFF);
+            
+             _mm_store_si128(pCurr++ , a0);
+         }
+
+         for (size_t i = Qty4 * 4; i < TotalQty; ++i) {
+             pData[i] += pData[i-1];
+         }
+    }
 
     // a convenience function
     template <class container>
@@ -355,47 +394,61 @@ public:
             size_t totalcompressed = 0;
             double timemsdecomp = 0;
             double timemscomp = 0;
+            double timemsdelta = 0;
+            double timemsinversedelta = 0;
             for (size_t k = 0; k < datas.size(); ++k) {
                 if(datas[k].empty()) continue;
                 uint32_t * outp = &outs[k][0];
                 nvalue = outs[k].size();
                 assert(!needPaddingTo128Bits(outp));
-                uint64_t elapsedcomp = 0;
                 const size_t orignvalue = nvalue;
                 {
                     nvalue = orignvalue;
                     backupdata.assign(datas[k].begin(),datas[k].end()); // making a copy to be safe
-                    z.reset();
+
                     if (pp.needtodelta) {
-                        encode(c,SIMDDeltas,&backupdata[0],backupdata.size(),outp,nvalue);
-                    } else {
-                        c.encodeArray(&backupdata[0], backupdata.size(), outp, nvalue);
+                        z.reset();
+                        if (SIMDDeltas) {
+                            deltaSIMD(&backupdata[0],backupdata.size());
+                        } else {
+                            delta(&backupdata[0],backupdata.size());
+                        }
+                        timemsdelta += static_cast<double>(z.split());
                     }
-                    elapsedcomp += z.split();
+
+                    z.reset();
+                    c.encodeArray(backupdata.data(), backupdata.size(), outp, nvalue);
                     nvalues[k] = nvalue;
+                    timemscomp += static_cast<double>(z.split());
                 }
-                timemscomp += static_cast<double>(elapsedcomp);
+                
                 totalcompressed += nvalue;
             }
             for (size_t k = 0; k < datas.size(); ++k) {
-                const uint32_t * outp = &outs[k][0];
+                const uint32_t * outp = outs[k].data();
                 nvalue = nvalues[k];
                 size_t recoveredsize = datas[k].size();
                 assert(recoveredsize > 0);
-                uint32_t * recov = &recovereds[0];
+                uint32_t * recov = recovereds.data();
                 assert(!needPaddingTo128Bits(recov));
+
                 z.reset();
-                {
-                  if  (pp.needtodelta) {
-                        decode(c,SIMDDeltas,outp,nvalue,recov,recoveredsize);
-                   } else {
-                        c.decodeArray(outp, nvalue,
-                                recov, recoveredsize);
-                  }
+                c.decodeArray(outp, nvalue, recov, recoveredsize);
+                timemsdecomp += static_cast<double>(z.split());
+
+                if (pp.needtodelta) {
+                    z.reset();
+                    if (SIMDDeltas) {
+                        inverseDeltaSIMD(recov, recoveredsize);
+                    } else {
+                        fastinverseDelta2(recov, recoveredsize);
+                        //fastinverseDelta(recov, recoveredsize);
+                        //inverseDelta(recov, recoveredsize);
+                    }
+                    timemsinversedelta += static_cast<double>(z.split());
                 }
-                const uint64_t elapseddecomp = z.split();
-                timemsdecomp += static_cast<double>(elapseddecomp);
-                if(recoveredsize!= datas[k].size()) {
+
+                if (recoveredsize != datas[k].size()) {
                     cerr<<" expected size of "<<datas[k].size()<<" got "<<recoveredsize<<endl;
                     throw logic_error("arrays don't have same size: bug.");
                 }
@@ -404,33 +457,48 @@ public:
                 }
 
             }
-            if(pp.cumulative)
+            if (!pp.separatetimes) {
+                timemscomp += timemsdelta;
+                timemsdecomp += timemsinversedelta;
+            }
+            if (pp.cumulative) {
                 i->comptime += timemscomp;
-            else
-                i->compspeed.push_back(static_cast<double>(totallength)  / timemscomp);
-            if (pp.fulldisplay)
-                cout << std::setprecision(4) << static_cast<double>(totallength) / timemscomp
-                        << "\t";
-            if(pp.cumulative)
                 i->decomptime += timemsdecomp;
-            else
-                i->decompspeed.push_back(static_cast<double>(totallength) / timemsdecomp);
-            if (pp.fulldisplay)
-                cout << std::setprecision(4) << static_cast<double>(totallength) / timemsdecomp
-                        << "\t";
-            if (pp.fulldisplay)cout << std::setprecision(4) << static_cast<double>(totalcompressed) * 32.0 / static_cast<double>(totallength)
-                    << "\t";
-            if(pp.cumulative) {
-                i->output += static_cast<double>(totalcompressed);
-                i->input += static_cast<double>(totallength);
-            } else
-                i->bitsperint.push_back(static_cast<double>(totalcompressed) * 32.0 / static_cast<double>(totallength));
-            if (pp.fulldisplay) cout << "\t";
+                if (pp.separatetimes) {
+                    i->deltatime += timemsdelta;
+                    i->inversedeltatime += timemsinversedelta;
+                }
+                i->output += totalcompressed;
+                i->input += totallength;
+            } else {
+                i->compspeed.push_back(totallength * 1.0 / timemscomp);
+                i->decompspeed.push_back(totallength * 1.0 / timemsdecomp);
+                if (pp.separatetimes) {
+                    i->deltaspeed.push_back(totallength * 1.0 / timemsdelta);
+                    i->inversedeltaspeed.push_back(totallength * 1.0 / timemsinversedelta);
+                }
+                i->bitsperint.push_back(totalcompressed * 32.0 / totallength);
+            }
+            if (pp.fulldisplay) {
+                if (pp.separatetimes) {
+                    cout << std::setprecision(4) << totallength * 1.0 / timemsdelta
+                         << "\t";
+                }
+                cout << std::setprecision(4) << totallength * 1.0 / timemscomp
+                     << "\t";
+                cout << std::setprecision(4) << totallength * 1.0 / timemsdecomp
+                     << "\t";
+                if (pp.separatetimes) {
+                    cout << std::setprecision(4) << totallength * 1.0 / timemsinversedelta
+                         << "\t";
+                }
+                cout << std::setprecision(4) << totalcompressed * 32.0 / totallength
+                     << "\t";
+                cout << "\t";
+            }
         }
         if (pp.fulldisplay) cout << endl;
     }
-
-
 };
 
 #endif /* DELTAUTIL_H_ */
