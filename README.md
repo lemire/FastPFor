@@ -34,18 +34,11 @@ It builds under
 
 *  clang++ 3.2 (LLVM 3.2) or better,
 *  Intel icpc (ICC) 13.0.1 or better,
+*  MinGW32 (x64-4.8.1-posix-seh-rev5)
 *  Microsoft VS 2012 or better,
 * and GNU GCC 4.7 or better.
 
 The code was tested under Windows, Linux and MacOS.
-
-Other compilers (e.g., Microsoft) are NOT supported right now: please
-help us make the code more portable.
-
-The code have been successfully compiled at one time under theses compilers
-
-*  MinGW32 (x64-4.8.1-posix-seh-rev5)
-*  VS2012
 
 ## Hardware Requirements
 
