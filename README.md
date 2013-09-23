@@ -33,10 +33,11 @@ a design decision.
 It builds under 
 
 *  clang++ 3.2 (LLVM 3.2) or better,
-*  Intel icpc (ICC) 13.0.1 or better
+*  Intel icpc (ICC) 13.0.1 or better,
+*  Microsoft VS 2012 or better,
 * and GNU GCC 4.7 or better.
 
-The code was tested under Linux and MacOS.
+The code was tested under Windows, Linux and MacOS.
 
 Other compilers (e.g., Microsoft) are NOT supported right now: please
 help us make the code more portable.
@@ -78,7 +79,7 @@ e.g., under bash type
 
 ### Installing GCC 4.7 under Linux 
 
-We support CLANG and the Intel compiler, but a common default is GCC 4.7 or better.
+We support clang, Visual Studio and the Intel compiler, but a common default is GCC 4.7 or better.
 
 Under a recent version of Ubuntu (12.10), you can install
 GCC 4.7 by typing:
