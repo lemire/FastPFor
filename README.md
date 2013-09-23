@@ -41,6 +41,11 @@ The code was tested under Linux and MacOS.
 Other compilers (e.g., Microsoft) are NOT supported right now: please
 help us make the code more portable.
 
+The code have been successfully compiled at one time under theses compilers
+
+*  MinGW32 (x64-4.8.1-posix-seh-rev5)
+*  VS2012
+
 ## Hardware Requirements
 
 To fully use the library, your processor should support SSSE3. This includes almost every Intel or AMD processor
@@ -76,7 +81,7 @@ e.g., under bash type
     export YOURCXX=g++-4.7
     make
 
-### Installing GCC 4.7 under Linux 
+### Installing GCC 4.7 under Linux
 
 We support CLANG and the Intel compiler, but a common default is GCC 4.7 or better.
 
