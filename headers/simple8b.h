@@ -85,8 +85,8 @@ public:
     template<uint32_t num1, uint32_t log1>
     static void unpack(uint32_t *&out, const uint64_t *&in) {
         if (log1 < 32) {
-            constexpr uint32_t actuallog1 = log1 < 32 ? log1 : 31;// bogus to silence compiler warnings
-            constexpr uint32_t mask = ((static_cast<uint32_t> (1) << actuallog1) - 1);
+            const uint32_t actuallog1 = log1 < 32 ? log1 : 31;// bogus to silence compiler warnings
+            const uint32_t mask = ((static_cast<uint32_t> (1) << actuallog1) - 1);
             for (uint32_t k = 0; k < num1; ++k) {
                 *(out++) = static_cast<uint32_t> (in[0] >> (64
                         - SIMPLE8B_LOGDESC - log1 - k * log1)) & mask;
@@ -103,8 +103,8 @@ public:
     static void carefulunpack(uint32_t num1, uint32_t *&out,
             const uint64_t *&in) {
         if (log1 < 32) {
-            constexpr uint32_t actuallog1 = log1 < 32 ? log1 : 31;// bogus to silence compiler warnings
-            constexpr uint32_t mask = ((static_cast<uint32_t> (1) << actuallog1) - 1);
+            const uint32_t actuallog1 = log1 < 32 ? log1 : 31;// bogus to silence compiler warnings
+            const uint32_t mask = ((static_cast<uint32_t> (1) << actuallog1) - 1);
             for (uint32_t k = 0; k < num1; ++k) {
                 *(out++) = static_cast<uint32_t> (in[0] >> (64
                         - SIMPLE8B_LOGDESC - log1 - k * log1)) & mask;

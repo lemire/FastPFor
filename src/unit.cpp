@@ -77,7 +77,7 @@ int main() {
             }
         }
 
-        for (size_t length = 0; length < (1U << 9); ++length) {
+        for (size_t length = 0; length < (1U << 8); ++length) {
             vector<uint32_t, cacheallocator> data(length);
             data.reserve(length + 1024);
             for (size_t i = 0; i < data.size(); ++i) {
@@ -95,7 +95,7 @@ int main() {
                       //  reinterpret_cast<uint32_t *> (padTo64bytes(
                         //        reinterpret_cast<uint8_t *> (&out[0]))); // ofk
                 assert(!needPaddingTo64bytes(aligned_out));
-                c.encodeArray(&data[0], data.size(), aligned_out, nvalue);
+                c.encodeArray(data.data(), data.size(), aligned_out, nvalue);
                 out.resize(nvalue);
                 vector<uint32_t, cacheallocator> recover(data.size() + 1024);
                 //if(c.name() != "VSEncoding")
