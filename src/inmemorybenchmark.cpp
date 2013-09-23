@@ -19,7 +19,13 @@
 using namespace std;
 
 static struct option long_options[] = {
-        { "codecs", required_argument, 0, 'c' },{ "minlength", required_argument, 0, 'm' },{ "maxlength", required_argument, 0, 'M' }, { "splitlongarrays", no_argument, 0, 'S' },{ 0, 0, 0, 0 } };
+        { "codecs", required_argument, 0, 'c' },
+        { "minlength", required_argument, 0, 'm' },
+        { "maxlength", required_argument, 0, 'M' }, 
+        { "nb", required_argument, 0, 'n' },
+        { "splitlongarrays", no_argument, 0, 'S' },
+        { "separatedeltatimes", no_argument, 0, 'D' },
+        { 0, 0, 0, 0 } };
 
 void message(const char * prog) {
     cerr << " usage : " << prog << " scheme  maropubinaryfile " << endl;
@@ -35,14 +41,15 @@ void message(const char * prog) {
 }
 
 int main(int argc, char **argv) {
-    size_t MAXCOUNTER = std::numeric_limits<std::size_t>::max();
     if (argc < 2) {
         message(argv[0]);
         return -1;
     }
     bool splitlongarrays = true;
+    bool separatedeltatimes = false;
     size_t MINLENGTH = 1;
     size_t MAXLENGTH =  std::numeric_limits<uint32_t>::max();
+    size_t MAXCOUNTER = std::numeric_limits<std::size_t>::max();
     vector < shared_ptr<IntegerCODEC> > tmp = CODECFactory::allSchemes();// the default
     vector<algostats> myalgos;
     for (auto i = tmp.begin(); i != tmp.end(); ++i) {
@@ -52,12 +59,16 @@ int main(int argc, char **argv) {
     int c;
     while (1) {
         int option_index = 0;
-        c = getopt_long(argc, argv, "Sc:", long_options, &option_index);
+        c = getopt_long(argc, argv, "DSc:n:m:M:", long_options, &option_index);
         if (c == -1)
             break;
         switch (c) {
+        case 'D' :
+             cout<<"# Outputting separate delta and inverseDelta times."<<endl;
+             separatedeltatimes = true;
+             break;
         case 'S' :
-             cout<<"#\n# disabling partition of big arrays. Performance may suffer.#\n"<<endl;
+             cout<<"#\n# disabling partition of big arrays. Performance may suffer.\n#"<<endl;
              splitlongarrays = false;
              break;
         case 'm' :
@@ -67,6 +78,10 @@ int main(int argc, char **argv) {
         case 'M' :
             istringstream ( optarg ) >> MAXLENGTH;
             cout<<"# MAXLENGTH = "<<MAXLENGTH<<endl;
+             break;
+        case 'n' :
+            istringstream ( optarg ) >> MAXCOUNTER;
+            cout<<"# MAXCOUNTER = "<< MAXCOUNTER << endl;
              break;
         case 'c':
         {   myalgos.clear();
@@ -127,10 +142,11 @@ int main(int argc, char **argv) {
                 break;
         }
         if(datastotalsize == 0) break;
-        cout<<"# read "<<  std::setprecision(3)  << static_cast<double>(datastotalsize) * 4.0 / (1024.0 * 1024.0) << " MB "<<endl;
-	cout<<"# processing block"<<endl;
+        cout<<"# read "<<  std::setprecision(3)  << static_cast<double>(datastotalsize) * 4.0 / (1024.0 * 1024.0) << " MB, " << datas.size() << " arrays."<<endl;
+
+	    cout<<"# processing block"<<endl;
 	    if(splitlongarrays) splitLongArrays(datas);
-	    processparameters pp(true,false, false, false, true);
+	    processparameters pp(true, false, false, false, true, separatedeltatimes);
 	    Delta::process(myalgos, datas, pp);        // done collecting data, now allocating memory
     }
     reader.close();
