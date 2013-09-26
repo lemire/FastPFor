@@ -54,7 +54,7 @@ void message() {
         " a comma-separated list of schemes chosen among those:" << endl;
     vector < string > all = CODECFactory::allNames();
     for (auto i = all.begin(); i != all.end(); ++i) {
-        cerr << *i;
+        cout << *i;
         if (i + 1 == all.end())
             cout << endl;
         else
