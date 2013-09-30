@@ -8,32 +8,73 @@
 
 #include "common.h"
 
+//
+// VS2012 bug: high_precision_clock is defined as system_clock and precision is about 15 MS!!
+// See: https://connect.microsoft.com/VisualStudio/feedback/details/719443
+//
+// Implementation has been taken from a post on stackoverflow and adapted here
+// http://stackoverflow.com/questions/13263277/difference-between-stdsystem-clock-and-stdsteady-clock
+//
+#ifdef _WIN32
+#define NOMINMAX
+#define WINDOWS_LEAN_AND_MEAN
+#include <windows.h>
+
+struct qpc_clock {
+  typedef std::chrono::nanoseconds                       duration;
+  typedef duration::rep                                  rep;
+  typedef duration::period                               period;
+  typedef std::chrono::time_point<qpc_clock, duration>   time_point;
+  static time_point now()
+  {
+      static bool isInited = false;
+      static LARGE_INTEGER frequency = {0, 0};
+      if (!isInited) {
+          if (QueryPerformanceFrequency(&frequency) == 0) {
+              throw std::logic_error("QueryPerformanceCounter not supported: " + std::to_string(GetLastError()));
+          }
+          isInited = true;
+      }
+      LARGE_INTEGER counter;
+      QueryPerformanceCounter(&counter);
+      return time_point(duration(static_cast<rep>((double)counter.QuadPart / frequency.QuadPart * period::den / period::num)));
+  }
+};
+
+#endif
+
 /**
  *  author: Preston Bannister
  */
- class WallClockTimer {
- public:
+class WallClockTimer {
+public:
+#ifdef _WIN32
+    typedef qpc_clock clock;
+#else
     typedef std::chrono::high_resolution_clock clock;
+#endif
+
     std::chrono::time_point<clock> t1, t2;
-     WallClockTimer() :
-         t1(), t2() {
-         t1 = std::chrono::high_resolution_clock::now();
-         t2 = t1;
-     }
-     void reset() {
-         t1 = std::chrono::high_resolution_clock::now();
-         t2 = t1;
-     }
-     uint64_t elapsed() {
-       std::chrono::microseconds delta = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
-       return delta.count();
-     }
-     uint64_t split() {
-        t2 = std::chrono::high_resolution_clock::now();
-         return elapsed();
-     }
- };
-#ifndef _MSC_VER
+    WallClockTimer() :
+        t1(), t2() {
+        t1 = clock::now();
+        t2 = t1;
+    }
+    void reset() {
+        t1 = clock::now();
+        t2 = t1;
+    }
+    uint64_t elapsed() {
+    	std::chrono::microseconds delta = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
+        return delta.count();
+    }
+    uint64_t split() {
+        t2 = clock::now();
+        return elapsed();
+    }
+};
+
+#ifndef _WIN32
 
 class CPUTimer {
 public:
@@ -76,5 +117,6 @@ public:
     }
 };
 #endif
+
 #endif
 

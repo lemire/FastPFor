@@ -54,7 +54,7 @@ void message() {
         " a comma-separated list of schemes chosen among those:" << endl;
     vector < string > all = CODECFactory::allNames();
     for (auto i = all.begin(); i != all.end(); ++i) {
-        cerr << *i;
+        cout << *i;
         if (i + 1 == all.end())
             cout << endl;
         else
@@ -321,7 +321,7 @@ int main(int argc, char **argv) {
                 ClusteredDataGenerator clu;
                 for (uint32_t K = 15; K <= 20; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
-                    for (uint32_t k = 0; k < (1U << (20 - K)); ++k)
+                    for (size_t k = 0; k < static_cast<size_t>(1U << (20 - K)); ++k)
                         datas.push_back(
                                 clu.generateClustered((1U << K), 1U << 29));
                     cout << "# generated " << datas.size() << " arrays" << endl;
@@ -342,7 +342,7 @@ int main(int argc, char **argv) {
                 UniformDataGenerator clu;
                 for (uint32_t K = 15; K <= 20; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
-                    for (uint32_t k = 0; k < (1U << (20 - K)); ++k)
+                    for (size_t k = 0; k < static_cast<size_t>(1U << (20 - K)); ++k)
                         datas.push_back(
                                 clu.generateUniform((1U << K), 1U << 29));
                     cout << "# generated " << datas.size() << " arrays" << endl;
@@ -363,7 +363,7 @@ int main(int argc, char **argv) {
                 ClusteredDataGenerator clu;
                 for (uint32_t K = 15; K <= 25; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
-                    for (uint32_t k = 0; k < (1U << (25 - K)); ++k)
+                    for (size_t k = 0; k < static_cast<size_t>(1U << (25 - K)); ++k)
                         datas.push_back(
                                 diffs(
                                         clu.generateClustered((1U << K),
@@ -387,7 +387,7 @@ int main(int argc, char **argv) {
                 UniformDataGenerator clu;
                 for (uint32_t K = 15; K <= 25; K += 5) {
                     vector < vector<uint32_t, cacheallocator> > datas;
-                    for (uint32_t k = 0; k < (1U << (25 - K)); ++k)
+                    for (size_t k = 0; k < static_cast<size_t>(1U << (25 - K)); ++k)
                         datas.push_back(
                                 diffs(clu.generateUniform((1U << K), 1U << 29),
                                         false));

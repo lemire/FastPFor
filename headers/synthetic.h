@@ -99,7 +99,7 @@ public:
         const uint32_t range = Max - Min;
         if(range < N) throw runtime_error("can't generate that many in small interval.");
         assert(range >= N);
-        if ((range == N) or (N < 10)) {
+        if ((range == N) || (N < 10)) {
             fillUniform(begin, end, Min, Max);
             return;
         }

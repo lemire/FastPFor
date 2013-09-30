@@ -33,13 +33,12 @@ a design decision.
 It builds under 
 
 *  clang++ 3.2 (LLVM 3.2) or better,
-*  Intel icpc (ICC) 13.0.1 or better
+*  Intel icpc (ICC) 13.0.1 or better,
+*  MinGW32 (x64-4.8.1-posix-seh-rev5)
+*  Microsoft VS 2012 or better,
 * and GNU GCC 4.7 or better.
 
-The code was tested under Linux and MacOS.
-
-Other compilers (e.g., Microsoft) are NOT supported right now: please
-help us make the code more portable.
+The code was tested under Windows, Linux and MacOS.
 
 ## Hardware Requirements
 
@@ -76,9 +75,9 @@ e.g., under bash type
     export YOURCXX=g++-4.7
     make
 
-### Installing GCC 4.7 under Linux 
+### Installing GCC 4.7 under Linux
 
-We support CLANG and the Intel compiler, but a common default is GCC 4.7 or better.
+We support clang, Visual Studio and the Intel compiler, but a common default is GCC 4.7 or better.
 
 Under a recent version of Ubuntu (12.10), you can install
 GCC 4.7 by typing:
