@@ -163,7 +163,7 @@ public:
     }
 
     ZipfianGenerator(int _items, double _zipfianconstant,
-            uint32_t seed = time(NULL)) :
+            uint32_t seed = static_cast<uint32_t>(time(NULL))) :
         n(_items), zetan(0), theta(_zipfianconstant), proba(n), rand(seed) {
         init(_items, _zipfianconstant);
     }
