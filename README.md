@@ -9,7 +9,11 @@ It should be suitable for applications to d-gap
 compression and differential coding in general.
 
 It is used by the zsearch engine (http://victorparmar.github.com/zsearch/)
-as well as in GMAP and GSNAP (http://research-pub.gene.com/gmap/).
+as well as in GMAP and GSNAP (http://research-pub.gene.com/gmap/). It
+has been ported to Java (https://github.com/lemire/JavaFastPFOR) and 
+Go (https://github.com/reducedb/encoding). The Java port is used by
+ClueWeb Tools (https://github.com/lintool/clueweb).
+
 
 ## Reference and documentation
 
