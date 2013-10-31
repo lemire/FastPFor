@@ -5,7 +5,11 @@
 ifeq ($(INTEL), 1)
 # if you wish to use the Intel compiler, please do "make INTEL=1".
     YOURCXX ?= /opt/intel/bin/icpc
-    CXXFLAGS = -std=c++0x -O3 -Wall -xSSSE3 -DNDEBUG=1 -ggdb
+ifeq ($(DEBUG),1)
+    CXXFLAGS = -std=c++11 -O3 -Wall -xSSSE3 -D_GLIBCXX_DEBUG  -DDEBUG=1 -ggdb
+else
+    CXXFLAGS = -std=c++11 -O3 -Wall -xSSSE3 -DNDEBUG=1 -ggdb
+endif
 else 
 # replace the YOURCXX variable with a path to a C++11 compatible compiler.
 YOURCXX ?= g++-4.7
