@@ -7,7 +7,7 @@
  *      Takeshi Yamamuro <linguin.m.s_at_gmail.com>
  *      Fabrizio Silvestri <fabrizio.silvestri_at_isti.cnr.it>
  *      Rossano Venturini <rossano.venturini_at_isti.cnr.it>
- *   which was available as APL 2.0.
+ *   which was available  under the Apache License, Version 2.0.
  */
 
 #ifndef OPTPFOR_H_
