@@ -81,6 +81,10 @@ codecssnappy:  $(HEADERS) src/codecs.cpp ./headers/common.h.gch  ./headers/snapp
 	$(CXX) $(CXXFLAGS) $(GCCPARAMS) -Winvalid-pch  -o codecssnappy src/codecs.cpp $(COMMONBINARIES) -Iheaders  -lsnappy -DUSESNAPPY
 
 
+example:  $(HEADERS) example.cpp ./headers/common.h.gch makefile $(COMMONBINARIES)
+	$(CXX) $(CXXFLAGS) $(GCCPARAMS) -Winvalid-pch  -o example example.cpp $(COMMONBINARIES) -Iheaders
+
+
 codecs:  $(HEADERS) src/codecs.cpp ./headers/common.h.gch makefile $(COMMONBINARIES)
 	$(CXX) $(CXXFLAGS) $(GCCPARAMS) -Winvalid-pch  -o codecs src/codecs.cpp $(COMMONBINARIES) -Iheaders
 

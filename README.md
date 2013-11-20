@@ -17,6 +17,12 @@ ClueWeb Tools (https://github.com/lintool/clueweb).
 
 ## Reference and documentation
 
+For a simple example, please see 
+
+example.cpp 
+
+in the root directory of this project.
+
 Please see:
 
 Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization,

@@ -32,8 +32,6 @@ int main() {
             for (vector<shared_ptr<IntegerCODEC> >::iterator i =
                     myalgos.begin(); i != myalgos.end(); ++i) {
                 IntegerCODEC & c = **i;
-                //cout<<c.name() <<" ";
-                //cout.flush();
                 vector<uint32_t, cacheallocator> out(2 * data.size() + 1024);
                 if (c.name() != "VSEncoding") // VSEncoding is fragile, output must be zero
                     for (uint32_t k = 0; k < out.size(); ++k)
@@ -42,8 +40,6 @@ int main() {
                 // next magic is to satisfy cachepacking aligment requirements; should not hurt others
                 uint32_t *aligned_out = &out[0];
                 assert(!needPaddingTo64bytes(aligned_out));
-                   //     reinterpret_cast<uint32_t *> (padTo64bytes(
-                     //           reinterpret_cast<uint8_t *> (&out[0]))); // ofk
                 c.encodeArray(&data[0], data.size(), aligned_out, nvalue);
                 out.resize(nvalue);
                 vector<uint32_t, cacheallocator> recover(data.size() + 1024);
@@ -92,13 +88,10 @@ int main() {
                         out[k] = rand();
                 size_t nvalue = out.size();
                 uint32_t *aligned_out = &out[0];
-                      //  reinterpret_cast<uint32_t *> (padTo64bytes(
-                        //        reinterpret_cast<uint8_t *> (&out[0]))); // ofk
                 assert(!needPaddingTo64bytes(aligned_out));
                 c.encodeArray(data.data(), data.size(), aligned_out, nvalue);
                 out.resize(nvalue);
                 vector<uint32_t, cacheallocator> recover(data.size() + 1024);
-                //if(c.name() != "VSEncoding")
                 for (uint32_t k = 0; k < recover.size(); ++k)
                     recover[k] = rand();
                 size_t recoveredsize = recover.size();
@@ -149,8 +142,7 @@ int main() {
             size_t nvalue = out.size();
             cout << " encoding ...";
             cout.flush();
-            uint32_t *aligned_out = &out[0]; //reinterpret_cast<uint32_t *> (padTo64bytes(
-                   // reinterpret_cast<uint8_t *> (&out[0]))); // ofk
+            uint32_t *aligned_out = &out[0]; 
             assert(!needPaddingTo64bytes(aligned_out));
             c.encodeArray(&data[0], data.size(), aligned_out, nvalue);
             out.resize(nvalue);

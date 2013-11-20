@@ -318,9 +318,7 @@ public:
     // a convenience function
     template <class container>
     static void process(vector<algostats> & myalgos,
-            const vector<container > & datas, processparameters & pp /*const bool needtodelta,
-            const bool fulldisplay, const bool displayhistogram, const bool computeentropy,
-            const bool cumulative*/, const string prefix = "") {
+            const vector<container > & datas, processparameters & pp , const string prefix = "") {
         // pp.needtodelta = false;
         enum {verbose = false};
         if(datas.empty() || myalgos.empty()) return;
