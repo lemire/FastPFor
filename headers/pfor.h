@@ -171,10 +171,14 @@ public:
     void encodeArray(const uint32_t *in, const size_t len, uint32_t *out,
             size_t &nvalue) {
         *out++ = static_cast<uint32_t>(len);
+#ifndef NDEBUG
         const uint32_t * const finalin(in + len);
+#endif
         const uint32_t maxsize = (1U << (32 - blocksizeinbits - 1));
         size_t totalnvalue(1);
-        for (size_t i = 0; i < len; i += maxsize) {
+        //for (size_t i = 0; i < len; i += maxsize)
+        for (size_t j = 0; j < (len+maxsize-1U)/maxsize; ++j) {
+            size_t i = j << (32 - blocksizeinbits - 1);
             size_t l = maxsize;
             if (i + maxsize > len) {
                 l = len - i;
@@ -194,12 +198,16 @@ public:
         nvalue = *in++;
         if (nvalue == 0)
             return in;
+#ifndef NDEBUG
         const uint32_t * const initin = in;
+#endif
         const uint32_t * const finalin = in + len;
         size_t totalnvalue(0);
         while (totalnvalue < nvalue) {
             size_t thisnvalue = nvalue - totalnvalue;
+#ifndef NDEBUG
             const uint32_t * const befin(in);
+#endif
             assert(finalin <= len + in);
             in = __decodeArray(in, finalin - in, out, thisnvalue);
             assert(in > befin);
@@ -243,9 +251,15 @@ public:
         nvalue = out - initout;
     }
 
+#ifndef NDEBUG
     const uint32_t * __decodeArray(const uint32_t *in, const size_t len,
+#else
+    const uint32_t * __decodeArray(const uint32_t *in, const size_t    ,
+#endif
             uint32_t *out, size_t &nvalue) {
+#ifndef NDEBUG
         const uint32_t * const initin(in);
+#endif
         nvalue = *in++;
         checkifdivisibleby(nvalue, BlockSize);
          const uint32_t b = *in++;

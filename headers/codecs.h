@@ -154,7 +154,11 @@ public:
         }
         nvalue = 2 + length * b / 32;
     }
+#ifndef NDEBUG
     const uint32_t * decodeArray(const uint32_t *in, const size_t length,
+#else
+    const uint32_t * decodeArray(const uint32_t *in, const size_t /*length*/,
+#endif
             uint32_t *out, size_t & nvalue) {
         nvalue = in[0];
         const uint32_t b = in[1];

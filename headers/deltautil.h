@@ -69,12 +69,17 @@ void summarize(vector<algostats> & v, string prefix = "#") {
         cout << "#wall clock (delta mis, comp mis, decomp mis, idelta mis, bits per int)" << endl;
         cout << "#" << endl;
         for (auto i = v.begin(); i != v.end(); ++i) {
+            double  deltaspeed_k = (k < i->deltaspeed.size()? i->deltaspeed[k]: -1.0);
+            double   compspeed_k = (k < i->compspeed.size()? i->compspeed[k]: -1.0);
+            double decompspeed_k = (k < i->decompspeed.size()? i->decompspeed[k]: -1.0);
+            double inversedeltaspeed_k = (k < i->inversedeltaspeed.size()? i->inversedeltaspeed[k]: -1.0);
+            double bitsperint_k = (k < i->bitsperint.size()? i->bitsperint[k]: -1.0);
             cout << prefix << std::setprecision(4) << i->name(40)
-                 << " \t " << i->deltaspeed.at(k)
-                 << " \t " << i->compspeed.at(k)
-                 << " \t " << i->decompspeed.at(k)
-                 << " \t " << i->inversedeltaspeed.at(k)
-                 << " \t " << i->bitsperint.at(k)
+                 << " \t " << deltaspeed_k
+                 << " \t " << compspeed_k
+                 << " \t " << decompspeed_k
+                 << " \t " << inversedeltaspeed_k
+                 << " \t " << bitsperint_k
                  << endl;
         }
         cout << prefix << endl << prefix << endl;
