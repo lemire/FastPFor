@@ -209,8 +209,10 @@ template<uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder>
 void NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::encodeArray(
         const uint32_t *in, const size_t len, uint32_t *out, size_t &nvalue) {
     size_t csize;
+#ifndef NDEBUG
     const uint32_t * const initin(in);
     const uint32_t * const initout(out);
+#endif
     checkifdivisibleby(len, BlockSize);
     const size_t initnvalue = nvalue;
 
@@ -245,8 +247,14 @@ void NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::encodeArray(
 
 template<uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder>
 const uint32_t * NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::decodeArray(
+#ifndef NDEBUG
         const uint32_t *in, const size_t len, uint32_t *out, size_t & nvalue) {
+#else
+        const uint32_t *in, const size_t    , uint32_t *out, size_t & nvalue) {
+#endif
+#ifndef NDEBUG
     const uint32_t * const initin(in);
+#endif
     const uint32_t * const initout(out);
 
     if (BlockSize * (*in) > nvalue)

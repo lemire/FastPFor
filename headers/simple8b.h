@@ -127,7 +127,9 @@ private:
 template<bool MarkLength>
 void Simple8b<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
         uint32_t *out, size_t &nvalue) {
+#ifndef NDEBUG
     const uint32_t * const initin(in);
+#endif
     uint32_t NumberOfValuesCoded = 0;
     const uint32_t * const initout(out);
     if (MarkLength) {
@@ -472,8 +474,15 @@ void Simple8b<MarkLength>::fakeencodeArray(const uint32_t *in,
 
 template<bool MarkLength>
 const uint32_t * Simple8b<MarkLength>::decodeArray(const uint32_t *in,
+#ifndef NDEBUG
         const size_t len, uint32_t *out, size_t & nvalue) {
-    const uint32_t * const initin(in);
+#else
+        const size_t    , uint32_t *out, size_t & nvalue) {
+#endif
+#ifndef NDEBUG
+    //const uint32_t * const initin(in);
+    const uint32_t * const endin(in + len);
+#endif
 #ifdef STATS
     vector < uint32_t > stats(16, 0);
 #endif
@@ -484,11 +493,12 @@ const uint32_t * Simple8b<MarkLength>::decodeArray(const uint32_t *in,
             throw NotEnoughStorage(markednvalue);
     }
     const size_t actualvalue = MarkLength ? markednvalue : nvalue;
-    const uint32_t * const endin(initin + len);
     // this may lead to unaligned access. Performance may be affected.
     // not much of an effect in practice on recent Intel processors.
     const uint64_t * in64 = reinterpret_cast<const uint64_t *> (in);
+#ifndef NDEBUG
     const uint64_t * finalin64 = reinterpret_cast<const uint64_t *> (endin);
+#endif
 
     if (nvalue < actualvalue)
         cerr << " possible overrun" << endl;

@@ -122,9 +122,15 @@ public:
     vector<vector<uint32_t,cacheallocator> > datatobepacked;
     vector<uint8_t> bytescontainer;
 
+#ifndef NDEBUG
     const uint32_t * decodeArray(const uint32_t *in, const size_t length,
+#else
+    const uint32_t * decodeArray(const uint32_t *in, const size_t       ,
+#endif
             uint32_t *out, size_t &nvalue) {
+#ifndef NDEBUG
         const uint32_t * const initin(in);
+#endif
         const size_t mynvalue = *in;
         ++in;
         if (mynvalue > nvalue)
@@ -157,7 +163,9 @@ public:
     void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
             size_t &nvalue) {
         checkifdivisibleby(length, BlockSize);
+#ifndef NDEBUG
         const uint32_t * const initout(out);
+#endif
         const uint32_t * const finalin(in + length);
 
         *out++ = static_cast<uint32_t>(length);

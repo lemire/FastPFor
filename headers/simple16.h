@@ -188,7 +188,9 @@ template<bool MarkLength>
 void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
         uint32_t *out, size_t &nvalue) {
     uint32_t NumberOfValuesCoded;
+#ifndef NDEBUG
     const uint32_t * const initin(in);
+#endif
     const uint32_t * const initout(out);
     if (MarkLength)
         *(out++) = static_cast<uint32_t>(length);
@@ -683,8 +685,14 @@ void Simple16<MarkLength>::fakeencodeArray(const uint32_t *in, const size_t leng
 
 template<bool MarkLength>
 const uint32_t * Simple16<MarkLength>::decodeArray(const uint32_t *in,
+#ifndef NDEBUG
         const size_t len, uint32_t *out, size_t & nvalue) {
+#else
+        const size_t    , uint32_t *out, size_t & nvalue) {
+#endif
+#ifndef NDEBUG
     const uint32_t * const endin = in + len;
+#endif
     if (MarkLength)
         if ((*in) > nvalue)
             throw NotEnoughStorage(*in);
