@@ -193,6 +193,8 @@ Go to:
 http://integerencoding.isti.cnr.it/?page_id=8
 
 Download both the software and the gov.sort.tar file.
+You might find useful to grow their stable-0.2.0 version from
+https://github.com/maropu/integer_encoding_library/releases/tag/stable-0.2.0
 
 Untar the tar file:
 
