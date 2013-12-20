@@ -5,6 +5,11 @@ by Daniel Lemire, Leonid Boytsov, Owen Kaser, Maxime Caron, Louis Dionne, Michel
 ## What is this?
 
 A research library with integer compression schemes.
+It is broadly applicable to the compression of arrays of
+32-bit integers where most integers are small.
+The library seeks to exploit SIMD instructions (SSE)
+whenever possible.
+
 It should be suitable for applications to d-gap
 compression and differential coding in general.
 
@@ -37,7 +42,7 @@ This code is licensed under Apache License, Version 2.0 (ASL2.0).
 
 ## Software Requirements
 
-This code requires a (recent as of 2012) compiler supporting C++11. This was
+This code requires a compiler supporting C++11. This was
 a design decision.
 
 It builds under 
@@ -147,7 +152,7 @@ Google snappy. You can do so on a recent ubuntu machine as:
 
 ## Processing data files
 
-Typing make will generate an inmemorybenchmark
+Typing "make" will generate an "inmemorybenchmark"
 executable that can process data files.
 
 You can use it to process arrays on (sorted!) integers
@@ -234,12 +239,10 @@ some SSE instructions may fail.
 
 ## Is any of this code subject to patents?
 
-I (D. Lemire) did not
-patent anything.
+I (D. Lemire) did not patent anything.
 
-However, we implemented
-varint-G8UI which was patented by its authors. DO NOT use vartin-G8UI if you
-want to avoid patents.
+However, we implemented varint-G8UI which was patented by its authors. 
+DO NOT use varint-G8UI if you want to avoid patents.
 
 The rest of the library *should be* patent-free.
 
