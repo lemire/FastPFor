@@ -386,7 +386,8 @@ public:
             getBestBFromData(in, bestb, bestcexcept, maxb);
             *bc++ = bestb;
             *bc++ = bestcexcept;
-            if (true) {
+            if (bestcexcept > 0) {
+                assert(bestb < 32);
                 const uint32_t maxval = 1U << bestb;
                 for (uint32_t k = 0; k < BlockSize; ++k) {
                     if (in[k] >= maxval) {
