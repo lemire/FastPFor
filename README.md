@@ -10,15 +10,26 @@ It is broadly applicable to the compression of arrays of
 The library seeks to exploit SIMD instructions (SSE)
 whenever possible.
 
-It should be suitable for applications to d-gap
-compression and differential coding in general.
-
 It is used by the zsearch engine (http://victorparmar.github.com/zsearch/)
 as well as in GMAP and GSNAP (http://research-pub.gene.com/gmap/). It
 has been ported to Java (https://github.com/lemire/JavaFastPFOR) and 
 Go (https://github.com/reducedb/encoding). The Java port is used by
 ClueWeb Tools (https://github.com/lintool/clueweb).
 
+
+## Working with sorted lists of integers
+
+If you are working primarily with sorted lists of integers, then 
+you might want to use differential coding. That is you may want to
+compress the deltas instead of the integers themselves. The current 
+library (fastpfor) is generic and was not optimized for this purpose.
+However, we have another library designed to compress sorted integer
+lists: 
+
+https://github.com/lemire/SIMDCompressionAndIntersection
+
+This other library (SIMDCompressionAndIntersection) also comes complete
+with new SIMD-based intersection algorithms.
 
 ## Reference and documentation
 
