@@ -7,46 +7,51 @@
 
 #ifndef DELTAUTIL_H_
 #define DELTAUTIL_H_
+#include <vector>
+#include <exception>
 #include "common.h"
 #include "codecs.h"
 #include "memutil.h"
 #include "entropy.h"
 #include "ztimer.h"
+
+namespace FastPFor {
+
 /**
  * This file is made of various convenient functions and structures.
  * It is not necessarily very reusable though.
  */
 struct algostats {
 
-    algostats(shared_ptr<IntegerCODEC> & a, bool simd = false) :
+    algostats(std::shared_ptr<IntegerCODEC> & a, bool simd = false) :
         algo(a), 
         deltaspeed(), compspeed(), decompspeed(), inversedeltaspeed(), bitsperint(), 
         deltatime(0), comptime(0), decomptime(0), inversedeltatime(0), output(), input(), 
         SIMDDeltas(simd) {
     }
-    string name() {
+    std::string name() {
         // if SIMDDeltas is "true", we prepend @
         if (SIMDDeltas) {
-            ostringstream convert;
+            std::ostringstream convert;
             convert << "@" << algo->name();
             return convert.str();
         }
         return algo->name();
     }
-    string name(size_t k) {
-        string n = name();
+    std::string name(size_t k) {
+        std::string n = name();
         char space = ' ';
         n.resize(k, space);
         return n;
     }
 
-    shared_ptr<IntegerCODEC> algo;
+    std::shared_ptr<IntegerCODEC> algo;
 
-    vector<double> deltaspeed;
-    vector<double> compspeed;
-    vector<double> decompspeed;
-    vector<double> inversedeltaspeed;
-    vector<double> bitsperint;
+    std::vector<double> deltaspeed;
+    std::vector<double> compspeed;
+    std::vector<double> decompspeed;
+    std::vector<double> inversedeltaspeed;
+    std::vector<double> bitsperint;
 
     double deltatime;
     double comptime;
@@ -57,41 +62,42 @@ struct algostats {
 
     bool SIMDDeltas;
 };
-void summarize(vector<algostats> & v, string prefix = "#") {
+
+void summarize(std::vector<algostats> & v, std::string prefix = "#") {
     if (v.empty())
         return;
-    cout << "# building summary " << endl;
+    std::cout << "# building summary " << std::endl;
     size_t N = v[0].bitsperint.size();
     for (size_t k = 0; k < N; ++k) {
-        cout << "###################" << endl;
+        std::cout << "###################" << std::endl;
         if (N > 1)
-            cout << "#test " << (k + 1) << " of " << N << endl;
-        cout << "#wall clock (delta mis, comp mis, decomp mis, idelta mis, bits per int)" << endl;
-        cout << "#" << endl;
+            std::cout << "#test " << (k + 1) << " of " << N << std::endl;
+        std::cout << "#wall clock (delta mis, comp mis, decomp mis, idelta mis, bits per int)" << std::endl;
+        std::cout << "#" << std::endl;
         for (auto i = v.begin(); i != v.end(); ++i) {
             double  deltaspeed_k = (k < i->deltaspeed.size()? i->deltaspeed[k]: -1.0);
             double   compspeed_k = (k < i->compspeed.size()? i->compspeed[k]: -1.0);
             double decompspeed_k = (k < i->decompspeed.size()? i->decompspeed[k]: -1.0);
             double inversedeltaspeed_k = (k < i->inversedeltaspeed.size()? i->inversedeltaspeed[k]: -1.0);
             double bitsperint_k = (k < i->bitsperint.size()? i->bitsperint[k]: -1.0);
-            cout << prefix << std::setprecision(4) << i->name(40)
+            std::cout << prefix << std::setprecision(4) << i->name(40)
                  << " \t " << deltaspeed_k
                  << " \t " << compspeed_k
                  << " \t " << decompspeed_k
                  << " \t " << inversedeltaspeed_k
                  << " \t " << bitsperint_k
-                 << endl;
+                 << std::endl;
         }
-        cout << prefix << endl << prefix << endl;
+        std::cout << prefix << std::endl << prefix << std::endl;
     }
     for(algostats a : v) {
         double deltaTime = a.deltatime + a.inversedeltatime;
         double totTime = deltaTime + a.comptime + a.decomptime;
         if (totTime > 0 && a.input > 0) {
-            cout << " " << std::setprecision(4) << a.name(40);
+            std::cout << " " << std::setprecision(4) << a.name(40);
             double input = static_cast<double>(a.input);
             if (deltaTime > 0) {
-                cout << input / a.deltatime << " \t "
+                std::cout << input / a.deltatime << " \t "
                      << input / a.comptime << " \t "
                      << input / a.decomptime << " \t "
                      << input / a.inversedeltatime << " \t "
@@ -101,28 +107,28 @@ void summarize(vector<algostats> & v, string prefix = "#") {
                      << static_cast<size_t>(a.comptime / 1000) << " \t "
                      << static_cast<size_t>(a.decomptime / 1000) << " \t "
                      << static_cast<size_t>(a.inversedeltatime / 1000)
-                     << endl;
+                     << std::endl;
             } else {
-                cout << input / a.comptime << " \t "
+                std::cout << input / a.comptime << " \t "
                      << input / a.decomptime << " \t "
                      << static_cast<double>(a.output) * 32.0 / input << " \t\t"
                      << "TotalTimes (ms):  "
                      << static_cast<size_t>(a.comptime / 1000) << " \t "
                      << static_cast<size_t>(a.decomptime / 1000)
-                     << endl;
+                     << std::endl;
             }
         }
     }
 }
 
 /**
- * This takes every vector and replaces it, if
- * needed by a series of vectors having max
- * size MAXSIZE. If a vector has size less than
+ * This takes every std::vector and replaces it, if
+ * needed by a series of std::vectors having max
+ * size MAXSIZE. If a std::vector has size less than
  * or equal to MAXSIZE, it remains unchanged.
  */
 template<class T>
-void splitLongArrays(vector<T> & datas, size_t MAXSIZE = 65536 ) {
+void splitLongArrays(std::vector<T> & datas, size_t MAXSIZE = 65536 ) {
     // possibly inefficient
     for (size_t i = 0; i < datas.size(); ++i) {
         if (datas[i].size() > MAXSIZE) {
@@ -174,7 +180,7 @@ public:
     template<class T>
     static void delta(T * data, const size_t size) {
         if (size == 0)
-            throw runtime_error("delta coding impossible with no value!");
+            throw std::runtime_error("delta coding impossible with no value!");
         for (size_t i = size - 1; i > 0; --i) {
             data[i] -= data[i - 1];
         }
@@ -322,26 +328,26 @@ public:
 
     // a convenience function
     template <class container>
-    static void process(vector<algostats> & myalgos,
-            const vector<container > & datas, processparameters & pp , const string prefix = "") {
+    static void process(std::vector<algostats> & myalgos,
+            const std::vector<container > & datas, processparameters & pp , const std::string prefix = "") {
         // pp.needtodelta = false;
         enum {verbose = false};
         if(datas.empty() || myalgos.empty()) return;
         if(pp.needtodelta) {
-            if(verbose) cout<<"# delta coding requested... checking whether we have sorted arrays...";
+            if(verbose) std::cout<<"# delta coding requested... checking whether we have sorted arrays...";
             for(auto x : datas) {
                 if(x.size() > 0)
                     for (size_t k = 1; k < x.size(); ++k) {
                         if(x[k]<x[k-1]) {
-                            cerr<<"Delta coding requested, but data is not sorted!"<<endl;
-                            cerr<<"Aborting!"<<endl;
+                            std::cerr << "Delta coding requested, but data is not sorted!" << std::endl;
+                            std::cerr << "Aborting!" << std::endl;
                             return;
                         }
                      }
             }
-            if(verbose) cout<<" arrays are indeed sorted. Good."<<endl;
+            if(verbose) std::cout<<" arrays are indeed sorted. Good." << std::endl;
         } else {
-            if(verbose) cout<<"# compressing the arrays themselves, no delta coding applied."<<endl;
+            if(verbose) std::cout<<"# compressing the arrays themselves, no delta coding applied." << std::endl;
             // we check whether it could have been applied...
             bool sorted = true;
 #if !defined(__clang__) && !defined(_MSC_VER) && !defined(__INTEL_COMPILER)
@@ -359,9 +365,9 @@ public:
 #pragma GCC diagnostic pop
 #endif
             if(sorted) {
-                cout<<"#\n#\n# you are providing sorted arrays, but you are not requesting delta coding. Are you sure?\n#\n#\n"<<endl;
+                std::cout<<"#\n#\n# you are providing sorted arrays, but you are not requesting delta coding. Are you sure?\n#\n#\n" << std::endl;
             } else {
-                if(verbose) cout<<"# I verified that the arrays are not sorted so simple delta coding is unapplicable."<<endl;
+                if(verbose) std::cout<<"# I verified that the arrays are not sorted so simple delta coding is unapplicable." << std::endl;
             }
 
         }
@@ -371,42 +377,45 @@ public:
                 hist.eatIntegers(*i);
             hist.display("#");
         }
-        if (pp.fulldisplay) cout << "#";
+        if (pp.fulldisplay) std::cout << "#";
         if (pp.fulldisplay && pp.computeentropy)
-            cout << " entropy  databits(entropy) ";
+            std::cout << " entropy  databits(entropy) ";
 
         if (pp.fulldisplay) {
             for (auto i = myalgos.begin(); i != myalgos.end(); ++i) {
-                cout << (*i).name() << "\t";
+                std::cout << (*i).name() << "\t";
             }
-            cout << endl;
+            std::cout << std::endl;
         }
         if (pp.fulldisplay)
-            cout
+            std::cout
                     << "# for each scheme we give compression speed (million int./s)"
-                        " decompression speed and bits per integer" << endl;
+                        " decompression speed and bits per integer" << std::endl;
         EntropyRecorder er;
         if(pp.computeentropy) {
              for (size_t k = 0; k < datas.size(); ++k)
-               if(!datas[k].empty()) er.eat(&datas[k][0], datas[k].size());
-             if (pp.fulldisplay)    cout << "# generated " << er.totallength << " integers" << endl;
+               if(!datas[k].empty())
+                er.eat(&datas[k][0], datas[k].size());
+             if (pp.fulldisplay)
+                std::cout << "# generated " << er.totallength << " integers" << std::endl;
         }
-        if (pp.fulldisplay)cout  << prefix << "\t";
+        if (pp.fulldisplay)
+            std::cout  << prefix << "\t";
         if(pp.computeentropy && pp.fulldisplay)
-            cout << std::setprecision(4) << er.computeShannon() << "\t";
+            std::cout << std::setprecision(4) << er.computeShannon() << "\t";
         if (pp.computeentropy && pp.fulldisplay)
-            cout << std::setprecision(4) << er.computeDataBits() << "\t";
+            std::cout << std::setprecision(4) << er.computeDataBits() << "\t";
         WallClockTimer z;
         size_t totallength = 0;
         size_t maxlength = 0;
-        vector<container > outs(datas.size());
+        std::vector<container > outs(datas.size());
         for (size_t k = 0; k < datas.size(); ++k) {
                 auto & data = datas[k];
                 outs[k].resize(4*data.size() + 2048 + 64);
                 totallength += data.size();
                 if(maxlength < data.size()) maxlength = data.size();
         }
-        vector<size_t> nvalues(datas.size());
+        std::vector<size_t> nvalues(datas.size());
         container recovereds(maxlength + 2048 + 64);
         container backupdata;
         backupdata.reserve(maxlength + 2048 + 64);
@@ -472,11 +481,11 @@ public:
                 }
 
                 if (recoveredsize != datas[k].size()) {
-                    cerr<<" expected size of "<<datas[k].size()<<" got "<<recoveredsize<<endl;
-                    throw logic_error("arrays don't have same size: bug.");
+                    std::cerr << " expected size of "<<datas[k].size()<<" got "<<recoveredsize << std::endl;
+                    throw std::logic_error("arrays don't have same size: bug.");
                 }
                 if (!equal(datas[k].begin(),datas[k].end(), recov))  {
-                    throw logic_error("we have a bug");
+                    throw std::logic_error("we have a bug");
                 }
 
             }
@@ -504,24 +513,26 @@ public:
             }
             if (pp.fulldisplay) {
                 if (pp.separatetimes) {
-                    cout << std::setprecision(4) << static_cast<double>(totallength) / static_cast<double>(timemsdelta)
+                    std::cout << std::setprecision(4) << static_cast<double>(totallength) / static_cast<double>(timemsdelta)
                          << "\t";
                 }
-                cout << std::setprecision(4) << static_cast<double>(totallength) / static_cast<double>(timemscomp)
+                std::cout << std::setprecision(4) << static_cast<double>(totallength) / static_cast<double>(timemscomp)
                      << "\t";
-                cout << std::setprecision(4) << static_cast<double>(totallength) / static_cast<double>(timemsdecomp)
+                std::cout << std::setprecision(4) << static_cast<double>(totallength) / static_cast<double>(timemsdecomp)
                      << "\t";
                 if (pp.separatetimes) {
-                    cout << std::setprecision(4) << static_cast<double>(totallength) / static_cast<double>(timemsinversedelta)
+                    std::cout << std::setprecision(4) << static_cast<double>(totallength) / static_cast<double>(timemsinversedelta)
                          << "\t";
                 }
-                cout << std::setprecision(4) << static_cast<double>(totalcompressed) * 32.0 / static_cast<double>(totallength)
+                std::cout << std::setprecision(4) << static_cast<double>(totalcompressed) * 32.0 / static_cast<double>(totallength)
                      << "\t";
-                cout << "\t";
+                std::cout << "\t";
             }
         }
-        if (pp.fulldisplay) cout << endl;
+        if (pp.fulldisplay) std::cout << std::endl;
     }
 };
+
+} // namespace FastPFor
 
 #endif /* DELTAUTIL_H_ */

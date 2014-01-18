@@ -13,7 +13,7 @@
 #include "bitpacking.h"
 #include "util.h"
 
-using namespace std;
+namespace FastPFor {
 
 /**
  * This implements as best as possible the PFor scheme
@@ -46,8 +46,8 @@ public:
         blocksizeinbits = 7//constexprbits(BlockSize)
     };
     // these are reusable buffers
-    vector<uint32_t> codedcopy;
-    vector<uint32_t> miss;
+    std::vector<uint32_t> codedcopy;
+    std::vector<uint32_t> miss;
     typedef uint32_t DATATYPE;// this is so that our code looks more like the original paper
 
     PFor() :
@@ -110,7 +110,7 @@ public:
         size_t exceptcounter = 0;
         const uint32_t maxgap = 1U << b;
         {
-            vector<uint32_t>::iterator cci = codedcopy.begin();
+            std::vector<uint32_t>::iterator cci = codedcopy.begin();
             for (uint32_t k = 0; k < BlockSize; ++k, ++cci) {
                 miss[exceptcounter] = k;
                 exceptcounter += (in[k] >= maxgap);
@@ -227,7 +227,7 @@ public:
             size_t &nvalue) {
         checkifdivisibleby(len, BlockSize);
         const uint32_t * const initout(out);
-        vector<DATATYPE> exceptions;
+        std::vector<DATATYPE> exceptions;
         exceptions.resize(len);
         DATATYPE * __restrict__ i = &exceptions[0];
         const uint32_t b = determineBestBase(in,len);
@@ -298,12 +298,14 @@ public:
         }
     }
 
-    virtual string name() const {
-        ostringstream convert;
+    virtual std::string name() const {
+        std::ostringstream convert;
         convert << "PFor";
         return convert.str();
     }
 
 };
+
+} // namespace FastPFor
 
 #endif /* PFOR_H_ */

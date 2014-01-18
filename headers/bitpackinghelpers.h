@@ -10,6 +10,8 @@
 
 #include "bitpacking.h"
 
+namespace FastPFor {
+
 inline void fastunpack(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out, const uint32_t bit) {
     // Could have used function pointers instead of switch.
     // Switch calls do offer the compiler more opportunities for optimization in
@@ -363,5 +365,6 @@ const uint32_t * unpackblock(const uint32_t * source, uint32_t * out,
     return source;
 }
 
+} // namespace FastPFor
 
 #endif /* BITPACKINGHELPERS_H_ */

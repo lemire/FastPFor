@@ -7,20 +7,23 @@
 
 #ifndef EXTERNALVECTOR_H_
 #define EXTERNALVECTOR_H_
+#include <vector>
+#include <queue>
 #include "common.h"
-using namespace std;
+
+namespace FastPFor {
 
 template<class CMP>
 class BinaryFileBuffer {
 public:
     typedef uint32_t Type;
-    typedef vector<Type> DataType;
+    typedef std::vector<Type> DataType;
 
     enum {
         BUFFERSIZE = 512
     };
     FILE *fd;
-    vector<DataType> buf;
+    std::vector<DataType> buf;
     size_t currentpointer, mEnd;
     size_t localpointer;
     bool valid;
@@ -49,7 +52,7 @@ public:
         return *this;
     }
     BinaryFileBuffer(FILE * f, size_t start, size_t end, CMP cmp,
-            vector<DataType>& Buf, size_t datasize) :
+            std::vector<DataType>& Buf, size_t datasize) :
         fd(f), buf(Buf), currentpointer(start), mEnd(end), localpointer(0),
                 valid(true), mCmp(cmp), sizeofdata(datasize) {
         buf.reserve(BUFFERSIZE);
@@ -81,16 +84,16 @@ public:
 
         int result = fseek(fd, currentpointer * sizeofdata * sizeof(Type), SEEK_SET);
         if (result != 0) {
-            cerr << "failed to seek" << endl;
-            throw runtime_error("failed to seek");
+            std::cerr << "failed to seek" << std::endl;
+            throw std::runtime_error("failed to seek");
         }
         for (size_t k = 0; k < howmanycanIread; ++k) {
             buf[k].resize(sizeofdata);
             size_t howmany = fread(&(buf[k][0]), sizeof(Type), sizeofdata, fd);
             if (howmany != sizeofdata) {
-                cerr << " Expected to read " << sizeofdata << " but found "
-                        << howmany << endl;
-                throw runtime_error("failed to read the number expected");
+                std::cerr << " Expected to read " << sizeofdata << " but found "
+                        << howmany << std::endl;
+                throw std::runtime_error("failed to read the number expected");
             }
         }
 
@@ -134,25 +137,25 @@ public:
         fd(NULL), N(0), sizeofdata(datasize) {
     }
     typedef uint32_t Type;
-    typedef vector<Type> DataType;
+    typedef std::vector<Type> DataType;
 
     ~externalvector() {
     }
     externalvector(const externalvector & other) :
         fd(NULL), N(0),  sizeofdata(other.sizeofdata) {
         if ((other.fd != NULL) or (fd != NULL)) {
-            cerr << "please don't use copy constructor for non-trivial things"
-                    << endl;
-            throw runtime_error("you are abusing copy constructor");
+            std::cerr << "please don't use copy constructor for non-trivial things"
+                    << std::endl;
+            throw std::runtime_error("you are abusing copy constructor");
         }
         assert(other.fd == NULL);
         assert(other.N == 0);
     }
     externalvector & operator=(const externalvector & other) {
         if ((other.fd != NULL) or (fd != NULL)) {
-            cerr << "please don't use assignment for non-trivial things"
-                    << endl;
-            throw runtime_error("you are abusing assignment operator");
+            std::cerr << "please don't use assignment for non-trivial things"
+                    << std::endl;
+            throw std::runtime_error("you are abusing assignment operator");
         }
         assert(other.fd == NULL);
         assert(other.N == 0);
@@ -189,7 +192,7 @@ public:
     // blocks are *not* merged. For my purposes, I did not
     // need a true shuffle.
     void shuffle(const size_t BLOCKSIZE = DEFAULTBLOCKSIZE) {
-        vector<DataType> buffer;
+        std::vector<DataType> buffer;
         for (size_t k = 0; k < size(); k += BLOCKSIZE) {
             if (k + BLOCKSIZE < size()) {
                 loadACopy(buffer, k, k + BLOCKSIZE);
@@ -206,16 +209,16 @@ public:
 
     template<class CMP>
     void sort(CMP & comparator, const size_t BLOCKSIZE = DEFAULTBLOCKSIZE) {
-        priority_queue<BinaryFileBuffer<CMP> , vector<BinaryFileBuffer<CMP> > ,
-                greater<BinaryFileBuffer<CMP> > > pq;
+        std::priority_queue<BinaryFileBuffer<CMP> , std::vector<BinaryFileBuffer<CMP> > ,
+                std::greater<BinaryFileBuffer<CMP> > > pq;
 
         const size_t howmanybuffers = N / BLOCKSIZE + (N % BLOCKSIZE == 0 ? 0
                 : 1);
 
-        vector < vector<DataType> > buffers(howmanybuffers);
+        std::vector < std::vector<DataType> > buffers(howmanybuffers);
         size_t buffercounter = 0;
 
-        vector<DataType> buffer;
+        std::vector<DataType> buffer;
         buffer.reserve(BLOCKSIZE);
         for (size_t rowindex = 0; rowindex < size(); rowindex += BLOCKSIZE) {
 
@@ -231,13 +234,13 @@ public:
             pq.push(bfb);
         }
         if (buffercounter != buffers.size())
-            throw runtime_error("This should never happen.");
+            throw std::runtime_error("This should never happen.");
         if (howmanybuffers == 1)
             return;// we are done
         // we must merge which requires a new file
         FILE * newfd = ::tmpfile();
         if (newfd == NULL) {
-            throw runtime_error("could not open temp file");
+            throw std::runtime_error("could not open temp file");
         }
 
         DataType container;
@@ -255,8 +258,8 @@ public:
             if (bfbparanoid) {
                 if (!first) {
                     if (comparator(container, lastentry))
-                        cout << " we have a problem at counter = " << counter
-                                << endl;
+                        std::cout << " we have a problem at counter = " << counter
+                                << std::endl;
                     assert(!comparator(container, lastentry));
                     lastentry = container;
                 } else {
@@ -268,7 +271,7 @@ public:
             size_t result = fwrite(&container[0], sizeof(Type), sizeofdata,
                     newfd);
             if (result != sizeofdata) {
-                cerr << "Error appending to the file " << endl;
+                std::cerr << "Error appending to the file " << std::endl;
                 break;
             }
             ++counter;
@@ -284,12 +287,12 @@ public:
         assert(d.size()==sizeofdata);
         int results = fseek(fd, 0, SEEK_END);
         if (results != 0) {
-            cerr << "could not seek to end of file" << endl;
-            throw runtime_error("bad seek");
+            std::cerr << "could not seek to end of file" << std::endl;
+            throw std::runtime_error("bad seek");
         }
         size_t result = fwrite(&d[0], sizeof(Type), sizeofdata, fd);
         if (result != sizeofdata) {
-            cerr << "Error appending to the file "  << endl;
+            std::cerr << "Error appending to the file "  << std::endl;
             return false;
         }
         ++N;
@@ -304,11 +307,11 @@ public:
     // caller is responsible for calling close
     void open() {
         if (vverbose)
-            cout << "opening..." << endl;
+            std::cout << "opening..." << std::endl;
         fd = tmpfile();
         if (fd == NULL) {
-            cerr << "Can't create a temp file" << endl;
-            throw runtime_error("could not open temp file");
+            std::cerr << "Can't create a temp file" << std::endl;
+            throw std::runtime_error("could not open temp file");
         }
     }
 
@@ -321,12 +324,12 @@ public:
         }
     }
 
-    void loadACopy(vector<DataType> & buffer, size_t begin, size_t end) const {
+    void loadACopy(std::vector<DataType> & buffer, size_t begin, size_t end) const {
         buffer.resize(end - begin);
         int result = fseek(fd, begin * sizeofdata * sizeof(Type), SEEK_SET);
         if (result != 0) {
-            cerr << "could not seek to " << begin << endl;
-            throw runtime_error("bad seek");
+            std::cerr << "could not seek to " << begin << std::endl;
+            throw std::runtime_error("bad seek");
         }
         for (size_t k = 0; k < buffer.size(); ++k) {
             buffer[k].resize(sizeofdata);
@@ -335,8 +338,8 @@ public:
 
             assert(buffer[k].size()==sizeofdata);
             if (result2 != sizeofdata) {
-                cerr << "Error reading from file " << endl;
-                throw runtime_error("bad read");
+                std::cerr << "Error reading from file " << std::endl;
+                throw std::runtime_error("bad read");
             }
         }
 
@@ -345,54 +348,54 @@ public:
     DataType get(const size_t pos) {
 
         if (fd == NULL) {
-            cerr << "no file to read from! Open the file first!" << endl;
-            throw runtime_error("file not open");
+            std::cerr << "no file to read from! Open the file first!" << std::endl;
+            throw std::runtime_error("file not open");
         }
         DataType ans(sizeofdata);
         int result = fseek(fd, pos * sizeofdata * sizeof(Type), SEEK_SET);
         if (result != 0) {
-            cerr << "could not seek to " << pos << endl;
-            throw runtime_error("bad seek");
+            std::cerr << "could not seek to " << pos << std::endl;
+            throw std::runtime_error("bad seek");
         }
         size_t howmany = fread(&ans[0], sizeof(Type), sizeofdata, fd);
         if (howmany != sizeofdata) {
-            cerr << "Error reading from file " << endl;
-            //cerr << strerror(errno) << endl;
-            throw runtime_error("bad read");
+            std::cerr << "Error reading from file " << std::endl;
+            //cerr << strerror(errno) << std::endl;
+            throw std::runtime_error("bad read");
         }
         return ans;
     }
-    void append(const vector<DataType> & buffer) {
+    void append(const std::vector<DataType> & buffer) {
         int result = fseek(fd, 0, SEEK_END);
         if (result != 0) {
-            cerr << "could not seek to end of file" << endl;
-            throw runtime_error("bad seek");
+            std::cerr << "could not seek to end of file" << std::endl;
+            throw std::runtime_error("bad seek");
         }
         for (size_t k = 0; k < buffer.size(); ++k) {
             assert(buffer[k].size()==sizeofdata);
             size_t result2 = fwrite(&(buffer[k][0]), sizeof(Type), sizeofdata, fd);
             if (result2 != sizeofdata) {
-                cerr << "Error write from file " << endl;
-                //cerr << strerror(errno) << endl;
-                throw runtime_error("bad write");
+                std::cerr << "Error write from file " << std::endl;
+                //cerr << strerror(errno) << std::endl;
+                throw std::runtime_error("bad write");
             }
         }
         N += buffer.size();
     }
 
-    void copyAt(const vector<DataType> & buffer, size_t begin) {
+    void copyAt(const std::vector<DataType> & buffer, size_t begin) {
         int result = fseek(fd, begin * sizeofdata * sizeof(Type), SEEK_SET);
         if (result != 0) {
-            cerr << "could not seek to " << begin << endl;
-            throw runtime_error("bad seek");
+            std::cerr << "could not seek to " << begin << std::endl;
+            throw std::runtime_error("bad seek");
         }
         for (size_t k = 0; k < buffer.size(); ++k) {
             assert(buffer[k].size()==sizeofdata);
             size_t result2 = fwrite(&(buffer[k][0]), sizeof(Type), sizeofdata, fd);
             if (result2 != sizeofdata) {
-                cerr << "Error write from file " << endl;
-                //cerr << strerror(errno) << endl;
-                throw runtime_error("bad write");
+                std::cerr << "Error write from file " << std::endl;
+                //cerr << strerror(errno) << std::endl;
+                throw std::runtime_error("bad write");
             }
         }
 
@@ -414,7 +417,7 @@ private:
 class Cmp {
 public:
 
-    Cmp(vector<size_t> & indexes) :
+    Cmp(std::vector<size_t> & indexes) :
         mIndexes(indexes) {
 
     }
@@ -427,8 +430,8 @@ public:
     }
 
     __attribute__ ((pure))
-    bool operator ()(const vector<uint32_t> & a, const vector<uint32_t> & b) const {
-        for (vector<size_t>::const_iterator i = mIndexes.begin(); i
+    bool operator ()(const std::vector<uint32_t> & a, const std::vector<uint32_t> & b) const {
+        for (std::vector<size_t>::const_iterator i = mIndexes.begin(); i
                 != mIndexes.end(); ++i) {
             const size_t k = *i;
             if (a[k] < b[k])
@@ -439,7 +442,9 @@ public:
         return false;
 
     }
-    vector<size_t> mIndexes;
+    std::vector<size_t> mIndexes;
 };
+
+} // namespace FastPFor
 
 #endif /* EXTERNALVECTOR_H_ */

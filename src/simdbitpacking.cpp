@@ -6,14 +6,13 @@
  */
 #include "simdbitpacking.h"
 
+namespace FastPFor {
+
 using namespace std;
-
-
 
 static void SIMD_nullunpacker32(const __m128i *  __restrict__ , uint32_t *  __restrict__  out) {
     memset(out,0,32 * 4 * 4);
 }
-
   
 static void __SIMD_fastpackwithoutmask1_32(const uint32_t *  __restrict__ _in, __m128i *  __restrict__  out) {
     const __m128i       *in = reinterpret_cast<const __m128i*>(_in);
@@ -14027,3 +14026,4 @@ void SIMD_fastpack_32(const uint32_t *  __restrict__ in, __m128i *  __restrict__
     simdpack(in,out, bit);
 }
 
+} // namespace FastPFor

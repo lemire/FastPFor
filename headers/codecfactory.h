@@ -28,38 +28,39 @@
 #include "simdbinarypacking.h"
 #include "snappydelta.h"
 
-using namespace std;
-typedef map<string, shared_ptr<IntegerCODEC> > CodecMap;
+namespace FastPFor {
+
+typedef std::map<std::string, std::shared_ptr<IntegerCODEC> > CodecMap;
 
 class CODECFactory {
 public:
 	static CodecMap scodecmap;
 
     // hacked for convenience
-    static vector<shared_ptr<IntegerCODEC> > allSchemes() {
-        vector < shared_ptr<IntegerCODEC> > ans;
+    static std::vector<std::shared_ptr<IntegerCODEC>> allSchemes() {
+        std::vector<std::shared_ptr<IntegerCODEC>> ans;
         for (auto i = scodecmap.begin(); i != scodecmap.end(); ++i) {
             ans.push_back(i->second);
         }
         return ans;
     }
 
-    static vector<string> allNames() {
-        vector < string > ans;
+    static std::vector<std::string> allNames() {
+        std::vector < std::string > ans;
         for (auto i = scodecmap.begin(); i != scodecmap.end(); ++i) {
             ans.push_back(i->first);
         }
         return ans;
     }
 
-    static shared_ptr<IntegerCODEC> & getFromName(string name) {
+    static std::shared_ptr<IntegerCODEC> & getFromName(std::string name) {
         if (scodecmap.find(name) == scodecmap.end()) {
-            cerr << "name " << name << " does not refer to a CODEC." << endl;
-            cerr << "possible choices:" << endl;
+            std::cerr << "name " << name << " does not refer to a CODEC." << std::endl;
+            std::cerr << "possible choices:" << std::endl;
             for (auto i = scodecmap.begin(); i != scodecmap.end(); ++i) {
-                cerr << static_cast<string> (i->first) << endl;// useless cast, but just to be clear
+                std::cerr << static_cast<std::string> (i->first) << std::endl;// useless cast, but just to be clear
             }
-            cerr << "for now, I'm going to just return 'copy'" << endl;
+            std::cerr << "for now, I'm going to just return 'copy'" << std::endl;
             return scodecmap["copy"];
         }
         return scodecmap[name];
@@ -71,45 +72,47 @@ public:
 // C++11 allows better than this, but neither Microsoft nor Intel support C++11 fully.
 static inline CodecMap initializefactory() {
 	CodecMap map;
-	map["fastbinarypacking8"] = shared_ptr<IntegerCODEC> (
+	map["fastbinarypacking8"] = std::shared_ptr<IntegerCODEC> (
 			new CompositeCodec<FastBinaryPacking<8> , VariableByte> );
-	map["fastbinarypacking16"] = shared_ptr<IntegerCODEC> (
+	map["fastbinarypacking16"] = std::shared_ptr<IntegerCODEC> (
 			new CompositeCodec<FastBinaryPacking<16> , VariableByte> );
-	map["fastbinarypacking32"] = shared_ptr<IntegerCODEC> (
+	map["fastbinarypacking32"] = std::shared_ptr<IntegerCODEC> (
 			new CompositeCodec<FastBinaryPacking<32> , VariableByte> );
-	map["BP32"] =  shared_ptr<IntegerCODEC> (new CompositeCodec<BP32 ,
+	map["BP32"] =  std::shared_ptr<IntegerCODEC> (new CompositeCodec<BP32 ,
 			VariableByte>);
-	map["vsencoding"] = shared_ptr<IntegerCODEC> (
+	map["vsencoding"] = std::shared_ptr<IntegerCODEC> (
 			new vsencoding::VSEncodingBlocks(1U << 16));
-	map["fastpfor"] = shared_ptr<IntegerCODEC> (
+	map["fastpfor"] = std::shared_ptr<IntegerCODEC> (
 			new CompositeCodec<FastPFor, VariableByte> ());
-	map["simdfastpfor"] = shared_ptr<IntegerCODEC> (
+	map["simdfastpfor"] = std::shared_ptr<IntegerCODEC> (
 			new CompositeCodec<SIMDFastPFor, VariableByte> ());
-	map["simplepfor"] = shared_ptr<IntegerCODEC> (
+	map["simplepfor"] = std::shared_ptr<IntegerCODEC> (
 			new CompositeCodec<SimplePFor<> , VariableByte> ());
-	map["pfor"] = shared_ptr<IntegerCODEC> (
+	map["pfor"] = std::shared_ptr<IntegerCODEC> (
 			new CompositeCodec<PFor, VariableByte> ());
-	map["pfor2008"] = shared_ptr<IntegerCODEC> (
+	map["pfor2008"] = std::shared_ptr<IntegerCODEC> (
 			new CompositeCodec<PFor2008, VariableByte> ());
-	map["newpfor"] = shared_ptr<IntegerCODEC> (
+	map["newpfor"] = std::shared_ptr<IntegerCODEC> (
 			new CompositeCodec<NewPFor<4, Simple16<false>> , VariableByte> ());
-	map["optpfor"] = shared_ptr<IntegerCODEC> (
+	map["optpfor"] = std::shared_ptr<IntegerCODEC> (
 			new CompositeCodec<OPTPFor<4, Simple16<false> > , VariableByte> ());
-	map["vbyte"] = shared_ptr<IntegerCODEC> (new VariableByte());
-	map["simple8b"] = shared_ptr<IntegerCODEC> (new Simple8b<true> ());
+	map["vbyte"] = std::shared_ptr<IntegerCODEC> (new VariableByte());
+	map["simple8b"] = std::shared_ptr<IntegerCODEC> (new Simple8b<true> ());
 #ifdef VARINTG8IU_H__
-	map["varintg8iu"] = shared_ptr<IntegerCODEC> (new VarIntG8IU ());
+	map["varintg8iu"] = std::shared_ptr<IntegerCODEC> (new VarIntG8IU ());
 #endif
 #ifdef USESNAPPY
-	map["snappy"] = shared_ptr<IntegerCODEC> (new JustSnappy ());
+	map["snappy"] = std::shared_ptr<IntegerCODEC> (new JustSnappy ());
 #endif
-	map["simdbinarypacking"] = shared_ptr<IntegerCODEC> (
+	map["simdbinarypacking"] = std::shared_ptr<IntegerCODEC> (
 			new CompositeCodec<SIMDBinaryPacking, VariableByte> ());
-	map["copy"] = shared_ptr<IntegerCODEC> (new JustCopy());
+	map["copy"] = std::shared_ptr<IntegerCODEC> (new JustCopy());
 	return map;
 }
 
 
 CodecMap CODECFactory::scodecmap = initializefactory();
+
+} // namespace FastPFor
 
 #endif /* CODECFACTORY_H_ */

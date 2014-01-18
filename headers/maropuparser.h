@@ -10,7 +10,7 @@
 
 #include "common.h"
 
-using namespace std;
+namespace FastPFor {
 
 /**
  * This is just a bit of code to parse the binary files provided by the
@@ -19,7 +19,7 @@ using namespace std;
  */
 class MaropuGapReader {
 public:
-    MaropuGapReader(const string & filename) :
+    MaropuGapReader(const std::string & filename) :
         mFilename(filename), fd(NULL) {
     }
     MaropuGapReader(const MaropuGapReader & mgr) :
@@ -31,7 +31,7 @@ public:
         return *this;
     }
 
-    string mFilename;
+    std::string mFilename;
     FILE * fd;
 
 
@@ -43,7 +43,7 @@ public:
     template <class container>
     bool loadIntegers(container & buffer) {
         if(fd == NULL) {
-          cerr<<"You forgot to open the file."<<endl;
+          std::cerr << "You forgot to open the file." << std::endl;
           return false;
         }
         uint32_t number;
@@ -55,9 +55,9 @@ public:
         result = fread(&(buffer[0]), sizeof(uint32_t), buffer.size(),
                 fd);
         if (result != buffer.size()) {
-            cerr << "IO status: " << strerror(errno) << endl;
-            cerr << "Error reading from file " << endl;
-            throw runtime_error("bad read");
+            std::cerr << "IO status: " << strerror(errno) << std::endl;
+            std::cerr << "Error reading from file " << std::endl;
+            throw std::runtime_error("bad read");
         }
         return true;
     }
@@ -67,9 +67,9 @@ public:
         close();
         fd = ::fopen(mFilename.c_str(), "rb");
         if (fd == NULL) {
-            cerr << "IO status: " << strerror(errno) << endl;
-            cerr << "Can't open " << mFilename << endl;
-            throw runtime_error("could not open temp file");
+            std::cerr << "IO status: " << strerror(errno) << std::endl;
+            std::cerr << "Can't open " << mFilename << std::endl;
+            throw std::runtime_error("could not open temp file");
         }
         setvbuf (fd , NULL , _IOFBF , 1024*4 ); // large buffer
     }
@@ -81,5 +81,7 @@ public:
         }
     }
 };
+
+} // namespace FastPFor
 
 #endif /* MAROPUPARSER_H_ */

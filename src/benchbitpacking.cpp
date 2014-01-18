@@ -4,8 +4,11 @@
  *
  * (c) Daniel Lemire, http://lemire.me/en/
  */
+
+#include <exception>
 #include <iostream>
 #include <iomanip>
+#include <vector>
 #include "util.h"
 #include "bitpackinghelpers.h"
 #include "simdbitpacking.h"
@@ -13,6 +16,9 @@
 #include "synthetic.h"
 #include "ztimer.h"
 #include "horizontalbitpacking.h"
+
+using namespace std;
+using namespace FastPFor;
 
 void maskfnc(vector<uint32_t, cacheallocator> & out, const uint32_t L) {
     if (L == 32)
@@ -266,7 +272,6 @@ void simplebenchmark(uint32_t N = 1U << 16, uint32_t T = 1U << 9) {
 
 }
 
-using namespace std;
 int main() {
     cout<<"# cache-to-cache"<<endl;
     simplebenchmark(1U << 16, 1U << 9);

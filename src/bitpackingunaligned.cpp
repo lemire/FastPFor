@@ -1,5 +1,7 @@
+#include <exception> // for std::logic_error
 #include "bitpackingunaligned.h"
 
+using FastPFor::byte;
 
 typedef const byte * (*runpacker)(const byte *  __restrict__ in, uint32_t *  __restrict__  out);
 typedef byte * (*rpacker)(const uint32_t *  __restrict__ in, byte *  __restrict__  out);
@@ -2774,7 +2776,7 @@ const byte * __fastunalignedbyteunpack8_8(const byte *  __restrict__ in, byte * 
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
 
@@ -2883,7 +2885,7 @@ const byte * __fastunalignedbyteunpack8_8(const byte *  __restrict__ in, byte * 
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
 
@@ -2944,7 +2946,7 @@ const byte * __fastunalignedbyteunpack8_8(const byte *  __restrict__ in, byte * 
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
 
@@ -2981,7 +2983,7 @@ const byte * __fastunalignedbyteunpack8_8(const byte *  __restrict__ in, byte * 
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
 
@@ -7614,7 +7616,7 @@ const byte * __fastunalignedbyteunpack8_16(const byte *  __restrict__ in, byte *
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
 
@@ -7723,7 +7725,7 @@ const byte * __fastunalignedbyteunpack8_16(const byte *  __restrict__ in, byte *
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
 
@@ -7784,7 +7786,7 @@ const byte * __fastunalignedbyteunpack8_16(const byte *  __restrict__ in, byte *
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
 
@@ -7821,6 +7823,6 @@ const byte * __fastunalignedbyteunpack8_16(const byte *  __restrict__ in, byte *
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 

@@ -12,6 +12,7 @@
 #include "simdbitpacking.h"
 #include "util.h"
 
+namespace FastPFor {
 
 /**
  *
@@ -72,9 +73,9 @@ public:
     const uint32_t * decodeArray(const uint32_t *in, const size_t /*length*/,
             uint32_t *out, size_t & nvalue) {
         const uint32_t actuallength = *in++;
-        if(needPaddingTo128Bits(out)) throw runtime_error("bad initial output align");
+        if(needPaddingTo128Bits(out)) throw std::runtime_error("bad initial output align");
         while(needPaddingTo128Bits(in)) {
-            if(in[0] != CookiePadder) throw logic_error("SIMDBinaryPacking alignment issue.");
+            if(in[0] != CookiePadder) throw std::logic_error("SIMDBinaryPacking alignment issue.");
             ++in;
         }
         const uint32_t * const initout(out);
@@ -96,7 +97,7 @@ public:
         return in;
     }
 
-    string name() const {
+    std::string name() const {
         return "SIMDBinaryPacking";
     }
 
@@ -133,9 +134,9 @@ public:
             uint32_t *out, size_t & nvalue) {
         const uint32_t actuallength = *in++;
         const uint32_t Bs = *in++;
-        if(needPaddingTo128Bits(out)) throw runtime_error("bad initial output align");
+        if(needPaddingTo128Bits(out)) throw std::runtime_error("bad initial output align");
         while(needPaddingTo128Bits(in)) {
-            if(in[0] != CookiePadder) throw logic_error("SIMDBinaryPacking alignment issue.");
+            if(in[0] != CookiePadder) throw std::logic_error("SIMDBinaryPacking alignment issue.");
             ++in;
         }
         for (uint32_t k = 0; k < actuallength / 128; ++k) {
@@ -151,10 +152,12 @@ public:
         return in;*/
     }
 
-    string name() const {
+    std::string name() const {
         return "SIMDGlobalBinaryPacking";
     }
 
 };
+
+} // namespace FastPFor
 
 #endif /* SIMDBINARYPACKING_H_ */

@@ -11,6 +11,8 @@
 #include "util.h"
 #include "codecs.h"
 
+namespace FastPFor {
+
 /**
  * This is a useful class for CODEC that only compress
  * data having length a multiple of some unit length.
@@ -60,11 +62,13 @@ public:
         assert(initin + length >= in2);
         return in2;
     }
-    string name() const {
-        ostringstream convert;
+    std::string name() const {
+        std::ostringstream convert;
         convert << codec1.name() << "+" << codec2.name();
         return convert.str();
     }
 };
+
+} // namespace FastPFor
 
 #endif /* COMPOSITECODEC_H_ */

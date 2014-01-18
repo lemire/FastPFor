@@ -6,22 +6,24 @@
 #ifndef SYNTHETICDATA_H_
 #define SYNTHETICDATA_H_
 
+#include <vector>
+#include <set>
 #include "common.h"
 #include "util.h"
 #include "mersenne.h"
 #include "memutil.h"
 
-using namespace std;
+namespace FastPFor {
 
-vector<uint32_t,cacheallocator> generateArray(uint32_t N, const uint32_t mask = 0xFFFFFFFFU) {
-    vector < uint32_t,cacheallocator> ans(N);
+std::vector<uint32_t,cacheallocator> generateArray(uint32_t N, const uint32_t mask = 0xFFFFFFFFU) {
+    std::vector<uint32_t,cacheallocator> ans(N);
     for (size_t k = 0; k < N; ++k)
         ans[k] = rand() & mask;
     return ans;
 }
 
-vector<uint32_t,cacheallocator> generateArray32(uint32_t N, const uint32_t mask = 0xFFFFFFFFU) {
-    vector < uint32_t,cacheallocator> ans(N);
+std::vector<uint32_t,cacheallocator> generateArray32(uint32_t N, const uint32_t mask = 0xFFFFFFFFU) {
+    std::vector<uint32_t,cacheallocator> ans(N);
     for (size_t k = 0; k < N; ++k)
         ans[k] = rand() & mask;
     return ans;
@@ -37,18 +39,18 @@ public:
      * fill the vector with N numbers uniformly picked from  from 0 to Max, not including Max
      * if it is not possible, an exception is thrown
      */
-    vector<uint32_t,cacheallocator> generateUniform(uint32_t N, uint32_t Max) {
+    std::vector<uint32_t,cacheallocator> generateUniform(uint32_t N, uint32_t Max) {
 		if (Max < N)
-			throw runtime_error(
+			throw std::runtime_error(
 					"can't generate enough distinct elements in small interval");
-		vector < uint32_t,cacheallocator > ans;
+		std::vector<uint32_t,cacheallocator> ans;
 		if (N == 0)
 			return ans; // nothing to do
 		ans.reserve(N);
 		assert(Max >= 1);
 
 		if (2 * N > Max) {
-			set < uint32_t > s;
+			std::set<uint32_t> s;
 			while (s.size() < Max - N)
 				s.insert(rand.getValue(Max - 1));
 			s.insert(Max);
@@ -62,7 +64,7 @@ public:
 			}
 			assert(c == ans.size());
 		} else {
-			set < uint32_t > s;
+			std::set<uint32_t> s;
 			while (s.size() < N)
 				s.insert(rand.getValue(Max - 1));
 			ans.assign(s.begin(), s.end());
@@ -85,7 +87,7 @@ public:
     // Max value is excluded from range
     template<class iterator>
     void fillUniform(iterator begin, iterator end, uint32_t Min, uint32_t Max) {
-        vector < uint32_t,cacheallocator > v = unidg.generateUniform(static_cast<uint32_t>(end - begin), Max - Min);
+        std::vector<uint32_t,cacheallocator> v = unidg.generateUniform(static_cast<uint32_t>(end - begin), Max - Min);
         for (size_t k = 0; k < v.size(); ++k)
             *(begin + k) = Min + v[k];
     }
@@ -97,7 +99,7 @@ public:
     void fillClustered(iterator begin, iterator end, uint32_t Min, uint32_t Max) {
         const uint32_t N = static_cast<uint32_t>(end - begin);
         const uint32_t range = Max - Min;
-        if(range < N) throw runtime_error("can't generate that many in small interval.");
+        if(range < N) throw std::runtime_error("can't generate that many in small interval.");
         assert(range >= N);
         if ((range == N) || (N < 10)) {
             fillUniform(begin, end, Min, Max);
@@ -122,8 +124,8 @@ public:
     }
 
     // Max value is excluded from range
-    vector<uint32_t,cacheallocator> generateClustered(uint32_t N, uint32_t Max) {
-        vector < uint32_t,cacheallocator > ans(N);
+    std::vector<uint32_t,cacheallocator> generateClustered(uint32_t N, uint32_t Max) {
+        std::vector<uint32_t,cacheallocator> ans(N);
         fillClustered(ans.begin(), ans.end(), 0, Max);
         return ans;
     }
@@ -135,7 +137,7 @@ public:
 
     uint32_t n;
     double zetan, theta;
-    vector<double> proba;
+    std::vector<double> proba;
 
     ZRandom rand;
     ZipfianGenerator(uint32_t seed = static_cast<uint32_t>(time(NULL))) :
@@ -144,7 +146,7 @@ public:
 
     void init(int _items, double _zipfianconstant = 1.0) {
         n = _items;
-        if(_items == 0) throw runtime_error("no items?");
+        if(_items == 0) throw std::runtime_error("no items?");
         theta = _zipfianconstant;
         if (theta > 0) {
             zetan = 1 / zeta(n, theta);
@@ -183,9 +185,9 @@ public:
 
 };
 
-vector<uint32_t,cacheallocator> generateZipfianArray32(uint32_t N, double power,
+std::vector<uint32_t,cacheallocator> generateZipfianArray32(uint32_t N, double power,
         const uint32_t mask = 0xFFFFFFFFU) {
-    vector < uint32_t , cacheallocator> ans(N);
+    std::vector<uint32_t , cacheallocator> ans(N);
     ZipfianGenerator zipf;
     const uint32_t MAXVALUE = 1U << 22;
     zipf.init(mask  > MAXVALUE-1 ? MAXVALUE : mask + 1, power);
@@ -193,5 +195,7 @@ vector<uint32_t,cacheallocator> generateZipfianArray32(uint32_t N, double power,
         ans[k] = zipf.nextInt();
     return ans;
 }
+
+} // namespace FastPFor
 
 #endif

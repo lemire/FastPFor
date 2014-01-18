@@ -29,6 +29,9 @@
 #define PREDICT_FALSE(x) x
 #define PREDICT_TRUE(x) x
 #endif
+
+namespace FastPFor {
+
 //typedef char v16qi __attribute__ ((vector_size (16)));
 
 class VarIntG8IU: public IntegerCODEC {
@@ -109,13 +112,8 @@ public:
     }
 
     virtual std::string name() const {
-        return string("VarIntG8IU");
+        return std::string("VarIntG8IU");
     }
-
-
-
-
-
 
     int encodeBlock(const uint32_t*& src, size_t& srclength,
             unsigned char*& dest, size_t& dstlength) {
@@ -231,7 +229,9 @@ private:
             return 1;
         }
     }
-
 };
+
+} // namespace FastPFor
+
 #endif  // VARINTG8IU_H__
 #endif //__SSE3__

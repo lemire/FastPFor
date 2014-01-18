@@ -11,6 +11,8 @@
 #include "common.h"
 #include "codecs.h"
 
+namespace FastPFor {
+
 /**
  * Follows Vo Ngoc Anh, Alistair Moffat: Index compression using 64-bit words.
  *  Softw., Pract. Exper. 40(2): 131-147 (2010)
@@ -76,7 +78,7 @@ public:
      */
     const uint32_t * decodeArray(const uint32_t *in, const size_t len,
             uint32_t *out, size_t & nvalue);
-    string name() const {
+    std::string name() const {
         return "Simple8b";
     }
     Simple8b() {
@@ -273,7 +275,7 @@ void Simple8b<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
             if (becareful)
                 assert(which(out64) == 15);
         } else {
-            throw logic_error("shouldn't happen");
+            throw std::logic_error("shouldn't happen");
         }
         ++out64;
 
@@ -409,7 +411,7 @@ void Simple8b<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
             if (becareful)
                 assert(which(out64) == 15);
         } else {
-            throw logic_error("shouldn't happen");
+            throw std::logic_error("shouldn't happen");
         }
         if (becareful)
             ASSERT(initin+length -ValuesRemaining+NumberOfValuesCoded==in,which(out64));
@@ -463,7 +465,7 @@ void Simple8b<MarkLength>::fakeencodeArray(const uint32_t *in,
         } else if (tryme<1, 60> (in, ValuesRemaining)) {
             NumberOfValuesCoded = (ValuesRemaining < 1) ? ValuesRemaining : 1;
         } else {
-            throw logic_error("shouldn't happen");
+            throw std::logic_error("shouldn't happen");
         }
         in += NumberOfValuesCoded;
         ValuesRemaining -= NumberOfValuesCoded;
@@ -501,7 +503,7 @@ const uint32_t * Simple8b<MarkLength>::decodeArray(const uint32_t *in,
 #endif
 
     if (nvalue < actualvalue)
-        cerr << " possible overrun" << endl;
+        std::cerr << " possible overrun" << std::endl;
     nvalue = actualvalue;
     const uint32_t * const end = out + nvalue;
     const uint32_t * const initout(out);
@@ -559,7 +561,7 @@ const uint32_t * Simple8b<MarkLength>::decodeArray(const uint32_t *in,
             unpack<1, 60> (out, in64);
             break;
         default:
-            throw logic_error("hmmm how could that happen?");
+            throw std::logic_error("hmmm how could that happen?");
         }
     }
     while (end > out) {
@@ -616,14 +618,14 @@ const uint32_t * Simple8b<MarkLength>::decodeArray(const uint32_t *in,
             carefulunpack<60> (1, out, in64);
             break;
         default:
-            throw logic_error("hmmm how could that happen?");
+            throw std::logic_error("hmmm how could that happen?");
         }
     }
 
 #ifdef STATS
     uint32_t sum = std::accumulate(stats.begin(),stats.end(),0);
     for (uint32_t k = 0; k < stats.size(); ++k) {
-        cout << "simple8b stats[" << k << "]=" << stats[k]*1.0/sum << endl;
+        cout << "simple8b stats[" << k << "]=" << stats[k]*1.0/sum << std::endl;
     }
 #endif
     assert(in64 <= finalin64);
@@ -634,5 +636,7 @@ const uint32_t * Simple8b<MarkLength>::decodeArray(const uint32_t *in,
     nvalue = MarkLength ? actualvalue : out - initout;
     return in;
 }
+
+} // namespace FastPFor
 
 #endif /* SIMPLE8B_H_ */

@@ -10,14 +10,13 @@
 
 #include "common.h"
 
+namespace FastPFor {
 
 template<class T, size_t alignment>
 T * moveToBoundary(T * inbyte) {
     return reinterpret_cast<T *> ((reinterpret_cast<uintptr_t> (inbyte)
             + (alignment - 1)) & ~(alignment - 1));
 }
-
-
 
 // use this when calling STL object if you want
 // their memory to be aligned on cache lines
@@ -112,5 +111,6 @@ template <class T1, size_t t, class T2>
 // typical cache line
 typedef  AlignedSTLAllocator<uint32_t, 64> cacheallocator;
 
+} // namespace FastPFor
 
 #endif /* MEMUTIL_H_ */

@@ -14,6 +14,8 @@
 #include "common.h"
 #include "codecs.h"
 
+namespace FastPFor {
+
 /**
  * If MarkLength is true, than the number of symbols is written
  * in the stream. Otherwise you need to specify it using the nvalue
@@ -55,7 +57,7 @@ public:
             size_t &nvalue);
     const uint32_t * decodeArray(const uint32_t *in, const size_t len,
             uint32_t *out, size_t & nvalue);
-    string name() const {
+    std::string name() const {
         if (hacked)
             return "Simple9hacked";
         return "Simple9";
@@ -168,8 +170,8 @@ void Simple9<MarkLength, hacked>::encodeArray(const uint32_t *in,
                 assert(which(out) == 14);
         } else {
             if ((*in >> 28) > 0) {
-                cerr << "Input's out of range: " << *in << endl;
-                throw runtime_error(
+                std::cerr << "Input's out of range: " << *in << std::endl;
+                throw std::runtime_error(
                         "You tried to apply Simple9 to an incompatible set of integers.");
             }
 
@@ -261,8 +263,8 @@ void Simple9<MarkLength, hacked>::encodeArray(const uint32_t *in,
                 assert(which(out) == 14);
         } else {
             if ((*in >> 28) > 0) {
-                cerr << "Input's out of range: " << *in << endl;
-                throw runtime_error(
+                std::cerr << "Input's out of range: " << *in << std::endl;
+                throw std::runtime_error(
                         "You tried to apply Simple9 to an incompatible set of integers.");
             }
             out[0] = 8;
@@ -291,7 +293,7 @@ const uint32_t * Simple9<MarkLength, hacked>::decodeArray(const uint32_t *in,
     const uint32_t * const endin = in + len;
     const uint32_t actualvalue = MarkLength ? *(in++) : nvalue;
     if (nvalue < actualvalue)
-        cerr << " possible overrun" << endl;
+        std::cerr << " possible overrun" << std::endl;
     nvalue = actualvalue;
     const uint32_t * const end = out + nvalue;
     while (end > out) {
@@ -307,13 +309,13 @@ const uint32_t * Simple9<MarkLength, hacked>::decodeArray(const uint32_t *in,
     uint32_t sum = std::accumulate(stats.begin(), stats.end(), 0);
 
     for (uint32_t k = 0; k < stats.size(); ++k) {
-        cout << "k=" << k << endl;
-        cout << "simple9 stats[" << k << "]=" << (stats[k] * 1.0 / sum) << endl;
+        std::cout << "k=" << k << std::endl;
+        std::cout << "simple9 stats[" << k << "]=" << (stats[k] * 1.0 / sum) << std::endl;
     }
-    cout << "alt computed length" << sum << endl;
-    cout << "computed length = " << expectedlength << endl;
-    cout << "we compressed " << nvalue << " integers down to " << len
-            << " 32-bit words" << endl;
+    std::cout << "alt computed length" << sum << std::endl;
+    std::cout << "computed length = " << expectedlength << std::endl;
+    std::cout << "we compressed " << nvalue << " integers down to " << len
+            << " 32-bit words" << std::endl;
 #endif
     assert(in <= endin);
     //    ASSERT (out < end + 60, out-end);
@@ -529,5 +531,7 @@ void Simple9<MarkLength, hacked>::unpack9_3(uint32_t **out, const uint32_t **in)
     *in = pin + 1;
     *out = pout + 3;
 }
+
+} // namespace FastPFor
 
 #endif /* SIMPLE9_H_ */

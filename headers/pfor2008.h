@@ -14,7 +14,7 @@
 #include "util.h"
 #include <iostream>
 
-using namespace std;
+namespace FastPFor {
 
 /**
  * Follows:
@@ -36,8 +36,8 @@ public:
         blocksizeinbits = 7//constexprbits(BlockSize)
     };
     // these are reusable buffers
-    vector<uint32_t> codedcopy;
-    vector<uint32_t> miss;
+    std::vector<uint32_t> codedcopy;
+    std::vector<uint32_t> miss;
     typedef uint32_t DATATYPE;// this is so that our code looks more like the original paper
 
     PFor2008() :
@@ -53,7 +53,7 @@ public:
         // a sample, but this only makes sense if you
         // are coding a frame of reference.
         size_t samplesize = size > defaultsamplesize ? defaultsamplesize : size;
-        vector<uint32_t> freqs(33);
+        std::vector<uint32_t> freqs(33);
         // we choose the sample to be consecutive
         uint32_t rstart = size > samplesize ? (rand() % (static_cast<uint32_t>(size - samplesize)))
                 : 0U;
@@ -101,7 +101,7 @@ public:
         size_t exceptcounter = 0;
         const uint32_t maxgap = 1U << b;
         {
-            vector<uint32_t>::iterator cci = codedcopy.begin();
+            std::vector<uint32_t>::iterator cci = codedcopy.begin();
             for (uint32_t k = 0; k < BlockSize; ++k, ++cci) {
                 miss[exceptcounter] = k;
                 exceptcounter += (in[k] >= maxgap);
@@ -212,7 +212,7 @@ public:
             } else if (maxb == 8) {
                 in = __decodeArray<uint8_t> (in, finalin - in, out, thisnvalue);
             } else {
-                throw logic_error("corrupted?");
+                throw std::logic_error("corrupted?");
             }
             assert(in > befin);
             assert(in <= finalin);
@@ -244,7 +244,7 @@ public:
         const uint32_t maxb = howmanybits(in, len);
         checkifdivisibleby(len, BlockSize);
         const uint32_t * const initout(out);
-        vector<DATATYPE> exceptions(len);
+        std::vector<DATATYPE> exceptions(len);
         DATATYPE * __restrict__ i = &exceptions[0];
         const uint32_t b = determineBestBase(in, len, maxb);
         *out++ = maxb;
@@ -282,7 +282,7 @@ public:
                     = reinterpret_cast<uint32_t *> ((reinterpret_cast<uintptr_t> (out8)
                             + 3) & ~3);
         } else {
-            throw logic_error("should not happen");
+            throw std::logic_error("should not happen");
         }
 
         nvalue = out - initout;
@@ -343,11 +343,14 @@ public:
         }
     }
 
-    virtual string name() const {
-        ostringstream convert;
+    virtual std::string name() const {
+        std::ostringstream convert;
         convert << "PFor2008";
         return convert.str();
     }
 
 };
+
+} // namespace FastPFor
+
 #endif /* PFOR2008_H_ */

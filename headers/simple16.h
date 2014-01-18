@@ -15,6 +15,8 @@
 #include "common.h"
 #include "codecs.h"
 
+namespace FastPFor {
+
 /**
  * If MarkLength is true, than the number of symbols is written
  * in the stream. Otherwise you need to specify it using the nvalue
@@ -142,7 +144,7 @@ public:
 
     const uint32_t * decodeArray(const uint32_t *in, const size_t len,
             uint32_t *out, size_t & nvalue);
-    string name() const {
+    std::string name() const {
         return "Simple16";
     }
     Simple16() {
@@ -385,8 +387,8 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
                 assert(which(out) == 14);
         } else {
             if ((*in >> 28) > 0) {
-                cerr << "Input's out of range: " << *in << endl;
-                throw runtime_error(
+                std::cerr << "Input's out of range: " << *in << std::endl;
+                throw std::runtime_error(
                         "You tried to apply Simple16 to an incompatible set of integers.");
             }
             out[0] = 15;
@@ -609,8 +611,8 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
                 assert(which(out) == 14);
         } else {
             if ((*in >> 28) > 0) {
-                cerr << "Input's out of range: " << *in << endl;
-                throw runtime_error(
+                std::cerr << "Input's out of range: " << *in << std::endl;
+                throw std::runtime_error(
                         "You tried to apply Simple16 to an incompatible set of integers.");
             }
             out[0] = 15;
@@ -698,7 +700,7 @@ const uint32_t * Simple16<MarkLength>::decodeArray(const uint32_t *in,
             throw NotEnoughStorage(*in);
     const uint32_t actualvalue = MarkLength ? *(in++) : static_cast<uint32_t>(nvalue);
     if (nvalue < actualvalue)
-        cerr << " possible overrun" << endl;
+        std::cerr << " possible overrun" << std::endl;
     nvalue = actualvalue;
 #ifdef STATS
     cout<<"simple16 decode "<<len<<endl;
@@ -1106,5 +1108,7 @@ void Simple16<MarkLength>::unpack28_1(uint32_t **out, const uint32_t **in) {
     *in = pin + 1;
     *out = pout + 1;
 }
+
+} // namespace FastPFor
 
 #endif /* SIMPLE16_H_ */

@@ -8,20 +8,26 @@
 
 #ifndef CVSTOMAROPUCVS_H_
 #define CVSTOMAROPUCVS_H_
+
+#include <fstream>
+#include <map>
+#include <set>
+#include <vector>
 #include "common.h"
 
-using namespace std;
+namespace FastPFor {
 
 enum {
     INCREASINGCARDINALITY, DECREASINGCARDINALITY
 };
+
 /**
  * Comma-Separate Values
  */
 class CSVReader {
 public:
 
-    CSVReader(istream * in, const string delimiter = ",",
+    CSVReader(std::istream * in, const std::string delimiter = ",",
             const char commentmarker = '#') :
         line(), mDelimiter(delimiter), mDelimiterPlusSpace(delimiter),
                 mCommentMarker(commentmarker), mIn(in), currentData() {
@@ -45,7 +51,7 @@ public:
     virtual ~CSVReader() {
     }
 
-    void linkStream(istream * in) {
+    void linkStream(std::istream * in) {
         mIn = in;
     }
 
@@ -61,21 +67,21 @@ public:
         return false;
     }
 
-    inline const vector<string> & nextRow() const {
+    inline const std::vector<std::string> & nextRow() const {
         return currentData;
     }
 
-    string line;
+    std::string line;
 
 private:
 
-    inline void tokenize(const string& str) {
-        string::size_type lastPos = str.find_first_not_of(mDelimiterPlusSpace,
+    inline void tokenize(const std::string& str) {
+        std::string::size_type lastPos = str.find_first_not_of(mDelimiterPlusSpace,
                 0);
-        string::size_type pos = str.find_first_of(mDelimiter, lastPos);
-        string::size_type pos_w = str.find_last_not_of(' ', pos);
-        while (string::npos != pos || string::npos != lastPos) {
-            const string::size_type fieldlength = pos == string::npos ? pos_w
+        std::string::size_type pos = str.find_first_of(mDelimiter, lastPos);
+        std::string::size_type pos_w = str.find_last_not_of(' ', pos);
+        while (std::string::npos != pos || std::string::npos != lastPos) {
+            const std::string::size_type fieldlength = pos == std::string::npos ? pos_w
                     + 1 - lastPos : pos_w - lastPos;
             currentData.push_back(str.substr(lastPos, fieldlength));
             lastPos = str.find_first_not_of(mDelimiterPlusSpace, pos);
@@ -84,26 +90,26 @@ private:
         }
     }
 
-    string mDelimiter;
-    string mDelimiterPlusSpace;
+    std::string mDelimiter;
+    std::string mDelimiterPlusSpace;
     char mCommentMarker;
-    istream * mIn;
-    vector<string> currentData;
+    std::istream * mIn;
+    std::vector<std::string> currentData;
 
 };
 
 class CSVFlatFile {
 public:
 
-    typedef map<string, size_t> maptype;
-    typedef map<string, size_t> umaptype;
+    typedef std::map<std::string, size_t> maptype;
+    typedef std::map<std::string, size_t> umaptype;
 
     enum {
         FREQNORMALISATION, DOMAINNORMALISATION
     };
     CSVFlatFile(const char * filename, const int normtype) :
         in(), mainreader(NULL), mapping(), NumberOfLines(0) {
-        cout << "# computing normalization of file " << filename << endl;
+        std::cout << "# computing normalization of file " << filename << std::endl;
         if (normtype == FREQNORMALISATION)
             computeFreqNormalization(filename);
         else if (normtype == DOMAINNORMALISATION)
@@ -127,53 +133,53 @@ public:
         return sum;
     }
 
-    vector<size_t> cardinalities() {
-        vector < size_t > cardinalities;
+    std::vector<size_t> cardinalities() {
+        std::vector<size_t> cardinalities;
         for (size_t k = 0; k < mapping.size(); ++k) {
                     cardinalities.push_back(mapping[k].size());
         }
         return cardinalities;
     }
 
-    vector<size_t> computeColumnOrderAndReturnColumnIndexes(
+    std::vector<size_t> computeColumnOrderAndReturnColumnIndexes(
             int order = INCREASINGCARDINALITY) {
-        vector < size_t > cardinalities;
+        std::vector<size_t> cardinalities;
         for (size_t k = 0; k < mapping.size(); ++k) {
             cardinalities.push_back(mapping[k].size());
         }
-        vector < pair<size_t, size_t> > cardinalitiesindex;
+        std::vector<std::pair<size_t, size_t> > cardinalitiesindex;
         for (size_t k = 0; k < cardinalities.size(); ++k)
             cardinalitiesindex.push_back(
-                    pair<size_t, size_t> (cardinalities[k], k));
+                    std::pair<size_t, size_t> (cardinalities[k], k));
         if (order == INCREASINGCARDINALITY)
             sort(cardinalitiesindex.begin(), cardinalitiesindex.end());
         else
             sort(cardinalitiesindex.rbegin(), cardinalitiesindex.rend());
-        vector < size_t > answer(getNumberOfColumns());
+        std::vector<size_t> answer(getNumberOfColumns());
         for (size_t k = 0; k < answer.size(); ++k)
             answer[k] = cardinalitiesindex[k].second;
         return answer;
     }
 
     // a bit awkward... but convenient:
-    set<size_t> AllButTopCardinalityColumnsExceptThoseWithCardinalityLowerThan(
+    std::set<size_t> AllButTopCardinalityColumnsExceptThoseWithCardinalityLowerThan(
             size_t topcolumns, size_t threshold) {
         if (mapping.empty()) {
-            set < size_t > answer;
+            std::set<size_t> answer;
             return answer;
         }
-        vector < size_t > allcards;
+        std::vector<size_t> allcards;
         for (size_t k = 0; k < mapping.size(); ++k) {
             allcards.push_back(mapping[k].size());
         }
         sort(allcards.rbegin(), allcards.rend());
-        size_t mythreshold = allcards[min(topcolumns - 1, allcards.size() - 1)];
-        cout << "# top " << topcolumns << " columns selected with cardinality "
-                << mythreshold << endl;
+        size_t mythreshold = allcards[std::min(topcolumns - 1, allcards.size() - 1)];
+        std::cout << "# top " << topcolumns << " columns selected with cardinality "
+                << mythreshold << std::endl;
         if (mythreshold < threshold)
             mythreshold = threshold;
-        cout << "# cardinality threshold " << mythreshold << endl;
-        set < size_t > answer;
+        std::cout << "# cardinality threshold " << mythreshold << std::endl;
+        std::set<size_t> answer;
         for (size_t k = 0; k < mapping.size(); ++k) {
             if (mapping[k].size() < mythreshold) {
                 answer.insert(k);
@@ -192,7 +198,7 @@ public:
     template<class C>
     bool nextRow(C & container) {
         if (mainreader.hasNext()) {
-            const vector<string> & row = mainreader.nextRow();
+            const std::vector<std::string> & row = mainreader.nextRow();
             for (size_t k = 0; k < row.size(); ++k) {
                 container[k] = mapping[k][row[k]];
             }
@@ -201,25 +207,25 @@ public:
             return false;
     }
 
-    void computeHisto(ifstream & fsin, vector<umaptype> & histograms) {
+    void computeHisto(std::ifstream & fsin, std::vector<umaptype> & histograms) {
         NumberOfLines = 0;
         CSVReader csvfile(&fsin);
         if (csvfile.hasNext()) {
             ++NumberOfLines;
-            const vector<string> & row = csvfile.nextRow();
+            const std::vector<std::string> & row = csvfile.nextRow();
             histograms.resize(row.size());
             for (size_t k = 0; k < row.size(); ++k) {
                 histograms[k][row[k]] = 1;
             }
         } else {
-            cerr
+            std::cerr
                     << "could open the file, but couldn't even read the first line"
-                    << endl;
+                    << std::endl;
             return;
         }
         while (csvfile.hasNext()) {
             ++NumberOfLines;
-            const vector<string> & row = csvfile.nextRow();
+            const std::vector<std::string> & row = csvfile.nextRow();
             for (size_t k = 0; k < row.size(); ++k) {
                 histograms[k][row[k]] += 1;
             }
@@ -227,24 +233,24 @@ public:
     }
     // map the string values to integer per frequency
     void computeFreqNormalization(const char * filename) {
-        ifstream fsin(filename);
+        std::ifstream fsin(filename);
         if (!fsin) {
-            cerr << "can't open " << filename << endl;
+            std::cerr << "can't open " << filename << std::endl;
             return;
         }
 
-        vector<umaptype> histograms;
+        std::vector<umaptype> histograms;
         computeHisto(fsin, histograms);
 
         fsin.close();
         mapping.resize(histograms.size());
         // next we sort the values per frequency
         for (size_t k = 0; k < histograms.size(); ++k) {
-            vector < pair<size_t, string> > tobesorted;
+            std::vector<std::pair<size_t, std::string> > tobesorted;
             tobesorted.reserve(histograms[k].size());
             for (umaptype::iterator i = histograms[k].begin(); i
                     != histograms[k].end(); ++i) {
-                tobesorted.push_back(pair<size_t, string> (i->second, i->first));
+                tobesorted.push_back(std::pair<size_t, std::string> (i->second, i->first));
             }
             histograms[k].clear();// free the memory
             sort(tobesorted.rbegin(), tobesorted.rend());
@@ -256,30 +262,30 @@ public:
 
     // map the string values to integers in lexicographical order
     void computeDomainNormalization(const char * filename) {
-        ifstream fsin(filename);
+        std::ifstream fsin(filename);
         if (!fsin) {
-            cerr << "can't open " << filename << endl;
+            std::cerr << "can't open " << filename << std::endl;
             return;
         }
         NumberOfLines = 0;
         CSVReader csvfile(&fsin);
-        vector < set<string> > histograms;
+        std::vector<std::set<std::string>> histograms;
         if (csvfile.hasNext()) {
             ++NumberOfLines;
-            const vector<string> & row = csvfile.nextRow();
+            const std::vector<std::string> & row = csvfile.nextRow();
             histograms.resize(row.size());
             for (size_t k = 0; k < row.size(); ++k) {
                 histograms[k].insert(row[k]);
             }
         } else {
-            cerr
+            std::cerr
                     << "could open the file, but couldn't even read the first line of "
-                    << filename << endl;
+                    << filename << std::endl;
             return;
         }
         while (csvfile.hasNext()) {
             ++NumberOfLines;
-            const vector<string> & row = csvfile.nextRow();
+            const std::vector<std::string> & row = csvfile.nextRow();
             for (size_t k = 0; k < row.size(); ++k) {
                 histograms[k].insert(row[k]);
             }
@@ -288,10 +294,10 @@ public:
         mapping.resize(histograms.size());
         // the values are already sorted lexicographically
         for (size_t k = 0; k < histograms.size(); ++k) {
-            set < string > &myvalues = histograms[k];
+            std::set<std::string> &myvalues = histograms[k];
             maptype & thismap = mapping[k];
             size_t counter = 0;
-            for (set<string>::iterator i = myvalues.begin(); i
+            for (std::set<std::string>::iterator i = myvalues.begin(); i
                     != myvalues.end(); ++i) {
                 thismap[*i] = counter++;
             }
@@ -299,10 +305,12 @@ public:
         }
     }
 
-    ifstream in;
+    std::ifstream in;
     CSVReader mainreader;
-    vector<maptype> mapping;
+    std::vector<maptype> mapping;
     size_t NumberOfLines;
 };
+
+} // namespace FastPFor
 
 #endif /* CVSTOMAROPU_H_ */

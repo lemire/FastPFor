@@ -8,6 +8,8 @@
 
 #include "common.h"
 
+namespace FastPFor {
+
 //
 // VS2012 bug: high_precision_clock is defined as system_clock and precision is about 15 MS!!
 // See: https://connect.microsoft.com/VisualStudio/feedback/details/719443
@@ -116,7 +118,10 @@ public:
         return elapsed();
     }
 };
+
 #endif
+
+} // namespace FastPFor
 
 #endif
 

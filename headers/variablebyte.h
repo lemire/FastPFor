@@ -10,6 +10,8 @@
 #include "common.h"
 #include "codecs.h"
 
+namespace FastPFor {
+
 class VariableByte: public IntegerCODEC {
 public:
     template<uint32_t i>
@@ -105,10 +107,12 @@ public:
         return reinterpret_cast<const uint32_t *> (inbyte);
     }
 
-    string name() const {
+    std::string name() const {
         return "VariableByte";
     }
 
 };
+
+} // namespace FastPFor
 
 #endif /* VARIABLEBYTE_H_ */

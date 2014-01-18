@@ -5,9 +5,14 @@
  * (c) Daniel Lemire, http://lemire.me/en/
  */
 
+#include <vector>
+#include <iostream>
 #include "csv.h"
 #include "externalvector.h"
 #include "util.h"
+
+using namespace std;
+using namespace FastPFor;
 
 void print(externalvector &ev) {
     for (size_t i = 0; i < ev.size(); ++i) {

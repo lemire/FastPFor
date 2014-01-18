@@ -1,5 +1,7 @@
 #include "bitpackingaligned.h"
 
+namespace FastPFor {
+
 uint32_t * nullpacker(const uint32_t *  __restrict__ /*in*/, uint32_t *  __restrict__  out) {
   return out;
 }
@@ -2121,7 +2123,7 @@ const uint32_t * __fastunpack32_8(const uint32_t *  __restrict__ in, uint32_t * 
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
 
@@ -2230,7 +2232,7 @@ const uint32_t * __fastunpack32_8(const uint32_t *  __restrict__ in, uint32_t * 
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
 
@@ -5863,7 +5865,7 @@ const uint32_t * __fastunpack32_16(const uint32_t *  __restrict__ in, uint32_t *
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
 
@@ -5972,7 +5974,7 @@ const uint32_t * __fastunpack32_16(const uint32_t *  __restrict__ in, uint32_t *
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
 
@@ -11101,7 +11103,7 @@ const uint32_t * __fastunpack32_24(const uint32_t *  __restrict__ in, uint32_t *
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
 
@@ -11210,7 +11212,7 @@ const uint32_t * __fastunpack32_24(const uint32_t *  __restrict__ in, uint32_t *
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
 
@@ -17851,7 +17853,7 @@ const uint32_t * __fastunpack32_32(const uint32_t *  __restrict__ in, uint32_t *
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
 
@@ -17960,6 +17962,7 @@ const uint32_t * __fastunpack32_32(const uint32_t *  __restrict__ in, uint32_t *
             default:
                 break;
     }
-    throw logic_error("number of bits is unsupported");
+    throw std::logic_error("number of bits is unsupported");
   }
 
+} // namespace FastPFor
