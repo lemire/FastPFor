@@ -200,7 +200,7 @@ public:
         if (mainreader.hasNext()) {
             const std::vector<std::string> & row = mainreader.nextRow();
             for (size_t k = 0; k < row.size(); ++k) {
-                container[k] = mapping[k][row[k]];
+                container[k] = static_cast<uint32_t>(mapping[k][row[k]]);
             }
             return true;
         } else
