@@ -20,12 +20,13 @@
 #else
 #include "horizontalbitpacking.h"
 
+namespace FastPFor {
+
 using namespace std;
+
 static void SIMD_nullunpacker32(const uint8_t *   , uint32_t *    out) {
     memset(out,0,32 * 4 * 4);
 }
-
-
 
              //Did not get good results with this:
 /*
@@ -984,7 +985,6 @@ void simdhunpack(const uint8_t *  in,uint32_t *  out, uint32_t bit) {
 
 }
 
-
-
+} // namespace FastPFor
 
 #endif

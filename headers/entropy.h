@@ -12,7 +12,7 @@
 #include "common.h"
 #include "util.h"
 
-using namespace std;
+namespace FastPFor {
 
 class EntropyRecorder {
 public:
@@ -56,7 +56,7 @@ public:
         }
         return total;
     }
-    typedef unordered_map<uint32_t,size_t>  maptype;
+    typedef std::unordered_map<uint32_t,size_t>  maptype;
     maptype counter;
     size_t totallength;
 };
@@ -79,16 +79,16 @@ double databits(const uint32_t * in, const size_t length) {
 double entropy(const uint32_t * in, const size_t length) {
     if (length == 0)
         return 0;
-    map<uint32_t, double> counter;
+    std::map<uint32_t, double> counter;
     for (size_t k = 0; k < length; ++k, ++in) {
-        map<uint32_t, double>::iterator i = counter.find(*in);
+        std::map<uint32_t, double>::iterator i = counter.find(*in);
         if (i != counter.end())
             i->second += 1;
         else
             counter[*in] = 1;
     }
     double total = 0;
-    for (map<uint32_t, double>::iterator i = counter.begin(); i
+    for (std::map<uint32_t, double>::iterator i = counter.begin(); i
             != counter.end(); ++i) {
         double x = i->second;
         total += x / static_cast<double>(length) * log(static_cast<double>(length) / x) / log(2.0);
@@ -96,5 +96,6 @@ double entropy(const uint32_t * in, const size_t length) {
     return total;
 }
 
+} // namespace FastPFor
 
 #endif /* ENTROPY_H_ */

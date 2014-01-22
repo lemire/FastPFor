@@ -14,6 +14,8 @@
 #include "bitpackingaligned.h"
 #include "util.h"
 
+namespace FastPFor {
+
 /**
  * This is 32-bit *aligned* binary packing, designed from the
  * ground up.
@@ -44,7 +46,7 @@ public:
             if (HowManyMiniBlocks == 16)
                 out = fastpackwithoutmask_16(&Bs[0], out, bits32);
             else
-                throw logic_error("unsupported HowManyMiniBlocks");
+                throw std::logic_error("unsupported HowManyMiniBlocks");
             for (uint32_t i = 0; i < HowManyMiniBlocks; ++i) {
                 if (MiniBlockSize == 8)
                     out = fastpackwithoutmask_8(in + i * MiniBlockSize, out,
@@ -60,7 +62,7 @@ public:
                             Bs[i]);
 
                 else
-                    throw logic_error("unsupported MiniBlockSize");
+                    throw std::logic_error("unsupported MiniBlockSize");
             }
         }
         nvalue = out - initout;
@@ -75,7 +77,7 @@ public:
             if (HowManyMiniBlocks == 16)
                 in = fastunpack_16(in, &Bs[0], bits32);
             else
-                throw logic_error("unsupported HowManyMiniBlocks");
+                throw std::logic_error("unsupported HowManyMiniBlocks");
             for (uint32_t i = 0; i < HowManyMiniBlocks; ++i, out += MiniBlockSize) {
                 if (MiniBlockSize == 8)
                     in = fastunpack_8(in, out, Bs[i]);
@@ -86,15 +88,15 @@ public:
                 else if (MiniBlockSize == 32)
                     in = fastunpack_32(in, out, Bs[i]);
                 else
-                    throw logic_error("unsupported MiniBlockSize");
+                    throw std::logic_error("unsupported MiniBlockSize");
             }
         }
         nvalue = out - initout;
         return in;
     }
 
-    string name() const {
-        ostringstream convert;
+    std::string name() const {
+        std::ostringstream convert;
         convert << "BinaryPacking" << MiniBlockSize;
         return convert.str();
     }
@@ -141,7 +143,7 @@ public:
                         out += Bs[i];
 
                 } else
-                    throw logic_error("unsupported MiniBlockSize");
+                    throw std::logic_error("unsupported MiniBlockSize");
             }
         }
         nvalue = out - initout;
@@ -169,15 +171,15 @@ public:
                     fastunpack(in, out + i * MiniBlockSize, Bs[i]);
                     in += Bs[i];
                 } else
-                    throw logic_error("unsupported MiniBlockSize");
+                    throw std::logic_error("unsupported MiniBlockSize");
             }
         }
         nvalue = out - initout;
         return in;
     }
 
-    string name() const {
-        ostringstream convert;
+    std::string name() const {
+        std::ostringstream convert;
         convert << "FastBinaryPacking" << MiniBlockSize;
         return convert.str();
     }
@@ -236,7 +238,7 @@ public:
         return in;
     }
 
-    string name() const {
+    std::string name() const {
         return "BP32";
     }
 
@@ -280,7 +282,7 @@ public:
                 outbyte = fastunalignedpackwithoutmask_16(&Bs[0], outbyte,
                         storageforbitwidth);
             else
-                throw logic_error("unsupported HowManyMiniBlocks");
+                throw std::logic_error("unsupported HowManyMiniBlocks");
             for (uint32_t i = 0; i < HowManyMiniBlocks; ++i) {
                 if (align)
                     outbyte = padTo32bits(outbyte);
@@ -298,7 +300,7 @@ public:
                      outbyte += sizeof(uint32_t) * Bs[i];
 
                 } else
-                    throw logic_error("unsupported MiniBlockSize");
+                    throw std::logic_error("unsupported MiniBlockSize");
             }
         }
         outbyte = padTo32bits(outbyte);
@@ -321,7 +323,7 @@ public:
             if (HowManyMiniBlocks == 16)
                 inbyte = fastunalignedunpack_16(inbyte, &Bs[0],storageforbitwidth);
             else
-                throw logic_error("unsupported HowManyMiniBlocks");
+                throw std::logic_error("unsupported HowManyMiniBlocks");
             for (uint32_t i = 0; i < HowManyMiniBlocks; ++i, out += MiniBlockSize) {
                 if (align)
                     inbyte = padTo32bits(inbyte);
@@ -333,7 +335,7 @@ public:
                     fastunpack(reinterpret_cast<const uint32_t *>(inbyte), out, Bs[i]);
                     inbyte += sizeof(uint32_t) * Bs[i];
                 } else
-                    throw logic_error("unsupported MiniBlockSize");
+                    throw std::logic_error("unsupported MiniBlockSize");
             }
         }
 
@@ -342,8 +344,8 @@ public:
         return reinterpret_cast<const uint32_t *> (padTo32bits(inbyte));
     }
 
-    string name() const {
-        ostringstream convert;
+    std::string name() const {
+        std::ostringstream convert;
         convert << "ByteAlignedPacking" << MiniBlockSize;
         if (prescan or align) {
             convert << "<";
@@ -360,6 +362,6 @@ public:
 
 };
 
-
+} // namespace FastPFor
 
 #endif /* BLOCKPACKING_H_ */

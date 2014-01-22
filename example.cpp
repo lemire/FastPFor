@@ -14,6 +14,9 @@
 
 
 int main() {
+    using CODECFactory::getFromName;
+    using FastPFor::IntegerCODEC;
+
     // We pick a CODEC
     IntegerCODEC & codec =  * CODECFactory::getFromName("simdfastpfor");
     // could use others, e.g., "simdbinarypacking", "varintg8iu"

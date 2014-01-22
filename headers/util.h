@@ -14,7 +14,8 @@
 #define USE_O_DIRECT
 #endif
 
-using namespace std;
+namespace FastPFor {
+
 //#define STATS
 // taken from stackoverflow
 #ifndef NDEBUG
@@ -156,17 +157,17 @@ container diffs(const container & in, const bool aredistinct) {
 
 inline void checkifdivisibleby(size_t a, uint32_t x) {
     if (!divisibleby(a, x)) {
-        ostringstream convert;
+        std::ostringstream convert;
         convert << a << " not divisible by " << x;
-        throw logic_error(convert.str());
+        throw std::logic_error(convert.str());
     }
 }
 
 template<class iter>
 void printme(iter i, iter b) {
     for (iter j = i; j != b; ++j)
-        cout << *j << " ";
-    cout << endl;
+        std::cout << *j << " ";
+    std::cout << std::endl;
 }
 
 __attribute__ ((const))
@@ -295,7 +296,7 @@ template<int b, class t, class iterator>
 int greedy_bit_size_lookahead( const iterator &begin,
        const iterator &end) {
   //  assert(end- begin <= b);
-  vector<t> prefixOrBuffer(end-begin);  // consider a  preallocated buffer...
+  std::vector<t> prefixOrBuffer(end-begin);  // consider a  preallocated buffer...
 
   partial_sum(begin, end, prefixOrBuffer.begin(),
 	      [](t x, t y) { return x | y; }  // change dl's + to |
@@ -372,16 +373,16 @@ int greedy_bit_size_lookahead( const iterator &begin,
 
 class BitWidthHistoGram {
 public:
-    vector < double > histo;
+    std::vector<double> histo;
     BitWidthHistoGram():histo(33, 0) {}
 
-    void display(string prefix ="") {
+    void display(std::string prefix ="") {
         double sum = 0;
         for (size_t k = 0; k < histo.size(); ++k)
             sum+= histo[k];
         if(sum==0) return ;
         for (size_t k = 0; k < histo.size(); ++k) {
-                cout<<prefix << k << " " << histo[k] / sum << endl;
+                std::cout<<prefix << k << " " << histo[k] / sum << std::endl;
         }
     }
     template <class container>
@@ -407,5 +408,6 @@ public:
 
 };
 
+} // namespace FastPFor
 
 #endif

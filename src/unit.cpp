@@ -15,6 +15,7 @@
 #include "cpubenchmark.h"
 
 using namespace std;
+using namespace FastPFor;
 
 int main() {
     vector < shared_ptr<IntegerCODEC> > myalgos = CODECFactory::allSchemes();

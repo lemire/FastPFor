@@ -14,6 +14,8 @@
 #include "blockpacking.h"
 #include "simple8b.h"
 
+namespace FastPFor {
+
 /**
  * FastPFor
  *
@@ -22,7 +24,7 @@
  *
  * Reference and documentation:
  *
- * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization
+ * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through std::vectorization
  * Software: Practice & Experience
  * http://arxiv.org/abs/1209.2137
  * http://onlinelibrary.wiley.com/doi/10.1002/spe.2203/abstract
@@ -52,15 +54,15 @@ public:
     // sometimes, mem. usage can grow too much, this clears it up
     void resetBuffer() {
         for (size_t i = 0; i < datatobepacked.size(); ++i) {
-            vector<uint32_t> ().swap(datatobepacked[i]);
+            std::vector<uint32_t> ().swap(datatobepacked[i]);
         }
     }
 
     const uint32_t PageSize;
     const uint32_t bitsPageSize;
 
-    vector<vector<uint32_t> > datatobepacked;
-    vector<uint8_t> bytescontainer;
+    std::vector<std::vector<uint32_t> > datatobepacked;
+    std::vector<uint8_t> bytescontainer;
 
 #ifndef NDEBUG
     const uint32_t * decodeArray(const uint32_t *in, const size_t length,
@@ -120,7 +122,7 @@ public:
         }
         assert(out == nvalue + initout);
         if (oldnvalue < nvalue)
-            cerr << "It is possible we have a buffer overrun. " << endl;
+            std::cerr << "It is possible we have a buffer overrun. " << std::endl;
         resetBuffer();// if you don't do this, the buffer has a memory
     }
 
@@ -168,7 +170,7 @@ public:
             *bc++ = bestcexcept;
             if (bestcexcept > 0) {
                 *bc++ = maxb;
-                vector < uint32_t > &thisexceptioncontainer
+                std::vector < uint32_t > &thisexceptioncontainer
                         = datatobepacked[maxb - bestb];
                 const uint32_t maxval = 1U << bestb;
                 for (uint32_t k = 0; k < BlockSize; ++k) {
@@ -216,7 +218,7 @@ public:
             }
         }
         length = inexcept - initin;
-        vector<uint32_t>::const_iterator unpackpointers[32 + 1];
+        std::vector<uint32_t>::const_iterator unpackpointers[32 + 1];
         for (uint32_t k = 1; k <= 32; ++k) {
             unpackpointers[k] = datatobepacked[k].begin();
         }
@@ -227,7 +229,7 @@ public:
             in = unpackblock<BlockSize>(in, out, b);
             if (cexcept > 0) {
                 const uint8_t maxbits = *bytep++;
-                vector<uint32_t>::const_iterator & exceptionsptr =
+                std::vector<uint32_t>::const_iterator & exceptionsptr =
                         unpackpointers[maxbits - b];
                 for (uint32_t k = 0; k < cexcept; ++k) {
                     const uint8_t pos = *(bytep++);
@@ -238,7 +240,7 @@ public:
         assert(in == headerin + wheremeta);
     }
 
-    string name() const {
+    std::string name() const {
         return "FastPFor";
     }
 
@@ -259,7 +261,7 @@ public:
  *
  * Reference and documentation:
  *
- * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization
+ * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through std::vectorization
  * http://arxiv.org/abs/1209.2137
  *
  */
@@ -290,8 +292,8 @@ public:
     const uint32_t PageSize;
     const uint32_t bitsPageSize;
 
-    vector<uint32_t> datatobepacked;
-    vector<uint8_t> bytescontainer;
+    std::vector<uint32_t> datatobepacked;
+    std::vector<uint8_t> bytescontainer;
 
     const uint32_t * decodeArray(const uint32_t *in, const size_t length,
             uint32_t *out, size_t &nvalue) {
@@ -342,7 +344,7 @@ public:
         }
         assert(out == nvalue + initout);
         if (oldnvalue < nvalue)
-            cerr << "It is possible we have a buffer overrun. " << endl;
+            std::cerr << "It is possible we have a buffer overrun. " << std::endl;
     }
 
 
@@ -440,13 +442,11 @@ public:
         assert(in == headerin + wheremeta);
     }
 
-    string name() const {
+    std::string name() const {
         return "SimplePFor";
     }
 };
 
-
-
-
+} // namespace FastPFo
 
 #endif /* EPFOR_H_ */

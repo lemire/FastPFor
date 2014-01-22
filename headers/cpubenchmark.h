@@ -10,6 +10,8 @@
 
 #include "common.h"
 
+namespace FastPFor {
+
 #if defined( __corei7__  )  // __amd64__ is untested
 // start and stop are as recommended by
 // Gabriele Paoloni, How to Benchmark Code Execution Times on Intel¨ IA-32 and IA-64 Instruction Set Architectures
@@ -99,5 +101,7 @@ public:
 
     }
 };
+
+} // namespace FastPFor
 
 #endif /* CPUBENCHMARK_H_ */

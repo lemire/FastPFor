@@ -11,6 +11,9 @@
 #include "entropy.h"
 #include "deltautil.h"
 
+using namespace std;
+using namespace FastPFor;
+
 void message(const char * prog) {
     cerr << " usage : " << prog << "  maropubinaryfile "
             << endl;
