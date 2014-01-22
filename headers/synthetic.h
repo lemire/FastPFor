@@ -173,7 +173,7 @@ public:
     double zeta(int n, double theta) {
         double sum = 0;
         for (long i = 0; i < n; i++) {
-            sum += 1 / (pow(i + 1, theta));
+            sum += 1.0 / (pow(static_cast<double>(i + 1), theta));
         }
         return sum;
     }
