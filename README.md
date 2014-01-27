@@ -1,5 +1,5 @@
 # The FastPFOR C++ library : Fast integer compression
-by Daniel Lemire, Leonid Boytsov, Owen Kaser, Maxime Caron, Louis Dionne, Michel Lemay, Erik Kruus
+by Daniel Lemire, Leonid Boytsov, Owen Kaser, Maxime Caron, Louis Dionne, Michel Lemay, Erik Kruus, Andrea Bedini
 
 
 ## What is this?

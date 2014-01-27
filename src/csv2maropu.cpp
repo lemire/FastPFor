@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
         cvs.close();
         return -1;
     }
-    uint32_t MAXSIZE = c * (1U << 20);
+    uint32_t MAXSIZE = static_cast<uint32_t>(c * (1U << 20));
     for (size_t block = 0; block * MAXSIZE >= integers; integers -= MAXSIZE) {
         if (fwrite(&MAXSIZE, sizeof(MAXSIZE), 1, fd) != 1) {
             cerr << "aborting" << endl;
@@ -60,14 +60,14 @@ int main(int argc, char **argv) {
                 cvs.close();
                 return -1;
             }
-            counter += c;
+            counter += static_cast<uint32_t>(c);
             if (counter == block)
                 break;
             assert(counter < block);
         }
     }
     if (integers > 0) {
-        uint32_t tsize = integers;
+        uint32_t tsize = static_cast<uint32_t>(integers);
         if (fwrite(&tsize, sizeof(tsize), 1, fd) != 1) {
             cerr << "aborting" << endl;
             ::fclose(fd);

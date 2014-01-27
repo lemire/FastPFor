@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
             continue;
         ++counter;
         histo.eatDGaps(rawdata);
-        histolength.histo[gccbits(rawdata.size())] += 1;
+        histolength.histo[gccbits(static_cast<uint32_t>(rawdata.size()))] += 1;
         if (counter + 1 > MAXCOUNT) {
             cout << "# bailing out early "<<(counter )<< endl;
             break;

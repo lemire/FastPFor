@@ -31,7 +31,7 @@ HEADERS = ./headers/simdfastpfor.h ./headers/simdbinarypacking.h ./headers/bitpa
 
 all: unit codecs inmemorybenchmark  
 
-allallall: unit codecs inmemorybenchmark entropy gapstats benchbitpacking partitionbylength csv2maropu  
+allallall: unit codecs inmemorybenchmark entropy gapstats benchbitpacking partitionbylength csv2maropu example 
 
 #snappy requires that the snappy lib be installed!!!
 snap: codecssnappy inmemorybenchmarksnappy

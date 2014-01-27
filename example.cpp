@@ -14,8 +14,7 @@
 
 
 int main() {
-    using CODECFactory::getFromName;
-    using FastPFor::IntegerCODEC;
+    using namespace FastPFor;
 
     // We pick a CODEC
     IntegerCODEC & codec =  * CODECFactory::getFromName("simdfastpfor");
@@ -30,7 +29,7 @@ int main() {
     // (Note: You don't need to use a vector.)
     //
     size_t N = 10 * 1000;
-    vector<uint32_t> mydata(N);
+    std::vector<uint32_t> mydata(N);
     for(uint32_t i = 0; i < N;i += 150) mydata[i] = i;
     //
     // the vector mydata could contain anything, really
@@ -40,7 +39,7 @@ int main() {
     // You need some "output" container. You are responsible
     // for allocating enough memory.
     //
-    vector<uint32_t> compressed_output(N+1024);
+    std::vector<uint32_t> compressed_output(N+1024);
     // N+1024 should be plenty
     //
     //
@@ -52,16 +51,16 @@ int main() {
     compressed_output.resize(compressedsize);
     compressed_output.shrink_to_fit();
     // display compression rate:
-    cout<<setprecision(3);
-    cout<<"You are using " << 32.0 * static_cast<double>(compressed_output.size()) /
-                 static_cast<double>(mydata.size()) <<" bits per integer. "<<endl;
+    std::cout<<std::setprecision(3);
+    std::cout<<"You are using " << 32.0 * static_cast<double>(compressed_output.size()) /
+                 static_cast<double>(mydata.size()) <<" bits per integer. "<<std::endl;
     //
     // You are done!... with the compression...
     //
     ///
     // decompressing is also easy:
     //
-    vector<uint32_t> mydataback(N);
+    std::vector<uint32_t> mydataback(N);
     size_t recoveredsize = mydataback.size();
     //
     codec.decodeArray(compressed_output.data(),
@@ -70,7 +69,7 @@ int main() {
     //
     // That's it!
     //
-    if(mydataback != mydata) throw runtime_error("bug!");
+    if(mydataback != mydata) throw std::runtime_error("bug!");
 
     // If you need to use differential coding, you can use
     // calls like these to get the deltas and recover the original
