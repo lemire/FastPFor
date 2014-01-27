@@ -47,6 +47,9 @@ http://arxiv.org/abs/1209.2137
 http://onlinelibrary.wiley.com/doi/10.1002/spe.2203/abstract
 
 
+Daniel Lemire, Leonid Boytsov, Nathan Kurz, SIMD Compression and the Intersection of Sorted Integers, arXiv: 1401.6399, 2014
+http://arxiv.org/abs/1401.6399
+
 ## License
 
 This code is licensed under Apache License, Version 2.0 (ASL2.0).
