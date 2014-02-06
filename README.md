@@ -31,6 +31,13 @@ https://github.com/lemire/SIMDCompressionAndIntersection
 This other library (SIMDCompressionAndIntersection) also comes complete
 with new SIMD-based intersection algorithms.
 
+# For a simple C library
+
+FastPFOR is a C++ research library. For something simpler,
+written in C, see:
+
+https://github.com/lemire/simdcomp
+
 ## Reference and documentation
 
 For a simple example, please see 
