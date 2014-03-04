@@ -267,4 +267,6 @@ DO NOT use varint-G8UI if you want to avoid patents.
 
 The rest of the library *should be* patent-free.
 
+## Funding 
 
+This work was supported by NSERC grant number 26143.
