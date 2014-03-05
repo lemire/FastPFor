@@ -104,11 +104,11 @@ library.
 
 ## Building with make
 
-You can specify which C++ compiler you are using with the YOURCXX variable.
+You can specify which C++ compiler you are using with the CXX variable.
 
 e.g., under bash type
 
-    export YOURCXX=g++-4.7
+    export CXX=g++-4.7
     make
 
 ### Installing GCC 4.7 under Linux
