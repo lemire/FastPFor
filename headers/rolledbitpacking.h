@@ -10,6 +10,7 @@
 
 #include <exception> // logic_error, runtime_error
 #include "common.h"
+#include "util.h"
 
 namespace FastPFor {
 
