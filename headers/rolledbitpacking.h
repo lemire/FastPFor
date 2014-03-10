@@ -10,6 +10,8 @@
 
 #include <exception> // logic_error, runtime_error
 #include "common.h"
+#include "util.h"
+
 
 namespace FastPFor {
 
@@ -225,7 +227,7 @@ uint8_t * __pack_vl(const uint32_t * __restrict__ in,
     };
 #else
     const uint32_t mygcd = gcd(bit, 32);
-#endif    
+#endif
 
     // iterate over bit position of the output
     for (uint32_t t = 0; t < mygcd; ++t) {
@@ -261,7 +263,7 @@ const uint8_t * __unpack_vl(const uint8_t * __restrict__ inbyte,
         uint32_t * __restrict__ out) {
     assert(bit <= 32);
     uint32_t counter = 0;
-    
+
 #if  !defined(_MSC_VER) && !defined(__INTEL_COMPILER)
     enum {
         mygcd = gcd(bit, 32)
