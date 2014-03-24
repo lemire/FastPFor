@@ -23,6 +23,7 @@
 #include "compositecodec.h"
 #include "blockpacking.h"
 #include "pfor.h"
+#include "simdpfor.h"
 #include "pfor2008.h"
 #include "VarIntG8IU.h"
 #include "simdbinarypacking.h"
@@ -34,7 +35,7 @@ typedef std::map<std::string, std::shared_ptr<IntegerCODEC> > CodecMap;
 
 class CODECFactory {
 public:
-	static CodecMap scodecmap;
+    static CodecMap scodecmap;
 
     // hacked for convenience
     static std::vector<std::shared_ptr<IntegerCODEC>> allSchemes() {
@@ -71,43 +72,45 @@ public:
 
 // C++11 allows better than this, but neither Microsoft nor Intel support C++11 fully.
 static inline CodecMap initializefactory() {
-	CodecMap map;
-	map["fastbinarypacking8"] = std::shared_ptr<IntegerCODEC> (
-			new CompositeCodec<FastBinaryPacking<8> , VariableByte> );
-	map["fastbinarypacking16"] = std::shared_ptr<IntegerCODEC> (
-			new CompositeCodec<FastBinaryPacking<16> , VariableByte> );
-	map["fastbinarypacking32"] = std::shared_ptr<IntegerCODEC> (
-			new CompositeCodec<FastBinaryPacking<32> , VariableByte> );
-	map["BP32"] =  std::shared_ptr<IntegerCODEC> (new CompositeCodec<BP32 ,
-			VariableByte>);
-	map["vsencoding"] = std::shared_ptr<IntegerCODEC> (
-			new vsencoding::VSEncodingBlocks(1U << 16));
-	map["fastpfor"] = std::shared_ptr<IntegerCODEC> (
-			new CompositeCodec<FastPFor, VariableByte> ());
-	map["simdfastpfor"] = std::shared_ptr<IntegerCODEC> (
-			new CompositeCodec<SIMDFastPFor, VariableByte> ());
-	map["simplepfor"] = std::shared_ptr<IntegerCODEC> (
-			new CompositeCodec<SimplePFor<> , VariableByte> ());
-	map["pfor"] = std::shared_ptr<IntegerCODEC> (
-			new CompositeCodec<PFor, VariableByte> ());
-	map["pfor2008"] = std::shared_ptr<IntegerCODEC> (
-			new CompositeCodec<PFor2008, VariableByte> ());
-	map["newpfor"] = std::shared_ptr<IntegerCODEC> (
-			new CompositeCodec<NewPFor<4, Simple16<false>> , VariableByte> ());
-	map["optpfor"] = std::shared_ptr<IntegerCODEC> (
-			new CompositeCodec<OPTPFor<4, Simple16<false> > , VariableByte> ());
-	map["vbyte"] = std::shared_ptr<IntegerCODEC> (new VariableByte());
-	map["simple8b"] = std::shared_ptr<IntegerCODEC> (new Simple8b<true> ());
+    CodecMap map;
+    map["fastbinarypacking8"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<FastBinaryPacking<8> , VariableByte> );
+    map["fastbinarypacking16"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<FastBinaryPacking<16> , VariableByte> );
+    map["fastbinarypacking32"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<FastBinaryPacking<32> , VariableByte> );
+    map["BP32"] =  std::shared_ptr<IntegerCODEC> (new CompositeCodec<BP32 ,
+            VariableByte>);
+    map["vsencoding"] = std::shared_ptr<IntegerCODEC> (
+            new vsencoding::VSEncodingBlocks(1U << 16));
+    map["fastpfor"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<FastPFor, VariableByte> ());
+    map["simdfastpfor"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<SIMDFastPFor, VariableByte> ());
+    map["simplepfor"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<SimplePFor<> , VariableByte> ());
+    map["pfor"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<PFor, VariableByte> ());
+    map["simdpfor"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<SIMDPFor, VariableByte> ());
+    map["pfor2008"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<PFor2008, VariableByte> ());
+    map["newpfor"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<NewPFor<4, Simple16<false>> , VariableByte> ());
+    map["optpfor"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<OPTPFor<4, Simple16<false> > , VariableByte> ());
+    map["vbyte"] = std::shared_ptr<IntegerCODEC> (new VariableByte());
+    map["simple8b"] = std::shared_ptr<IntegerCODEC> (new Simple8b<true> ());
 #ifdef VARINTG8IU_H__
-	map["varintg8iu"] = std::shared_ptr<IntegerCODEC> (new VarIntG8IU ());
+    map["varintg8iu"] = std::shared_ptr<IntegerCODEC> (new VarIntG8IU ());
 #endif
 #ifdef USESNAPPY
-	map["snappy"] = std::shared_ptr<IntegerCODEC> (new JustSnappy ());
+    map["snappy"] = std::shared_ptr<IntegerCODEC> (new JustSnappy ());
 #endif
-	map["simdbinarypacking"] = std::shared_ptr<IntegerCODEC> (
-			new CompositeCodec<SIMDBinaryPacking, VariableByte> ());
-	map["copy"] = std::shared_ptr<IntegerCODEC> (new JustCopy());
-	return map;
+    map["simdbinarypacking"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<SIMDBinaryPacking, VariableByte> ());
+    map["copy"] = std::shared_ptr<IntegerCODEC> (new JustCopy());
+    return map;
 }
 
 
