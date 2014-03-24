@@ -31,6 +31,13 @@ https://github.com/lemire/SIMDCompressionAndIntersection
 This other library (SIMDCompressionAndIntersection) also comes complete
 with new SIMD-based intersection algorithms.
 
+# For a simple C library
+
+FastPFOR is a C++ research library. For something simpler,
+written in C, see:
+
+https://github.com/lemire/simdcomp
+
 ## Reference and documentation
 
 For a simple example, please see 
@@ -46,6 +53,9 @@ Software Practice & Experience (to appear)
 http://arxiv.org/abs/1209.2137
 http://onlinelibrary.wiley.com/doi/10.1002/spe.2203/abstract
 
+
+Daniel Lemire, Leonid Boytsov, Nathan Kurz, SIMD Compression and the Intersection of Sorted Integers, arXiv: 1401.6399, 2014
+http://arxiv.org/abs/1401.6399
 
 ## License
 
@@ -94,11 +104,11 @@ library.
 
 ## Building with make
 
-You can specify which C++ compiler you are using with the YOURCXX variable.
+You can specify which C++ compiler you are using with the CXX variable.
 
 e.g., under bash type
 
-    export YOURCXX=g++-4.7
+    export CXX=g++-4.7
     make
 
 ### Installing GCC 4.7 under Linux
@@ -257,4 +267,6 @@ DO NOT use varint-G8UI if you want to avoid patents.
 
 The rest of the library *should be* patent-free.
 
+## Funding 
 
+This work was supported by NSERC grant number 26143.
