@@ -232,7 +232,7 @@ public:
         const __m128i* pStart = reinterpret_cast<__m128i*>(pData);
         __m128i a = _mm_load_si128(pCurr);
         while (pCurr > pStart) {
-            register __m128i b = _mm_load_si128(pCurr - 1);
+            __m128i b = _mm_load_si128(pCurr - 1);
             _mm_store_si128(pCurr-- , _mm_sub_epi32(a, b));
             a = b;
         }

@@ -2599,80 +2599,6 @@ const byte * __fastunalignedbyteunpack8_8(const byte *  __restrict__ in, byte * 
 
 
 
-  static const runpacker       unpackarray_8[] = {
-          nullunpacker8,
-  __fastunalignedunpack1_8,
-  __fastunalignedunpack2_8,
-  __fastunalignedunpack3_8,
-  __fastunalignedunpack4_8,
-  __fastunalignedunpack5_8,
-  __fastunalignedunpack6_8,
-  __fastunalignedunpack7_8,
-  __fastunalignedunpack8_8,
-  __fastunalignedunpack9_8,
-  __fastunalignedunpack10_8,
-  __fastunalignedunpack11_8,
-  __fastunalignedunpack12_8,
-  __fastunalignedunpack13_8,
-  __fastunalignedunpack14_8,
-  __fastunalignedunpack15_8,
-  __fastunalignedunpack16_8,
-  __fastunalignedunpack17_8,
-  __fastunalignedunpack18_8,
-  __fastunalignedunpack19_8,
-  __fastunalignedunpack20_8,
-  __fastunalignedunpack21_8,
-  __fastunalignedunpack22_8,
-  __fastunalignedunpack23_8,
-  __fastunalignedunpack24_8,
-  __fastunalignedunpack25_8,
-  __fastunalignedunpack26_8,
-  __fastunalignedunpack27_8,
-  __fastunalignedunpack28_8,
-  __fastunalignedunpack29_8,
-  __fastunalignedunpack30_8,
-  __fastunalignedunpack31_8,
-  __fastunalignedunpack32_8,
-};
-
-
-  static const rpacker       packarray_8[] = {
-          nullpacker,
-  __fastunalignedpackwithoutmask1_8,
-  __fastunalignedpackwithoutmask2_8,
-  __fastunalignedpackwithoutmask3_8,
-  __fastunalignedpackwithoutmask4_8,
-  __fastunalignedpackwithoutmask5_8,
-  __fastunalignedpackwithoutmask6_8,
-  __fastunalignedpackwithoutmask7_8,
-  __fastunalignedpackwithoutmask8_8,
-  __fastunalignedpackwithoutmask9_8,
-  __fastunalignedpackwithoutmask10_8,
-  __fastunalignedpackwithoutmask11_8,
-  __fastunalignedpackwithoutmask12_8,
-  __fastunalignedpackwithoutmask13_8,
-  __fastunalignedpackwithoutmask14_8,
-  __fastunalignedpackwithoutmask15_8,
-  __fastunalignedpackwithoutmask16_8,
-  __fastunalignedpackwithoutmask17_8,
-  __fastunalignedpackwithoutmask18_8,
-  __fastunalignedpackwithoutmask19_8,
-  __fastunalignedpackwithoutmask20_8,
-  __fastunalignedpackwithoutmask21_8,
-  __fastunalignedpackwithoutmask22_8,
-  __fastunalignedpackwithoutmask23_8,
-  __fastunalignedpackwithoutmask24_8,
-  __fastunalignedpackwithoutmask25_8,
-  __fastunalignedpackwithoutmask26_8,
-  __fastunalignedpackwithoutmask27_8,
-  __fastunalignedpackwithoutmask28_8,
-  __fastunalignedpackwithoutmask29_8,
-  __fastunalignedpackwithoutmask30_8,
-  __fastunalignedpackwithoutmask31_8,
-  __fastunalignedpackwithoutmask32_8,
-};
-
-
   const byte * fastunalignedunpack_8(const byte *  __restrict__ in, uint32_t *  __restrict__  out, const uint32_t bit) {
     switch(bit) {
             case 0: return nullunpacker8(in,out);
@@ -2888,31 +2814,6 @@ const byte * __fastunalignedbyteunpack8_8(const byte *  __restrict__ in, byte * 
     throw std::logic_error("number of bits is unsupported");
   }
 
-
-  static const rbyteunpacker       byteunpackarray_8[] = {
-          nullbyteunpacker8,
-  __fastunalignedbyteunpack1_8,
-  __fastunalignedbyteunpack2_8,
-  __fastunalignedbyteunpack3_8,
-  __fastunalignedbyteunpack4_8,
-  __fastunalignedbyteunpack5_8,
-  __fastunalignedbyteunpack6_8,
-  __fastunalignedbyteunpack7_8,
-  __fastunalignedbyteunpack8_8,
-};
-
-
-  static const rbytepacker       bytepackarray_8[] = {
-          nullbytepacker,
-  __fastunalignedbytepackwithoutmask1_8,
-  __fastunalignedbytepackwithoutmask2_8,
-  __fastunalignedbytepackwithoutmask3_8,
-  __fastunalignedbytepackwithoutmask4_8,
-  __fastunalignedbytepackwithoutmask5_8,
-  __fastunalignedbytepackwithoutmask6_8,
-  __fastunalignedbytepackwithoutmask7_8,
-  __fastunalignedbytepackwithoutmask8_8,
-};
 
 
   const byte * fastunalignedbyteunpack_8(const byte *  __restrict__ in, byte *  __restrict__  out, const uint32_t bit) {
@@ -7439,80 +7340,6 @@ const byte * __fastunalignedbyteunpack8_16(const byte *  __restrict__ in, byte *
 
 
 
-  static const runpacker       unpackarray_16[] = {
-          nullunpacker16,
-  __fastunalignedunpack1_16,
-  __fastunalignedunpack2_16,
-  __fastunalignedunpack3_16,
-  __fastunalignedunpack4_16,
-  __fastunalignedunpack5_16,
-  __fastunalignedunpack6_16,
-  __fastunalignedunpack7_16,
-  __fastunalignedunpack8_16,
-  __fastunalignedunpack9_16,
-  __fastunalignedunpack10_16,
-  __fastunalignedunpack11_16,
-  __fastunalignedunpack12_16,
-  __fastunalignedunpack13_16,
-  __fastunalignedunpack14_16,
-  __fastunalignedunpack15_16,
-  __fastunalignedunpack16_16,
-  __fastunalignedunpack17_16,
-  __fastunalignedunpack18_16,
-  __fastunalignedunpack19_16,
-  __fastunalignedunpack20_16,
-  __fastunalignedunpack21_16,
-  __fastunalignedunpack22_16,
-  __fastunalignedunpack23_16,
-  __fastunalignedunpack24_16,
-  __fastunalignedunpack25_16,
-  __fastunalignedunpack26_16,
-  __fastunalignedunpack27_16,
-  __fastunalignedunpack28_16,
-  __fastunalignedunpack29_16,
-  __fastunalignedunpack30_16,
-  __fastunalignedunpack31_16,
-  __fastunalignedunpack32_16,
-};
-
-
-  static const rpacker       packarray_16[] = {
-          nullpacker,
-  __fastunalignedpackwithoutmask1_16,
-  __fastunalignedpackwithoutmask2_16,
-  __fastunalignedpackwithoutmask3_16,
-  __fastunalignedpackwithoutmask4_16,
-  __fastunalignedpackwithoutmask5_16,
-  __fastunalignedpackwithoutmask6_16,
-  __fastunalignedpackwithoutmask7_16,
-  __fastunalignedpackwithoutmask8_16,
-  __fastunalignedpackwithoutmask9_16,
-  __fastunalignedpackwithoutmask10_16,
-  __fastunalignedpackwithoutmask11_16,
-  __fastunalignedpackwithoutmask12_16,
-  __fastunalignedpackwithoutmask13_16,
-  __fastunalignedpackwithoutmask14_16,
-  __fastunalignedpackwithoutmask15_16,
-  __fastunalignedpackwithoutmask16_16,
-  __fastunalignedpackwithoutmask17_16,
-  __fastunalignedpackwithoutmask18_16,
-  __fastunalignedpackwithoutmask19_16,
-  __fastunalignedpackwithoutmask20_16,
-  __fastunalignedpackwithoutmask21_16,
-  __fastunalignedpackwithoutmask22_16,
-  __fastunalignedpackwithoutmask23_16,
-  __fastunalignedpackwithoutmask24_16,
-  __fastunalignedpackwithoutmask25_16,
-  __fastunalignedpackwithoutmask26_16,
-  __fastunalignedpackwithoutmask27_16,
-  __fastunalignedpackwithoutmask28_16,
-  __fastunalignedpackwithoutmask29_16,
-  __fastunalignedpackwithoutmask30_16,
-  __fastunalignedpackwithoutmask31_16,
-  __fastunalignedpackwithoutmask32_16,
-};
-
-
   const byte * fastunalignedunpack_16(const byte *  __restrict__ in, uint32_t *  __restrict__  out, const uint32_t bit) {
     switch(bit) {
             case 0: return nullunpacker16(in,out);
@@ -7729,30 +7556,6 @@ const byte * __fastunalignedbyteunpack8_16(const byte *  __restrict__ in, byte *
   }
 
 
-  static const rbyteunpacker       byteunpackarray_16[] = {
-          nullbyteunpacker16,
-  __fastunalignedbyteunpack1_16,
-  __fastunalignedbyteunpack2_16,
-  __fastunalignedbyteunpack3_16,
-  __fastunalignedbyteunpack4_16,
-  __fastunalignedbyteunpack5_16,
-  __fastunalignedbyteunpack6_16,
-  __fastunalignedbyteunpack7_16,
-  __fastunalignedbyteunpack8_16,
-};
-
-
-  static const rbytepacker       bytepackarray_16[] = {
-          nullbytepacker,
-  __fastunalignedbytepackwithoutmask1_16,
-  __fastunalignedbytepackwithoutmask2_16,
-  __fastunalignedbytepackwithoutmask3_16,
-  __fastunalignedbytepackwithoutmask4_16,
-  __fastunalignedbytepackwithoutmask5_16,
-  __fastunalignedbytepackwithoutmask6_16,
-  __fastunalignedbytepackwithoutmask7_16,
-  __fastunalignedbytepackwithoutmask8_16,
-};
 
 
   const byte * fastunalignedbyteunpack_16(const byte *  __restrict__ in, byte *  __restrict__  out, const uint32_t bit) {
