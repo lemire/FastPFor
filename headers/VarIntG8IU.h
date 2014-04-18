@@ -120,21 +120,24 @@ namespace FastPFor {
 				}
 				dst += readSize;
 			}
-			for (; srclength >= 9; srclength -= 8, src += 8) {
+			if(srclength >= 9) {
 				unsigned char desc = *src;
 				src += 1;
 				srclength -= 1;
-				static char buff[16];
+				static char buff[32];
 				memcpy(buff, src, 8);
 				const __m128i data = _mm_lddqu_si128 (reinterpret_cast<__m128i const*> (buff));
 				const __m128i result = _mm_shuffle_epi8 (data,vecmask[desc][0]);
-				_mm_storeu_si128(reinterpret_cast<__m128i*> (dst), result);
+				_mm_storeu_si128(reinterpret_cast<__m128i*> (buff), result);
 				int readSize = maskOutputSize[desc];
 				if ( readSize >= 4 ) {
-					const __m128i result2 = _mm_shuffle_epi8 (data, vecmask[desc][1]);//__builtin_ia32_pshufb128(data, shf2);
-					_mm_storeu_si128(reinterpret_cast<__m128i *> (dst + 4), result2);//__builtin_ia32_storedqu(dst + (16), result2);
+					const __m128i result2 = _mm_shuffle_epi8 (data, vecmask[desc][1]);
+					_mm_storeu_si128(reinterpret_cast<__m128i *> (buff + 16), result2);
 				}
+				memcpy(dst, buff, 4 * readSize);
 				dst += readSize;
+				srclength -= 8;
+				src += 8;
 			}
 
 			nvalue = (dst - initdst);
