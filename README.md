@@ -193,7 +193,23 @@ The "minlength" flag skips short arrays. (Warning: timings over
 short arrays are unreliable.)
 
 
-## Testing with the ClueWeb09 data set
+## Testing with the Gov2 and ClueWeb09 data sets
+
+As of April 2014, we recommend getting our archive at
+
+http://lemire.me/data/integercompression2014.html
+
+It is the data was used for the following paper:
+
+Daniel Lemire, Leonid Boytsov, Nathan Kurz, SIMD Compression and the Intersection of Sorted Integers, arXiv: 1401.6399, 2014
+http://arxiv.org/abs/1401.6399
+
+## Testing with the ClueWeb09 data set (legacy)
+
+(Please consider grabbing our new archive at 
+http://lemire.me/data/integercompression2014.html
+instead.)
+
 
 Grab the data set from:
 
@@ -207,7 +223,11 @@ then run:
 
 Note: processing can take over an hour.
 
-## Testing with the Gov2 data set
+## Testing with the Gov2 data set  (legacy)
+
+(Please consider grabbing our new archive at 
+http://lemire.me/data/integercompression2014.html
+instead.)
 
 You can test the library over d-gaps data
 from the TREC GOV2 data set that was made graciously
