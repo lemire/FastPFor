@@ -111,6 +111,14 @@ e.g., under bash type
     export CXX=g++-4.7
     make
 
+
+### Multithreaded context
+
+You should not assume that our objects are thread safe.
+If you have several threads, each thread should have its own IntegerCODEC
+objects to ensure that there is no concurrency problems.
+
+
 ### Installing GCC 4.7 under Linux
 
 We support clang, Visual Studio and the Intel compiler, but a common default is GCC 4.7 or better.

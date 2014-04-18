@@ -21,10 +21,12 @@ namespace FastPFor {
  *
  *  Zhang J, Long X, Suel T. Performance of compressed inverted list caching in search engines.
  *  Proceeedings of 17th Conference on the World Wide Web, Beijing, China, Huai J, Chen R,
- *  Hon H-W, Liu Y, Ma W-Y, Tomkins A, Zhang X (eds.). ACM Press: New York, April 2008; 387Ð396.
+ *  Hon H-W, Liu Y, Ma W-Y, Tomkins A, Zhang X (eds.). ACM Press: New York, April 2008; 387ï¿½396.
  *
  * It is very similar to PFor except that exceptions can be stored using 8, 16 or 32 bits.
  * So I just copied PFor and made the required changes.
+ *
+ * In a multithreaded context, you may need one PFor2008 per thread.
  *
  */
 class PFor2008: public IntegerCODEC {

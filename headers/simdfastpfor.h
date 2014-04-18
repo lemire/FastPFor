@@ -18,6 +18,9 @@ namespace FastPFor {
 /**
  * SIMDFastPFor
  *
+ * In a multithreaded context, you may need one SIMDFastPFor per thread.
+ *
+ *
  * Reference and documentation:
  *
  * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through std::vectorization

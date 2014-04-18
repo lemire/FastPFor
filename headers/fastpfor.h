@@ -19,6 +19,7 @@ namespace FastPFor {
 /**
  * FastPFor
  *
+ * In a multithreaded context, you may need one FastPFor per thread.
  *
  * Designed by D. Lemire. This scheme is NOT patented.
  *

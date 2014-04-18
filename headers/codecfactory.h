@@ -33,6 +33,12 @@ namespace FastPFor {
 
 typedef std::map<std::string, std::shared_ptr<IntegerCODEC> > CodecMap;
 
+
+/**
+ * This class is a convenience class to generate codecs quickly.
+ * It cannot be used safely in a multithreaded context where
+ * each thread should have a different IntegerCODEC.
+ */
 class CODECFactory {
 public:
     static CodecMap scodecmap;

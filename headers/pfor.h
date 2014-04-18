@@ -21,6 +21,8 @@ namespace FastPFor {
  *
  *  Implemented by D. Lemire
  *
+ * In a multithreaded context, you may need one PFor per thread.
+ *
  * Small differences:
  *  1. We don't write the exception section is reverse order.
  *     It is written in forward order.

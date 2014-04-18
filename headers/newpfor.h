@@ -24,10 +24,12 @@ namespace FastPFor {
 /**
  * NewPFD also known as NewPFOR.
  *
+ * In a multithreaded context, you may need one NewPFor per thread.
+ *
  * Follows
  *
  * H. Yan, S. Ding, T. Suel, Inverted index compression and query processing with
- * optimized document ordering, in: WWW Õ09, 2009, pp. 401Ð410.
+ * optimized document ordering, in: WWW '09, 2009, pp. 401-410.
  */
 template<uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder = Simple16<
         false> >
