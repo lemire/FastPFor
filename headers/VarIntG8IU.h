@@ -124,7 +124,7 @@ namespace FastPFor {
 				unsigned char desc = *src;
 				src += 1;
 				srclength -= 1;
-				static char buff[32];
+				char buff[32];
 				memcpy(buff, src, 8);
 				const __m128i data = _mm_lddqu_si128 (reinterpret_cast<__m128i const*> (buff));
 				const __m128i result = _mm_shuffle_epi8 (data,vecmask[desc][0]);
