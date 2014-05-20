@@ -16,6 +16,8 @@ has been ported to Java (https://github.com/lemire/JavaFastPFOR) and
 Go (https://github.com/reducedb/encoding). The Java port is used by
 ClueWeb Tools (https://github.com/lintool/clueweb).
 
+Apache Lucene version 4.6.x uses a compression format derived from our FastPFOR
+scheme (see http://lucene.apache.org/core/4_6_1/core/org/apache/lucene/util/PForDeltaDocIdSet.html).
 
 ## Working with sorted lists of integers
 
@@ -48,14 +50,14 @@ in the root directory of this project.
 
 Please see:
 
-Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization,
-Software Practice & Experience (to appear)
-http://arxiv.org/abs/1209.2137
-http://onlinelibrary.wiley.com/doi/10.1002/spe.2203/abstract
+* Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through vectorization, Software Practice & Experience (to appear) http://arxiv.org/abs/1209.2137 http://onlinelibrary.wiley.com/doi/10.1002/spe.2203/abstract
+* Daniel Lemire, Leonid Boytsov, Nathan Kurz, SIMD Compression and the Intersection of Sorted Integers, arXiv: 1401.6399, 2014 http://arxiv.org/abs/1401.6399
 
 
-Daniel Lemire, Leonid Boytsov, Nathan Kurz, SIMD Compression and the Intersection of Sorted Integers, arXiv: 1401.6399, 2014
-http://arxiv.org/abs/1401.6399
+This library was used by the following papers:
+
+* G. Ottaviano, R. Venturini, Partitioned Elias-Fano Indexes, ACM SIGIR 2014 http://www.di.unipi.it/~ottavian/files/elias_fano_sigir14.pdf
+* M. Petri, A. Moffat, J. S. Culpepper, Score-Safe Term Dependency Processing With Hybrid Indexes, ACM SIGIR 2014 http://www.culpepper.io/publications/sp074-petri.pdf
 
 ## License
 
