@@ -156,19 +156,11 @@ public:
 
     void packblock(const uint32_t * source, uint32_t * out, const uint32_t bit) {
         usimdpack(source,reinterpret_cast<__m128i *>(out), bit);
-        /*for (uint32_t j = 0; j != BlockSize; j += PACKSIZE) {
-            fastpack(source + j, out, bit);
-            out += bit;
-        }*/
     }
 
     void unpackblock(const uint32_t * source, uint32_t * out,
             const uint32_t bit) {
         usimdunpack(reinterpret_cast<const __m128i *>(source),out, bit);
-        /*for (uint32_t j = 0; j != BlockSize; j += PACKSIZE) {
-            fastunpack(source, out + j, bit);
-            source += bit;
-        }*/
     }
 
     void encodeArray(const uint32_t *in, const size_t len, uint32_t *out,

@@ -16,7 +16,9 @@
 #include "simple9.h"
 #include "simple8b.h"
 #include "newpfor.h"
+#include "simdnewpfor.h"
 #include "optpfor.h"
+#include "simdoptpfor.h"
 #include "fastpfor.h"
 #include "simdfastpfor.h"
 #include "variablebyte.h"
@@ -101,10 +103,14 @@ static inline CodecMap initializefactory() {
             new CompositeCodec<SIMDPFor, VariableByte> ());
     map["pfor2008"] = std::shared_ptr<IntegerCODEC> (
             new CompositeCodec<PFor2008, VariableByte> ());
+    map["simdnewpfor"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<SIMDNewPFor<4, Simple16<false>> , VariableByte> ());
     map["newpfor"] = std::shared_ptr<IntegerCODEC> (
             new CompositeCodec<NewPFor<4, Simple16<false>> , VariableByte> ());
     map["optpfor"] = std::shared_ptr<IntegerCODEC> (
             new CompositeCodec<OPTPFor<4, Simple16<false> > , VariableByte> ());
+    map["simdoptpfor"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<SIMDOPTPFor<4, Simple16<false> > , VariableByte> ());
     map["vbyte"] = std::shared_ptr<IntegerCODEC> (new VariableByte());
     map["simple8b"] = std::shared_ptr<IntegerCODEC> (new Simple8b<true> ());
 #ifdef VARINTG8IU_H__
