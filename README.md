@@ -1,7 +1,6 @@
 # The FastPFOR C++ library : Fast integer compression
 by Daniel Lemire, Leonid Boytsov, Owen Kaser, Maxime Caron, Louis Dionne, Michel Lemay, Erik Kruus, Andrea Bedini
 
-
 ## What is this?
 
 A research library with integer compression schemes.
@@ -18,6 +17,17 @@ ClueWeb Tools (https://github.com/lintool/clueweb).
 
 Apache Lucene version 4.6.x uses a compression format derived from our FastPFOR
 scheme (see http://lucene.apache.org/core/4_6_1/core/org/apache/lucene/util/PForDeltaDocIdSet.html).
+
+## Myths
+
+Myth: SIMD compression requires very large blocks of integers (1024 or more).
+
+Fact: This is not true. Our fastest scheme (SIMDBinaryPacking) works over blocks of 128 integers.
+
+Myth: SIMD compression means high speed but less compression.
+
+Fact: This is wrong. Some schemes cannot easily be accelerated
+with SIMD instructions, but many that do compress very well.
 
 ## Working with sorted lists of integers
 
