@@ -105,7 +105,7 @@ namespace FastPFor {
 
 			uint32_t * dst = out;
 			size_t srclength = length * 4;
-			for (; srclength >= 17; srclength -= 8, src += 8) {
+			for (; srclength >= 22; srclength -= 8, src += 8) {
 				unsigned char desc = *src;
 				src += 1;
 				srclength -= 1;
@@ -114,13 +114,13 @@ namespace FastPFor {
 				_mm_storeu_si128(reinterpret_cast<__m128i*> (dst), result);
 				int readSize = maskOutputSize[desc];
 
-				if ( readSize >= 4 ) {
+				if ( readSize > 4 ) {
 					const __m128i result2 = _mm_shuffle_epi8 (data, vecmask[desc][1]);//__builtin_ia32_pshufb128(data, shf2);
 					_mm_storeu_si128(reinterpret_cast<__m128i *> (dst + 4), result2);//__builtin_ia32_storedqu(dst + (16), result2);
 				}
 				dst += readSize;
 			}
-			if(srclength >= 9) {
+			while(srclength >= 9) {
 				unsigned char desc = *src;
 				src += 1;
 				srclength -= 1;
@@ -130,7 +130,7 @@ namespace FastPFor {
 				const __m128i result = _mm_shuffle_epi8 (data,vecmask[desc][0]);
 				_mm_storeu_si128(reinterpret_cast<__m128i*> (buff), result);
 				int readSize = maskOutputSize[desc];
-				if ( readSize >= 4 ) {
+				if ( readSize > 4 ) {
 					const __m128i result2 = _mm_shuffle_epi8 (data, vecmask[desc][1]);
 					_mm_storeu_si128(reinterpret_cast<__m128i *> (buff + 16), result2);
 				}
