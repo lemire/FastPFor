@@ -29,6 +29,7 @@ Myth: SIMD compression means high speed but less compression.
 Fact: This is wrong. Some schemes cannot easily be accelerated
 with SIMD instructions, but many that do compress very well.
 
+
 ## Working with sorted lists of integers
 
 If you are working primarily with sorted lists of integers, then 
