@@ -9,6 +9,10 @@ It is broadly applicable to the compression of arrays of
 The library seeks to exploit SIMD instructions (SSE)
 whenever possible.
 
+This library can decode at least 4 billions of compressed integers per second on most
+desktop or laptop processors. That is, it can decompress data at a rate of 15 GB/s.
+This is significantly faster than generic codecs like gzip, LZO, Snappy or LZ4.
+
 It is used by the zsearch engine (http://victorparmar.github.com/zsearch/)
 as well as in GMAP and GSNAP (http://research-pub.gene.com/gmap/). It
 has been ported to Java (https://github.com/lemire/JavaFastPFOR) and 
