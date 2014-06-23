@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -147,6 +147,7 @@
     <ClCompile Include="..\src\bitpackingaligned.cpp" />
     <ClCompile Include="..\src\bitpackingunaligned.cpp" />
     <ClCompile Include="..\src\simdbitpacking.cpp" />
+    <ClCompile Include="..\src\simdunalignedbitpacking.cpp" />
     <ClCompile Include="..\src\unit.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +181,7 @@
     <ClInclude Include="..\headers\rolledbitpacking.h" />
     <ClInclude Include="..\headers\simdbinarypacking.h" />
     <ClInclude Include="..\headers\simdbitpacking.h" />
+    <ClInclude Include="..\headers\usimdbitpacking.h" />
     <ClInclude Include="..\headers\simdfastpfor.h" />
     <ClInclude Include="..\headers\simple16.h" />
     <ClInclude Include="..\headers\simple8b.h" />
