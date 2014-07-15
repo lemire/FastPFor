@@ -1,6 +1,7 @@
 upcoming 
     Added SIMD versions of OptPFD and NewPFD.
     Fixed buffer overrun in varintg8iu
+    Factor out decodeBlock method from decodeArray (Matthias Petri)
 0.1.4  May 21st 2014
     Added "myths" section to README file
 0.1.3  January 22nd 2014
