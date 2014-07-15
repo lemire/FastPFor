@@ -54,6 +54,7 @@ public:
     virtual uint32_t findBestB(const uint32_t *in, uint32_t len);
 
     virtual void encodeBlock(const uint32_t *in, uint32_t *out, size_t &nvalue);
+    virtual const uint32_t* decodeBlock(const uint32_t* in,uint32_t* out,size_t& nvalue);
 
     virtual void encodeArray(const uint32_t *in, const size_t len,
             uint32_t *out, size_t &nvalue);
@@ -250,6 +251,41 @@ void NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::encodeArray(
 }
 
 template<uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder>
+const uint32_t * NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::decodeBlock(
+        const uint32_t *in, uint32_t *out, size_t &nvalue) {
+    const uint32_t * const initout(out);
+    const uint32_t b = *in >> (32 - PFORDELTA_B);
+    const size_t nExceptions = (*in >> (32 - (PFORDELTA_B
+                  + PFORDELTA_NEXCEPT))) & ((1 << PFORDELTA_NEXCEPT) - 1);
+    const uint32_t encodedExceptionsSize = *in & ((1 << PFORDELTA_EXCEPTSZ)
+                                                  - 1);
+
+    size_t twonexceptions = 2 * nExceptions;
+    ++in;
+    if (encodedExceptionsSize > 0)
+        ecoder.decodeArray(in, encodedExceptionsSize, &exceptions[0],
+                           twonexceptions);
+    assert(twonexceptions >= 2 * nExceptions);
+    in += encodedExceptionsSize;
+
+    uint32_t * beginout(out);// we use this later
+
+    for (uint32_t j = 0; j < BlockSize; j += 32) {
+        fastunpack(in, out, b);
+        in += b;
+        out += 32;
+    }
+
+    for (uint32_t e = 0, lpos = -1; e < nExceptions; e++) {
+        lpos += exceptions[e] + 1;
+        beginout[lpos] |= (exceptions[e + nExceptions] + 1) << b;
+    }
+
+    nvalue = out - initout;
+    return in;
+}
+
+template<uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder>
 const uint32_t * NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::decodeArray(
 #ifndef NDEBUG
         const uint32_t *in, const size_t len, uint32_t *out, size_t & nvalue) {
@@ -264,39 +300,12 @@ const uint32_t * NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::decodeArra
     if (BlockSize * (*in) > nvalue)
         throw NotEnoughStorage(*in);
     const uint32_t numBlocks = *in++;
-
+    size_t out_len = 0;
     for (uint32_t i = 0; i < numBlocks; i++) {
-
-        const uint32_t b = *in >> (32 - PFORDELTA_B);
-
-        const size_t nExceptions = (*in >> (32 - (PFORDELTA_B
-                + PFORDELTA_NEXCEPT))) & ((1 << PFORDELTA_NEXCEPT) - 1);
-
-        const uint32_t encodedExceptionsSize = *in & ((1 << PFORDELTA_EXCEPTSZ)
-                - 1);
-
-        size_t twonexceptions = 2 * nExceptions;
-        ++in;
-        if (encodedExceptionsSize > 0)
-            ecoder.decodeArray(in, encodedExceptionsSize, &exceptions[0],
-                    twonexceptions);
-        assert(twonexceptions >= 2 * nExceptions);
-        in += encodedExceptionsSize;
-
-        uint32_t * beginout(out);// we use this later
-
-        for (uint32_t j = 0; j < BlockSize; j += 32) {
-            fastunpack(in, out, b);
-            in += b;
-            out += 32;
-        }
-
-        for (uint32_t e = 0, lpos = -1; e < nExceptions; e++) {
-            lpos += exceptions[e] + 1;
-            beginout[lpos] |= (exceptions[e + nExceptions] + 1) << b;
-        }
-
+        in = decodeBlock(in, out, out_len);
+        out += out_len;
     }
+
     if (static_cast<size_t> (out - initout) > nvalue) {
         std::cerr << "possible buffer overrun" << std::endl;
     }
