@@ -35,44 +35,44 @@ public:
              * depends on your compiler and machine.
              */
             if (val < (1U << 7)) {
-                *bout = static_cast<uint8_t>(val | (1U << 7));
+                *bout = static_cast<uint8_t>(val);
                 ++bout;
             } else if (val < (1U << 14)) {
-                *bout = extract7bits<0> (val);
+                *bout = extract7bitsmaskless<0> (val)  | (1U << 7);
                 ++bout;
-                *bout = extract7bitsmaskless<1> (val) | (1U << 7);
+                *bout = extract7bits<1> (val);
                 ++bout;
             } else if (val < (1U << 21)) {
-                *bout = extract7bits<0> (val);
+                *bout = extract7bitsmaskless<0> (val)  | (1U << 7);
                 ++bout;
-                *bout = extract7bits<1> (val);
+                *bout = extract7bitsmaskless<1> (val)  | (1U << 7);
                 ++bout;
-                *bout = extract7bitsmaskless<2> (val) | (1U << 7);
+                *bout = extract7bits<2> (val) ;
                 ++bout;
             } else if (val < (1U << 28)) {
-                *bout = extract7bits<0> (val);
+                *bout = extract7bitsmaskless<0> (val)  | (1U << 7);
                 ++bout;
-                *bout = extract7bits<1> (val);
+                *bout = extract7bitsmaskless<1> (val)  | (1U << 7);
                 ++bout;
-                *bout = extract7bits<2> (val);
+                *bout = extract7bitsmaskless<2> (val)  | (1U << 7);
                 ++bout;
-                *bout = extract7bitsmaskless<3> (val) | (1U << 7);
+                *bout = extract7bits<3> (val) ;
                 ++bout;
             } else {
-                *bout = extract7bits<0> (val);
+                *bout = extract7bitsmaskless<0> (val)  | (1U << 7);
                 ++bout;
-                *bout = extract7bits<1> (val);
+                *bout = extract7bitsmaskless<1> (val)  | (1U << 7);
                 ++bout;
-                *bout = extract7bits<2> (val);
+                *bout = extract7bitsmaskless<2> (val)  | (1U << 7);
                 ++bout;
-                *bout = extract7bits<3> (val);
+                *bout = extract7bitsmaskless<3> (val)  | (1U << 7);
                 ++bout;
-                *bout = extract7bitsmaskless<4> (val) | (1U << 7);
+                *bout = extract7bits<4> (val);
                 ++bout;
             }
         }
         while (needPaddingTo32Bits(bout)) {
-            *bout++ = 0;
+            *bout++ = (1U << 7);
         }
         const size_t storageinbytes = bout - initbout;
         assert((storageinbytes % 4) == 0);
@@ -96,7 +96,8 @@ public:
             for (uint32_t v = 0; endbyte > inbyte; shift += 7) {
                 uint8_t c = *inbyte++;
                 v += ((c & 127) << shift);
-                if ((c & 128)) {
+
+                if ((c & 128) == 0) {
                     *out++ = v;
                     break;
                 }
