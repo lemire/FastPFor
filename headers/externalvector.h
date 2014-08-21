@@ -11,7 +11,7 @@
 #include <queue>
 #include "common.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 template<class CMP>
 class BinaryFileBuffer {

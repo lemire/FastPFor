@@ -19,7 +19,7 @@
 #include "util.h"
 #include "codecs.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  * NewPFD also known as NewPFOR.

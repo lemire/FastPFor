@@ -31,7 +31,7 @@
 #include "simdbinarypacking.h"
 #include "snappydelta.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 typedef std::map<std::string, std::shared_ptr<IntegerCODEC> > CodecMap;
 

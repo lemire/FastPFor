@@ -14,7 +14,7 @@
 #define USE_O_DIRECT
 #endif
 
-namespace FastPFor {
+namespace FastPForLib {
 
 //#define STATS
 // taken from stackoverflow

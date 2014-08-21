@@ -12,7 +12,7 @@
 #include "util.h"
 
 using namespace std;
-using namespace FastPFor;
+using namespace FastPForLib;
 
 void print(externalvector &ev) {
     for (size_t i = 0; i < ev.size(); ++i) {

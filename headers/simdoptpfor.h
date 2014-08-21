@@ -18,7 +18,7 @@
 #include "simple16.h"
 #include "simdnewpfor.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  * SIMDOptPFor, a SIMD-version of OPTPFor designed by D. Lemire

@@ -9,7 +9,7 @@
 #include "common.h"
 #include "util.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  *  Mersenne twister - random number generator.

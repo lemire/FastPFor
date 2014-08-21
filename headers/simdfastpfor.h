@@ -13,7 +13,7 @@
 #include "memutil.h"
 #include "util.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  * SIMDFastPFor

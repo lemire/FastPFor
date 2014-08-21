@@ -14,7 +14,7 @@
 #include "common.h"
 #include "codecs.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  * If MarkLength is true, than the number of symbols is written

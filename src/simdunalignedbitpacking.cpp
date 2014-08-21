@@ -6,7 +6,7 @@
  */
 #include "usimdbitpacking.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 using namespace std;
 

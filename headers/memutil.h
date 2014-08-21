@@ -10,7 +10,7 @@
 
 #include "common.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 template<class T, size_t alignment>
 T * moveToBoundary(T * inbyte) {

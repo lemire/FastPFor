@@ -8,7 +8,7 @@
 #define BITPACKINGUNALIGNED
 #include "common.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 typedef uint8_t byte;
 

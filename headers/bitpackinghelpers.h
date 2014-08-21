@@ -10,7 +10,7 @@
 
 #include "bitpacking.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 inline void fastunpack(const uint32_t *  __restrict__ in, uint32_t *  __restrict__  out, const uint32_t bit) {
     // Could have used function pointers instead of switch.

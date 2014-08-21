@@ -18,7 +18,7 @@
 #include "simple16.h"
 #include "newpfor.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  * OptPFD

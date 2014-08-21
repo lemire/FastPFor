@@ -10,7 +10,7 @@
 #include "common.h"
 #include "codecs.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 class VariableByte: public IntegerCODEC {
 public:

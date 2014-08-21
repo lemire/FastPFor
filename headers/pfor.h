@@ -13,7 +13,7 @@
 #include "bitpacking.h"
 #include "util.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  * This implements as best as possible the PFor scheme

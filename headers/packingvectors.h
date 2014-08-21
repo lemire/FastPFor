@@ -11,7 +11,7 @@
 #include "common.h"
 #include "bitpacking.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 template <uint32_t PACKSIZE = 32>
 class packingvector

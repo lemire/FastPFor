@@ -14,7 +14,7 @@
 
 
 int main() {
-    using namespace FastPFor;
+    using namespace FastPForLib;
 
     // We pick a CODEC
     IntegerCODEC & codec =  * CODECFactory::getFromName("simdfastpfor");

@@ -12,7 +12,7 @@
 #include "deltautil.h"
 
 using namespace std;
-using namespace FastPFor;
+using namespace FastPForLib;
 
 void message(const char * prog) {
     cerr << " usage : " << prog << "  maropubinaryfile "

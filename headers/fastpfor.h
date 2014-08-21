@@ -14,7 +14,7 @@
 #include "blockpacking.h"
 #include "simple8b.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  * FastPFor

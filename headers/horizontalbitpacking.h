@@ -31,7 +31,7 @@
 #endif
 #include "common.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 void simdhunpack(const uint8_t * __restrict__ in,uint32_t * __restrict__ out, uint32_t bit);
 

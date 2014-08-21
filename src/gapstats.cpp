@@ -9,7 +9,7 @@
 #include "util.h"
 
 using namespace std;
-using namespace FastPFor;
+using namespace FastPForLib;
 
 int main(int argc, char **argv) {
     BitWidthHistoGram histo;

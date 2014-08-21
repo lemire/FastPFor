@@ -15,7 +15,7 @@
 #include "entropy.h"
 #include "ztimer.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  * This file is made of various convenient functions and structures.

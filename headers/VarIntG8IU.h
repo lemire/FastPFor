@@ -15,7 +15,7 @@
 #define PREDICT_FALSE(x) x
 #endif
 
-namespace FastPFor {
+namespace FastPForLib {
 /**
  *
  * Implementation of varint-G8IU taken from

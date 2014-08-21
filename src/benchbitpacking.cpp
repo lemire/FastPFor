@@ -18,7 +18,7 @@
 #include "horizontalbitpacking.h"
 
 using namespace std;
-using namespace FastPFor;
+using namespace FastPForLib;
 
 void maskfnc(vector<uint32_t, cacheallocator> & out, const uint32_t L) {
     if (L == 32)

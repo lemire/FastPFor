@@ -9,7 +9,7 @@
 
 #include "common.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 void simdpack(const uint32_t * __restrict__ in,__m128i * __restrict__ out, uint32_t bit);
 void simdpackwithoutmask(const uint32_t * __restrict__ in,__m128i * __restrict__ out, uint32_t bit);

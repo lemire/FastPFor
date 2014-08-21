@@ -1,6 +1,6 @@
 #include "bitpackingaligned.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 uint32_t * nullpacker(const uint32_t *  __restrict__ /*in*/, uint32_t *  __restrict__  out) {
   return out;

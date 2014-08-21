@@ -15,7 +15,7 @@
 #include "stringutil.h"
 
 using namespace std;
-using namespace FastPFor;
+using namespace FastPForLib;
 
 static struct option long_options[] = {
         { "codecs", required_argument, 0, 'c' },

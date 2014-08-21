@@ -12,7 +12,7 @@
 #include "util.h"
 #include "bitpackinghelpers.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 class NotEnoughStorage: public std::runtime_error {
 public:

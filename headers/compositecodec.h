@@ -11,7 +11,7 @@
 #include "util.h"
 #include "codecs.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  * This is a useful class for CODEC that only compress

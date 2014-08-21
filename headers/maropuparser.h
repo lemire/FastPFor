@@ -10,7 +10,7 @@
 
 #include "common.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  * This is just a bit of code to parse the binary files provided by the

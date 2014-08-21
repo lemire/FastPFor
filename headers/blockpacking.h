@@ -14,7 +14,7 @@
 #include "bitpackingaligned.h"
 #include "util.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  * This is 32-bit *aligned* binary packing, designed from the

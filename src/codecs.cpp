@@ -22,7 +22,7 @@
 #include "deltautil.h"
 
 using namespace std;
-using namespace FastPFor;
+using namespace FastPForLib;
 
 static struct option long_options[] = { { "uniformsparseclassic", no_argument,
         0, 0 }, { "displayhistogram", no_argument, 0, 'H' }, {

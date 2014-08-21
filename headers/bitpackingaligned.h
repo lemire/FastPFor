@@ -9,7 +9,7 @@
 
 #include "common.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 const uint32_t * fastunpack_8(const uint32_t * __restrict__ in,
         uint32_t * __restrict__ out, const uint32_t bit);

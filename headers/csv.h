@@ -15,7 +15,7 @@
 #include <vector>
 #include "common.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 enum {
     INCREASINGCARDINALITY, DECREASINGCARDINALITY

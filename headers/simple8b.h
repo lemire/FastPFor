@@ -11,7 +11,7 @@
 #include "common.h"
 #include "codecs.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  * Follows Vo Ngoc Anh, Alistair Moffat: Index compression using 64-bit words.
@@ -31,7 +31,6 @@ namespace FastPFor {
 template<bool MarkLength>
 class Simple8b: public IntegerCODEC {
 public:
-
     template<uint32_t num1, uint32_t log1>
     static bool tryme(const uint32_t *n, size_t len) {
         if (log1 >= 32)
@@ -53,7 +52,6 @@ public:
         }
         return true;
     }
-
     static void bit_writer(uint64_t * out, const uint32_t value,
             const uint32_t bits) {
         *out = (*out << bits) | value;

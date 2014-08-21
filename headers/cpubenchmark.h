@@ -10,11 +10,11 @@
 
 #include "common.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 #if defined( __corei7__  )  // __amd64__ is untested
 // start and stop are as recommended by
-// Gabriele Paoloni, How to Benchmark Code Execution Times on Intel¨ IA-32 and IA-64 Instruction Set Architectures
+// Gabriele Paoloni, How to Benchmark Code Execution Times on Intelï¿½ IA-32 and IA-64 Instruction Set Architectures
 // September 2010
 // http://edc.intel.com/Link.aspx?id=3954
 

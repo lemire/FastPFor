@@ -31,17 +31,17 @@
  * Note: This code is not what I would consider model C++ code.
  *
  * The code below follows :
- * F. Silvestri and R. Venturini, ÒVSEncoding: efficient coding and fast
- * decoding of integer lists via dynamic programming,Ó in CIKM, 2010, pp. 1219-1228.
+ * F. Silvestri and R. Venturini, ï¿½VSEncoding: efficient coding and fast
+ * decoding of integer lists via dynamic programming,ï¿½ in CIKM, 2010, pp. 1219-1228.
  */
 
 namespace vsencoding {
 
 // better to explicitly mark these dependencies
-using FastPFor::div_roundup;
-using FastPFor::IntegerCODEC;
-using FastPFor::asmbits;
-using FastPFor::NotEnoughStorage;
+using FastPForLib::div_roundup;
+using FastPForLib::IntegerCODEC;
+using FastPForLib::asmbits;
+using FastPForLib::NotEnoughStorage;
 
 class BitsWriter {
 private:

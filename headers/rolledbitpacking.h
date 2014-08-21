@@ -13,7 +13,7 @@
 #include "util.h"
 
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /***
  * The idea here is not to unroll the loops and to let the

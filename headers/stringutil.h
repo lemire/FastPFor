@@ -12,7 +12,7 @@
 #include "common.h"
 #include "util.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 using namespace std;
 

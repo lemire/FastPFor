@@ -13,7 +13,7 @@
 #include "mersenne.h"
 #include "memutil.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 std::vector<uint32_t,cacheallocator> generateArray(uint32_t N, const uint32_t mask = 0xFFFFFFFFU) {
     std::vector<uint32_t,cacheallocator> ans(N);

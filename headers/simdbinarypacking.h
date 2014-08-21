@@ -12,7 +12,7 @@
 #include "simdbitpacking.h"
 #include "util.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  *

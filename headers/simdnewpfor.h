@@ -23,7 +23,7 @@
 #include "usimdbitpacking.h"
 
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  * SIMDNewPFD, a SIMD-version of NewPFD designed by D. Lemire.

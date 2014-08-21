@@ -14,7 +14,7 @@
 #include "util.h"
 #include <iostream>
 
-namespace FastPFor {
+namespace FastPForLib {
 
 /**
  * Follows:
