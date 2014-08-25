@@ -15,6 +15,7 @@
 #include "simple16.h"
 #include "simple9.h"
 #include "simple8b.h"
+#include "simple8b_rle.h"
 #include "newpfor.h"
 #include "simdnewpfor.h"
 #include "optpfor.h"
@@ -113,6 +114,7 @@ static inline CodecMap initializefactory() {
             new CompositeCodec<SIMDOPTPFor<4, Simple16<false> > , VariableByte> ());
     map["vbyte"] = std::shared_ptr<IntegerCODEC> (new VariableByte());
     map["simple8b"] = std::shared_ptr<IntegerCODEC> (new Simple8b<true> ());
+    map["simple8b_rle"] = std::shared_ptr<IntegerCODEC> (new Simple8b_RLE<true> ());
 #ifdef VARINTG8IU_H__
     map["varintg8iu"] = std::shared_ptr<IntegerCODEC> (new VarIntG8IU ());
 #endif
