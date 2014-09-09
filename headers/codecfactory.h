@@ -113,6 +113,8 @@ static inline CodecMap initializefactory() {
     map["simdoptpfor"] = std::shared_ptr<IntegerCODEC> (
             new CompositeCodec<SIMDOPTPFor<4, Simple16<false> > , VariableByte> ());
     map["vbyte"] = std::shared_ptr<IntegerCODEC> (new VariableByte());
+    map["vbytealt"] = std::shared_ptr<IntegerCODEC> (new VariableByteAlt());
+
     map["simple8b"] = std::shared_ptr<IntegerCODEC> (new Simple8b<true> ());
     map["simple8b_rle"] = std::shared_ptr<IntegerCODEC> (new Simple8b_RLE<true> ());
 #ifdef VARINTG8IU_H__
