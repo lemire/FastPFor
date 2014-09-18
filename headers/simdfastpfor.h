@@ -213,7 +213,7 @@ public:
         uint32_t bestcost = bestb * BlockSize;
         uint32_t cexcept = 0;
         bestcexcept = static_cast<uint8_t>(cexcept);
-        if(0) for (uint32_t b = bestb - 1; b < 32; --b) {
+        for (uint32_t b = bestb - 1; b < 32; --b) {
             cexcept += freqs[b + 1];
             uint32_t thiscost = cexcept * overheadofeachexcept + cexcept
                     * (maxb - b) + b * BlockSize + 8;// the  extra 8 is the cost of storing maxbits
