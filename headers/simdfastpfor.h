@@ -47,7 +47,7 @@ public:
         assert(gccbits(BlockSizeInUnitsOfPackSize * PACKSIZE - 1) <= 8);
     }
     enum {
-        BlockSizeInUnitsOfPackSize = 4,
+        BlockSizeInUnitsOfPackSize = 8,
         PACKSIZE = 32,
         overheadofeachexcept = 8,
         overheadduetobits = 8,
@@ -57,15 +57,21 @@ public:
 
     static uint32_t * packblockupsimd(const uint32_t * source, uint32_t * out,
             const uint32_t bit) {
-       SIMD_fastpack_32(source, reinterpret_cast<__m128i *>(out), bit);
-       out += 4 * bit;
+       for(int k = 0; k<BlockSize; k+=128) {
+         SIMD_fastpack_32(source, reinterpret_cast<__m128i *>(out), bit);
+         out += 4 * bit;
+         source += 128;
+       }
        return out;
     }
 
     static const uint32_t * unpackblocksimd(const uint32_t * source, uint32_t * out,
             const uint32_t bit) {
-        SIMD_fastunpack_32(reinterpret_cast<const __m128i *>(source), out, bit);
-        source += 4*bit;
+        for(int k = 0; k<BlockSize; k+=128) {
+    	  SIMD_fastunpack_32(reinterpret_cast<const __m128i *>(source), out, bit);
+          source += 4*bit;
+          out+= 128;
+        }
         return source;
     }
 
@@ -207,7 +213,7 @@ public:
         uint32_t bestcost = bestb * BlockSize;
         uint32_t cexcept = 0;
         bestcexcept = static_cast<uint8_t>(cexcept);
-        for (uint32_t b = bestb - 1; b < 32; --b) {
+        if(0) for (uint32_t b = bestb - 1; b < 32; --b) {
             cexcept += freqs[b + 1];
             uint32_t thiscost = cexcept * overheadofeachexcept + cexcept
                     * (maxb - b) + b * BlockSize + 8;// the  extra 8 is the cost of storing maxbits
