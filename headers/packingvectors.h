@@ -34,7 +34,6 @@ public:
     static const uint32_t * unpackmetight(const uint32_t * in, STLContainer & out,
     		const uint32_t bit) {
     	const uint32_t size = *in;
-
     	++in;
     	out.resize((size + PACKSIZE - 1) / PACKSIZE * PACKSIZE);
     	uint32_t j = 0;
@@ -44,16 +43,15 @@ public:
     	}
     	uint32_t buffer[PACKSIZE];
     	uint32_t remaining = size - j;
-
-
     	memcpy(buffer,in,(remaining * bit + 31)/32*sizeof(uint32_t));
     	uint32_t * bpointer = buffer;
+    	in += (out.size()-j)/PACKSIZE * bit;
     	for (; j != out.size(); j += PACKSIZE) {
     		fastunpack(bpointer, &out[j], bit);
-    		in += bit;
     		bpointer+=bit;
     	}
     	out.resize(size);
+    	in -= ( j - size ) * bit / 32;
     	return in;
     }
 
@@ -105,7 +103,7 @@ public:
             fastpackwithoutmask(&source[j], out, bit);
             out += bit;
         }
-//        out -= ( j - size ) * bit / 32;
+        out -= ( j - size ) * bit / 32;
         source.resize(size);
         return out;
     }
