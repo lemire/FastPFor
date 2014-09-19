@@ -34,6 +34,7 @@ namespace FastPForLib {
  * Designed by D. Lemire with ideas from Leonid Boytsov. This scheme is NOT patented.
  *
  */
+template <uint32_t BlockSizeInUnitsOfPackSize = 8>// BlockSizeInUnitsOfPackSize can have value 4 or 8
 class SIMDFastPFor: public IntegerCODEC {
 public:
     /**
@@ -47,7 +48,6 @@ public:
         assert(gccbits(BlockSizeInUnitsOfPackSize * PACKSIZE - 1) <= 8);
     }
     enum {
-        BlockSizeInUnitsOfPackSize = 8,
         PACKSIZE = 32,
         overheadofeachexcept = 8,
         overheadduetobits = 8,
@@ -316,7 +316,7 @@ public:
     }
 
     std::string name() const {
-        return "SIMDFastPFor";
+        return std::string("SIMDFastPFor")+std::to_string(BlockSize);
     }
 
 };

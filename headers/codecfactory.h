@@ -92,12 +92,14 @@ static inline CodecMap initializefactory() {
             VariableByte>);
     map["vsencoding"] = std::shared_ptr<IntegerCODEC> (
             new vsencoding::VSEncodingBlocks(1U << 16));
-    map["fastpfor"] = std::shared_ptr<IntegerCODEC> (
-            new CompositeCodec<FastPFor, VariableByte> ());
-    map["fastpforw"] = std::shared_ptr<IntegerCODEC> (
-            new CompositeCodec<FastPForw, VariableByte> ());
-    map["simdfastpfor"] = std::shared_ptr<IntegerCODEC> (
-            new CompositeCodec<SIMDFastPFor, VariableByte> ());
+    map["fastpfor128"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<FastPFor<4>, VariableByte> ());
+    map["fastpfor256"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<FastPFor<8>, VariableByte> ());
+    map["simdfastpfor128"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<SIMDFastPFor<4>, VariableByte> ());
+    map["simdfastpfor256"] = std::shared_ptr<IntegerCODEC> (
+            new CompositeCodec<SIMDFastPFor<8>, VariableByte> ());
     map["simplepfor"] = std::shared_ptr<IntegerCODEC> (
             new CompositeCodec<SimplePFor<> , VariableByte> ());
     map["pfor"] = std::shared_ptr<IntegerCODEC> (
