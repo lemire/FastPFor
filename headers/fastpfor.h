@@ -147,6 +147,7 @@ public:
             cexcept += freqs[b + 1];
             uint32_t thiscost = cexcept * overheadofeachexcept + cexcept
                     * (maxb - b) + b * BlockSize + 8;// the  extra 8 is the cost of storing maxbits
+            if(maxb - b == 1) thiscost -= cexcept;
             if (thiscost < bestcost) {
                 bestcost = thiscost;
                 bestb = static_cast<uint8_t>(b);
@@ -191,14 +192,15 @@ public:
         out += (bytescontainersize + sizeof(uint32_t) - 1)
                 / sizeof(uint32_t);
         uint32_t bitmap = 0;
-        for (uint32_t k = 1; k <= 32; ++k) {
+        for (uint32_t k = 2; k <= 32; ++k) {
             if (datatobepacked[k].size() != 0)
                 bitmap |= (1U << (k - 1));
         }
         *(out++) = bitmap;
-        for (uint32_t k = 1; k <= 32; ++k) {
-            if (datatobepacked[k].size() > 0)
+        for (uint32_t k = 2; k <= 32; ++k) {
+            if (datatobepacked[k].size() > 0) {
                 out = packingvector<32>::packmeupwithoutmask(datatobepacked[k], out, k);
+            }
         }
         nvalue = out - initout;
     }
@@ -213,7 +215,7 @@ public:
         const uint8_t * bytep = reinterpret_cast<const uint8_t *> (inexcept);
         inexcept += (bytesize + sizeof(uint32_t) - 1) / sizeof(uint32_t);
         const uint32_t bitmap = *(inexcept++);
-        for (uint32_t k = 1; k <= 32; ++k) {
+        for (uint32_t k = 2; k <= 32; ++k) {
             if ((bitmap & (1U << (k - 1))) != 0) {
                 inexcept = packingvector<32>::unpackme(inexcept, datatobepacked[k], k);
             }
@@ -230,11 +232,18 @@ public:
             in = unpackblock<BlockSize>(in, out, b);
             if (cexcept > 0) {
                 const uint8_t maxbits = *bytep++;
-                std::vector<uint32_t>::const_iterator & exceptionsptr =
-                        unpackpointers[maxbits - b];
-                for (uint32_t k = 0; k < cexcept; ++k) {
-                    const uint8_t pos = *(bytep++);
-                    out[pos] |= (*(exceptionsptr++)) << b;
+                if(maxbits - b == 1) {
+                	for (uint32_t k = 0; k < cexcept; ++k) {
+                		const uint8_t pos = *(bytep++);
+                		out[pos] |= static_cast<uint32_t>(1) << b;
+                	}
+                } else {
+                	std::vector<uint32_t>::const_iterator & exceptionsptr =
+                			unpackpointers[maxbits - b];
+                	for (uint32_t k = 0; k < cexcept; ++k) {
+                		const uint8_t pos = *(bytep++);
+                		out[pos] |= (*(exceptionsptr++)) << b;
+                	}
                 }
             }
         }
