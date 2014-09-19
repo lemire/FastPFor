@@ -30,6 +30,32 @@ public:
         out.resize(size);
         return in;
     }
+    template<class STLContainer>
+    static const uint32_t * unpackmetight(const uint32_t * in, STLContainer & out,
+    		const uint32_t bit) {
+    	const uint32_t size = *in;
+
+    	++in;
+    	out.resize((size + PACKSIZE - 1) / PACKSIZE * PACKSIZE);
+    	uint32_t j = 0;
+    	for (; j + PACKSIZE - 1 < size; j += PACKSIZE) {
+    		fastunpack(in, &out[j], bit);
+    		in += bit;
+    	}
+    	uint32_t buffer[PACKSIZE];
+    	uint32_t remaining = size - j;
+
+
+    	memcpy(buffer,in,(remaining * bit + 31)/32*sizeof(uint32_t));
+    	uint32_t * bpointer = buffer;
+    	for (; j != out.size(); j += PACKSIZE) {
+    		fastunpack(bpointer, &out[j], bit);
+    		in += bit;
+    		bpointer+=bit;
+    	}
+    	out.resize(size);
+    	return in;
+    }
 
     template<class STLContainer>
     static uint32_t * packmeup(STLContainer & source, uint32_t * out, const uint32_t bit) {
@@ -63,6 +89,27 @@ public:
         source.resize(size);
         return out;
     }
+
+
+    template<class STLContainer>
+    static uint32_t * packmeuptightwithoutmask(STLContainer & source, uint32_t * out,
+            const uint32_t bit) {
+        const size_t size = source.size();
+        *out = static_cast<uint32_t>(size);
+        out++;
+        if (source.size() == 0)
+            return out;
+        source.resize((source.size() + PACKSIZE - 1) / PACKSIZE * PACKSIZE);
+        uint32_t j = 0;
+        for (; j != source.size(); j += PACKSIZE) {
+            fastpackwithoutmask(&source[j], out, bit);
+            out += bit;
+        }
+//        out -= ( j - size ) * bit / 32;
+        source.resize(size);
+        return out;
+    }
+
 };
 
 } // namespace FastPFor
