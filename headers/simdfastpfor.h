@@ -87,13 +87,11 @@ public:
         	usimdunpack(reinterpret_cast<const __m128i *>(in), &out[j], bit);
             in += 4 * bit;
         }
-        assert(j<=size);
         for(; j + 31 < size; j += 32) {
         	fastunpack(in, &out[j], bit);
         	in += bit;
         }
     	uint32_t buffer[PACKSIZE];
-    	assert(size >=j);
     	uint32_t remaining = size - j;
     	memcpy(buffer,in,(remaining * bit + 31)/32*sizeof(uint32_t));
     	uint32_t * bpointer = buffer;
