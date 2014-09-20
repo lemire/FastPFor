@@ -10,6 +10,7 @@
 #include "common.h"
 #include "codecs.h"
 #include "simdbitpacking.h"
+#include "usimdbitpacking.h"
 #include "memutil.h"
 #include "util.h"
 
@@ -80,17 +81,29 @@ public:
             const uint32_t bit) {
         const uint32_t size = *in;
         ++in;
-        in = padTo128bits(in);
+//        in = padTo128bits(in);
         out.resize((size + 32 - 1) / 32 * 32);
         uint32_t j = 0;
         for (; j + 128 <= out.size(); j += 128) {
-            SIMD_fastunpack_32(reinterpret_cast<const __m128i *>(in), &out[j], bit);
+        	usimdunpack(reinterpret_cast<const __m128i *>(in), &out[j], bit);
             in += 4 * bit;
         }
-        for(; j < out.size(); j += 32) {
+        for(; j   < out.size(); j += 32) {
         	fastunpack(in, &out[j], bit);
         	in += bit;
         }
+        //assert(j<=size);
+    	//uint32_t buffer[32];
+  //  	uint32_t remaining = size - j;
+//        assert((remaining * bit + 31)/32<=32);
+    	//memcpy(buffer,in,(remaining * bit + 31)/32*sizeof(uint32_t));
+    	//uint32_t * bpointer = buffer;
+        for (; j != out.size(); j += 32) {
+            	fastunpack(in, &out[j], bit);
+          //  	bpointer+=bit;
+            	in+=bit;
+        }
+  //      in -= ( j - size ) * bit / 32;
         out.resize(size);
         return in;
     }
@@ -101,19 +114,20 @@ public:
         const uint32_t size = static_cast<uint32_t>(source.size());
         *out = size;
         out++;
-        out = padTo128bits(out);
+  //      out = padTo128bits(out);
         if (source.size() == 0)
             return out;
         source.resize((source.size() + 32 - 1) / 32 * 32);
         uint32_t j = 0;
         for (; j + 128 <= source.size(); j += 128) {
-            SIMD_fastpackwithoutmask_32(&source[j], reinterpret_cast<__m128i *>(out), bit);
+        	usimdpackwithoutmask(&source[j], reinterpret_cast<__m128i *>(out), bit);
             out += 4 * bit;
         }
         for(; j < source.size(); j += 32) {
         	fastpackwithoutmask(&source[j], out, bit);
         	out += bit;
         }
+//        out -= ( j - size ) * bit / 32;
         source.resize(size);
         return out;
     }

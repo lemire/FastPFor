@@ -30,6 +30,7 @@ public:
         out.resize(size);
         return in;
     }
+
     template<class STLContainer>
     static const uint32_t * unpackmetight(const uint32_t * in, STLContainer & out,
     		const uint32_t bit) {
