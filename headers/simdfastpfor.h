@@ -81,29 +81,28 @@ public:
             const uint32_t bit) {
         const uint32_t size = *in;
         ++in;
-//        in = padTo128bits(in);
         out.resize((size + 32 - 1) / 32 * 32);
         uint32_t j = 0;
-        for (; j + 128 <= out.size(); j += 128) {
+        for (; j + 128 <= size; j += 128) {
         	usimdunpack(reinterpret_cast<const __m128i *>(in), &out[j], bit);
             in += 4 * bit;
         }
-        for(; j   < out.size(); j += 32) {
+        assert(j<=size);
+        for(; j + 31 < size; j += 32) {
         	fastunpack(in, &out[j], bit);
         	in += bit;
         }
-        //assert(j<=size);
-    	//uint32_t buffer[32];
-  //  	uint32_t remaining = size - j;
-//        assert((remaining * bit + 31)/32<=32);
-    	//memcpy(buffer,in,(remaining * bit + 31)/32*sizeof(uint32_t));
-    	//uint32_t * bpointer = buffer;
-        for (; j != out.size(); j += 32) {
-            	fastunpack(in, &out[j], bit);
-          //  	bpointer+=bit;
-            	in+=bit;
+    	uint32_t buffer[PACKSIZE];
+    	assert(size >=j);
+    	uint32_t remaining = size - j;
+    	memcpy(buffer,in,(remaining * bit + 31)/32*sizeof(uint32_t));
+    	uint32_t * bpointer = buffer;
+    	in += (out.size()-j)/32 * bit;
+        for(; j  < size; j += 32) {
+        	fastunpack(bpointer, &out[j], bit);
+        	bpointer += bit;
         }
-  //      in -= ( j - size ) * bit / 32;
+        in -= ( j - size ) * bit / 32;
         out.resize(size);
         return in;
     }
@@ -114,20 +113,19 @@ public:
         const uint32_t size = static_cast<uint32_t>(source.size());
         *out = size;
         out++;
-  //      out = padTo128bits(out);
         if (source.size() == 0)
             return out;
         source.resize((source.size() + 32 - 1) / 32 * 32);
         uint32_t j = 0;
-        for (; j + 128 <= source.size(); j += 128) {
+        for (; j + 128 <= size; j += 128) {
         	usimdpackwithoutmask(&source[j], reinterpret_cast<__m128i *>(out), bit);
             out += 4 * bit;
         }
-        for(; j < source.size(); j += 32) {
+        for(; j < size; j += 32) {
         	fastpackwithoutmask(&source[j], out, bit);
         	out += bit;
         }
-//        out -= ( j - size ) * bit / 32;
+        out -= ( j - size ) * bit / 32;
         source.resize(size);
         return out;
     }
