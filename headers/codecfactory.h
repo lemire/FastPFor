@@ -31,6 +31,7 @@
 #include "VarIntG8IU.h"
 #include "simdbinarypacking.h"
 #include "snappydelta.h"
+#include "varintgb.h"
 
 namespace FastPForLib {
 
