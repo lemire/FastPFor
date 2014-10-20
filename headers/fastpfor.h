@@ -453,6 +453,8 @@ public:
     }
 };
 
-} // namespace FastPFo
+
+
+} // namespace FastPFor
 
 #endif /* EPFOR_H_ */
