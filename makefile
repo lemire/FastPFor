@@ -16,14 +16,17 @@ else
 CXXFLAGSEXTRA = -mssse3 # mssse3 necessary for varintg8iu and msse4.1 necessary for horizontal bit packing
 
 ifeq ($(DEBUG),1)
-CXXFLAGS = $(CXXFLAGSEXTRA)  -std=c++11 -Weffc++ -pedantic -O3 -ggdb -D_GLIBCXX_DEBUG -Wold-style-cast -Wall -Wextra -Wcast-align  -Wcast-qual
+CXXFLAGS = $(CXXFLAGSEXTRA)  -std=c++11 -Weffc++ -pedantic -O3 -ggdb -D_GLIBCXX_DEBUG  -Wall -Wextra   -Wcast-qual
 else
-CXXFLAGS = $(CXXFLAGSEXTRA)  -std=c++11 -Weffc++ -pedantic -O3 -Wold-style-cast -Wall -Wextra -Wcast-align  -Wcast-qual
+CXXFLAGS = $(CXXFLAGSEXTRA)  -std=c++11 -Weffc++ -pedantic -O3  -Wall -Wextra  -Wcast-qual
 endif
 #-ggdb
 endif
 
-HEADERS = ./headers/simdpfor.h ./headers/simdfastpfor.h ./headers/simdbinarypacking.h ./headers/bitpackinghelpers.h ./headers/common.h ./headers/memutil.h ./headers/pfor.h ./headers/pfor2008.h ./headers/bitpackingunaligned.h ./headers/bitpackingaligned.h ./headers/blockpacking.h  ./headers/codecfactory.h ./headers/packingvectors.h ./headers/compositecodec.h ./headers/cpubenchmark.h  ./headers/maropuparser.h ./headers/bitpacking.h  ./headers/util.h ./headers/simple9.h ./headers/simple8b.h ./headers/simple16.h ./headers/optpfor.h ./headers/newpfor.h ./headers/vsencoding.h ./headers/mersenne.h  ./headers/ztimer.h ./headers/codecs.h ./headers/synthetic.h ./headers/fastpfor.h ./headers/variablebyte.h ./headers/stringutil.h ./headers/entropy.h ./headers/VarIntG8IU.h ./headers/deltautil.h 
+CCFLAGS = -g -march=native -std=gnu99 -O3 -Wall -Wextra
+
+
+HEADERS = ./headers/simdpfor.h ./headers/simdfastpfor.h ./headers/simdbinarypacking.h ./headers/bitpackinghelpers.h ./headers/common.h ./headers/memutil.h ./headers/pfor.h ./headers/pfor2008.h ./headers/bitpackingunaligned.h ./headers/bitpackingaligned.h ./headers/blockpacking.h  ./headers/codecfactory.h ./headers/packingvectors.h ./headers/compositecodec.h ./headers/cpubenchmark.h  ./headers/maropuparser.h ./headers/bitpacking.h  ./headers/util.h ./headers/simple9.h ./headers/simple8b.h ./headers/simple16.h ./headers/optpfor.h ./headers/newpfor.h ./headers/vsencoding.h ./headers/mersenne.h  ./headers/ztimer.h ./headers/codecs.h ./headers/synthetic.h ./headers/fastpfor.h ./headers/variablebyte.h ./headers/stringutil.h ./headers/entropy.h ./headers/VarIntG8IU.h ./headers/deltautil.h  ./headers/simdvariablebyte.h 
 
 all: unit codecs inmemorybenchmark  
 
@@ -43,7 +46,7 @@ GCCPARAMS=
 ./headers/common.h.gch: ./headers/common.h 
 	$(CXX) $(CXXFLAGS) -x c++-header  -c ./headers/common.h -Iheaders
 
-COMMONBINARIES= bitpacking.o bitpackingaligned.o bitpackingunaligned.o simdbitpacking.o  simdunalignedbitpacking.o
+COMMONBINARIES= bitpacking.o bitpackingaligned.o bitpackingunaligned.o simdbitpacking.o  simdunalignedbitpacking.o  varintdecode.o
 
 bitpacking.o: ./headers/bitpacking.h ./src/bitpacking.cpp
 	$(CXX) $(CXXFLAGS) -c ./src/bitpacking.cpp -Iheaders
@@ -62,6 +65,10 @@ simdunalignedbitpacking.o: ./headers/common.h ./headers/usimdbitpacking.h ./src/
 
 horizontalbitpacking.o: ./headers/common.h ./headers/horizontalbitpacking.h ./src/horizontalbitpacking.cpp
 	$(CXX) $(CXXFLAGS) -msse4.1 -c ./src/horizontalbitpacking.cpp -Iheaders
+
+
+varintdecode.o: ./src/varintdecode.c
+	$(CC) $(CCFLAGS) -c ./src/varintdecode.c -Iheaders
 
 
 entropy: $(HEADERS) src/entropy.cpp
