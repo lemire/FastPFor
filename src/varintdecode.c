@@ -1,10 +1,10 @@
 /**
- * (c) Indeed.com
- * All rights reserved (as of March 2014)
+ * (c) Indeed.com and Nathan Kurz
+ * Apache License 2.0
  */
 
 #include <x86intrin.h>
-
+#include <stdint.h>
 
 
 static const uint8_t  vec_lookup[] __attribute__((aligned(0x1000))) = {
