@@ -13,54 +13,62 @@ set(PROJECT_DESCRIPTION "The FastPFOR C++ library: Fast integer compression")
 set(CMAKE_BUILD_TYPE "Release") # CHANGE TO Debug HERE
 
 # C++11 compiler Check
-if(NOT CMAKE_CXX_COMPILER_VERSION) # work around for cmake versions smaller than 2.8.10
-    execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE CMAKE_CXX_COMPILER_VERSION)
-endif()
-if(CMAKE_CXX_COMPILER MATCHES ".*clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-      set(CMAKE_COMPILER_IS_CLANGXX 1)
-endif()
-if( (CMAKE_COMPILER_IS_GNUCXX AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 4.7) OR
-    (CMAKE_COMPILER_IS_CLANGXX AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 3.2))
-  message(FATAL_ERROR "Your C++ compiler does not support C++11. Please install g++ 4.7 (or greater) or clang 3.2 (or greater)")
-else()
-  message(STATUS "Compiler is recent enough to support C++11.")
-endif()
-
-# warnings and standard flags
-if( CMAKE_COMPILER_IS_GNUCXX )  
-    append_cxx_compiler_flags("-std=c++11 -Weffc++ -pedantic -O3 -ggdb -D_GLIBCXX_DEBUG" "GCC" CMAKE_CXX_FLAGS_DEBUG)
-    append_cxx_compiler_flags("-Wold-style-cast -Wall -Wextra -Wcast-align  -Wcast-qual" "GCC" CMAKE_CXX_FLAGS_DEBUG)
-    append_cxx_compiler_flags("-std=c++11 -Weffc++ -Wold-style-cast -Wall -Wextra -Wcast-align -Wcast-qual" "GCC" CMAKE_CXX_FLAGS_RELEASE)
-    append_cxx_compiler_flags("-pedantic -O3 -ffast-math -funroll-loops" "GCC" CMAKE_CXX_FLAGS_RELEASE)
-else()
-    append_cxx_compiler_flags("-std=c++11 -Weverything -pedantic -O3 -g" "GCC" CMAKE_CXX_FLAGS_DEBUG)
-    append_cxx_compiler_flags("-Wall -Wextra -Wcast-align  -Wcast-qual" "GCC" CMAKE_CXX_FLAGS_DEBUG)
-    append_cxx_compiler_flags("-std=c++11 -Weffc++ -Wold-style-cast -Wall -Wextra -Wcast-align -Wcast-qual" "GCC" CMAKE_C_FLAGS_RELEASE)
-    append_cxx_compiler_flags("-pedantic -O3 -ffast-math -funroll-loops" "GCC" CMAKE_C_FLAGS_RELEASE)
-endif()
-
-# cpu features
 include(DetectCPUFeatures)
-if( SUPPORT_BMI2 )
-    if( CMAKE_COMPILER_IS_GNUCXX )
-        append_cxx_compiler_flags("-mbmi2" "GCC" CMAKE_CXX_FLAGS)
-    else()
-        append_cxx_compiler_flags("-mbmi2" "CLANG" CMAKE_CXX_FLAGS)
-    endif()
-endif()
-if( SUPPORT_SSE42 )
-    if( CMAKE_COMPILER_IS_GNUCXX )
-        append_cxx_compiler_flags("-msse4.2" "GCC" CMAKE_CXX_FLAGS)
-    else()
-        append_cxx_compiler_flags("-msse4.2" "CLANG" CMAKE_CXX_FLAGS)
-    endif()
-endif()
-if( SUPPORT_SSE3 )
-    if( CMAKE_COMPILER_IS_GNUCXX )
-        append_cxx_compiler_flags("-msse3" "GCC" CMAKE_CXX_FLAGS)
-    else()
-        append_cxx_compiler_flags("-msse3" "CLANG" CMAKE_CXX_FLAGS)
-    endif()
+if(NOT MSVC)
+	if(NOT CMAKE_CXX_COMPILER_VERSION) # work around for cmake versions smaller than 2.8.10
+		execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE CMAKE_CXX_COMPILER_VERSION)
+	endif()
+	if(CMAKE_CXX_COMPILER MATCHES ".*clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+		  set(CMAKE_COMPILER_IS_CLANGXX 1)
+	endif()
+	if( (CMAKE_COMPILER_IS_GNUCXX AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 4.7) OR
+		(CMAKE_COMPILER_IS_CLANGXX AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 3.2))
+	  message(FATAL_ERROR "Your C++ compiler does not support C++11. Please install g++ 4.7 (or greater) or clang 3.2 (or greater)")
+	else()
+	  message(STATUS "Compiler is recent enough to support C++11.")
+	endif()
+
+	# warnings and standard flags
+	if( CMAKE_COMPILER_IS_GNUCXX )  
+		append_cxx_compiler_flags("-std=c++11 -Weffc++ -pedantic -O3 -ggdb -D_GLIBCXX_DEBUG" "GCC" CMAKE_CXX_FLAGS_DEBUG)
+		append_cxx_compiler_flags("-Wold-style-cast -Wall -Wextra -Wcast-align  -Wcast-qual" "GCC" CMAKE_CXX_FLAGS_DEBUG)
+		append_cxx_compiler_flags("-std=c++11 -Weffc++ -Wold-style-cast -Wall -Wextra -Wcast-align -Wcast-qual" "GCC" CMAKE_CXX_FLAGS_RELEASE)
+		append_cxx_compiler_flags("-pedantic -O3 -ffast-math -funroll-loops" "GCC" CMAKE_CXX_FLAGS_RELEASE)
+	else()
+		append_cxx_compiler_flags("-std=c++11 -Weverything -pedantic -O3 -g" "GCC" CMAKE_CXX_FLAGS_DEBUG)
+		append_cxx_compiler_flags("-Wall -Wextra -Wcast-align  -Wcast-qual" "GCC" CMAKE_CXX_FLAGS_DEBUG)
+		append_cxx_compiler_flags("-std=c++11 -Weffc++ -Wold-style-cast -Wall -Wextra -Wcast-align -Wcast-qual" "GCC" CMAKE_C_FLAGS_RELEASE)
+		append_cxx_compiler_flags("-pedantic -O3 -ffast-math -funroll-loops" "GCC" CMAKE_C_FLAGS_RELEASE)
+	endif()
+
+	# cpu features
+	if( SUPPORT_AVX2 )
+		if( CMAKE_COMPILER_IS_GNUCXX )
+			append_cxx_compiler_flags("-mbmi2" "GCC" CMAKE_CXX_FLAGS)
+		else()
+			append_cxx_compiler_flags("-mbmi2" "CLANG" CMAKE_CXX_FLAGS)
+		endif()
+	endif()
+	if( SUPPORT_SSE42 )
+		if( CMAKE_COMPILER_IS_GNUCXX )
+			append_cxx_compiler_flags("-msse4.2" "GCC" CMAKE_CXX_FLAGS)
+		else()
+			append_cxx_compiler_flags("-msse4.2" "CLANG" CMAKE_CXX_FLAGS)
+		endif()
+	endif()
+else()
+	file(GLOB HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/headers/*.h")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /Oi")
+	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Ox")
+	if( SUPPORT_AVX2 )
+		SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:AVX2")
+	elseif( SUPPORT_AVX )
+		SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:AVX")
+	elseif( SUPPORT_SSE42)
+		SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
+	else()
+		SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE")
+	endif()
 endif()
 
 
@@ -72,7 +80,9 @@ add_library(FastPFor STATIC src/bitpacking.cpp
                                 src/bitpackingunaligned.cpp
                                 src/horizontalbitpacking.cpp 
                                 src/simdunalignedbitpacking.cpp
-                                src/simdbitpacking.cpp)
+                                src/simdbitpacking.cpp
+								${HEADERS}
+								)
 
 
 # other executables

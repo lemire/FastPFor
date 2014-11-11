@@ -8,6 +8,8 @@
 #ifndef VARINTGB_H_
 #define VARINTGB_H_
 
+#include <array>
+
 #include "common.h"
 #include "codecs.h"
 #include "variablebyte.h"
@@ -139,7 +141,7 @@ public:
         inbyte = padTo32bits(inbyte);
         return reinterpret_cast<const uint32_t *> (inbyte);
     }
-    const uint32_t mask[4] = { 0xFF, 0xFFFF, 0xFFFFFF, 0xFFFFFFFF };
+	const array<uint32_t, 4> mask{ { 0xFF, 0xFFFF, 0xFFFFFF, 0xFFFFFFFF } };
 
     const uint8_t* decodeGroupVarInt(const uint8_t* in, uint32_t* out) {
 	       const uint32_t sel = *in++;

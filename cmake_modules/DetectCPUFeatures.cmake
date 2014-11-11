@@ -1,72 +1,54 @@
+include(CheckCXXSourceCompiles)
 
-set(SUPPORT_BMI2 0)
-# Check if we are on a Linux system
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-	# Use /proc/cpuinfo to get the information
-	file(STRINGS "/proc/cpuinfo" _cpuinfo)
-	if(_cpuinfo MATCHES "(avx2)|(bmi2)")
-		message(STATUS "Detected BMI2 Support")
-		set(SUPPORT_BMI2 1)
-	endif()
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-#  handle windows
-#	get_filename_component(_vendor_id "[HKEY_LOCAL_MACHINE\\Hardware\\Description\\System\\CentralProcessor\\0;VendorIdentifier]" NAME CACHE)
-#	get_filename_component(_cpu_id "[HKEY_LOCAL_MACHINE\\Hardware\\Description\\System\\CentralProcessor\\0;Identifier]" NAME CACHE)	
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-#  handle MacOs
-execute_process(COMMAND sysctl -n machdep.cpu.features
-                OUTPUT_VARIABLE _cpuinfo OUTPUT_STRIP_TRAILING_WHITESPACE)
-	if(_cpuinfo MATCHES "BMI2")
-		message(STATUS "Detected BMI2 Support")
-		set(SUPPORT_BMI2 1)
-	endif()
-endif()	
-	
+message(STATUS "TEST TEST")
+set(OLD_CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
 
-set(SUPPORT_SSE42 0)
-# Check if we are on a Linux system
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-	# Use /proc/cpuinfo to get the information
-	file(STRINGS "/proc/cpuinfo" _cpuinfo)
-	if(_cpuinfo MATCHES "(sse4_2)|(sse4a)")
-	    message(STATUS "Detected SSE4.2 Support")
-		set(SUPPORT_SSE42 1)
-	endif()
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-#  handle windows
-#	get_filename_component(_vendor_id "[HKEY_LOCAL_MACHINE\\Hardware\\Description\\System\\CentralProcessor\\0;VendorIdentifier]" NAME CACHE)
-#	get_filename_component(_cpu_id "[HKEY_LOCAL_MACHINE\\Hardware\\Description\\System\\CentralProcessor\\0;Identifier]" NAME CACHE)	
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-#  handle MacOs
-execute_process(COMMAND sysctl -n machdep.cpu.features
-                OUTPUT_VARIABLE _cpuinfo OUTPUT_STRIP_TRAILING_WHITESPACE)
-	if(_cpuinfo MATCHES "SSE4.2")
-		message(STATUS "Detected SSE4.2 Support")
-		set(SUPPORT_SSE42 1)
-	endif()
-endif()	
-	
+set(SSE4PROG "
 
-set(SUPPORT_SSE3 0)
-# Check if we are on a Linux system
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-	# Use /proc/cpuinfo to get the information
-	file(STRINGS "/proc/cpuinfo" _cpuinfo)
-	if(_cpuinfo MATCHES "sse3")
-		message(STATUS "Detected SSE3 Support")
-		set(SUPPORT_SSE3 1)
-	endif()
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-#  handle windows
-#	get_filename_component(_vendor_id "[HKEY_LOCAL_MACHINE\\Hardware\\Description\\System\\CentralProcessor\\0;VendorIdentifier]" NAME CACHE)
-#	get_filename_component(_cpu_id "[HKEY_LOCAL_MACHINE\\Hardware\\Description\\System\\CentralProcessor\\0;Identifier]" NAME CACHE)	
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-#  handle MacOs
-execute_process(COMMAND sysctl -n machdep.cpu.features
-                OUTPUT_VARIABLE _cpuinfo OUTPUT_STRIP_TRAILING_WHITESPACE)
-	if(_cpuinfo MATCHES "SSE3")
-		message(STATUS "Detected SSE3 Support")
-		set(SUPPORT_SSE3 1)
-	endif()
+#include<smmintrin.h>
+int main(){
+__m128 x=_mm_set1_ps(0.5);
+x=_mm_dp_ps(x,x,0x77);
+return _mm_movemask_ps(x);
+}")
+
+set(AVXPROG "
+
+#include<immintrin.h>
+int main(){
+__m128 x=_mm_set1_ps(0.5);
+x=_mm_permute_ps(x,1);
+return _mm_movemask_ps(x);
+}")
+
+set(AVX2PROG "
+
+#include<immintrin.h>
+int main(){
+__m256i x=_mm256_set1_epi32(5);
+x=_mm256_add_epi32(x,x);
+return _mm256_movemask_epi8(x);
+}")
+
+if(MSVC)
+	message(STATUS "TEST 2")
+	set(CMAKE_REQUIRED_FLAGS "/EHsc /arch:SSE2")
+	check_cxx_source_compiles("${SSE4PROG}" SUPPORT_SSE42)
+	message(STATUS "SUPPORT_SSE42 ${SUPPORT_SSE42}")
+	set(CMAKE_REQUIRED_FLAGS "/EHsc /arch:AVX")
+	check_cxx_source_compiles("${AVXPROG}" SUPPORT_AVX)
+	message(STATUS "SUPPORT_AVX ${SUPPORT_AVX}")
+	set(CMAKE_REQUIRED_FLAGS "/EHsc /arch:AVX2")
+	check_cxx_source_compiles("${AVX2PROG}" SUPPORT_AVX2)
+	message(STATUS "SUPPORT_AVX2 ${SUPPORT_AVX2}")
+else()
+	set(CMAKE_REQUIRED_FLAGS "-march=native -msse4.2")
+	check_cxx_source_compiles("${SSE4PROG}" SUPPORT_SSE42)
+	set(CMAKE_REQUIRED_FLAGS "-march=native -mavx")
+	check_cxx_source_compiles("${AVXPROG}" SUPPORT_AVX)
+	set(CMAKE_REQUIRED_FLAGS "-march=native -mavx2")
+	check_cxx_source_compiles("${AVX2PROG}" SUPPORT_AVX2)
 endif()	
+
+set(CMAKE_REQUIRED_FLAGS ${OLD_CMAKE_REQUIRED_FLAGS})
 	
