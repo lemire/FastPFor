@@ -46,7 +46,7 @@
 #include <unordered_set>
 
 #ifdef _MSC_VER
-
+#include <iso646.h>
 #include <stdint.h>
 
 #define __attribute__(n)

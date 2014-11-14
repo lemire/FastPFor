@@ -8,6 +8,8 @@
 #ifndef VARINTGB_H_
 #define VARINTGB_H_
 
+#include <array>
+
 #include "common.h"
 #include "codecs.h"
 #include "variablebyte.h"
@@ -139,7 +141,7 @@ public:
         inbyte = padTo32bits(inbyte);
         return reinterpret_cast<const uint32_t *> (inbyte);
     }
-    const uint32_t mask[4] = { 0xFF, 0xFFFF, 0xFFFFFF, 0xFFFFFFFF };
+	const array<uint32_t, 4> mask{ { 0xFF, 0xFFFF, 0xFFFFFF, 0xFFFFFFFF } };
 
     const uint8_t* decodeGroupVarInt(const uint8_t* in, uint32_t* out) {
 	       const uint32_t sel = *in++;
@@ -151,16 +153,16 @@ public:
     	       return in + 4;
     	    }
     	    const uint32_t sel1 = (sel & 3);
-    	    *out++ = *((uint32_t*)(in)) & mask[sel1];
+    	    *out++ = *(reinterpret_cast<const uint32_t*>(in)) & mask[sel1];
     	    in += sel1 + 1;
     	    const uint32_t sel2 = ((sel >> 2) & 3);
-    	    *out++ = *((uint32_t*)(in)) & mask[sel2];
+    	    *out++ = *(reinterpret_cast<const uint32_t*>(in)) & mask[sel2];
     	    in += sel2 + 1;
     	    const uint32_t sel3 = ((sel >> 4) & 3);
-    	    *out++ = *((uint32_t*)(in)) & mask[sel3];
+    	    *out++ = *(reinterpret_cast<const uint32_t*>(in)) & mask[sel3];
     	    in += sel3 + 1;
     	    const uint32_t sel4 = (sel >> 6);
-    	    *out++ = *((uint32_t*)(in)) & mask[sel4];
+    	    *out++ = *(reinterpret_cast<const uint32_t*>(in)) & mask[sel4];
     	    in += sel4 + 1;
     	    return in;
     }
@@ -175,19 +177,19 @@ public:
     	    	return in + 4;
     	    }
     	    const uint32_t sel1 = (sel & 3);
-    	    *val += *((uint32_t*)(in)) & mask[sel1];
+    	    *val += *(reinterpret_cast<const uint32_t*>(in)) & mask[sel1];
     	    *out++ = *val;
     	    in += sel1 + 1;
     	    const uint32_t sel2 = ((sel >> 2) & 3);
-    	    *val += *((uint32_t*)(in)) & mask[sel2];
+    	    *val += *(reinterpret_cast<const uint32_t*>(in)) & mask[sel2];
     	    *out++ = *val;
     	    in += sel2 + 1;
     	    const uint32_t sel3 = ((sel >> 4) & 3);
-    	    *val += *((uint32_t*)(in)) & mask[sel3];
+    	    *val += *(reinterpret_cast<const uint32_t*>(in)) & mask[sel3];
     	    *out++ = *val;
     	    in += sel3 + 1;
     	    const uint32_t sel4 = (sel >> 6);
-    	    *val += *((uint32_t*)(in)) & mask[sel4];
+    	    *val += *(reinterpret_cast<const uint32_t*>(in)) & mask[sel4];
     	    *out++ = *val;
     	    in += sel4 + 1;
       	    return in;
@@ -202,6 +204,6 @@ public:
 };
 
 
-};
+}
 
 #endif // VARINTGB_H_
