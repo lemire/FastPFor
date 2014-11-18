@@ -12,6 +12,28 @@ set(PROJECT_URL "https://github.com/lemire/FastPFOR")
 set(PROJECT_DESCRIPTION "The FastPFOR C++ library: Fast integer compression")
 set(CMAKE_BUILD_TYPE "Release") # CHANGE TO Debug HERE
 
+#
+# Runs compiler with "-dumpversion" and parses major/minor
+# version with a regex.
+#
+# Taken&Modified from Boost.cmake
+#
+function(CXX_COMPILER_DUMPVERSION _OUTPUT_VERSION)
+
+  exec_program(${CMAKE_CXX_COMPILER}
+    ARGS ${CMAKE_CXX_COMPILER_ARG1} -dumpversion
+    OUTPUT_VARIABLE COMPILER_VERSION
+  )
+  #string(REGEX REPLACE "([0-9])\\.([0-9])(\\.[0-9])?" "\\1\\2"
+  #   COMPILER_VERSION ${COMPILER_VERSION})
+
+  set(${_OUTPUT_VERSION} ${COMPILER_VERSION} PARENT_SCOPE)
+endfunction()
+
+if(NOT WIN32)
+    CXX_COMPILER_DUMPVERSION(CXX_COMPILER_VERSION)
+endif()
+
 MESSAGE( STATUS "CMAKE_CXX_COMPILER_ID: " ${CMAKE_CXX_COMPILER_ID} )
 MESSAGE( STATUS "CMAKE_C_COMPILER: " ${CXX_COMPILER_VERSION} )
 MESSAGE( STATUS "CXX_COMPILER_VERSION: " ${CXX_COMPILER_VERSION} )
