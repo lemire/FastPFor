@@ -102,32 +102,11 @@ Some specific binaries will only run if your processor supports SSE4.1. They hav
 
 ## Building with CMake
 
-At the root of the project:
+You need cmake. On most linux distributions, you can simply do the following:
 
-- Create a directory to contain the out-of-source build.
-
-        mkdir build
-        cd build
-
-- Generate the files to actually perform the build. Many build systems are
-supported by CMake, so you may want to look at the [documentation](http://www.cmake.org).
-
-        cmake ..
-
-- Given you generated Unix Makefiles (the default), you can now build the
-library.
-
-        make
-
-## Building with make
-
-You can specify which C++ compiler you are using with the CXX variable.
-
-e.g., under bash type
-
-    export CXX=g++-4.7
-    make
-
+      cmake .
+      make
+It may be necessary to set the CXX variable.
 
 ### Multithreaded context
 
@@ -174,13 +153,7 @@ run the unit tests. For example , if you generated Unix Makefiles
 
     make check
 
-will do it. If you used raw make, type the following:
-
-    make
-    ./unit
-
-Note that we are thorough in the unit tests so it can
-take several minutes to run through them all.
+will do it. 
 
 ## Simple benchmark
 
