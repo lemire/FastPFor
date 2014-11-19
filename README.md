@@ -106,7 +106,10 @@ You need cmake. On most linux distributions, you can simply do the following:
 
       cmake .
       make
+
 It may be necessary to set the CXX variable.
+
+To create project files for Microsoft Visual Studio, it might be useful to target 64-bit Windows (e.g., see http://www.cmake.org/cmake/help/v3.0/generator/Visual%20Studio%2012%202013.html).
 
 ### Multithreaded context
 

@@ -11,7 +11,7 @@ project(FastPFor CXX C)
 set(PROJECT_URL "https://github.com/lemire/FastPFOR")
 set(PROJECT_DESCRIPTION "The FastPFOR C++ library: Fast integer compression")
 set(CMAKE_BUILD_TYPE "Release") # CHANGE TO Debug HERE
-
+include(DetectCPUFeatures)
 #
 # Runs compiler with "-dumpversion" and parses major/minor
 # version with a regex.
@@ -37,6 +37,11 @@ endif()
 MESSAGE( STATUS "CMAKE_CXX_COMPILER_ID: " ${CMAKE_CXX_COMPILER_ID} )
 MESSAGE( STATUS "CMAKE_C_COMPILER: " ${CXX_COMPILER_VERSION} )
 MESSAGE( STATUS "CXX_COMPILER_VERSION: " ${CXX_COMPILER_VERSION} )
+if( SUPPORT_SSE42 )
+    MESSAGE( STATUS "SSE 4.2 support detected" )
+else()
+    MESSAGE( STATUS "SSE 4.2 support not detected" )
+endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     # require at least gcc 4.7
