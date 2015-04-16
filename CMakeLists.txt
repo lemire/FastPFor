@@ -129,6 +129,9 @@ endif()
 add_executable(codecs src/codecs.cpp)
 target_link_libraries(codecs FastPFor)
 
+add_executable(example example.cpp)
+target_link_libraries(example FastPFor)
+
 add_executable(inmemorybenchmark src/inmemorybenchmark.cpp)
 target_link_libraries(inmemorybenchmark FastPFor)
 
