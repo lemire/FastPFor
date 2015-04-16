@@ -4,13 +4,20 @@
 # Copyright (c) 2012 Louis Dionne
 #
 cmake_minimum_required(VERSION 2.8.7)
+if (NOT CMAKE_BUILD_TYPE)
+		message(STATUS "No build type selected, default to Release")
+		set(CMAKE_BUILD_TYPE "Release")
+else()
+        MESSAGE( STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE} )
+endif()
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
 include(AppendCompilerFlags)
+
 
 project(FastPFor CXX C)
 set(PROJECT_URL "https://github.com/lemire/FastPFOR")
 set(PROJECT_DESCRIPTION "The FastPFOR C++ library: Fast integer compression")
-set(CMAKE_BUILD_TYPE "Release") # CHANGE TO Debug HERE
 include(DetectCPUFeatures)
 #
 # Runs compiler with "-dumpversion" and parses major/minor
@@ -53,19 +60,19 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     #set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast -lm -lrt -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=core2")
     #set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast -lm -lrt -DNDEBUG -std=c++11 -DHAVE_CXX0X -msse4.2")
     set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Wcast-align -Ofast -lm -lrt -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=native -Wl,--no-as-needed")
-    set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -lm -lrt -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=native -Wl,--no-as-needed")
+    set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -lm -lrt -std=c++11 -DHAVE_CXX0X -march=native -Wl,--no-as-needed")
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
     if (CXX_COMPILER_VERSION VERSION_LESS 14.0.1)
         message(STATUS "Intel version must be at least 14.0.1!")
     endif()
     set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast -lrt -DNDEBUG -std=c++11 -DHAVE_CXX0X  -march=native")
-    set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -ggdb  -lrt -DNDEBUG -std=c++11 -DHAVE_CXX0X  -march=native")
+    set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -ggdb  -lrt -std=c++11 -DHAVE_CXX0X  -march=native")
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     if (CXX_COMPILER_VERSION VERSION_LESS 4.2.1)
         message(STATUS  "Clang version must be at least 4.2.1!" )
     endif()
     set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Wcast-align -O3 -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=native")
-    set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=native")
+    set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -std=c++11 -DHAVE_CXX0X -march=native")
 elseif(WIN32)
     # TODO add support for later versions?
     if(NOT MSVC12)
