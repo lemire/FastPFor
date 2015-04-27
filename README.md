@@ -95,7 +95,12 @@ It builds under
 
 The code was tested under Windows, Linux and MacOS.
 
+The build system expects an x64 operating system. Under Linux and MacOS, typing `uname -a` in the console should print the `x86_64` string. If you have a 32-bit system, you may need to do extra work to build and run this code. Please use a 64-bit system instead.
+
+
 ## Hardware Requirements
+
+We require an x64 platform.
 
 To fully use the library, your processor should support SSSE3. This includes almost every Intel or AMD processor
 sold after 2006. (Note: the key schemes require merely SSE2.) 
