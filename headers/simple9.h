@@ -90,7 +90,6 @@ const typename Simple9<MarkLength, hacked>::unpacker
 template<bool MarkLength, bool hacked>
 void Simple9<MarkLength, hacked>::encodeArray(const uint32_t *in,
         const size_t length, uint32_t *out, size_t &nvalue) {
-    const uint32_t * const initin(in);
     uint32_t NumberOfValuesCoded;
     const uint32_t * const initout(out);
     if (MarkLength)
@@ -290,7 +289,6 @@ const uint32_t * Simple9<MarkLength, hacked>::decodeArray(const uint32_t *in,
     if (MarkLength)
         if ((*in) > nvalue)
             throw NotEnoughStorage(*in);
-    const uint32_t * const endin = in + len;
     const uint32_t actualvalue = MarkLength ? *(in++) : nvalue;
     if (nvalue < actualvalue)
         std::cerr << " possible overrun" << std::endl;

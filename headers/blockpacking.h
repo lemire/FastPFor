@@ -313,8 +313,6 @@ public:
             uint32_t *out, size_t & nvalue) {
         const uint32_t actuallength = *in++;
         const uint8_t * inbyte = reinterpret_cast<const uint8_t *> (in);
-        const uint8_t * finalinbyte = reinterpret_cast<const uint8_t *> (in
-                + length);
         const uint32_t * const initout(out);
 
         const uint32_t storageforbitwidth = prescan ? *inbyte++ : bits32;
