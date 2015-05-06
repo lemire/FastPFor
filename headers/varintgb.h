@@ -39,10 +39,10 @@ public:
         bout += 4;
 
         size_t k = 0;
-        for (; k + 3 < length;) {
+        for (; k + 3 < length; k+= 4) {
             uint8_t * keyp = bout++;
             *keyp = 0;
-            for (int j = 0; j < 8; j += 2, ++k) {
+            {
                 const uint32_t val = delta ? in[k] - prev : in[k];
                 if (delta)
                     prev = in[k];
@@ -51,20 +51,87 @@ public:
                 } else if (val < (1U << 16)) {
                     *bout++ = static_cast<uint8_t> (val);
                     *bout++ = static_cast<uint8_t> (val >> 8);
-                    *keyp |= static_cast<uint8_t>(1 << j);
+                    *keyp = static_cast<uint8_t>(1);
                 } else if (val < (1U << 24)) {
                     *bout++ = static_cast<uint8_t> (val);
                     *bout++ = static_cast<uint8_t> (val >> 8);
                     *bout++ = static_cast<uint8_t> (val >> 16);
-                    *keyp |= static_cast<uint8_t>(2 << j);
+                    *keyp = static_cast<uint8_t>(2);
                 } else {
                     // the compiler will do the right thing
                     *reinterpret_cast<uint32_t *> (bout) = val;
                     bout += 4;
-                    *keyp |= static_cast<uint8_t>(3 << j);
+                    *keyp = static_cast<uint8_t>(3);
+                }
+            }
+            {
+                const uint32_t val = delta ? in[k+1] - prev : in[k+1];
+                if (delta)
+                    prev = in[k+1];
+                if (val < (1U << 8)) {
+                    *bout++ = static_cast<uint8_t> (val);
+                } else if (val < (1U << 16)) {
+                    *bout++ = static_cast<uint8_t> (val);
+                    *bout++ = static_cast<uint8_t> (val >> 8);
+                    *keyp |= static_cast<uint8_t>(1 << 2);
+                } else if (val < (1U << 24)) {
+                    *bout++ = static_cast<uint8_t> (val);
+                    *bout++ = static_cast<uint8_t> (val >> 8);
+                    *bout++ = static_cast<uint8_t> (val >> 16);
+                    *keyp |= static_cast<uint8_t>(2 << 2);
+                } else {
+                    // the compiler will do the right thing
+                    *reinterpret_cast<uint32_t *> (bout) = val;
+                    bout += 4;
+                    *keyp |= static_cast<uint8_t>(3 << 2);
+                }
+            }
+            {
+                const uint32_t val = delta ? in[k+2] - prev : in[k+2];
+                if (delta)
+                    prev = in[k+2];
+                if (val < (1U << 8)) {
+                    *bout++ = static_cast<uint8_t> (val);
+                } else if (val < (1U << 16)) {
+                    *bout++ = static_cast<uint8_t> (val);
+                    *bout++ = static_cast<uint8_t> (val >> 8);
+                    *keyp |= static_cast<uint8_t>(1 << 4);
+                } else if (val < (1U << 24)) {
+                    *bout++ = static_cast<uint8_t> (val);
+                    *bout++ = static_cast<uint8_t> (val >> 8);
+                    *bout++ = static_cast<uint8_t> (val >> 16);
+                    *keyp |= static_cast<uint8_t>(2 << 4);
+                } else {
+                    // the compiler will do the right thing
+                    *reinterpret_cast<uint32_t *> (bout) = val;
+                    bout += 4;
+                    *keyp |= static_cast<uint8_t>(3 << 4);
+                }
+            }
+            {
+                const uint32_t val = delta ? in[k+3] - prev : in[k+3];
+                if (delta)
+                    prev = in[k+3];
+                if (val < (1U << 8)) {
+                    *bout++ = static_cast<uint8_t> (val);
+                } else if (val < (1U << 16)) {
+                    *bout++ = static_cast<uint8_t> (val);
+                    *bout++ = static_cast<uint8_t> (val >> 8);
+                    *keyp |= static_cast<uint8_t>(1 << 6);
+                } else if (val < (1U << 24)) {
+                    *bout++ = static_cast<uint8_t> (val);
+                    *bout++ = static_cast<uint8_t> (val >> 8);
+                    *bout++ = static_cast<uint8_t> (val >> 16);
+                    *keyp |= static_cast<uint8_t>(2 << 6);
+                } else {
+                    // the compiler will do the right thing
+                    *reinterpret_cast<uint32_t *> (bout) = val;
+                    bout += 4;
+                    *keyp |= static_cast<uint8_t>(3 << 6);
                 }
             }
         }
+
         if (k < length) {
             uint8_t * keyp = bout++;
             *keyp = 0;
@@ -141,6 +208,16 @@ public:
         inbyte = padTo32bits(inbyte);
         return reinterpret_cast<const uint32_t *> (inbyte);
     }
+
+    string name() const {
+        if(delta)
+            return "varintgbdelta";
+        else
+            return "varintgb";
+    }
+
+
+private:
 	const array<uint32_t, 4> mask{ { 0xFF, 0xFFFF, 0xFFFFFF, 0xFFFFFFFF } };
 
     const uint8_t* decodeGroupVarInt(const uint8_t* in, uint32_t* out) {
@@ -194,13 +271,6 @@ public:
     	    in += sel4 + 1;
       	    return in;
     }
-    string name() const {
-        if(delta)
-            return "varintgbdelta";
-        else
-            return "varintgb";
-    }
-
 };
 
 
