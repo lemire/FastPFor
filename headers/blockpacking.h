@@ -337,7 +337,6 @@ public:
             }
         }
 
-        assert(inbyte <= finalinbyte);
         nvalue = out - initout;
         return reinterpret_cast<const uint32_t *> (padTo32bits(inbyte));
     }

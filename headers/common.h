@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <string.h>
 #ifndef _WIN32
-#include <intrin.h>
 #include <sys/mman.h>
 #include <sys/resource.h>
 #endif
@@ -49,6 +48,7 @@
 #ifdef _MSC_VER
 #include <iso646.h>
 #include <stdint.h>
+#include <intrin.h>
 
 #define __attribute__(n)
 #define __restrict__

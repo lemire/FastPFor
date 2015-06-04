@@ -275,7 +275,6 @@ void Simple9<MarkLength, hacked>::encodeArray(const uint32_t *in,
         ++out;
         ValuesRemaining -= NumberOfValuesCoded;
     }
-    assert(initin + length == in);
     nvalue = out - initout;
 }
 template<bool MarkLength, bool hacked>
@@ -315,8 +314,6 @@ const uint32_t * Simple9<MarkLength, hacked>::decodeArray(const uint32_t *in,
     std::cout << "we compressed " << nvalue << " integers down to " << len
             << " 32-bit words" << std::endl;
 #endif
-    assert(in <= endin);
-    //    ASSERT (out < end + 60, out-end);
     return in;
 }
 
