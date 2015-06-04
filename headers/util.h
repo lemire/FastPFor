@@ -132,6 +132,16 @@ inline uint32_t gccbits(const uint32_t v) {
 #endif
 }
 
+#ifdef _MSC_VER
+// taken from http://stackoverflow.com/questions/355967/how-to-use-msvc-intrinsics-to-get-the-equivalent-of-this-gcc-code
+uint32_t __builtin_clz(uint32_t x) {
+        unsigned long r = 0;
+        _BitScanReverse(&r, x);
+        return (31-r);
+}
+
+#endif
+
 __attribute__ ((const))
 inline bool divisibleby(size_t a, uint32_t x) {
     return (a % x == 0);

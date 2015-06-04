@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #ifndef _WIN32
+#include <intrin.h>
 #include <sys/mman.h>
 #include <sys/resource.h>
 #endif
