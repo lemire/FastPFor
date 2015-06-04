@@ -199,20 +199,8 @@ namespace FastPForLib {
 		int maskOutputSize[256];
 		__m128i vecmask[256][2];
 
-		int getNumByteNeeded(const uint32_t value) {
-			if (value > 0x000000FF) {
-				if (value > 0x0000FFFF) {
-					if (value > 0x00FFFFFF) {
-						return 4;
-					} else {
-						return 3;
-					}
-				} else {
-					return 2;
-				}
-			} else {
-				return 1;
-			}
+		int getNumByteNeeded(const uint32_t val) {
+			return ((__builtin_clz(val | 255) ^ 31) >> 3) + 1;
 		}
 	};
 
