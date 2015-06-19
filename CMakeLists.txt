@@ -6,10 +6,9 @@
 cmake_minimum_required(VERSION 2.8.7)
 if (NOT CMAKE_BUILD_TYPE)
 		message(STATUS "No build type selected, default to Release")
-		set(CMAKE_BUILD_TYPE "Release")
-else()
-        MESSAGE( STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE} )
+		set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
 endif()
+MESSAGE( STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE} )
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
 include(AppendCompilerFlags)
@@ -86,6 +85,10 @@ elseif(WIN32)
 else ()
     message(FATAL_ERROR "Please, use GCC, Clang, or the Intel compiler!")
 endif()
+
+MESSAGE( STATUS "CMAKE_CXX_FLAGS_DEBUG: " ${CMAKE_CXX_FLAGS_DEBUG} )
+MESSAGE( STATUS "CMAKE_CXX_FLAGS_RELEASE: " ${CMAKE_CXX_FLAGS_RELEASE} )
+
 
 
 # library target
