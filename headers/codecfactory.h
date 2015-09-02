@@ -14,6 +14,7 @@
 #include "util.h"
 #include "simple16.h"
 #include "simple9.h"
+#include "simple9_rle.h"
 #include "simple8b.h"
 #include "simple8b_rle.h"
 #include "newpfor.h"
@@ -121,10 +122,14 @@ static inline CodecMap initializefactory() {
             new CompositeCodec<SIMDOPTPFor<4, Simple16<false> > , VariableByte> ());
     map["varint"] = std::shared_ptr<IntegerCODEC> (new VariableByte());
     map["vbyte"] = std::shared_ptr<IntegerCODEC> (new VByte());
+#if !defined(_MSC_VER) || (_MSC_VER != 1900)
     map["varintgb"] = std::shared_ptr<IntegerCODEC> (new VarIntGB<>());
-
+#endif
+    map["simple16"] = std::shared_ptr<IntegerCODEC>(new Simple16<true>());
+    map["simple9"] = std::shared_ptr<IntegerCODEC>(new Simple9<true>());
+    map["simple9_rle"] = std::shared_ptr<IntegerCODEC>(new Simple9_RLE<true>());
     map["simple8b"] = std::shared_ptr<IntegerCODEC> (new Simple8b<true> ());
-    map["simple8b_rle"] = std::shared_ptr<IntegerCODEC> (new Simple8b_RLE<true> ());
+    map["simple8b_rle"] = std::shared_ptr<IntegerCODEC> (new Simple8b_RLE<true>());
 #ifdef VARINTG8IU_H__
     map["varintg8iu"] = std::shared_ptr<IntegerCODEC> (new VarIntG8IU ());
 #endif
