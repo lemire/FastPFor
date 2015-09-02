@@ -8,7 +8,6 @@
 #ifndef VARINTGB_H_
 #define VARINTGB_H_
 
-#include <array>
 
 #include "common.h"
 #include "codecs.h"
@@ -218,7 +217,7 @@ public:
 
 
 private:
-	const array<uint32_t, 4> mask{ { 0xFF, 0xFFFF, 0xFFFFFF, 0xFFFFFFFF } };
+	static uint32_t mask[4];// { { 0xFF, 0xFFFF, 0xFFFFFF, 0xFFFFFFFF } };
 
     const uint8_t* decodeGroupVarInt(const uint8_t* in, uint32_t* out) {
 	       const uint32_t sel = *in++;
@@ -273,6 +272,8 @@ private:
     }
 };
 
+template<bool delta>
+uint32_t VarIntGB<delta>::mask[4] = { 0xFF, 0xFFFF, 0xFFFFFF, 0xFFFFFFFF };
 
 }
 
