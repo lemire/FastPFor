@@ -484,11 +484,9 @@ public:
                     std::cerr << " expected size of "<<datas[k].size()<<" got "<<recoveredsize << std::endl;
                     throw std::logic_error("arrays don't have same size: bug.");
                 }
-#if !defined(_MSC_VER) || (_MSC_VER != 1900)
-                if (!equal(datas[k].begin(), datas[k].end(), recov)) {
-                    throw std::logic_error("we have a bug");
-                }
-#else
+                //if (!equal(datas[k].begin(), datas[k].end(), recov)) {
+                //    throw std::logic_error("we have a bug");
+                //}
                 for (size_t i = 0; i < datas[k].size(); i++) {
                     if (datas[k][i] != recov[i]) {
                         std::cout << "difference at index " << i << ":" << std::endl;
@@ -497,7 +495,6 @@ public:
                         throw std::logic_error("we have a bug");
                     }
                 }
-#endif
             }
             if (!pp.separatetimes) {
                 timemscomp += timemsdelta;

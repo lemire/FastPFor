@@ -32,9 +32,7 @@
 #include "VarIntG8IU.h"
 #include "simdbinarypacking.h"
 #include "snappydelta.h"
-#if !defined(_MSC_VER) || (_MSC_VER != 1900)
 #include "varintgb.h"
-#endif
 
 namespace FastPForLib {
 
