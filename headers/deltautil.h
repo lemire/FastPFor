@@ -90,11 +90,12 @@ void summarize(std::vector<algostats> & v, std::string prefix = "#") {
         }
         std::cout << prefix << std::endl << prefix << std::endl;
     }
-    for(algostats a : v) {
+	std::cout << " codec:                                  enc/mis dec/mis bits/i enc(ms) dec(ms)" << std::endl;
+	for(algostats a : v) {
         double deltaTime = a.deltatime + a.inversedeltatime;
         double totTime = deltaTime + a.comptime + a.decomptime;
         if (totTime > 0 && a.input > 0) {
-            std::cout << " " << std::setprecision(4) << a.name(40);
+            std::cout << " " << std::setprecision(1) << std::fixed << a.name(40);
             double input = static_cast<double>(a.input);
             if (deltaTime > 0) {
                 std::cout << input / a.deltatime << " \t "
@@ -109,13 +110,12 @@ void summarize(std::vector<algostats> & v, std::string prefix = "#") {
                      << static_cast<size_t>(a.inversedeltatime / 1000)
                      << std::endl;
             } else {
-                std::cout << input / a.comptime << " \t "
-                     << input / a.decomptime << " \t "
-                     << static_cast<double>(a.output) * 32.0 / input << " \t\t"
-                     << "TotalTimes (ms):  "
-                     << static_cast<size_t>(a.comptime / 1000) << " \t "
-                     << static_cast<size_t>(a.decomptime / 1000)
-                     << std::endl;
+                std::cout << std::setw(7) << input / a.comptime << " "
+					 << std::setw(7) << input / a.decomptime << " "
+					 << std::setw(6) << a.output * 32.0 / input << " "
+					 << std::setw(7) << a.comptime / 1000 << " "
+					 << std::setw(7) << a.decomptime / 1000
+					 << std::endl;
             }
         }
     }
@@ -484,10 +484,17 @@ public:
                     std::cerr << " expected size of "<<datas[k].size()<<" got "<<recoveredsize << std::endl;
                     throw std::logic_error("arrays don't have same size: bug.");
                 }
-                if (!equal(datas[k].begin(),datas[k].end(), recov))  {
-                    throw std::logic_error("we have a bug");
+                //if (!equal(datas[k].begin(), datas[k].end(), recov)) {
+                //    throw std::logic_error("we have a bug");
+                //}
+                for (size_t i = 0; i < datas[k].size(); i++) {
+                    if (datas[k][i] != recov[i]) {
+                        std::cout << "difference at index " << i << ":" << std::endl;
+                        std::cout << "  expected: " << datas[k][i] << std::endl;
+                        std::cout << "    actual: " << recov[i] << std::endl;
+                        throw std::logic_error("we have a bug");
+                    }
                 }
-
             }
             if (!pp.separatetimes) {
                 timemscomp += timemsdelta;
