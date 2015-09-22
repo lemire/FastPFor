@@ -77,6 +77,10 @@ public:
 };
 
 
+ /*
+ * Reference: Vo Ngoc Anh and Alistair Moffat. 2010. Index compression using
+ * 64-bit words. Softw. Pract. Exper.40, 2 (February 2010), 131-147.
+ */
 class ClusteredDataGenerator {
 public:
     UniformDataGenerator unidg;
