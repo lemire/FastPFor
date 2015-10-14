@@ -59,46 +59,6 @@
 
 namespace FastPForLib {
 
-    /**
-    * If MarkLength is true, than the number of symbols is written
-    * in the stream. Otherwise you need to specify it using the nvalue
-    * parameter decodeArray.
-    */
-    template<bool MarkLength>
-    class Simple9_RLE : public IntegerCODEC {
-
-    public:
-        std::string name() const {
-            return "Simple9_RLE";
-        }
-
-        void encodeArray(const uint32_t *input, const size_t length, uint32_t *out, size_t &nvalue) {
-            auto len = length > 0 ? length : nvalue;
-            if (MarkLength) { *out++ = static_cast<uint32_t>(len); }
-            auto count = Simple9_Codec::Compress(input, 0, len, out, 0);
-            nvalue = count;
-        }
-
-        const uint32_t * decodeArray(const uint32_t *input, const size_t length, uint32_t *out, size_t &nvalue) {
-            uint32_t markednvalue;
-            if (MarkLength) {
-                markednvalue = *input++;
-                if (markednvalue > nvalue)
-                    throw NotEnoughStorage(markednvalue);
-            }
-            const size_t actualvalue = MarkLength ? markednvalue : nvalue;
-            if (nvalue < actualvalue) {
-                std::cerr << " possible overrun" << std::endl;
-            }
-            auto count = actualvalue;
-            Simple9_Codec::Decompress(input, 0, out, 0, count);
-            nvalue = MarkLength ? actualvalue : count;
-            input += count;
-            return input;
-        }
-    };
-
-
     /***************************************
     ********** Simple9-like codec **********
     ****************************************/
@@ -260,6 +220,46 @@ namespace FastPForLib {
     // --------------------------- selector code:  0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  A,  B,  C,  D,  E,  F
     const uint32_t Simple9_Codec::intNumber[] = { 28, 14,  9,  7,  5,  4,  3,  2,  1,  1,  1,  1,  1,  1,  1,  1 };
     const uint32_t Simple9_Codec::bitLength[] = { 1,   2,  3,  4,  5,  7,  9, 14, 31, 31, 31, 31, 31, 31, 31, 31 };
+
+
+    /**
+    * If MarkLength is true, than the number of symbols is written
+    * in the stream. Otherwise you need to specify it using the nvalue
+    * parameter decodeArray.
+    */
+    template<bool MarkLength>
+    class Simple9_RLE : public IntegerCODEC {
+
+    public:
+        std::string name() const {
+            return "Simple9_RLE";
+        }
+
+        void encodeArray(const uint32_t *input, const size_t length, uint32_t *out, size_t &nvalue) {
+            auto len = length > 0 ? length : nvalue;
+            if (MarkLength) { *out++ = static_cast<uint32_t>(len); }
+            auto count = Simple9_Codec::Compress(input, 0, len, out, 0);
+            nvalue = count;
+        }
+
+        const uint32_t * decodeArray(const uint32_t *input, const size_t length, uint32_t *out, size_t &nvalue) {
+            uint32_t markednvalue;
+            if (MarkLength) {
+                markednvalue = *input++;
+                if (markednvalue > nvalue)
+                    throw NotEnoughStorage(markednvalue);
+            }
+            const size_t actualvalue = MarkLength ? markednvalue : nvalue;
+            if (nvalue < actualvalue) {
+                std::cerr << " possible overrun" << std::endl;
+            }
+            auto count = actualvalue;
+            Simple9_Codec::Decompress(input, 0, out, 0, count);
+            nvalue = MarkLength ? actualvalue : count;
+            input += count;
+            return input;
+        }
+    };
 
 #undef _SIMPLE9_USE_RLE
 

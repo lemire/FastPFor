@@ -60,73 +60,6 @@
 #define _SIMPLE8B_USE_RLE // optional, comment this line if run-length encoding is not needed
 
 namespace FastPForLib {
-
-    /**
-    * If MarkLength is true, than the number of symbols is written
-    * in the stream. Otherwise you need to specify it using the nvalue
-    * parameter decodeArray.
-    *
-    * Note that when MarkLength is false, some unaligned (64-bit vs. 32-bit)
-    * access are possible. This may fail on non-x86 platforms.
-    */
-    template<bool MarkLength>
-    class Simple8b_RLE : public IntegerCODEC {
-
-    public:
-        std::string name() const {
-            return "Simple8b_RLE";
-        }
-
-        void encodeArray(const uint32_t *in,
-            const size_t length, uint32_t *out, size_t &nvalue) {
-
-            const uint32_t * const initout(out);
-            if (MarkLength) {
-                *out++ = static_cast<uint32_t>(length);
-            }
-            // this may lead to unaligned access. Performance may be affected.
-            // not much of an effect in practice on recent Intel processors.
-            uint64_t * out64 = reinterpret_cast<uint64_t*> (out);
-            auto count = Simple8b_Codec::Compress(in, 0, length, out64, 0);
-            nvalue = count * 2;
-        }
-
-        const uint32_t * decodeArray(const uint32_t *in,
-            const size_t length, uint32_t *out, size_t &nvalue) {
-
-            uint32_t markednvalue;
-            if (MarkLength) {
-                markednvalue = *in++;
-                if (markednvalue > nvalue)
-                    throw NotEnoughStorage(markednvalue);
-            }
-            const size_t actualvalue = MarkLength ? markednvalue : nvalue;
-            // this may lead to unaligned access. Performance may be affected.
-            // not much of an effect in practice on recent Intel processors.
-            const uint64_t * in64 = reinterpret_cast<const uint64_t *> (in);
-#ifndef NDEBUG
-            const uint32_t * const endin(in + length);
-            const uint64_t * finalin64 = reinterpret_cast<const uint64_t *> (endin);
-#endif
-            if (nvalue < actualvalue) {
-                std::cerr << " possible overrun" << std::endl;
-            }
-            nvalue = actualvalue;
-
-            uint32_t pos = 0;
-            uint32_t count = static_cast<uint32_t>(length) / 2;
-
-            pos = Simple8b_Codec::Decompress(in64, 0, out, 0, nvalue);
-
-            assert(in64 + pos <= finalin64);
-            in = reinterpret_cast<const uint32_t *> (in64 + pos);
-            assert(in <= endin);
-            nvalue = MarkLength ? actualvalue : nvalue;
-            return in;
-        }
-    };
-
-
     /****************************************
     ********** Simple8b-like codec **********
     *****************************************/
@@ -284,6 +217,71 @@ namespace FastPForLib {
     //const uint32_t Simple8b_Codec::bitLength[] = { 1, 2, 3, 4, 5, 6, 6, 7, 8, 9, 10, 12, 15, 20, 30, 32 };
     //const uint32_t Simple8b_Codec::bitLength[] = { 1, 3, 4, 5, 5, 6, 6, 7, 8, 9, 10, 11, 12, 15, 20, 32 };
     //const uint32_t Simple8b_Codec::bitLength[] = { 1, 4, 4, 5, 5, 6, 6, 7, 8, 9, 10, 11, 12, 14, 15, 32 };
+
+
+    /**
+    * If MarkLength is true, than the number of symbols is written
+    * in the stream. Otherwise you need to specify it using the nvalue
+    * parameter decodeArray.
+    *
+    * Note that when MarkLength is false, some unaligned (64-bit vs. 32-bit)
+    * access are possible. This may fail on non-x86 platforms.
+    */
+    template<bool MarkLength>
+    class Simple8b_RLE : public IntegerCODEC {
+
+    public:
+        std::string name() const {
+            return "Simple8b_RLE";
+        }
+
+        void encodeArray(const uint32_t *in,
+            const size_t length, uint32_t *out, size_t &nvalue) {
+
+            if (MarkLength) {
+                *out++ = static_cast<uint32_t>(length);
+            }
+            // this may lead to unaligned access. Performance may be affected.
+            // not much of an effect in practice on recent Intel processors.
+            uint64_t * out64 = reinterpret_cast<uint64_t*> (out);
+            auto count = Simple8b_Codec::Compress(in, 0, length, out64, 0);
+            nvalue = count * 2;
+        }
+
+        const uint32_t * decodeArray(const uint32_t *in,
+            const size_t length, uint32_t *out, size_t &nvalue) {
+
+            uint32_t markednvalue;
+            if (MarkLength) {
+                markednvalue = *in++;
+                if (markednvalue > nvalue)
+                    throw NotEnoughStorage(markednvalue);
+            }
+            const size_t actualvalue = MarkLength ? markednvalue : nvalue;
+            // this may lead to unaligned access. Performance may be affected.
+            // not much of an effect in practice on recent Intel processors.
+            const uint64_t * in64 = reinterpret_cast<const uint64_t *> (in);
+#ifndef NDEBUG
+            const uint32_t * const endin(in + length);
+            const uint64_t * finalin64 = reinterpret_cast<const uint64_t *> (endin);
+#endif
+            if (nvalue < actualvalue) {
+                std::cerr << " possible overrun" << std::endl;
+            }
+            nvalue = actualvalue;
+
+            uint32_t pos = 0;
+
+            pos = Simple8b_Codec::Decompress(in64, 0, out, 0, nvalue);
+
+            assert(in64 + pos <= finalin64);
+            in = reinterpret_cast<const uint32_t *> (in64 + pos);
+            assert(in <= endin);
+            nvalue = MarkLength ? actualvalue : nvalue;
+            return in;
+        }
+    };
+
 
 #undef _SIMPLE8B_USE_RLE
 
