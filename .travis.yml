@@ -1,7 +1,6 @@
 language: cpp
 sudo: false
 compiler:
-  - gcc
   - clang
 
 script: cmake . && make && ./unit
