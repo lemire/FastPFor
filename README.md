@@ -33,7 +33,6 @@ Myth: SIMD compression means high speed but less compression.
 Fact: This is wrong. Some schemes cannot easily be accelerated
 with SIMD instructions, but many that do compress very well.
 
-
 ## Working with sorted lists of integers
 
 If you are working primarily with sorted lists of integers, then 
@@ -125,20 +124,22 @@ If you have several threads, each thread should have its own IntegerCODEC
 objects to ensure that there is no concurrency problems.
 
 
-### Installing GCC 4.7 under Linux
+### Installing GCC 4.8 under Linux
 
-We support clang, Visual Studio and the Intel compiler, but a common default is GCC 4.7 or better.
+We support clang, Visual Studio and the Intel compiler, but a common default is GCC 4.8 or better.
 
-Under a recent version of Ubuntu (12.10), you can install
-GCC 4.7 by typing:
+Under a recent version of Ubuntu (12.14), you can install
+GCC 4.8 by typing:
 
-    sudo apt-get install gcc-4.7 g++-4.7
+    sudo apt-get install gcc-4.8 g++-4.8
 
-### Installing GCC 4.7 under Mac
+### Installing GCC 4.8 under Mac
 
-Mac Ports supports GCC 4.7. You can install it by typing:
+Mac Ports supports GCC 4.8. You can install it by typing:
 
-    sudo port install gcc47
+    sudo port install gcc48
+
+See : https://www.macports.org/
 
 ## Why C++11?
 
