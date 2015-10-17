@@ -11,13 +11,6 @@
 *  which was available under the Apache License, Version 2.0.
 */
 
-/*********************
-* As of October 2015, this 
-* code does not pass the unit
-* tests. 
-********************/
-
-
 /****************************************************
 ***** Simple9-like encoder/decoder, RLE variant *****
 *****************************************************
