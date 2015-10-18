@@ -9,13 +9,6 @@
 *  Softw., Pract. Exper. 40(2): 131-147 (2010)
 **/
 
-/*********************
-* As of October 2015, this
-* code does not pass the unit
-* tests.
-********************/
-
-
 /*****************************************************
 ***** Simple8b-like encoder/decoder, RLE variant *****
 ******************************************************
@@ -67,6 +60,7 @@
 #define _SIMPLE8B_USE_RLE // optional, comment this line if run-length encoding is not needed
 
 namespace FastPForLib {
+
     /****************************************
     ********** Simple8b-like codec **********
     *****************************************/
@@ -245,9 +239,7 @@ namespace FastPForLib {
         void encodeArray(const uint32_t *in,
             const size_t length, uint32_t *out, size_t &nvalue) {
 
-            if (MarkLength) {
-                *out++ = static_cast<uint32_t>(length);
-            }
+            if (MarkLength) { *out++ = static_cast<uint32_t>(length); }
             // this may lead to unaligned access. Performance may be affected.
             // not much of an effect in practice on recent Intel processors.
             uint64_t * out64 = reinterpret_cast<uint64_t*> (out);

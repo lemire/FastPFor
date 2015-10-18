@@ -14,7 +14,9 @@
 #include "util.h"
 #include "simple16.h"
 #include "simple9.h"
+#include "simple9_rle.h"
 #include "simple8b.h"
+#include "simple8b_rle.h"
 #include "newpfor.h"
 #include "simdnewpfor.h"
 #include "optpfor.h"
@@ -125,7 +127,9 @@ static inline CodecMap initializefactory() {
 #endif
     map["simple16"] = std::shared_ptr<IntegerCODEC>(new Simple16<true>());
     map["simple9"] = std::shared_ptr<IntegerCODEC>(new Simple9<true>());
+    map["simple9_rle"] = std::shared_ptr<IntegerCODEC>(new Simple9_RLE<true>());
     map["simple8b"] = std::shared_ptr<IntegerCODEC> (new Simple8b<true> ());
+    map["simple8b_rle"] = std::shared_ptr<IntegerCODEC> (new Simple8b_RLE<true>());
 #ifdef VARINTG8IU_H__
     map["varintg8iu"] = std::shared_ptr<IntegerCODEC> (new VarIntG8IU ());
 #endif

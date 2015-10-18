@@ -11,13 +11,6 @@
 *  which was available under the Apache License, Version 2.0.
 */
 
-/*********************
-* As of October 2015, this 
-* code does not pass the unit
-* tests. 
-********************/
-
-
 /****************************************************
 ***** Simple9-like encoder/decoder, RLE variant *****
 *****************************************************
@@ -243,9 +236,8 @@ namespace FastPForLib {
         }
 
         void encodeArray(const uint32_t *input, const size_t length, uint32_t *out, size_t &nvalue) {
-            auto len = length > 0 ? length : nvalue;
-            if (MarkLength) { *out++ = static_cast<uint32_t>(len); }
-            auto count = Simple9_Codec::Compress(input, 0, len, out, 0);
+            if (MarkLength) { *out++ = static_cast<uint32_t>(length); }
+            auto count = Simple9_Codec::Compress(input, 0, length, out, 0);
             nvalue = count;
         }
 
