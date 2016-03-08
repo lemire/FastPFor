@@ -12,7 +12,6 @@
 #define SIMDVARIABLEBYTE_H_
 #include "common.h"
 #include "codecs.h"
-//#include "varintdecode.h"
 
 #ifdef __cplusplus
 extern "C" {
