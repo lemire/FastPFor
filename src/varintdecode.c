@@ -601,7 +601,7 @@ static index_bytes_consumed combined_lookup[] __attribute__((aligned(0x1000))) =
 	{0, 0}
 };
 
-static const int8_t vectors[] = {
+static const int8_t vectors[] __attribute__((aligned(0x1000))) = {
 	0,  -1, 4,  -1, 1,  -1, 5,  -1, 2,  -1, -1, -1, 3,  -1, -1, -1,  // 0
 	0,  -1, 4,  -1, 1,  -1, 5,  6,  2,  -1, -1, -1, 3,  -1, -1, -1,  // 1
 	0,  -1, 4,  5,  1,  -1, 6,  -1, 2,  -1, -1, -1, 3,  -1, -1, -1,  // 2
