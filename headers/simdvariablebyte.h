@@ -12,12 +12,11 @@
 #define SIMDVARIABLEBYTE_H_
 #include "common.h"
 #include "codecs.h"
-#include "varintdecode.h"
+//#include "varintdecode.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-void init(void);
 size_t masked_vbyte_read_loop_fromcompressedsize(const uint8_t* in, uint32_t* out,
 		size_t inputsize);
 #ifdef __cplusplus
@@ -30,9 +29,7 @@ size_t masked_vbyte_read_loop_fromcompressedsize(const uint8_t* in, uint32_t* ou
  */
 class MaskedVByte: public FastPForLib::IntegerCODEC {
 public:
-	MaskedVByte() {
-        init();
-    }
+	MaskedVByte() {}
 
     void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
             size_t &nvalue) {
