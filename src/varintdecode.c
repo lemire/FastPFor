@@ -1117,7 +1117,7 @@ size_t masked_vbyte_read_loop(const uint8_t* in, uint32_t* out,
 		nextSig |= lowSig;
 		scanned += 48;
 
-		while (count + 96 < length) {  // 96 == 48 + 48 ahead for scanning
+		do {
 			uint64_t thisSig = nextSig;
 
 #ifdef __AVX2__
@@ -1158,8 +1158,8 @@ size_t masked_vbyte_read_loop(const uint8_t* in, uint32_t* out,
 				consumed += bytes;
 				count += ints_read;
 			}
-		}
-		sig = (nextSig << (scanned - consumed - 48)) | sig;
+		} while (count + 112 < length);  // 112 == 48 + 48 ahead for scanning + up to 16 remaining in sig
+                sig = (nextSig << (scanned - consumed - 48)) | sig;
 		availablebytes = scanned - consumed;
 	}
 	while (availablebytes + count < length) {
