@@ -33,6 +33,8 @@
 #include "simdbinarypacking.h"
 #include "snappydelta.h"
 #include "varintgb.h"
+#include "simdvariablebyte.h"
+#include "streamvariablebyte.h"
 
 namespace FastPForLib {
 
@@ -122,6 +124,8 @@ static inline CodecMap initializefactory() {
             new CompositeCodec<SIMDOPTPFor<4, Simple16<false> > , VariableByte> ());
     map["varint"] = std::shared_ptr<IntegerCODEC> (new VariableByte());
     map["vbyte"] = std::shared_ptr<IntegerCODEC> (new VByte());
+    map["maskedvbyte"] = std::shared_ptr<IntegerCODEC> (new MaskedVByte());
+    map["streamvbyte"] = std::shared_ptr<IntegerCODEC> (new StreamVByte());
 #if !defined(_MSC_VER) || (_MSC_VER != 1900)
     map["varintgb"] = std::shared_ptr<IntegerCODEC> (new VarIntGB<>());
 #endif

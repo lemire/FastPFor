@@ -100,7 +100,7 @@ public:
         localpointer = 0;
     }
 
-    void hasMore() {
+    bool hasMore() {
         return valid;
     }
     bool empty() {

@@ -6,13 +6,20 @@
 #include <x86intrin.h>
 #include <stdint.h>
 
+#if defined(_MSC_VER)
+#define ALIGNED(x) __declspec(align(x))
+#else
+#if defined(__GNUC__)
+#define ALIGNED(x) __attribute__ ((aligned(x)))
+#endif
+#endif
 
 typedef struct index_bytes_consumed {
     uint8_t index;
     uint8_t bytes_consumed;
 } index_bytes_consumed;
 
-static index_bytes_consumed combined_lookup[] __attribute__((aligned(0x1000))) = {
+static index_bytes_consumed combined_lookup[] ALIGNED(0x1000) = {
 	{0, 6},    {32, 7},   {16, 7},   {118, 6},  {8, 7},    {48, 8},   {82, 6},
 	{160, 5},  {4, 7},    {40, 8},   {24, 8},   {127, 7},  {70, 6},   {109, 7},
 	{148, 5},  {165, 6},  {2, 7},    {36, 8},   {20, 8},   {121, 7},  {12, 8},
@@ -601,7 +608,7 @@ static index_bytes_consumed combined_lookup[] __attribute__((aligned(0x1000))) =
 	{0, 0}
 };
 
-static const int8_t vectors[] __attribute__((aligned(0x1000))) = {
+static const int8_t vectors[] ALIGNED(0x1000) = {
 	0,  -1, 4,  -1, 1,  -1, 5,  -1, 2,  -1, -1, -1, 3,  -1, -1, -1,  // 0
 	0,  -1, 4,  -1, 1,  -1, 5,  6,  2,  -1, -1, -1, 3,  -1, -1, -1,  // 1
 	0,  -1, 4,  5,  1,  -1, 6,  -1, 2,  -1, -1, -1, 3,  -1, -1, -1,  // 2
@@ -875,11 +882,12 @@ static int read_int_groupAVX2(const uint8_t* in, uint32_t* out, int* ints_read) 
 	}
 
 	int mask2 = mask&0xFFF;
+  index_bytes_consumed combined = combined_lookup[mask2];
 
-	int index = combined_lookup[mask2].index;
+  int index = combined.index;
 
-	__m128i shuffle_vector = vectors_sse3[index];
-	int consumed = bytes_consumed[mask2].consumed;
+  __m128i shuffle_vector = vectors_sse3[index];
+  int consumed = combined.bytes_consumed;
 
 	if (index < 64) {
 		*ints_read = 6;
