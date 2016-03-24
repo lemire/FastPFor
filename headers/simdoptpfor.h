@@ -27,119 +27,126 @@ namespace FastPForLib {
  *
  * Combines results from the following papers:
  *
- * H. Yan, S. Ding, T. Suel, Inverted index compression and query processing with
+ * H. Yan, S. Ding, T. Suel, Inverted index compression and query processing
+ * with
  * optimized document ordering, in: WWW '09, 2009, pp. 401-410.
  *
- * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second through std::vectorization
+ * Daniel Lemire and Leonid Boytsov, Decoding billions of integers per second
+ * through std::vectorization
  * Software: Practice & Experience
  * http://arxiv.org/abs/1209.2137
  * http://onlinelibrary.wiley.com/doi/10.1002/spe.2203/abstract
  */
-template<uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder = Simple16<
-        false> >
-class SIMDOPTPFor: public SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder> {
+template <uint32_t BlockSizeInUnitsOfPackSize,
+          class ExceptionCoder = Simple16<false>>
+class SIMDOPTPFor
+    : public SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder> {
 public:
+  SIMDOPTPFor() {}
+  uint32_t tryB(uint32_t b, const uint32_t *in, uint32_t len);
+  uint32_t findBestB(const uint32_t *in, uint32_t len);
 
-    SIMDOPTPFor()  {
-    }
-    uint32_t tryB(uint32_t b, const uint32_t *in, uint32_t len);
-    uint32_t findBestB(const uint32_t *in, uint32_t len);
-
-    virtual std::string name() const {
-        std::ostringstream convert;
-        convert << "SIMDOPTPFor<" << BlockSizeInUnitsOfPackSize << "," << SIMDNewPFor<
-                BlockSizeInUnitsOfPackSize, ExceptionCoder>::ecoder.name()
-                << ">";
-        return convert.str();
-    }
+  virtual std::string name() const {
+    std::ostringstream convert;
+    convert << "SIMDOPTPFor<" << BlockSizeInUnitsOfPackSize << ","
+            << SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::ecoder
+                   .name()
+            << ">";
+    return convert.str();
+  }
 };
 
-template<uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder>
-__attribute__ ((pure))
-uint32_t SIMDOPTPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::tryB(uint32_t b,
-        const uint32_t *in, uint32_t len) {
+template <uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder>
+__attribute__((pure)) uint32_t
+SIMDOPTPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::tryB(
+    uint32_t b, const uint32_t *in, uint32_t len) {
 
-    assert(b <= 32);
-    if (b == 32) {
-        return len;
+  assert(b <= 32);
+  if (b == 32) {
+    return len;
+  }
+  uint32_t size = div_roundup(len * b, 32);
+  uint32_t curExcept = 0;
+
+  for (uint32_t i = 0; i < len; i++) {
+    if (in[i] >= (1U << b)) {
+      const uint32_t e = in[i] >> b;
+      SIMDNewPFor<BlockSizeInUnitsOfPackSize,
+                  ExceptionCoder>::exceptionsPositions[curExcept] = i;
+      SIMDNewPFor<BlockSizeInUnitsOfPackSize,
+                  ExceptionCoder>::exceptionsValues[curExcept] = e;
+      curExcept++;
     }
-    uint32_t size = div_roundup(len * b, 32);
-    uint32_t curExcept = 0;
+  }
 
-    for (uint32_t i = 0; i < len; i++) {
-        if (in[i] >= (1U << b)) {
-            const uint32_t e = in[i] >> b;
-            SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::exceptionsPositions[curExcept]
-                    = i;
-            SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::exceptionsValues[curExcept]
-                    = e;
-            curExcept++;
-        }
+  if (curExcept > 0) {
+
+    for (uint32_t i = curExcept - 1; i > 0; i--) {
+      const uint32_t cur = SIMDNewPFor<BlockSizeInUnitsOfPackSize,
+                                       ExceptionCoder>::exceptionsPositions[i];
+      const uint32_t prev =
+          SIMDNewPFor<BlockSizeInUnitsOfPackSize,
+                      ExceptionCoder>::exceptionsPositions[i - 1];
+      const uint32_t gap = cur - prev;
+      SIMDNewPFor<BlockSizeInUnitsOfPackSize,
+                  ExceptionCoder>::exceptionsPositions[i] = gap;
     }
 
-    if (curExcept > 0) {
-
-        for (uint32_t i = curExcept - 1; i > 0; i--) {
-            const uint32_t cur = SIMDNewPFor<BlockSizeInUnitsOfPackSize,
-                    ExceptionCoder>::exceptionsPositions[i];
-            const uint32_t prev = SIMDNewPFor<BlockSizeInUnitsOfPackSize,
-                    ExceptionCoder>::exceptionsPositions[i - 1];
-            const uint32_t gap = cur - prev;
-            SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::exceptionsPositions[i]
-                    = gap;
-        }
-
-        for (uint32_t i = 0; i < curExcept; i++) {
-            const uint32_t excPos =
-                    (i > 0) ? SIMDNewPFor<BlockSizeInUnitsOfPackSize,
-                            ExceptionCoder>::exceptionsPositions[i] - 1
-                            : SIMDNewPFor<BlockSizeInUnitsOfPackSize,
-                                    ExceptionCoder>::exceptionsPositions[i];
-            const uint32_t excVal = SIMDNewPFor<BlockSizeInUnitsOfPackSize,
-                    ExceptionCoder>::exceptionsValues[i] - 1;
-            SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::exceptions[i]
-                    = excPos;
-            SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::exceptions[i
-                    + curExcept] = excVal;
-        }
-        size_t encodedExceptions_sz;
-        SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::ecoder.fakeencodeArray(
-                &SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::exceptions[0],
-                2 * curExcept, /*&encodedExceptions[0], */encodedExceptions_sz);
-        size += static_cast<uint32_t>(encodedExceptions_sz);
+    for (uint32_t i = 0; i < curExcept; i++) {
+      const uint32_t excPos =
+          (i > 0)
+              ? SIMDNewPFor<BlockSizeInUnitsOfPackSize,
+                            ExceptionCoder>::exceptionsPositions[i] -
+                    1
+              : SIMDNewPFor<BlockSizeInUnitsOfPackSize,
+                            ExceptionCoder>::exceptionsPositions[i];
+      const uint32_t excVal = SIMDNewPFor<BlockSizeInUnitsOfPackSize,
+                                          ExceptionCoder>::exceptionsValues[i] -
+                              1;
+      SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::exceptions[i] =
+          excPos;
+      SIMDNewPFor<BlockSizeInUnitsOfPackSize,
+                  ExceptionCoder>::exceptions[i + curExcept] = excVal;
     }
-    return size;
-
+    size_t encodedExceptions_sz;
+    SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::ecoder
+        .fakeencodeArray(&SIMDNewPFor<BlockSizeInUnitsOfPackSize,
+                                      ExceptionCoder>::exceptions[0],
+                         2 * curExcept,
+                         /*&encodedExceptions[0], */ encodedExceptions_sz);
+    size += static_cast<uint32_t>(encodedExceptions_sz);
+  }
+  return size;
 }
-template<uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder>
-__attribute__ ((pure))
-uint32_t SIMDOPTPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::findBestB(
-        const uint32_t *in, uint32_t len) {
-    uint32_t
-            b =
-            		SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs.back();
-    assert(b == 32);
-    uint32_t bsize = tryB(b, in, len);
-    const uint32_t mb = maxbits(in,in+len);
-    uint32_t i = 0;
-    while(mb  > 28 + SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs[i]) ++i; // some schemes such as Simple16 don't code numbers greater than 28
+template <uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder>
+__attribute__((pure)) uint32_t
+SIMDOPTPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::findBestB(
+    const uint32_t *in, uint32_t len) {
+  uint32_t b =
+      SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs.back();
+  assert(b == 32);
+  uint32_t bsize = tryB(b, in, len);
+  const uint32_t mb = maxbits(in, in + len);
+  uint32_t i = 0;
+  while (
+      mb >
+      28 + SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs[i])
+    ++i; // some schemes such as Simple16 don't code numbers greater than 28
 
-    for (; i
-            < SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs.size()
-                    - 1; i++) {
-        const uint32_t
-                csize =
-                        tryB(
-                                SIMDNewPFor<BlockSizeInUnitsOfPackSize,
-                                        ExceptionCoder>::possLogs[i], in, len);
+  for (; i < SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs
+                     .size() -
+                 1;
+       i++) {
+    const uint32_t csize = tryB(
+        SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs[i],
+        in, len);
 
-        if (csize <= bsize) {
-            b
-                    = SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs[i];
-            bsize = csize;
-        }
+    if (csize <= bsize) {
+      b = SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::possLogs[i];
+      bsize = csize;
     }
-    return b;
+  }
+  return b;
 }
 
 } // namespace FastPFor

@@ -11,9 +11,12 @@
 
 namespace FastPForLib {
 
-void usimdpack(const uint32_t * __restrict__ in,__m128i * __restrict__ out, uint32_t bit);
-void usimdpackwithoutmask(const uint32_t * __restrict__ in,__m128i * __restrict__ out, uint32_t bit);
-void usimdunpack(const __m128i * __restrict__ in,uint32_t * __restrict__ out, uint32_t bit);
+void usimdpack(const uint32_t *__restrict__ in, __m128i *__restrict__ out,
+               uint32_t bit);
+void usimdpackwithoutmask(const uint32_t *__restrict__ in,
+                          __m128i *__restrict__ out, uint32_t bit);
+void usimdunpack(const __m128i *__restrict__ in, uint32_t *__restrict__ out,
+                 uint32_t bit);
 
 } // namespace FastPFor
 
