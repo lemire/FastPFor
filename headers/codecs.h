@@ -110,8 +110,6 @@ class JustCopy : public IntegerCODEC {
 public:
   void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
                    size_t &nvalue) {
-    // if (length > nvalue)
-    //    cerr << "It is possible we have a buffer overrun. " << endl;
     memcpy(out, in, sizeof(uint32_t) * length);
     nvalue = length;
   }

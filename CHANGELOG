@@ -1,7 +1,9 @@
-0.1.6 Upcoming
+0.1.6 April 14th 2016
     FastPFOR and SIMDFastPFOR updated to use 512-int blocks (like JavaFastPFOR)
     Added SIMDSimplePFOR
     Added MaskedVByte
+    Added StreamVByte
+    More verbose error messages
 0.1.5 August 21st 2014
     Added SIMD versions of OptPFD and NewPFD.
     Fixed buffer overrun in varintg8iu

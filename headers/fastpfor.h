@@ -122,8 +122,15 @@ public:
       in += thissize;
     }
     assert(out == nvalue + initout);
-    if (oldnvalue < nvalue)
-      std::cerr << "It is possible we have a buffer overrun. " << std::endl;
+		if (oldnvalue < nvalue)
+			std::cerr
+					<< "It is possible we have a buffer overrun. You reported having allocated "
+					<< oldnvalue * sizeof(uint32_t)
+					<< " bytes for the compressed data but we needed "
+					<< nvalue * sizeof(uint32_t)
+					<< " bytes. Please increase the available memory"
+							" for compressed data or check the value of the last parameter provided "
+							" to the encodeArray method." << std::endl;
     resetBuffer(); // if you don't do this, the buffer has a memory
   }
 
@@ -346,8 +353,15 @@ public:
       in += thissize;
     }
     assert(out == nvalue + initout);
-    if (oldnvalue < nvalue)
-      std::cerr << "It is possible we have a buffer overrun. " << std::endl;
+		if (oldnvalue < nvalue)
+			std::cerr
+					<< "It is possible we have a buffer overrun. You reported having allocated "
+					<< oldnvalue * sizeof(uint32_t)
+					<< " bytes for the compressed data but we needed "
+					<< nvalue * sizeof(uint32_t)
+					<< " bytes. Please increase the available memory"
+							" for compressed data or check the value of the last parameter provided "
+							" to the encodeArray method." << std::endl;
   }
 
   void getBestBFromData(const uint32_t *in, uint8_t &bestb,
