@@ -80,4 +80,10 @@ int main() {
   Delta::deltaSIMD(mydata.data(), mydata.size());
   Delta::inverseDeltaSIMD(mydata.data(), mydata.size());
   // be mindful of CPU caching issues
+
+  // If you do use differential coding a lot, you might want 
+  // to check out these other libraries...
+  // https://github.com/lemire/FastDifferentialCoding
+  // and
+  // https://github.com/lemire/SIMDCompressionAndIntersection
 }

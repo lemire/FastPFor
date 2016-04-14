@@ -50,12 +50,31 @@ https://github.com/lemire/SIMDCompressionAndIntersection
 This other library (SIMDCompressionAndIntersection) also comes complete
 with new SIMD-based intersection algorithms.
 
+There is also a C library for differential coding (fast computation of
+deltas, and recovery from deltas): 
+
+https://github.com/lemire/FastDifferentialCoding
+
 # For a simple C library
 
 FastPFOR is a C++ research library. For something simpler,
 written in C, see:
 
 https://github.com/lemire/simdcomp
+
+or 
+
+https://github.com/lemire/streamvbyte
+
+or 
+
+https://github.com/lemire/LittleIntPacker
+
+or
+
+https://github.com/lemire/MaskedVByte
+
+Which library is best depends on your needs.
 
 ## Other recommended libraries
 
