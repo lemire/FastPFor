@@ -188,6 +188,10 @@ some have been. Please see:
 
 https://github.com/lemire/JavaFastPFOR
 
+## What if I prefer C#?
+
+See CSharpFastPFOR: A C#  integer compression library  https://github.com/Genbox/CSharpFastPFOR
+
 ## Testing
 
 If you used CMake to generate the build files, the `check` target will
