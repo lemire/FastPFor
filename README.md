@@ -97,10 +97,14 @@ Please see:
 * Wayne Xin Zhao, Xudong Zhang, Daniel Lemire, Dongdong Shan, Jian-Yun Nie, Hongfei Yan, Ji-Rong Wen, A General SIMD-based Approach to Accelerating Compression Algorithms, ACM Transactions on Information Systems 33 (3), 2015. http://arxiv.org/abs/1502.01916
 
 
-This library was used by the following papers:
+This library was used by several papers including the following:
 
 * G. Ottaviano, R. Venturini, Partitioned Elias-Fano Indexes, ACM SIGIR 2014 http://www.di.unipi.it/~ottavian/files/elias_fano_sigir14.pdf
 * M. Petri, A. Moffat, J. S. Culpepper, Score-Safe Term Dependency Processing With Hybrid Indexes, ACM SIGIR 2014 http://www.culpepper.io/publications/sp074-petri.pdf
+
+It has also inspired related work such as...
+
+* T. D. Wu, Bitpacking techniques for indexing genomes: I. Hash tables, Algorithms for Molecular Biology 11 (5), 2016. http://almob.biomedcentral.com/articles/10.1186/s13015-016-0069-5
 
 ## License
 
