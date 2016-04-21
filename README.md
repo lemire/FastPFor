@@ -17,7 +17,8 @@ This is significantly faster than generic codecs like gzip, LZO, Snappy or LZ4.
 
 It is used by the zsearch engine (http://victorparmar.github.com/zsearch/)
 as well as in GMAP and GSNAP (http://research-pub.gene.com/gmap/). It
-has been ported to Java (https://github.com/lemire/JavaFastPFOR) and 
+has been ported to Java (https://github.com/lemire/JavaFastPFOR),
+C# (https://github.com/Genbox/CSharpFastPFOR)  and 
 Go (https://github.com/reducedb/encoding). The Java port is used by
 ClueWeb Tools (https://github.com/lintool/clueweb).
 
@@ -191,6 +192,10 @@ https://github.com/lemire/JavaFastPFOR
 ## What if I prefer C#?
 
 See CSharpFastPFOR: A C#  integer compression library  https://github.com/Genbox/CSharpFastPFOR
+
+## What if I prefer Go?
+
+See  Encoding: Integer Compression Libraries for Go https://github.com/zhenjl/encoding
 
 ## Testing
 
