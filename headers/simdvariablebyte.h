@@ -9,6 +9,10 @@
 
 #ifndef SIMDVARIABLEBYTE_H_
 #define SIMDVARIABLEBYTE_H_
+
+#if ! defined(_MSC_VER) // code relies on compound literals which Visual Studio fails to support. TODO: code a workaround
+
+
 #include "common.h"
 #include "codecs.h"
 
@@ -93,5 +97,5 @@ public:
 
   std::string name() const { return "MaskedVByte"; }
 };
-
+#endif
 #endif /* SIMDVARIABLEBYTE_H_ */

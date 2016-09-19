@@ -5,9 +5,11 @@
  * (c) Daniel Lemire, http://lemire.me/en/
  */
 
+
+
 #ifndef _STREAMVARIABLEBYTE_
 #define _STREAMVARIABLEBYTE_
-
+#if !(defined(_MSC_VER)) // todo : need to be ported to Visual Studio
 #include "common.h"
 #include "codecs.h"
 
@@ -74,4 +76,5 @@ public:
   std::string name() const { return "streamvbyte"; }
 };
 }
+#endif
 #endif

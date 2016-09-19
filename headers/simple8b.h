@@ -34,9 +34,9 @@ public:
   static bool tryme(const uint32_t *n, size_t len) {
     if (log1 >= 32)
       return true;
-    const uint32_t min =
+    const uint32_t minv =
         (static_cast<uint32_t>(len) < num1) ? static_cast<uint32_t>(len) : num1;
-    for (uint32_t i = 0; i < min; i++) {
+    for (uint32_t i = 0; i < minv; i++) {
       if (n[i] >= (1U << (log1 % 32)))
         return false;
     }
@@ -115,10 +115,6 @@ public:
     }
     ++in;
   }
-
-private:
-  // for clarity
-  static uint32_t min(uint32_t a, uint32_t b) { return a < b ? a : b; }
 };
 
 template <bool MarkLength>
@@ -583,49 +579,49 @@ const uint32_t *Simple8b<MarkLength>::decodeArray(const uint32_t *in,
 #endif
     switch (which(in64)) {
     case 0:
-      carefulunpack<0>(min(static_cast<uint32_t>(end - out), 240), out, in64);
+      carefulunpack<0>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 240), out, in64);
       break;
     case 1:
-      carefulunpack<0>(min(static_cast<uint32_t>(end - out), 120), out, in64);
+      carefulunpack<0>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 120), out, in64);
       break;
     case 2:
-      carefulunpack<1>(min(static_cast<uint32_t>(end - out), 60), out, in64);
+      carefulunpack<1>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 60), out, in64);
       break;
     case 3:
-      carefulunpack<2>(min(static_cast<uint32_t>(end - out), 30), out, in64);
+      carefulunpack<2>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 30), out, in64);
       break;
     case 4:
-      carefulunpack<3>(min(static_cast<uint32_t>(end - out), 20), out, in64);
+      carefulunpack<3>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 20), out, in64);
       break;
     case 5:
-      carefulunpack<4>(min(static_cast<uint32_t>(end - out), 15), out, in64);
+      carefulunpack<4>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 15), out, in64);
       break;
     case 6:
-      carefulunpack<5>(min(static_cast<uint32_t>(end - out), 12), out, in64);
+      carefulunpack<5>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 12), out, in64);
       break;
     case 7:
-      carefulunpack<6>(min(static_cast<uint32_t>(end - out), 10), out, in64);
+      carefulunpack<6>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 10), out, in64);
       break;
     case 8:
-      carefulunpack<7>(min(static_cast<uint32_t>(end - out), 8), out, in64);
+      carefulunpack<7>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 8), out, in64);
       break;
     case 9:
-      carefulunpack<8>(min(static_cast<uint32_t>(end - out), 7), out, in64);
+      carefulunpack<8>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 7), out, in64);
       break;
     case 10:
-      carefulunpack<10>(min(static_cast<uint32_t>(end - out), 6), out, in64);
+      carefulunpack<10>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 6), out, in64);
       break;
     case 11:
-      carefulunpack<12>(min(static_cast<uint32_t>(end - out), 5), out, in64);
+      carefulunpack<12>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 5), out, in64);
       break;
     case 12:
-      carefulunpack<15>(min(static_cast<uint32_t>(end - out), 4), out, in64);
+      carefulunpack<15>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 4), out, in64);
       break;
     case 13:
-      carefulunpack<20>(min(static_cast<uint32_t>(end - out), 3), out, in64);
+      carefulunpack<20>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 3), out, in64);
       break;
     case 14:
-      carefulunpack<30>(min(static_cast<uint32_t>(end - out), 2), out, in64);
+      carefulunpack<30>(std::min<uint32_t>(static_cast<uint32_t>(end - out), 2), out, in64);
       break;
     case 15:
       carefulunpack<60>(1, out, in64);

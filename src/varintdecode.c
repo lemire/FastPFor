@@ -2,6 +2,8 @@
  * (c) Indeed.com and Nathan Kurz
  * Apache License 2.0
  */
+#if ! defined(_MSC_VER) // code relies on compound literals which Visual Studio fails to support. TODO: code a workaround
+
 
 #if defined(_MSC_VER)
      /* Microsoft C/C++-compatible compiler */
@@ -1621,3 +1623,6 @@ size_t altmasked_vbyte_read_loop_fromcompressedsize(const uint8_t *in,
   }
   return out - initout;
 }
+
+
+#endif

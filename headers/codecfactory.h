@@ -124,8 +124,12 @@ static inline CodecMap initializefactory() {
       new CompositeCodec<SIMDOPTPFor<4, Simple16<false>>, VariableByte>());
   map["varint"] = std::shared_ptr<IntegerCODEC>(new VariableByte());
   map["vbyte"] = std::shared_ptr<IntegerCODEC>(new VByte());
+#if !(defined(_MSC_VER)) // todo: port to Visual Studio
   map["maskedvbyte"] = std::shared_ptr<IntegerCODEC>(new MaskedVByte());
+#endif 
+#if !(defined(_MSC_VER)) // todo: streamvbyte needs to be ported to Visual Studio
   map["streamvbyte"] = std::shared_ptr<IntegerCODEC>(new StreamVByte());
+#endif
 #if !defined(_MSC_VER) || (_MSC_VER != 1900)
   map["varintgb"] = std::shared_ptr<IntegerCODEC>(new VarIntGB<>());
 #endif
