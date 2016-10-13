@@ -83,6 +83,30 @@ Which library is best depends on your needs.
 
 ## Other recommended libraries
 
+
+For a simple C library
+----------------------
+
+This library is a C++ research library. For something simpler,
+written in C, see:
+
+https://github.com/lemire/simdcomp
+
+
+Comparison with the FastPFOR C++ library
+-----------------------------------------
+
+The FastPFOR C++ Library available at https://github.com/lemire/FastPFor
+implements some of the same compression schemes except that
+it is not optimized for the compression of sorted lists of integers.
+
+Other recommended libraries
+---------------------------------
+
+* CSharpFastPFOR: A C#  integer compression library  https://github.com/Genbox/CSharpFastPFOR
+* JavaFastPFOR: A java integer compression library https://github.com/lemire/JavaFastPFOR
+* Encoding: Integer Compression Libraries for Go https://github.com/zhenjl/encoding
+* FrameOfReference is a C++ library dedicated to frame-of-reference (FOR) compression: https://github.com/lemire/FrameOfReference
 * libvbyte: A fast implementation for varbyte 32bit/64bit integer compression https://github.com/cruppstahl/libvbyte
 * TurboPFor is a C library that offers lots of interesting optimizations. Well worth checking! (GPL license) https://github.com/powturbo/TurboPFor
 * Oroch is a C++ library that offers a usable API (MIT license) https://github.com/ademakov/Oroch
