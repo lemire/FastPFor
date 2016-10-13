@@ -75,9 +75,7 @@ or
 
 https://github.com/lemire/MaskedVByte
 
-or
 
-* FrameOfReference is a C++ library dedicated to frame-of-reference (FOR) compression: https://github.com/lemire/FrameOfReference
 
 Which library is best depends on your needs.
 
