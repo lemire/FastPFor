@@ -56,51 +56,13 @@ deltas, and recovery from deltas):
 
 https://github.com/lemire/FastDifferentialCoding
 
-# For a simple C library
-
-FastPFOR is a C++ research library. For something simpler,
-written in C, see:
-
-https://github.com/lemire/simdcomp
-
-or 
-
-https://github.com/lemire/streamvbyte
-
-or 
-
-https://github.com/lemire/LittleIntPacker
-
-or
-
-https://github.com/lemire/MaskedVByte
-
-
-
-Which library is best depends on your needs.
-
 ## Other recommended libraries
 
-
-For a simple C library
-----------------------
-
-This library is a C++ research library. For something simpler,
-written in C, see:
-
-https://github.com/lemire/simdcomp
-
-
-Comparison with the FastPFOR C++ library
------------------------------------------
-
-The FastPFOR C++ Library available at https://github.com/lemire/FastPFor
-implements some of the same compression schemes except that
-it is not optimized for the compression of sorted lists of integers.
-
-Other recommended libraries
----------------------------------
-
+* High-performance dictionary coding https://github.com/lemire/dictionary
+* LittleIntPacker: C library to pack and unpack short arrays of integers as fast as possible https://github.com/lemire/LittleIntPacker
+* The SIMDComp library: A simple C library for compressing lists of integers using binary packing https://github.com/lemire/simdcomp
+* StreamVByte: Fast integer compression in C using the StreamVByte codec https://github.com/lemire/streamvbyte
+* MaskedVByte: Fast decoder for VByte-compressed integers https://github.com/lemire/MaskedVByte
 * CSharpFastPFOR: A C#  integer compression library  https://github.com/Genbox/CSharpFastPFOR
 * JavaFastPFOR: A java integer compression library https://github.com/lemire/JavaFastPFOR
 * Encoding: Integer Compression Libraries for Go https://github.com/zhenjl/encoding
