@@ -35,6 +35,7 @@
 #include "varintgb.h"
 #include "simdvariablebyte.h"
 #include "streamvariablebyte.h"
+#include "simdgroupsimple.h"
 
 namespace FastPForLib {
 
@@ -146,6 +147,10 @@ static inline CodecMap initializefactory() {
 #endif
   map["simdbinarypacking"] = std::shared_ptr<IntegerCODEC>(
       new CompositeCodec<SIMDBinaryPacking, VariableByte>());
+  map["simdgroupsimple"] = std::shared_ptr<IntegerCODEC>(
+      new CompositeCodec<SIMDGroupSimple<false, false>, VariableByte>());
+  map["simdgroupsimple_ringbuf"] = std::shared_ptr<IntegerCODEC>(
+      new CompositeCodec<SIMDGroupSimple<true, true>, VariableByte>());
   map["copy"] = std::shared_ptr<IntegerCODEC>(new JustCopy());
   return map;
 }
