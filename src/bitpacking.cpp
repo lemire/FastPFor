@@ -1,4 +1,6 @@
 #include "bitpacking.h"
+#include <cstdint>
+#include <type_traits>
 
 void __fastunpack0(const uint32_t *__restrict__, uint32_t *__restrict__ out) {
   for (uint32_t i = 0; i < 32; ++i)
@@ -7,6 +9,54 @@ void __fastunpack0(const uint32_t *__restrict__, uint32_t *__restrict__ out) {
 void __fastpack0(const uint32_t *__restrict__, uint32_t *__restrict__) {}
 void __fastpackwithoutmask0(const uint32_t *__restrict__,
                             uint32_t *__restrict__) {}
+
+template<uint8_t DELTA, uint8_t SHR> typename std::enable_if<DELTA + SHR < 32>::type
+  set_out(const uint32_t *__restrict__ & in, uint32_t *__restrict__ out) {
+  *out = ((*in) >> SHR) % (1 << DELTA);
+}
+
+template<uint8_t DELTA, uint8_t SHR> typename std::enable_if<DELTA + SHR >= 32>::type
+  set_out(const uint32_t *__restrict__ & in, uint32_t *__restrict__ out) {
+  *out = (*in) >> SHR;
+  ++in;
+
+  constexpr uint8_t NEXT_SHR = SHR + DELTA - 32;
+  *out |= ((*in) % (1U << NEXT_SHR)) << (32 - SHR);
+}
+
+template<uint8_t DELTA, uint8_t SHR, uint8_t OINDEX> struct Unroller {
+  static_assert(DELTA < 32, "");
+
+  static void Do(const uint32_t *__restrict__ & in, uint32_t *__restrict__ & out) {
+    constexpr uint8_t NEXT_SHR = SHR + DELTA < 32 ? SHR + DELTA : SHR + DELTA - 32;
+
+    set_out<DELTA, SHR>(in, out);
+
+    out++;
+    Unroller<DELTA, NEXT_SHR, OINDEX+1>::Do(in, out);
+  }
+};
+
+template<uint8_t DELTA, uint8_t SHR> struct Unroller<DELTA, SHR, 31> {
+  static void Do(const uint32_t *__restrict__ in, uint32_t *__restrict__ & out) {
+    *out = ((*in) >> SHR) % (1 << DELTA);
+  }
+};
+
+void R__fastunpack1(const uint32_t *__restrict__ in,
+                    uint32_t *__restrict__ out) {
+  Unroller<1, 0, 0>::Do(in, out);
+}
+
+void R__fastunpack2(const uint32_t *__restrict__ in,
+                    uint32_t *__restrict__ out) {
+  Unroller<2, 0, 0>::Do(in, out);
+}
+
+void R__fastunpack3(const uint32_t *__restrict__ in,
+                    uint32_t *__restrict__ out) {
+  Unroller<3, 0, 0>::Do(in, out);
+}
 
 void __fastunpack1(const uint32_t *__restrict__ in,
                    uint32_t *__restrict__ out) {
