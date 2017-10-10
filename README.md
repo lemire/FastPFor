@@ -30,7 +30,7 @@ scheme (see http://lucene.apache.org/core/4_6_1/core/org/apache/lucene/util/PFor
 Myth: SIMD compression requires very large blocks of integers (1024 or more).
 
 Fact: This is not true. Our fastest scheme (SIMDBinaryPacking) works over blocks of 128 integers.
-Another very fast scheme (StreamVByte) works over blocks of four integers.
+[Another very fast scheme (StreamVByte) works over blocks of four integers](https://github.com/lemire/streamvbyte).
 
 Myth: SIMD compression means high speed but less compression.
 
