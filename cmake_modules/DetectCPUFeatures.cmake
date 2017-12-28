@@ -1,6 +1,5 @@
 include(CheckCXXSourceCompiles)
 
-message(STATUS "TEST TEST")
 set(OLD_CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
 
 set(SSE4PROG "
