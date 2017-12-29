@@ -17,7 +17,7 @@ template<uint8_t DELTA, uint8_t SHR>
   *out = (*in) >> SHR;
   ++in;
 
-  constexpr uint8_t NEXT_SHR = SHR + DELTA - 32;
+  static const uint8_t NEXT_SHR = SHR + DELTA - 32;
   *out |= ((*in) % (1U << NEXT_SHR)) << (32 - SHR);
 }
 
