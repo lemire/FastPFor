@@ -1,0 +1,21 @@
+platform:
+  - x64
+  
+environment:
+  MSVC_DEFAULT_OPTIONS: ON
+  matrix:
+    - GENERATOR: Visual Studio 14 2015 Win64
+
+branches:
+  only:
+    - master
+
+build_script:
+  - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+  - cmd: mkdir build
+  - cmd: cd build
+  - cmd: cmake -G "%GENERATOR%" ..
+  - cmd: cmake --build . --config Debug
+
+test_script:
+  - cmd: ctest -C Debug
