@@ -26,6 +26,10 @@ ClueWeb Tools (https://github.com/lintool/clueweb).
 Apache Lucene version 4.6.x uses a compression format derived from our FastPFOR
 scheme (see http://lucene.apache.org/core/4_6_1/core/org/apache/lucene/util/PForDeltaDocIdSet.html).
 
+## Python bindings
+
+- We have Python bindings: https://github.com/searchivarius/PyFastPFor
+
 ## Myths
 
 Myth: SIMD compression requires very large blocks of integers (1024 or more).
