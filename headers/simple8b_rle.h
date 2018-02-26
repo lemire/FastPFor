@@ -83,12 +83,6 @@ class Simple8b_Codec {
   static const uint64_t RLE_MAX_VALUE_MASK = (1ULL << RLE_MAX_VALUE_BITS) - 1;
   static const uint64_t RLE_MAX_COUNT_MASK = (1ULL << RLE_MAX_COUNT_BITS) - 1;
 
-  static uint32_t bits(uint32_t i) {
-    i = i - ((i >> 1) & 0x55555555);
-    i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
-    return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
-  }
-
   // check if next integer repeats, return count if packs better, otherwize 0
   static uint32_t tryRunLength(const uint32_t *input, uint32_t pos,
                                uint32_t count) {
