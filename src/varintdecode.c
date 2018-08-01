@@ -1624,5 +1624,4 @@ size_t altmasked_vbyte_read_loop_fromcompressedsize(const uint8_t *in,
   return out - initout;
 }
 
-
 #endif
