@@ -283,7 +283,7 @@ Simple9<MarkLength, hacked>::decodeArray(const uint32_t *in, const size_t len,
   size_t lengths[] = {28, 14, 9, 7, 5, 4, 3, 2, 1};
   vector<uint32_t> stats(16, 0);
   size_t expectedlength = 0;
-#elif
+#else
 template <bool MarkLength, bool hacked>
 const uint32_t *
 Simple9<MarkLength, hacked>::decodeArray(const uint32_t *in, const size_t /* len */,
