@@ -275,14 +275,19 @@ void Simple9<MarkLength, hacked>::encodeArray(const uint32_t *in,
   }
   nvalue = out - initout;
 }
+#ifdef STATS
 template <bool MarkLength, bool hacked>
 const uint32_t *
 Simple9<MarkLength, hacked>::decodeArray(const uint32_t *in, const size_t len,
                                          uint32_t *out, size_t &nvalue) {
-#ifdef STATS
   size_t lengths[] = {28, 14, 9, 7, 5, 4, 3, 2, 1};
   vector<uint32_t> stats(16, 0);
   size_t expectedlength = 0;
+#else
+template <bool MarkLength, bool hacked>
+const uint32_t *
+Simple9<MarkLength, hacked>::decodeArray(const uint32_t *in, const size_t /* len */,
+                                         uint32_t *out, size_t &nvalue) {
 #endif
   if (MarkLength)
     if ((*in) > nvalue)
