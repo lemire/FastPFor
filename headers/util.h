@@ -117,7 +117,7 @@ __attribute__((const)) inline uint32_t gccbits(const uint32_t v) {
 #ifdef _MSC_VER
 // taken from
 // http://stackoverflow.com/questions/355967/how-to-use-msvc-intrinsics-to-get-the-equivalent-of-this-gcc-code
-uint32_t __builtin_clz(uint32_t x) {
+inline uint32_t __builtin_clz(uint32_t x) {
   unsigned long r = 0;
   _BitScanReverse(&r, x);
   return (31 - r);
