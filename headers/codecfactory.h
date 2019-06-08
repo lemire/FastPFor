@@ -127,9 +127,7 @@ static inline CodecMap initializefactory() {
   map["vbyte"] = std::shared_ptr<IntegerCODEC>(new VByte());
   map["maskedvbyte"] = std::shared_ptr<IntegerCODEC>(new MaskedVByte());
   map["streamvbyte"] = std::shared_ptr<IntegerCODEC>(new StreamVByte());
-#if !defined(_MSC_VER) || (_MSC_VER != 1900)
   map["varintgb"] = std::shared_ptr<IntegerCODEC>(new VarIntGB<>());
-#endif
   map["simple16"] = std::shared_ptr<IntegerCODEC>(new Simple16<true>());
   map["simple9"] = std::shared_ptr<IntegerCODEC>(new Simple9<true>());
   map["simple9_rle"] = std::shared_ptr<IntegerCODEC>(new Simple9_RLE<true>());
