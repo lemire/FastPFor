@@ -65,7 +65,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#pragma warning(disable:4996);
+#pragma warning(disable:4996)
 
 #define __GETOPT_H__
 
@@ -76,6 +76,8 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
+#define NOMINMAX
+#define WINDOWS_LEAN_AND_MEAN
 #include <windows.h>
 
 #ifdef __cplusplus

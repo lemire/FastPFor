@@ -77,9 +77,6 @@
     <ProjectReference Include="FastPFor.vcxproj">
       <Project>{42d8aba4-fc4e-426c-a833-d64d06081f92}</Project>
     </ProjectReference>
-    <ProjectReference Include="getopt.vcxproj">
-      <Project>{d0d480b3-816e-4a04-8ae4-75210f8701e0}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
