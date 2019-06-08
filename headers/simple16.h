@@ -18,6 +18,9 @@
 namespace FastPForLib {
 
 /**
+ * This is an implementation of the popular Simple16 scheme. It is limited to
+ * 28-bit integers (between 0 and 2^28-1).
+ *
  * If MarkLength is true, than the number of symbols is written
  * in the stream. Otherwise you need to specify it using the nvalue
  * parameter decodeArray.
@@ -375,7 +378,7 @@ void Simple16<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
       if ((*in >> 28) > 0) {
         std::cerr << "Input's out of range: " << *in << std::endl;
         throw std::runtime_error(
-            "You tried to apply Simple16 to an incompatible set of integers.");
+            "You tried to apply Simple16 to an incompatible set of integers: they should be in [0,2^28).");
       }
       out[0] = 15;
       NumberOfValuesCoded = 1;
