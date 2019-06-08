@@ -10,6 +10,8 @@ namespace FastPForLib {
 
 using namespace std;
 
+namespace simdunaligned {
+
 static void SIMD_nullunpacker32(const __m128i *__restrict__,
                                 uint32_t *__restrict__ out) {
   memset(out, 0, 32 * 4 * 4);
@@ -13865,8 +13867,11 @@ static void __SIMD_fastunpack32_32(const __m128i *__restrict__ in,
   }
 }
 
+} // namespace simdunaligned
+
 void usimdunpack(const __m128i *__restrict__ in, uint32_t *__restrict__ out,
                  const uint32_t bit) {
+  using namespace simdunaligned;
   switch (bit) {
   case 0:
     SIMD_nullunpacker32(in, out);
@@ -14009,6 +14014,7 @@ void usimdunpack(const __m128i *__restrict__ in, uint32_t *__restrict__ out,
 /*assumes that integers fit in the prescribed number of bits*/
 void usimdpackwithoutmask(const uint32_t *__restrict__ in,
                           __m128i *__restrict__ out, const uint32_t bit) {
+  using namespace simdunaligned;
   switch (bit) {
   case 0:
     return;
@@ -14150,6 +14156,7 @@ void usimdpackwithoutmask(const uint32_t *__restrict__ in,
 /*assumes that integers fit in the prescribed number of bits*/
 void usimdpack(const uint32_t *__restrict__ in, __m128i *__restrict__ out,
                const uint32_t bit) {
+  using namespace simdunaligned;
   switch (bit) {
   case 0:
     return;
