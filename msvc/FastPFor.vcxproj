@@ -75,6 +75,8 @@
     <ClCompile Include="..\src\horizontalbitpacking.cpp" />
     <ClCompile Include="..\src\simdbitpacking.cpp" />
     <ClCompile Include="..\src\simdunalignedbitpacking.cpp" />
+    <ClCompile Include="..\src\streamvbyte.c" />
+    <ClCompile Include="..\src\varintdecode.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
