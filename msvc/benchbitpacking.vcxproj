@@ -48,6 +48,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../headers</AdditionalIncludeDirectories>
       <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -63,6 +64,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../headers</AdditionalIncludeDirectories>
       <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
