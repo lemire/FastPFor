@@ -2,8 +2,6 @@
  * (c) Indeed.com and Nathan Kurz
  * Apache License 2.0
  */
-#if ! defined(_MSC_VER) // code relies on compound literals which Visual Studio fails to support. TODO: code a workaround
-
 
 #if defined(_MSC_VER)
      /* Microsoft C/C++-compatible compiler */
@@ -27,11 +25,9 @@
 #include <stdint.h>
 
 #if defined(_MSC_VER)
-#define ALIGNED(x) __declspec(align(x))
-#else
-#if defined(__GNUC__)
-#define ALIGNED(x) __attribute__((aligned(x)))
-#endif
+#define DECLARE_ALIGNED(n,t,v) __declspec(align(n)) t v
+#elif defined(__GNUC__)
+#define DECLARE_ALIGNED(n,t,v) t __attribute__ ((aligned (n))) v
 #endif
 
 typedef struct index_bytes_consumed {
@@ -39,7 +35,7 @@ typedef struct index_bytes_consumed {
   uint8_t bytes_consumed;
 } index_bytes_consumed;
 
-static index_bytes_consumed combined_lookup[] ALIGNED(0x1000) = {
+static DECLARE_ALIGNED(0x1000, index_bytes_consumed, combined_lookup[])= {
     {0, 6},    {32, 7},   {16, 7},   {118, 6},  {8, 7},    {48, 8},   {82, 6},
     {160, 5},  {4, 7},    {40, 8},   {24, 8},   {127, 7},  {70, 6},   {109, 7},
     {148, 5},  {165, 6},  {2, 7},    {36, 8},   {20, 8},   {121, 7},  {12, 8},
@@ -627,7 +623,7 @@ static index_bytes_consumed combined_lookup[] ALIGNED(0x1000) = {
     {0, 2},    {0, 3},    {0, 3},    {0, 0},    {0, 2},    {0, 0},    {0, 0},
     {0, 0}};
 
-static const int8_t vectors[] ALIGNED(0x1000) = {
+static DECLARE_ALIGNED(0x1000, const int8_t, vectors[]) = {
     0,  -1, 4,  -1, 1,  -1, 5,  -1, 2,  -1, -1, -1, 3,  -1, -1, -1, // 0
     0,  -1, 4,  -1, 1,  -1, 5,  6,  2,  -1, -1, -1, 3,  -1, -1, -1, // 1
     0,  -1, 4,  5,  1,  -1, 6,  -1, 2,  -1, -1, -1, 3,  -1, -1, -1, // 2
@@ -1624,4 +1620,3 @@ size_t altmasked_vbyte_read_loop_fromcompressedsize(const uint8_t *in,
   return out - initout;
 }
 
-#endif

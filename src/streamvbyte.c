@@ -59,6 +59,14 @@ typedef __m256i ymm_t;
 #define IACA_END
 #endif // not IACA
 
+#ifdef _MSC_VER
+static inline int __builtin_ctz(uint32_t x) {
+  unsigned long ret;
+  _BitScanForward(&ret, x);
+  return (int)ret;
+}
+#endif
+
 static inline uint8_t _encoded_length(uint32_t val) {
   if (val < (1 << 8)) {
     return 1;
