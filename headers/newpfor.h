@@ -36,6 +36,9 @@ template <uint32_t BlockSizeInUnitsOfPackSize,
           class ExceptionCoder = Simple16<false>>
 class NewPFor : public IntegerCODEC {
 public:
+  using IntegerCODEC::encodeArray;
+  using IntegerCODEC::decodeArray;
+
   enum {
     PFORDELTA_B = 6,
     PFORDELTA_NEXCEPT = 10,

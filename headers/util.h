@@ -173,6 +173,17 @@ __attribute__((const)) inline uint32_t asmbits(const uint32_t v) {
 #endif
 }
 
+__attribute__((const)) inline uint32_t asmbits(const uint64_t v) {
+#ifdef _MSC_VER
+  return gccbits(v);
+#else
+  if (v == 0) return 0;
+  uint64_t answer;
+  __asm__("bsr %1, %0;" : "=r"(answer) : "r"(v));
+  return static_cast<uint32_t>(answer + 1);
+#endif
+}
+
 __attribute__((const)) inline uint32_t slowbits(uint32_t v) {
   uint32_t r = 0;
   while (v) {

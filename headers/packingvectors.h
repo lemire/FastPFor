@@ -29,27 +29,28 @@ public:
     return in;
   }
 
-  template <class STLContainer>
-  static const uint32_t *unpackmetight(const uint32_t *in, STLContainer &out,
+  template <typename IntType>
+  static const uint32_t *unpackmetight(
+                                       const uint32_t *in,
+                                       IntType * out,
+                                       size_t outSize,
                                        const uint32_t bit) {
     const uint32_t size = *in;
     ++in;
-    out.resize((size + PACKSIZE - 1) / PACKSIZE * PACKSIZE);
     uint32_t j = 0;
     for (; j + PACKSIZE - 1 < size; j += PACKSIZE) {
       fastunpack(in, &out[j], bit);
       in += bit;
     }
-    uint32_t buffer[PACKSIZE];
+    uint32_t buffer[PACKSIZE * 2];
     uint32_t remaining = size - j;
     memcpy(buffer, in, (remaining * bit + 31) / 32 * sizeof(uint32_t));
     uint32_t *bpointer = buffer;
-    in += (out.size() - j) / PACKSIZE * bit;
-    for (; j != out.size(); j += PACKSIZE) {
+    in += (outSize - j) / PACKSIZE * bit;
+    for (; j != outSize; j += PACKSIZE) {
       fastunpack(bpointer, &out[j], bit);
       bpointer += bit;
     }
-    out.resize(size);
     in -= (j - size) * bit / 32;
     return in;
   }
@@ -88,22 +89,20 @@ public:
     return out;
   }
 
-  template <class STLContainer>
-  static uint32_t *packmeuptightwithoutmask(STLContainer &source, uint32_t *out,
+  template <typename IntType>
+  static uint32_t *packmeuptightwithoutmask(
+                                            const IntType * source,
+                                            size_t size,
+                                            uint32_t *out,
                                             const uint32_t bit) {
-    const size_t size = source.size();
     *out = static_cast<uint32_t>(size);
     out++;
-    if (source.size() == 0)
-      return out;
-    source.resize((source.size() + PACKSIZE - 1) / PACKSIZE * PACKSIZE);
     uint32_t j = 0;
-    for (; j != source.size(); j += PACKSIZE) {
+    for (; j < size; j += PACKSIZE) {
       fastpackwithoutmask(&source[j], out, bit);
       out += bit;
     }
     out -= (j - size) * bit / 32;
-    source.resize(size);
     return out;
   }
 };

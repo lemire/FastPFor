@@ -17,17 +17,17 @@ namespace FastPForLib {
 /**
  * This is an implementation of the compression algorithm SIMD-GroupSimple,
  * which was proposed in Section 4 of the following paper:
- * 
+ *
  * W. X. Zhao, X. Zhang, D. Lemire, D. Shan, J. Nie, H. Yan, and J. Wen.
  * A general simd-based approach to accelerating compression algorithms.
  * ACM Trans. Inf. Syst., 33(3), 2015.
  * http://arxiv.org/abs/1502.01916
- * 
+ *
  * Implemented by Patrick Damme,
- * https://wwwdb.inf.tu-dresden.de/our-group/team/patrick-damme . 
- * 
+ * https://wwwdb.inf.tu-dresden.de/our-group/team/patrick-damme .
+ *
  * We provide two variants of the compression part of the algorithm.
- * 
+ *
  * The original variant
  * ====================
  * The first variant closely follows the original algorithm as described in the
@@ -38,27 +38,27 @@ namespace FastPForLib {
  * However, our implementation differs from the paper in some minor points, for
  * instance, we directly look up the mask used in the pattern selection
  * algorithm instead of calculating it from a looked up bit width.
- * 
+ *
  * The variant using a quad max ring buffer
  * ========================================
  * The second variant is based on the original description, but uses a ring
  * buffer instead of an array for the (pseudo) quad max values to reduce the
  * size of the temporary data during the compression. More details on this can
  * be found in Section 3.2.3 of the following paper:
- * 
+ *
  * P. Damme, D. Habich, J. Hildebrandt, and W. Lehner. Lightweight data
  * compression algorithms: An experimental survey (experiments and analyses).
  * In Proceedings of the 20th International Conference on Extending Database
  * Technology, EDBT 2017.
  * http://openproceedings.org/2017/conf/edbt/paper-146.pdf
- * 
+ *
  * The template parameter useRingBuf determines which variant is used:
  * - false: original variant
  * - true: the variant with the ring buffer
  * Both variants use the same packing routines and the same decompression
  * algorithm. Our experiments suggest that the variant with the ring buffer is
  * faster than the original algorithm for small bit widths.
- * 
+ *
  * Compressed data format
  * ======================
  * As described in the original paper, the compressed data consists of two
@@ -92,7 +92,7 @@ namespace FastPForLib {
  * To sum up: For maximum performance use SIMDGroupSimple<false, false> or
  * SIMDGroupSimple<true, true>; to verify that the two variants really produce
  * the same data, use the same value for pessimisticGap.
- * 
+ *
  * Further assumptions
  * ===================
  * Finally, this implementation assumes that the number of 32-bit integers to
@@ -102,6 +102,9 @@ namespace FastPForLib {
 template<bool useRingBuf, bool pessimisticGap>
 class SIMDGroupSimple : public IntegerCODEC {
 public:
+  using IntegerCODEC::encodeArray;
+  using IntegerCODEC::decodeArray;
+
   // Tell CompositeCodec that this implementation can only handle input sizes
   // which are multiples of four.
   static const uint32_t BlockSize = 4;
@@ -344,7 +347,7 @@ public:
    * function is called at most once per array to decompress. Hence, top
    * efficiency is not that crucial here.
    */
-  inline static void decomprIncompleteBlock(const uint8_t &n, 
+  inline static void decomprIncompleteBlock(const uint8_t &n,
                                             const __m128i *&in,
                                             __m128i *&out) {
     // We choose the bit width consistent with comprIncompleteBlock().
@@ -816,7 +819,7 @@ public:
     checkifdivisibleby(len, BlockSize);
     if (needPaddingTo128Bits(in))
       throw std::runtime_error("the input buffer must be aligned to 16 bytes");
-    
+
     if (useRingBuf)
       encodeArrayInternal_wRingBuf(in, len, out, nvalue);
     else
@@ -827,7 +830,7 @@ public:
                               uint32_t *out, size_t &nvalue) {
     if (needPaddingTo128Bits(out))
       throw std::runtime_error("the output buffer must be aligned to 16 bytes");
-    
+
     // The start of the header.
     const uint32_t *const inHeader32 = in;
     nvalue = inHeader32[0];
