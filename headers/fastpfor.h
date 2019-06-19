@@ -138,8 +138,8 @@ class FastPForImpl {
 
   void getBestBFromData(const IntType *in, uint8_t &bestb, uint8_t &bestcexcept,
                         uint8_t &maxb) {
-    constexpr uint8_t bits = sizeof(IntType) * 8;
-    uint32_t freqs[bits + 1];
+    uint8_t bits = sizeof(IntType) * 8;
+    uint32_t freqs[65];
     for (uint32_t k = 0; k <= bits; ++k) freqs[k] = 0;
     for (uint32_t k = 0; k < BlockSize; ++k) {
       freqs[asmbits(in[k])]++;
