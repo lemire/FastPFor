@@ -29,6 +29,9 @@ namespace FastPForLib {
  */
 class SIMDBinaryPacking : public IntegerCODEC {
 public:
+  using IntegerCODEC::encodeArray;
+  using IntegerCODEC::decodeArray;
+
   static const uint32_t CookiePadder = 123456;
   static const uint32_t MiniBlockSize = 128;
   static const uint32_t HowManyMiniBlocks = 16;

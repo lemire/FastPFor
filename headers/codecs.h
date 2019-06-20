@@ -18,9 +18,7 @@ class NotEnoughStorage : public std::runtime_error {
 public:
   size_t required; // number of 32-bit symbols required
   NotEnoughStorage(const size_t req)
-      : runtime_error(""), required(req){
-
-                           };
+      : runtime_error(""), required(req) {}
 };
 
 class IntegerCODEC {
@@ -38,6 +36,10 @@ public:
   virtual void encodeArray(const uint32_t *in, const size_t length,
                            uint32_t *out, size_t &nvalue) = 0;
 
+  virtual void encodeArray(const uint64_t *in, const size_t length,
+                           uint32_t *out, size_t &nvalue) {
+    throw std::logic_error("Not implemented!");
+  }
   /**
    * Usage is similar to decodeArray except that it returns a pointer
    * incremented from in. In theory it should be in+length. If the
@@ -54,6 +56,12 @@ public:
    */
   virtual const uint32_t *decodeArray(const uint32_t *in, const size_t length,
                                       uint32_t *out, size_t &nvalue) = 0;
+
+  virtual const uint32_t *decodeArray(const uint32_t *in, const size_t length,
+                                      uint64_t *out, size_t &nvalue) {
+    throw std::logic_error("Not implemented!");
+  }
+
   virtual ~IntegerCODEC() {}
 
   /**

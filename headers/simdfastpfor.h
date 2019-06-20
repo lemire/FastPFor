@@ -44,6 +44,9 @@ template <uint32_t BlockSizeInUnitsOfPackSize =
               8> // BlockSizeInUnitsOfPackSize can have value 4 or 8
 class SIMDFastPFor : public IntegerCODEC {
 public:
+  using IntegerCODEC::encodeArray;
+  using IntegerCODEC::decodeArray;
+
   /**
    * ps (page size) should be a multiple of BlockSize, any "large"
    * value should do.
@@ -152,7 +155,7 @@ public:
 #else
   const uint32_t *decodeArray(const uint32_t *in, const size_t,
 #endif
-                              uint32_t *out, size_t &nvalue) {
+                              uint32_t *out, size_t &nvalue) override {
 #ifndef NDEBUG
     const uint32_t *const initin(in);
 #endif
@@ -185,7 +188,7 @@ public:
    * to simplify slightly the implementation.)
    */
   void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
-                   size_t &nvalue) {
+                   size_t &nvalue) override {
     checkifdivisibleby(length, BlockSize);
 #ifndef NDEBUG
     const uint32_t *const initout(out);
@@ -342,7 +345,7 @@ public:
     assert(in == headerin + wheremeta);
   }
 
-  std::string name() const {
+  std::string name() const override {
     return std::string("SIMDFastPFor") + std::to_string(BlockSize);
   }
 };
@@ -363,6 +366,9 @@ public:
 template <class EXCEPTIONCODER = Simple8b<true>>
 class SIMDSimplePFor : public IntegerCODEC {
 public:
+  using IntegerCODEC::encodeArray;
+  using IntegerCODEC::decodeArray;
+
   EXCEPTIONCODER ecoder;
   /**
    * ps (page size) should be a multiple of BlockSize, any "large"
@@ -391,7 +397,7 @@ public:
   std::vector<uint8_t> bytescontainer;
 
   const uint32_t *decodeArray(const uint32_t *in, const size_t length,
-                              uint32_t *out, size_t &nvalue) {
+                              uint32_t *out, size_t &nvalue) override {
     const uint32_t *const initin(in);
     const size_t mynvalue = *in;
     ++in;
@@ -418,7 +424,7 @@ public:
    * to simplify slightly the implementation.)
    */
   void encodeArray(const uint32_t *in, const size_t length, uint32_t *out,
-                   size_t &nvalue) {
+                   size_t &nvalue) override {
     checkifdivisibleby(length, BlockSize);
     const uint32_t *const initout(out);
     const uint32_t *const finalin(in + length);
@@ -547,7 +553,7 @@ public:
     assert(in == headerin + wheremeta);
   }
 
-  std::string name() const { return "SIMDSimplePFor"; }
+  std::string name() const override { return "SIMDSimplePFor"; }
 };
 
 } // namespace FastPFor

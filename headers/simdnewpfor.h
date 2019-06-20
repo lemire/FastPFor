@@ -45,6 +45,9 @@ template <uint32_t BlockSizeInUnitsOfPackSize,
           class ExceptionCoder = Simple16<false>>
 class SIMDNewPFor : public IntegerCODEC {
 public:
+  using IntegerCODEC::encodeArray;
+  using IntegerCODEC::decodeArray;
+
   enum {
     PFORDELTA_B = 6,
     PFORDELTA_NEXCEPT = 10,
