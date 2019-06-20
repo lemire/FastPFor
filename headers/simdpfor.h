@@ -40,9 +40,6 @@ namespace FastPForLib {
  */
 class SIMDPFor : public IntegerCODEC {
 public:
-  using IntegerCODEC::encodeArray;
-  using IntegerCODEC::decodeArray;
-
   enum {
     BlockSizeInUnitsOfPackSize = 4,
     PACKSIZE = 32,
@@ -170,7 +167,7 @@ public:
   }
 
   void encodeArray(const uint32_t *in, const size_t len, uint32_t *out,
-                   size_t &nvalue) override {
+                   size_t &nvalue) {
     *out++ = static_cast<uint32_t>(len);
 #ifndef NDEBUG
     const uint32_t *const finalin(in + len);
@@ -195,7 +192,7 @@ public:
     nvalue = totalnvalue;
   }
   const uint32_t *decodeArray(const uint32_t *in, const size_t len,
-                              uint32_t *out, size_t &nvalue) override {
+                              uint32_t *out, size_t &nvalue) {
     nvalue = *in++;
     if (nvalue == 0)
       return in;
@@ -302,7 +299,7 @@ public:
     }
   }
 
-  virtual std::string name() const override {
+  virtual std::string name() const {
     std::ostringstream convert;
     convert << "SIMDPFor";
     return convert.str();
