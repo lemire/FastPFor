@@ -48,7 +48,7 @@ class FastPForImpl {
         datatobepacked(sizeof(IntType) * 8 + 1),
         bytescontainer(PageSize + 3 * PageSize / BlockSize) {
     assert(ps / BlockSize * BlockSize == ps);
-    assert(gccbits(BlockSizeInUnitsOfPackSize * PACKSIZE - 1) <= 8);
+    assert(gccbits(static_cast<uint32_t>(BlockSizeInUnitsOfPackSize * PACKSIZE - 1)) <= 8);
   }
   enum {
     PACKSIZE = 32,
@@ -341,7 +341,7 @@ public:
         datatobepacked(PageSize),
         bytescontainer(PageSize + 3 * PageSize / BlockSize) {
     assert(ps / BlockSize * BlockSize == ps);
-    assert(gccbits(BlockSizeInUnitsOfPackSize * PACKSIZE - 1) <= 8);
+    assert(gccbits(static_cast<uint32_t>(BlockSizeInUnitsOfPackSize * PACKSIZE - 1)) <= 8);
   }
   enum {
     BlockSizeInUnitsOfPackSize = 4,
