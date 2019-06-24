@@ -41,8 +41,19 @@ namespace FastPForLib {
                              reinterpret_cast<uint32_t *>(out32.data()),
                              inSize);
 
+          bool passed = true;
           for (size_t i = 0; i < inSize; ++i) {
+            if (in32[i] != out32[i]) {
+              passed = false;
+            }
             EXPECT_EQ(in32[i], out32[i]);
+          }
+          if (!passed) {
+            std::cout << "Test failed with int32 input: ";
+            for (size_t i = 0; i < inSize; ++i) {
+              std::cout << in32[i] << " ";
+            }
+            std::cout << std::endl;
           }
         }
 
@@ -64,8 +75,19 @@ namespace FastPForLib {
                              reinterpret_cast<uint64_t *>(out64.data()),
                              inSize);
 
+          bool passed = true;
           for (size_t i = 0; i < inSize; ++i) {
+            if (in64[i] != out64[i]) {
+              passed = false;
+            }
             EXPECT_EQ(in64[i], out64[i]);
+          }
+          if (!passed) {
+            std::cout << "Test failed with int64 input: ";
+            for (size_t i = 0; i < inSize; ++i) {
+              std::cout << in64[i] << " ";
+            }
+            std::cout << std::endl;
           }
         }
 
@@ -126,7 +148,6 @@ namespace FastPForLib {
     std::uniform_int_distribution<int32_t> dist(
                             std::numeric_limits<int32_t>::min(),
                             std::numeric_limits<int32_t>::max());
-    std::srand(std::time(nullptr));
     for (int i = 0; i < 70000; ++i) {
       in32.push_back(dist(e2));
     }
@@ -142,7 +163,6 @@ namespace FastPForLib {
     std::uniform_int_distribution<int64_t> dist(
                             std::numeric_limits<int64_t>::min(),
                             std::numeric_limits<int64_t>::max());
-    std::srand(std::time(nullptr));
     for (int i = 0; i < 70000; ++i) {
       in64.push_back(dist(e2));
     }

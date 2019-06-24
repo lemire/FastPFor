@@ -195,6 +195,7 @@ add_custom_target(check unit DEPENDS unit)
 
 add_executable(FastPFor_unittest
     unittest/test_composite.cpp
+    unittest/test_driver.cpp
     unittest/test_fastpfor.cpp
     unittest/test_variablebyte.cpp)
-target_link_libraries(FastPFor_unittest gtest_main FastPFor)
+target_link_libraries(FastPFor_unittest gtest FastPFor)
