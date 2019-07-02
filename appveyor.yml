@@ -13,17 +13,9 @@ platform:
 environment:
   matrix:
     - GENERATOR: "Visual Studio 15 2017" # x86 build
-      AVXFLAG: "OFF"
     - GENERATOR: "Visual Studio 15 2017 Win64" # x64 build
-      AVXFLAG: "OFF"
-    - GENERATOR: "Visual Studio 15 2017 Win64" # x64 build
-      AVXFLAG: "ON"
     - GENERATOR: "Visual Studio 14 2015" # x86 build
-      AVXFLAG: "OFF"
     - GENERATOR: "Visual Studio 14 2015 Win64" # x64 build
-      AVXFLAG: "OFF"
-    - GENERATOR: "Visual Studio 14 2015 Win64" # x64 build
-      AVXFLAG: "ON"
 
 
 matrix:
