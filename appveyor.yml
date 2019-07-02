@@ -1,21 +1,51 @@
-platform:
-  - x64
-  
-environment:
-  MSVC_DEFAULT_OPTIONS: ON
-  matrix:
-    - GENERATOR: Visual Studio 14 2015 Win64
-
+version: '{build}'
 branches:
   only:
-    - master
+  - master
+image:
+    - Visual Studio 2017
+    - Visual Studio 2015
+clone_folder: c:\projects\fastpfor
+
+platform:
+- x64
+
+environment:
+  matrix:
+    - GENERATOR: "Visual Studio 15 2017" # x86 build
+      AVXFLAG: "OFF"
+    - GENERATOR: "Visual Studio 15 2017 Win64" # x64 build
+      AVXFLAG: "OFF"
+    - GENERATOR: "Visual Studio 15 2017 Win64" # x64 build
+      AVXFLAG: "ON"
+    - GENERATOR: "Visual Studio 14 2015" # x86 build
+      AVXFLAG: "OFF"
+    - GENERATOR: "Visual Studio 14 2015 Win64" # x64 build
+      AVXFLAG: "OFF"
+    - GENERATOR: "Visual Studio 14 2015 Win64" # x64 build
+      AVXFLAG: "ON"
+
+
+matrix:
+    fast_finish: true
+    exclude:
+      - image:      Visual Studio 2015
+        GENERATOR: "Visual Studio 14 2015 Win64"
+        AVXFLAG: "ON"
+      - image:      Visual Studio 2015
+        GENERATOR: "Visual Studio 15 2017" # x86 build
+      - image:      Visual Studio 2015
+        GENERATOR: "Visual Studio 15 2017 Win64" # x64 build
+      - image:      Visual Studio 2017
+        GENERATOR: "Visual Studio 14 2015" # x86 build
+      - image:      Visual Studio 2017
+        GENERATOR: "Visual Studio 14 2015 Win64" # x64 build
 
 build_script:
-  - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-  - cmd: mkdir build
-  - cmd: cd build
-  - cmd: cmake -G "%GENERATOR%" ..
-  - cmd: cmake --build . --config Debug
+  - mkdir build
+  - cd build
+  - ps: cmake -G "$env:GENERATOR" ..
+  - cmake --build . --config Debug
 
 test_script:
-  - cmd: ctest -C Debug
+  - ctest --verbose
