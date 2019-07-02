@@ -183,7 +183,7 @@ class FastPForImpl {
         *bc++ = maxb;
         std::vector<IntType> &thisexceptioncontainer =
             datatobepacked[maxb - bestb];
-        const uint32_t maxval = 1U << bestb;
+        const IntType maxval = static_cast<IntType>(1ULL << bestb);
         for (uint32_t k = 0; k < BlockSize; ++k) {
           if (in[k] >= maxval) {
             // we have an exception
@@ -203,7 +203,7 @@ class FastPForImpl {
 
     IntType bitmap = 0;
     for (uint32_t k = 2; k <= sizeof(IntType) * 8; ++k) {
-      if (datatobepacked[k].size() != 0) bitmap |= (1UL << (k - 1));
+      if (datatobepacked[k].size() != 0) bitmap |= (1ULL << (k - 1));
     }
     *(reinterpret_cast<IntType *>(out)) = bitmap;
     out += (sizeof(IntType) + sizeof(uint32_t) - 1) / sizeof(uint32_t);
@@ -231,7 +231,7 @@ class FastPForImpl {
     IntType bitmap = *(reinterpret_cast<const IntType *>(inexcept));
     inexcept += (sizeof(IntType) + sizeof(uint32_t) - 1) / sizeof(uint32_t);
     for (uint32_t k = 2; k <= sizeof(IntType) * 8; ++k) {
-      if ((bitmap & (1UL << (k - 1))) != 0) {
+      if ((bitmap & (1ULL << (k - 1))) != 0) {
         uint32_t nvalue = *inexcept;
         datatobepacked[k].resize((nvalue + PACKSIZE - 1) / PACKSIZE * PACKSIZE);
         inexcept = packingvector<32>::unpackmetight(
