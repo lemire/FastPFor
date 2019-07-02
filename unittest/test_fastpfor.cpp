@@ -112,8 +112,7 @@ namespace FastPForLib {
 
         void _genDataRandom(std::vector<int32_t>& v, uint32_t values) {
           v.clear();
-          std::random_device rd;
-          std::mt19937_64 e2(rd());
+          std::mt19937_64 e2(123456);
           std::uniform_int_distribution<int32_t> dist(
                                   std::numeric_limits<int32_t>::min(),
                                   std::numeric_limits<int32_t>::max());
@@ -124,8 +123,7 @@ namespace FastPForLib {
 
         void _genDataRandom64(std::vector<int64_t>& v, uint32_t values) {
           v.clear();
-          std::random_device rd;
-          std::mt19937_64 e2(rd());
+          std::mt19937_64 e2(123456);
           std::uniform_int_distribution<int64_t> dist(
                                   std::numeric_limits<int64_t>::min(),
                                   std::numeric_limits<int64_t>::max());
@@ -139,8 +137,7 @@ namespace FastPForLib {
                                  uint32_t bits,
                                  uint32_t values) {
           v.clear();
-          std::random_device rd;
-          std::mt19937_64 e2(rd());
+          std::mt19937_64 e2(123456);
           std::uniform_int_distribution<uint32_t> dist(
                                   0,
                                   bits == 32 ? ~0U : (1U << bits) - 1);
@@ -154,8 +151,7 @@ namespace FastPForLib {
                                    uint32_t bits,
                                    uint32_t values) {
           v.clear();
-          std::random_device rd;
-          std::mt19937_64 e2(rd());
+          std::mt19937_64 e2(123456);
           std::uniform_int_distribution<uint64_t> dist(
                                   0,
                                   bits == 64 ? ~0UL : (1ULL << bits) - 1);

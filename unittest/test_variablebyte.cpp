@@ -175,8 +175,7 @@ namespace FastPForLib {
 
   TEST_F(VariableByteTest, randomNumbers5000) {
     in64.resize(0);
-    std::random_device rd;
-    std::mt19937_64 e2(rd());
+    std::mt19937_64 e2(123456);
     std::uniform_int_distribution<int64_t> dist(
                             std::numeric_limits<int64_t>::min(),
                             std::numeric_limits<int64_t>::max());
