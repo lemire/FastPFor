@@ -4,7 +4,6 @@ branches:
   - master
 image:
     - Visual Studio 2017
-    - Visual Studio 2015
 clone_folder: c:\projects\fastpfor
 
 platform:
@@ -12,26 +11,8 @@ platform:
 
 environment:
   matrix:
-    - GENERATOR: "Visual Studio 15 2017" # x86 build
     - GENERATOR: "Visual Studio 15 2017 Win64" # x64 build
-    - GENERATOR: "Visual Studio 14 2015" # x86 build
-    - GENERATOR: "Visual Studio 14 2015 Win64" # x64 build
-
-
-matrix:
-    fast_finish: true
-    exclude:
-      - image:      Visual Studio 2015
-        GENERATOR: "Visual Studio 14 2015 Win64"
-        AVXFLAG: "ON"
-      - image:      Visual Studio 2015
-        GENERATOR: "Visual Studio 15 2017" # x86 build
-      - image:      Visual Studio 2015
-        GENERATOR: "Visual Studio 15 2017 Win64" # x64 build
-      - image:      Visual Studio 2017
-        GENERATOR: "Visual Studio 14 2015" # x86 build
-      - image:      Visual Studio 2017
-        GENERATOR: "Visual Studio 14 2015 Win64" # x64 build
+    - GENERATOR: "Visual Studio 15 2017" # x86 build
 
 build_script:
   - mkdir build
