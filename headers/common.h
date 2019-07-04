@@ -51,8 +51,7 @@
 #include <intrin.h>
 
 #define __attribute__(n)
-#define __restrict__
-#define constexpr inline
+#define __restrict__ __restrict
 
 #endif
 
