@@ -1,6 +1,8 @@
 # The FastPFOR C++ library : Fast integer compression
 [![Build Status](https://travis-ci.org/lemire/FastPFor.png)](https://travis-ci.org/lemire/FastPFor)
 [![Build Status](https://img.shields.io/appveyor/ci/lemire/FastPFor.svg)](https://ci.appveyor.com/project/lemire/FastPFor)
+[![Code Quality: Cpp](https://img.shields.io/lgtm/grade/cpp/g/lemire/FastPFor.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/lemire/FastPFor/context:cpp)
+[![Total Alerts](https://img.shields.io/lgtm/alerts/g/lemire/FastPFor.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/lemire/FastPFor/alerts)
 
 
 ## What is this?
