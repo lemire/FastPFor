@@ -41,6 +41,9 @@ namespace FastPForLib {
  */
 class PFor : public IntegerCODEC {
 public:
+  using IntegerCODEC::encodeArray;
+  using IntegerCODEC::decodeArray;
+
   enum {
     BlockSizeInUnitsOfPackSize = 4,
     PACKSIZE = 32,

@@ -114,6 +114,31 @@ __attribute__((const)) inline uint32_t gccbits(const uint32_t v) {
 #endif
 }
 
+__attribute__((const)) inline uint32_t gccbits(const uint64_t v) {
+  if (v == 0) {
+    return 0;
+  }
+#ifdef _MSC_VER
+  unsigned long index;
+  #ifdef _WIN64
+    _BitScanReverse64(&index, v);
+    return static_cast<uint32_t>(index + 1);
+  #else
+    if (v >> 32 == 0) {
+      _BitScanReverse(&index, (uint32_t)v);
+      return static_cast<uint32_t>(index + 1);
+    } else {
+      _BitScanReverse(&index, (uint32_t)(v >> 32));
+      return static_cast<uint32_t>(index + 32 + 1);
+    }
+  #endif
+#else
+  uint32_t answer;
+  __asm__("bsr %1, %0;" : "=r"(answer) : "r"(v));
+  return answer + 1;
+#endif
+}
+
 #ifdef _MSC_VER
 // taken from
 // http://stackoverflow.com/questions/355967/how-to-use-msvc-intrinsics-to-get-the-equivalent-of-this-gcc-code
@@ -170,6 +195,17 @@ __attribute__((const)) inline uint32_t asmbits(const uint32_t v) {
   uint32_t answer;
   __asm__("bsr %1, %0;" : "=r"(answer) : "r"(v));
   return answer + 1;
+#endif
+}
+
+__attribute__((const)) inline uint32_t asmbits(const uint64_t v) {
+#ifdef _MSC_VER
+  return gccbits(v);
+#else
+  if (v == 0) return 0;
+  uint64_t answer;
+  __asm__("bsr %1, %0;" : "=r"(answer) : "r"(v));
+  return static_cast<uint32_t>(answer + 1);
 #endif
 }
 

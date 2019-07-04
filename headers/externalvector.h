@@ -9,6 +9,7 @@
 #define EXTERNALVECTOR_H_
 #include <vector>
 #include <queue>
+#include <random>
 #include "common.h"
 
 namespace FastPForLib {
@@ -175,14 +176,16 @@ public:
   // need a true shuffle.
   void shuffle(const size_t BLOCKSIZE = DEFAULTBLOCKSIZE) {
     std::vector<DataType> buffer;
+    std::random_device rd;
+    std::mt19937 g(rd());
     for (size_t k = 0; k < size(); k += BLOCKSIZE) {
       if (k + BLOCKSIZE < size()) {
         loadACopy(buffer, k, k + BLOCKSIZE);
-        random_shuffle(buffer.begin(), buffer.end());
+        std::shuffle(buffer.begin(), buffer.end(), g);
         copyAt(buffer, k);
       } else {
         loadACopy(buffer, k, size());
-        random_shuffle(buffer.begin(), buffer.end());
+        std::shuffle(buffer.begin(), buffer.end(), g);
         copyAt(buffer, k);
       }
     }
