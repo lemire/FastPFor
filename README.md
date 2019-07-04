@@ -15,15 +15,15 @@ This library can decode at least 4 billions of compressed integers per second on
 desktop or laptop processors. That is, it can decompress data at a rate of 15 GB/s.
 This is significantly faster than generic codecs like gzip, LZO, Snappy or LZ4.
 
-It is used by the zsearch engine (http://victorparmar.github.com/zsearch/)
-as well as in GMAP and GSNAP (http://research-pub.gene.com/gmap/). It
-has been ported to Java (https://github.com/lemire/JavaFastPFOR),
-C# (https://github.com/Genbox/CSharpFastPFOR)  and 
-Go (https://github.com/reducedb/encoding). The Java port is used by
-ClueWeb Tools (https://github.com/lintool/clueweb).
+It is used by the [zsearch engine](http://victorparmar.github.com/zsearch/)
+as well as in [GMAP and GSNAP](http://research-pub.gene.com/gmap/). It
+has [been ported to Java](https://github.com/lemire/JavaFastPFOR),
+[C#](https://github.com/Genbox/CSharpFastPFOR)  and 
+[Go](https://github.com/reducedb/encoding). The Java port is used by
+[ClueWeb Tools](https://github.com/lintool/clueweb).
 
-Apache Lucene version 4.6.x uses a compression format derived from our FastPFOR
-scheme (see http://lucene.apache.org/core/4_6_1/core/org/apache/lucene/util/PForDeltaDocIdSet.html).
+[Apache Lucene version 4.6.x uses a compression format derived from our FastPFOR
+scheme](http://lucene.apache.org/core/4_6_1/core/org/apache/lucene/util/PForDeltaDocIdSet.html).
 
 ## Python bindings
 
@@ -123,9 +123,6 @@ It builds under
 
 The code was tested under Windows, Linux and MacOS.
 
-The build system expects an x64 operating system. Under Linux and MacOS, typing `uname -a` in the console should print the `x86_64` string. If you have a 32-bit system, you may need to do extra work to build and run this code. Please use a 64-bit system instead.
-
-
 ## Hardware Requirements
 
 We require an x64 platform.
@@ -152,23 +149,6 @@ You should not assume that our objects are thread safe.
 If you have several threads, each thread should have its own IntegerCODEC
 objects to ensure that there is no concurrency problems.
 
-
-### Installing GCC 4.8 under Linux
-
-We support clang, Visual Studio and the Intel compiler, but a common default is GCC 4.8 or better.
-
-Under a recent version of Ubuntu (12.14), you can install
-GCC 4.8 by typing:
-
-    sudo apt-get install gcc-4.8 g++-4.8
-
-### Installing GCC 4.8 under Mac
-
-Mac Ports supports GCC 4.8. You can install it by typing:
-
-    sudo port install gcc48
-
-See : https://www.macports.org/
 
 ## Why C++11?
 
@@ -249,68 +229,6 @@ It is the data was used for the following paper:
 
 Daniel Lemire, Leonid Boytsov, Nathan Kurz, SIMD Compression and the Intersection of Sorted Integers, arXiv: 1401.6399, 2014
 http://arxiv.org/abs/1401.6399
-
-## Testing with the ClueWeb09 data set (legacy)
-
-(Please consider grabbing our new archive at 
-http://lemire.me/data/integercompression2014.html
-instead.)
-
-
-Grab the data set from:
-
-http://boytsov.info/datasets/clueweb09gap/
-
-Using the provided software, uncompress it and
-run the "toflat" executable to create a "clueweb09.bin" file
-then run:
-
-    ./inmemorybenchmark --minlength 10000 clueweb09.bin
-
-Note: processing can take over an hour.
-
-## Testing with the Gov2 data set  (legacy)
-
-(Please consider grabbing our new archive at 
-http://lemire.me/data/integercompression2014.html
-instead.)
-
-You can test the library over d-gaps data
-from the TREC GOV2 data set that was made graciously
-available by   Fabrizio Silvestri,  Takeshi Yamamuro
-and Rossano Venturini.
-
-Go to:
-
-http://integerencoding.isti.cnr.it/?page_id=8
-
-Download both the software and the gov.sort.tar file.
-You might find useful to grow their stable-0.2.0 version from
-https://github.com/maropu/integer_encoding_library/releases/tag/stable-0.2.0
-
-Untar the tar file:
-
-    tar xvf gov2.sort.tar
-
-You may want to make the newly generated files non-writeable
-(I'm paranoid):
-
-    chmod -w gov2.sort.Delta gov2.sort.Delta.TOC
-
-Build the software (you need the decoders executable)
-and
-
-You need to run this command
-
-    ./decoders 3 gov2.sort somefilename
-
-where "3" is for delta.
-
-Then you should be able to test with out inmemorybenchmark:
-
-    ./inmemorybenchmark --minlength 10000 somefilename.DEC
-
-Note: processing can take over an hour.
 
 
 ## I used your code and I get segmentation faults
