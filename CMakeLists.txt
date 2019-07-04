@@ -43,10 +43,6 @@ if(NOT WIN32)
     CXX_COMPILER_DUMPVERSION(CXX_COMPILER_VERSION)
 endif()
 
-if(MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
-endif()
-
 MESSAGE( STATUS "CMAKE_SIZEOF_VOID_P (should be 8): " ${CMAKE_SIZEOF_VOID_P} )
 if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
    MESSAGE( STATUS "Good. You appear to have a 64-bit system. " )
