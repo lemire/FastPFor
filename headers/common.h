@@ -51,7 +51,7 @@
 #include <intrin.h>
 
 #define __attribute__(n)
-#define __restrict__ __restrict.
+#define __restrict__ __restrict
 
 #endif
 
