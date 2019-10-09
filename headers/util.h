@@ -236,8 +236,7 @@ __attribute__((const)) inline uint32_t bits(uint32_t v) {
     v >>= 2;
     r += 2;
   }
-  if (v >= (1U << 0)) {
-    v >>= 1;
+  if (v >= 1U) {
     r += 1;
   }
   return r;
