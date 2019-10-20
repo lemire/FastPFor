@@ -234,7 +234,7 @@ uint8_t *svb_insert_scalar_d1_init(uint8_t *keyPtr, uint8_t *dataPtr,
       dataPtr = dataPtrPrev;
 
       // shift keys 2 bits "to the right"
-      uint32_t mask_hi = key & (~0 << shift);
+      uint32_t mask_hi = key & (~0u << shift);
       uint32_t mask_lo = key & ((1 << shift) - 1);
       key = (mask_hi << 2) | mask_lo;
       uint32_t carry_bits, prev_carry_bits = (key & (3 << 8)) >> 8;
