@@ -234,7 +234,7 @@ uint8_t *svb_insert_scalar_d1_init(uint8_t *keyPtr, uint8_t *dataPtr,
       dataPtr = dataPtrPrev;
 
       // shift keys 2 bits "to the right"
-      uint32_t mask_hi = key & (~0 << shift);
+      uint32_t mask_hi = key & (~0u << shift);
       uint32_t mask_lo = key & ((1 << shift) - 1);
       key = (mask_hi << 2) | mask_lo;
       uint32_t carry_bits, prev_carry_bits = (key & (3 << 8)) >> 8;
@@ -761,7 +761,7 @@ uint8_t *svb_decode_avx_d1_init(uint32_t *out, uint8_t *__restrict__ keyPtr,
         Data = _mm_cvtepu8_epi16(_mm_lddqu_si128((xmm_t *)(dataPtr + 16)));
         Prev = _write_16bit_avx_d1(out + 16, Data, Prev);
         Data = _mm_cvtepu8_epi16(_mm_loadl_epi64((xmm_t *)(dataPtr + 24)));
-        Prev = _write_16bit_avx_d1(out + 24, Data, Prev);
+        _write_16bit_avx_d1(out + 24, Data, Prev);
         out += 32;
         dataPtr += 32;
 
@@ -788,7 +788,7 @@ uint8_t *svb_decode_avx_d1_init(uint32_t *out, uint8_t *__restrict__ keyPtr,
         Data = _decode_avx((keys & 0x00FF), &dataPtr);
         Prev = _write_avx_d1(out + 24, Data, Prev);
         Data = _decode_avx((keys & 0xFF00) >> 8, &dataPtr);
-        Prev = _write_avx_d1(out + 28, Data, Prev);
+        _write_avx_d1(out + 28, Data, Prev);
 
         out += 32;
       }
