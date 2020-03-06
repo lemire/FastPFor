@@ -12,9 +12,9 @@
 #include "codecs.h"
 #include "variablebyte.h"
 
-using namespace std;
-
 namespace FastPForLib {
+
+using namespace std;
 
 /**
  * Group VarInt.
