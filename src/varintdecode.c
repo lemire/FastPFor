@@ -1114,7 +1114,7 @@ static uint64_t masked_vbyte_read_group(const uint8_t *in, uint32_t *out,
 #include <stdio.h>
 void print_binary(uint64_t num, uint64_t remaining) {
   if (remaining > 64) {
-    printf(" (Broken remaining: %ld) ", remaining);
+    printf(" (Broken remaining: %llu) ", (unsigned long long)remaining);
     remaining = 64;
   }
   for (uint64_t i = 0; i < remaining; i++) {
