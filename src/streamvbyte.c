@@ -59,7 +59,7 @@ typedef __m256i ymm_t;
 #define IACA_END
 #endif // not IACA
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(__clang__)
 static inline int __builtin_ctz(uint32_t x) {
   unsigned long ret;
   _BitScanForward(&ret, x);
@@ -340,7 +340,7 @@ uint8_t *svb_decode_scalar(uint32_t *outPtr, const uint8_t *keyPtr,
   return dataPtr; // pointer to first unused byte after end
 }
 
-static uint8_t lengthTable[256] = {
+static const uint8_t lengthTable[256] = {
     4,  5,  6,  7,  5,  6,  7,  8,  6,  7,  8,  9,  7,  8,  9,  10, 5,  6,  7,
     8,  6,  7,  8,  9,  7,  8,  9,  10, 8,  9,  10, 11, 6,  7,  8,  9,  7,  8,
     9,  10, 8,  9,  10, 11, 9,  10, 11, 12, 7,  8,  9,  10, 8,  9,  10, 11, 9,
@@ -356,7 +356,7 @@ static uint8_t lengthTable[256] = {
     10, 11, 12, 13, 11, 12, 13, 14, 12, 13, 14, 15, 10, 11, 12, 13, 11, 12, 13,
     14, 12, 13, 14, 15, 13, 14, 15, 16};
 
-static uint8_t shuffleTable[256][16] = {
+static const int8_t shuffleTable[256][16] = {
     {0, -1, -1, -1, 1, -1, -1, -1, 2, -1, -1, -1, 3, -1, -1, -1}, // 1111
     {0, 1, -1, -1, 2, -1, -1, -1, 3, -1, -1, -1, 4, -1, -1, -1},  // 2111
     {0, 1, 2, -1, 3, -1, -1, -1, 4, -1, -1, -1, 5, -1, -1, -1},   // 3111
@@ -618,10 +618,10 @@ static uint8_t shuffleTable[256][16] = {
 // static char HighTo32[16] = {8, 9, -1, -1, 10, 11, -1, -1, 12, 13, -1, -1, 14,
 // 15, -1, -1};
 // Byte Order: {0x0706050403020100, 0x0F0E0D0C0B0A0908}
-#ifndef _MSC_VER
-static xmm_t High16To32 = {0xFFFF0B0AFFFF0908, 0xFFFF0F0EFFFF0D0C};
+#if !defined(_MSC_VER) || defined(__clang__)
+static const xmm_t High16To32 = { (long long)0xFFFF0B0AFFFF0908, (long long)0xFFFF0F0EFFFF0D0C};
 #else
-static xmm_t High16To32 = {8,  9,  -1, -1, 10, 11, -1, -1,
+static const xmm_t High16To32 = {8,  9,  -1, -1, 10, 11, -1, -1,
                            12, 13, -1, -1, 14, 15, -1, -1};
 #endif
 

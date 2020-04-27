@@ -13,6 +13,7 @@
 #include "usimdbitpacking.h"
 #include "memutil.h"
 #include "util.h"
+#include "simple8b.h"
 #include "usimdbitpacking.h"
 
 namespace FastPForLib {
