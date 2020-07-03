@@ -1,7 +1,7 @@
 # The FastPFOR C++ library : Fast integer compression
 [![Build Status](https://travis-ci.org/lemire/FastPFor.png)](https://travis-ci.org/lemire/FastPFor)
 [![Build Status](https://img.shields.io/appveyor/ci/lemire/FastPFor.svg)](https://ci.appveyor.com/project/lemire/FastPFor)
-
+![Ubuntu-CI](https://github.com/lemire/FastPFor/workflows/Ubuntu-CI/badge.svg)
 
 
 ## What is this?
