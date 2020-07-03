@@ -16,9 +16,11 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
 include(AppendCompilerFlags)
 
 
-project(FastPFor CXX C)
+project(FastPFOR CXX C)
 set(PROJECT_URL "https://github.com/lemire/FastPFOR")
 set(PROJECT_DESCRIPTION "The FastPFOR C++ library: Fast integer compression")
+# Need to bump this when we release a new version.
+set(PROJECT_VERSION "0.1.9")
 
 include(DetectCPUFeatures)
 #
@@ -106,17 +108,16 @@ MESSAGE( STATUS "CMAKE_C_FLAGS_RELEASE: " ${CMAKE_C_FLAGS_RELEASE} )
 
 # library target
 include_directories(headers)
-add_library(FastPFor STATIC src/bitpacking.cpp
-                                src/bitpacking.cpp
-                                src/bitpackingaligned.cpp
-                                src/bitpackingunaligned.cpp
-                                src/horizontalbitpacking.cpp
-                                src/simdunalignedbitpacking.cpp
-                                src/simdbitpacking.cpp
-                                src/varintdecode.c
-                                src/streamvbyte.c
-								${HEADERS}
-								)
+add_library(FastPFOR STATIC
+    src/bitpacking.cpp
+    src/bitpackingaligned.cpp
+    src/bitpackingunaligned.cpp
+    src/horizontalbitpacking.cpp
+    src/simdunalignedbitpacking.cpp
+    src/simdbitpacking.cpp
+    src/varintdecode.c
+    src/streamvbyte.c)
+set_target_properties(FastPFOR PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 
 
 # other executables
@@ -125,11 +126,11 @@ add_executable(partitionbylength src/partitionbylength.cpp)
 add_executable(csv2maropu src/csv2maropu.cpp)
 
 add_executable(entropy src/entropy.cpp)
-target_link_libraries(entropy FastPFor)
+target_link_libraries(entropy FastPFOR)
 
 if( SUPPORT_SSE42 )
     add_executable(benchbitpacking src/benchbitpacking.cpp)
-    target_link_libraries(benchbitpacking FastPFor)
+    target_link_libraries(benchbitpacking FastPFOR)
 endif()
 
 find_package(snappy)
@@ -142,11 +143,11 @@ else()
     include_directories(${snappy_INCLUDE_DIRS})
     add_executable(codecssnappy src/codecs.cpp)
     set_target_properties(codecssnappy PROPERTIES DEFINE_SYMBOL USESNAPPY)
-    target_link_libraries(codecssnappy FastPFor ${snappy_LIBRARIES})
+    target_link_libraries(codecssnappy FastPFOR ${snappy_LIBRARIES})
 
     add_executable(inmemorybenchmarksnappy src/inmemorybenchmark.cpp)
     set_target_properties(inmemorybenchmarksnappy PROPERTIES DEFINE_SYMBOL USESNAPPY)
-    target_link_libraries(inmemorybenchmarksnappy FastPFor ${snappy_LIBRARIES})
+    target_link_libraries(inmemorybenchmarksnappy FastPFOR ${snappy_LIBRARIES})
 endif()
 
 # Download and unpack googletest at configure time
@@ -184,25 +185,57 @@ if(CMAKE_VERSION VERSION_LESS 2.8.11)
 endif()
 
 add_executable(codecs src/codecs.cpp)
-target_link_libraries(codecs FastPFor)
+target_link_libraries(codecs FastPFOR)
 
 add_executable(example example.cpp)
-target_link_libraries(example FastPFor)
+target_link_libraries(example FastPFOR)
 
 add_executable(inmemorybenchmark src/inmemorybenchmark.cpp)
-target_link_libraries(inmemorybenchmark FastPFor)
+target_link_libraries(inmemorybenchmark FastPFOR)
 
 add_executable(unit src/unit.cpp)
-target_link_libraries(unit FastPFor)
+target_link_libraries(unit FastPFOR)
 add_custom_target(check unit DEPENDS unit)
 
 
-add_executable(FastPFor_unittest
+add_executable(FastPFOR_unittest
     unittest/test_composite.cpp
     unittest/test_driver.cpp
     unittest/test_fastpfor.cpp
     unittest/test_variablebyte.cpp)
-target_link_libraries(FastPFor_unittest gtest FastPFor)
+target_link_libraries(FastPFOR_unittest gtest FastPFOR)
 enable_testing()
 add_test("unit" unit)
-add_test("FastPFor_unittest" FastPFor_unittest)
+add_test("FastPFOR_unittest" FastPFOR_unittest)
+
+
+include(GNUInstallDirs)
+install(TARGETS FastPFOR
+    EXPORT FastPFORExport
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+set(PACKAGE_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/FastPFOR")
+install(EXPORT FastPFORExport
+    FILE "FastPFORTargets.cmake"
+    DESTINATION "${PACKAGE_CMAKE_INSTALL_DIR}"
+    NAMESPACE "FastPFOR::")
+install(DIRECTORY "headers/" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/fastpfor")
+install(FILES AUTHORS LICENSE README.md
+    DESTINATION "${CMAKE_INSTALL_DOCDIR}")
+if(NOT CMAKE_VERSION VERSION_LESS 3.0.0)
+    include(CMakePackageConfigHelpers)
+    configure_package_config_file("FastPFORConfig.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/FastPFORConfig.cmake"
+        INSTALL_DESTINATION "${PACKAGE_CMAKE_INSTALL_DIR}")
+    write_basic_package_version_file("FastPFORConfigVersion.cmake"
+        COMPATIBILITY SameMajorVersion)
+    install(FILES
+       "${CMAKE_CURRENT_BINARY_DIR}/FastPFORConfig.cmake"
+       "${CMAKE_CURRENT_BINARY_DIR}/FastPFORConfigVersion.cmake"
+        DESTINATION "${PACKAGE_CMAKE_INSTALL_DIR}")
+endif()
+configure_file("fastpfor.pc.in" "${CMAKE_CURRENT_BINARY_DIR}/fastpfor.pc" @ONLY)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/fastpfor.pc"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")

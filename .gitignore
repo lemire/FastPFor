@@ -10,3 +10,5 @@
 *.VC.db
 *.VC.opendb
 *.vcxproj.user
+/fastpfor.pc
+/FastPFORConfig.cmake
