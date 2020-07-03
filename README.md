@@ -1,7 +1,7 @@
 # The FastPFOR C++ library : Fast integer compression
 [![Build Status](https://travis-ci.org/lemire/FastPFor.png)](https://travis-ci.org/lemire/FastPFor)
 [![Build Status](https://img.shields.io/appveyor/ci/lemire/FastPFor.svg)](https://ci.appveyor.com/project/lemire/FastPFor)
-[![Code Quality: Cpp](https://img.shields.io/lgtm/grade/cpp/g/lemire/FastPFor.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/lemire/FastPFor/context:cpp)
+
 
 
 ## What is this?
@@ -137,10 +137,14 @@ Some specific binaries will only run if your processor supports SSE4.1. They hav
 
 You need cmake. On most linux distributions, you can simply do the following:
 
-      cmake .
-      make
+      git clone https://github.com/lemire/FastPFor.git
+      cd FastPFor
+      mkdir build
+      cd build
+      cmake ..
+      cmake --build .
 
-It may be necessary to set the CXX variable.
+It may be necessary to set the CXX variable. The project is installable (`make install` works).
 
 To create project files for Microsoft Visual Studio, it might be useful to target 64-bit Windows (e.g., see http://www.cmake.org/cmake/help/v3.0/generator/Visual%20Studio%2012%202013.html).
 
