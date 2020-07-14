@@ -73,7 +73,7 @@ https://github.com/lemire/FastDifferentialCoding
 * Encoding: Integer Compression Libraries for Go https://github.com/zhenjl/encoding
 * FrameOfReference is a C++ library dedicated to frame-of-reference (FOR) compression: https://github.com/lemire/FrameOfReference
 * libvbyte: A fast implementation for varbyte 32bit/64bit integer compression https://github.com/cruppstahl/libvbyte
-* TurboPFor is a C library that offers lots of interesting optimizations. Well worth checking! (GPL license) https://github.com/powturbo/TurboPFor
+* TurboPFor is a C library that offers lots of interesting optimizations. Well worth checking! (GPL license) https://github.com/powturbo/TurboPFor-Integer-Compression
 * Oroch is a C++ library that offers a usable API (MIT license) https://github.com/ademakov/Oroch
 
 ## Reference and documentation
