@@ -5,6 +5,8 @@
 #
 cmake_minimum_required(VERSION 3.0)
 set (CMAKE_CXX_STANDARD 11) # for constexpr specifier and other goodies
+OPTION(BUILD_SHARED_LIBS "Build Shared Libraries" ON)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 if (NOT CMAKE_BUILD_TYPE)
 		message(STATUS "No build type selected, default to Release")
@@ -14,6 +16,8 @@ MESSAGE( STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE} )
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
 include(AppendCompilerFlags)
+include(CPackComponent)
+include(GenerateExportHeader)
 
 
 project(FastPFOR CXX C)
@@ -108,7 +112,7 @@ MESSAGE( STATUS "CMAKE_C_FLAGS_RELEASE: " ${CMAKE_C_FLAGS_RELEASE} )
 
 # library target
 include_directories(headers)
-add_library(FastPFOR STATIC
+add_library(FastPFOR
     src/bitpacking.cpp
     src/bitpackingaligned.cpp
     src/bitpackingunaligned.cpp
@@ -116,7 +120,13 @@ add_library(FastPFOR STATIC
     src/simdunalignedbitpacking.cpp
     src/simdbitpacking.cpp
     src/varintdecode.c
-    src/streamvbyte.c)
+    src/streamvbyte.c
+)
+set_target_properties(FastPFOR
+    PROPERTIES
+        WINDOWS_EXPORT_ALL_SYMBOLS ON
+)
+GENERATE_EXPORT_HEADER(FastPFOR)
 set_target_properties(FastPFOR PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 
 
@@ -210,20 +220,76 @@ add_test("FastPFOR_unittest" FastPFOR_unittest)
 
 
 include(GNUInstallDirs)
+set(DESCR_COMMON "research library with integer compression schemes broadly applicable to the compression of arrays of 32-bit integers where most integers are small.")
+set(CPACK_PACKAGE_NAME "libfastpfor")
+set(CPACK_PACKAGE_VENDOR "Daniel Lemire")
+set(CPACK_PACKAGE_VERSION_MAJOR "0")
+set(CPACK_PACKAGE_VERSION_MINOR "1")
+set(CPACK_PACKAGE_VERSION_PATCH "8")
+set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+set(CPACK_PACKAGE_DESCRIPTION "A ${DESCR_COMMON}")
+set(CPACK_DEBIAN_PACKAGE_NAME "${CPACK_PACKAGE_NAME}")
+set(CPACK_RPM_PACKAGE_NAME "${CPACK_PACKAGE_NAME}")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/lemire/FastPFor")
+set(CPACK_PACKAGE_MAINTAINER "${CPACK_PACKAGE_VENDOR}")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "${CPACK_PACKAGE_MAINTAINER}")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+set(CPACK_PACKAGE_MAINTAINER "${CPACK_PACKAGE_VENDOR}")
+set(CPACK_DEB_COMPONENT_INSTALL ON)
+set(CPACK_RPM_COMPONENT_INSTALL ON)
+set(CPACK_NSIS_COMPONENT_INSTALL ON)
+set(CPACK_DEBIAN_ENABLE_COMPONENT_DEPENDS ON)
+set(CPACK_RPM_ENABLE_COMPONENT_DEPENDS ON)
+set(CPACK_DEBIAN_COMPRESSION_TYPE "xz")
+
+cpack_add_component(lib
+    DISPLAY_NAME "library"
+    DESCRIPTION "The shared ${DESCR_COMMON}"
+    REQUIRED
+)
+cpack_add_component(lib_dev
+    DISPLAY_NAME "dev files"
+    DESCRIPTION "The SDK for ${DESCR_COMMON}"
+)
+
 install(TARGETS FastPFOR
     EXPORT FastPFORExport
     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    COMPONENT "lib_dev"
+
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+    COMPONENT "lib"
+)
+
+set("CPACK_DEBIAN_LIB_PACKAGE_NAME" "${CPACK_DEBIAN_PACKAGE_NAME}")
+set("CPACK_RPM_LIB_PACKAGE_NAME" "${CPACK_RPM_PACKAGE_NAME}")
+
+set("CPACK_DEBIAN_LIB_DEV_PACKAGE_NAME" "${CPACK_DEBIAN_LIB_PACKAGE_NAME}-dev")
+set("CPACK_DEBIAN_LIB_DEV_PACKAGE_DEPENDS" "${CPACK_DEBIAN_LIB_PACKAGE_NAME}")
+set("CPACK_DEBIAN_LIB_DEV_PACKAGE_SUGGESTS" "cmake, pkg-config, pkg-conf")
+
+set("CPACK_RPM_LIB_DEV_PACKAGE_NAME" "${CPACK_RPM_LIB_PACKAGE_NAME}-devel")
+set("CPACK_RPM_LIB_DEV_PACKAGE_DEPENDS" "${CPACK_RPM_LIB_PACKAGE_NAME}")
+set("CPACK_RPM_LIB_DEV_PACKAGE_SUGGESTS" "${CPACK_DEBIAN_LIB_DEV_PACKAGE_SUGGESTS}")
+
+
 set(PACKAGE_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/FastPFOR")
 install(EXPORT FastPFORExport
     FILE "FastPFORTargets.cmake"
     DESTINATION "${PACKAGE_CMAKE_INSTALL_DIR}"
-    NAMESPACE "FastPFOR::")
-install(DIRECTORY "headers/" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/fastpfor")
+    NAMESPACE "FastPFOR::"
+    COMPONENT "lib_dev"
+)
+install(DIRECTORY "headers/"
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/fastpfor"
+    COMPONENT "lib_dev"
+)
 install(FILES AUTHORS LICENSE README.md
-    DESTINATION "${CMAKE_INSTALL_DOCDIR}")
+    DESTINATION "${CMAKE_INSTALL_DOCDIR}"
+    COMPONENT "lib"
+)
 if(NOT CMAKE_VERSION VERSION_LESS 3.0.0)
     include(CMakePackageConfigHelpers)
     configure_package_config_file("FastPFORConfig.cmake.in"
@@ -234,8 +300,15 @@ if(NOT CMAKE_VERSION VERSION_LESS 3.0.0)
     install(FILES
        "${CMAKE_CURRENT_BINARY_DIR}/FastPFORConfig.cmake"
        "${CMAKE_CURRENT_BINARY_DIR}/FastPFORConfigVersion.cmake"
-        DESTINATION "${PACKAGE_CMAKE_INSTALL_DIR}")
+        DESTINATION "${PACKAGE_CMAKE_INSTALL_DIR}"
+        COMPONENT "lib_dev"
+    )
 endif()
 configure_file("fastpfor.pc.in" "${CMAKE_CURRENT_BINARY_DIR}/fastpfor.pc" @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/fastpfor.pc"
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
+    COMPONENT "lib_dev"
+)
+
+set(CPACK_COMPONENTS_ALL "lib_dev;lib")
+include(CPack)
