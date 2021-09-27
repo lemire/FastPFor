@@ -53,10 +53,10 @@ private:
 public:
   uint32_t written;
 
-  BitsWriter(uint32_t *out);
-  void bit_flush();
+  inline BitsWriter(uint32_t *out);
+  inline void bit_flush();
 
-  void bit_writer(uint32_t value, uint32_t bits);
+  inline void bit_writer(uint32_t value, uint32_t bits);
 };
 
 BitsWriter::BitsWriter(uint32_t *out)
@@ -119,14 +119,14 @@ private:
   uint32_t maxBlk;
 
 public:
-  VSEncoding(uint32_t *lens, uint32_t *zlens, uint32_t size, bool cflag);
+  inline VSEncoding(uint32_t *lens, uint32_t *zlens, uint32_t size, bool cflag);
 
   /*
    * Compute the optimal sub-lists from lists.
    *      len: The length of the sequence of lists
    *      fixCost: The fix cost in bits that we pay for  each block
    */
-  uint32_t *compute_OptPartition(uint32_t *seq, uint32_t len, uint32_t fixCost,
+  inline uint32_t *compute_OptPartition(uint32_t *seq, uint32_t len, uint32_t fixCost,
                                  uint32_t &pSize);
 };
 
@@ -298,10 +298,10 @@ public:
       : VSENCODING_BLOCKSZ(mVSENCODING_BLOCKSZ),
         __tmp(VSENCODING_BLOCKSZ * 4 + VSEncodingBlocks::TAIL_MERGIN) {}
 
-  void encodeVS(uint32_t len, const uint32_t *in, uint32_t &size,
+  inline void encodeVS(uint32_t len, const uint32_t *in, uint32_t &size,
                 uint32_t *out);
 
-  const uint32_t *decodeVS(uint32_t len, const uint32_t *in, uint32_t *out,
+  inline const uint32_t *decodeVS(uint32_t len, const uint32_t *in, uint32_t *out,
                            uint32_t *aux);
   std::string name() const { return "VSEncoding"; }
 
@@ -313,10 +313,10 @@ public:
    *
    * Note: *out must be large enough to contain the compress.
    */
-  void encodeArray(const uint32_t *in, const size_t len, uint32_t *out,
+  inline void encodeArray(const uint32_t *in, const size_t len, uint32_t *out,
                    size_t &nvalue);
 
-  const uint32_t *decodeArray(const uint32_t *in, const size_t len,
+  inline const uint32_t *decodeArray(const uint32_t *in, const size_t len,
                               uint32_t *out, size_t &nvalue);
   uint32_t VSENCODING_BLOCKSZ; //     = 65536U
 

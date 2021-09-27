@@ -238,7 +238,7 @@ public:
   }
 };
 
-const uint32_t Simple8b_Codec::bitLength[] = {1, 1,  2,  3,  4,  5,  6,  7,
+inline const uint32_t Simple8b_Codec::bitLength[] = {1, 1,  2,  3,  4,  5,  6,  7,
                                               8, 10, 12, 15, 20, 30, 60, 32};
 // const uint32_t Simple8b_Codec::bitLength[] = { 1, 2, 3, 4, 5, 6, 6, 7, 8, 9,
 // 10, 12, 15, 20, 30, 32 };
