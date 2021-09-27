@@ -1,0 +1,16 @@
+name: Macos-CI
+
+on: [push, pull_request]
+
+jobs:
+  macos-build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use cmake
+        run: |
+          mkdir build
+          cd build
+          cmake  ..
+          cmake --build . 
+          ctest . --output-on-failure
