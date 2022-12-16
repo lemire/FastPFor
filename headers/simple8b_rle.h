@@ -66,12 +66,19 @@
 
 namespace FastPForLib {
 
+static const uint32_t Simple8b_Codec_bitLength[] = {1,  1,  2,  3,  4,  5,  6,  7,
+                                                    8, 10, 12, 15, 20, 30, 60, 32};
+// static const uint32_t Simple8b_Codec_bitLength[] = { 1, 2, 3, 4, 5, 6, 6, 7, 8, 9,
+// 10, 12, 15, 20, 30, 32 };
+// static const uint32_t Simple8b_Codec_bitLength[] = { 1, 3, 4, 5, 5, 6, 6, 7, 8, 9,
+// 10, 11, 12, 15, 20, 32 };
+// static const uint32_t Simple8b_Codec_bitLength[] = { 1, 4, 4, 5, 5, 6, 6, 7, 8, 9,
+// 10, 11, 12, 14, 15, 32 };
+
 /****************************************
 ********** Simple8b-like codec **********
 *****************************************/
 class Simple8b_Codec {
-  static const uint32_t bitLength[];
-
   static const uint32_t SIMPLE8B_BITSIZE = 60;
   static const uint32_t SIMPLE8B_MAXCODE = 15;
   static const uint32_t SIMPLE8B_MINCODE = 1;
@@ -83,7 +90,7 @@ class Simple8b_Codec {
   static const uint64_t RLE_MAX_VALUE_MASK = (1ULL << RLE_MAX_VALUE_BITS) - 1;
   static const uint64_t RLE_MAX_COUNT_MASK = (1ULL << RLE_MAX_COUNT_BITS) - 1;
 
-  // check if next integer repeats, return count if packs better, otherwize 0
+  // check if next integer repeats, return count if packs better, otherwise 0
   static uint32_t tryRunLength(const uint32_t *input, uint32_t pos,
                                uint32_t count) {
     uint32_t startPos = pos;
@@ -127,8 +134,8 @@ public:
         // otherwise try all the bit packing possibilities
         uint32_t code = SIMPLE8B_MINCODE;
         for (; code < SIMPLE8B_MAXCODE; code++) {
-          uint32_t intNum = bitLength[SIMPLE8B_MAXCODE - code];
-          uint32_t bitLen = bitLength[code];
+          uint32_t intNum = Simple8b_Codec_bitLength[SIMPLE8B_MAXCODE - code];
+          uint32_t bitLen = Simple8b_Codec_bitLength[code];
           intNum = (intNum < remainingCount) ? intNum : remainingCount;
 
           uint64_t maxVal = (1ULL << bitLen) - 1;
@@ -192,8 +199,8 @@ public:
 #endif
       else {
         // decode bit-packed integers
-        uint32_t intNum = bitLength[SIMPLE8B_MAXCODE - code];
-        uint32_t bitLen = bitLength[code];
+        uint32_t intNum = Simple8b_Codec_bitLength[SIMPLE8B_MAXCODE - code];
+        uint32_t bitLen = Simple8b_Codec_bitLength[code];
         uint64_t bitMask = (1ULL << bitLen) - 1;
         intNum = (intNum < remainingCount)
                      ? intNum
@@ -237,15 +244,6 @@ public:
     return inPos;
   }
 };
-
-const uint32_t Simple8b_Codec::bitLength[] = {1, 1,  2,  3,  4,  5,  6,  7,
-                                              8, 10, 12, 15, 20, 30, 60, 32};
-// const uint32_t Simple8b_Codec::bitLength[] = { 1, 2, 3, 4, 5, 6, 6, 7, 8, 9,
-// 10, 12, 15, 20, 30, 32 };
-// const uint32_t Simple8b_Codec::bitLength[] = { 1, 3, 4, 5, 5, 6, 6, 7, 8, 9,
-// 10, 11, 12, 15, 20, 32 };
-// const uint32_t Simple8b_Codec::bitLength[] = { 1, 4, 4, 5, 5, 6, 6, 7, 8, 9,
-// 10, 11, 12, 14, 15, 32 };
 
 /**
 * If MarkLength is true, than the number of symbols is written
