@@ -271,8 +271,9 @@ public:
     nvalue = count * 2;
   }
 
-  const uint32_t *decodeArray(const uint32_t *in, const size_t,
+  const uint32_t *decodeArray(const uint32_t *in, const size_t length,
                               uint32_t *out, size_t &nvalue) {
+    (void)length;
 
     uint32_t markednvalue;
     if (MarkLength) {
