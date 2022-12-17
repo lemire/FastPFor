@@ -12,7 +12,6 @@
 #include "codecs.h"
 #include "bitpacking.h"
 #include "util.h"
-#include <iostream>
 
 namespace FastPForLib {
 
@@ -348,9 +347,7 @@ public:
   }
 
   virtual std::string name() const override {
-    std::ostringstream convert;
-    convert << "PFor2008";
-    return convert.str();
+    return "PFor2008";
   }
 };
 

@@ -870,11 +870,7 @@ public:
   }
 
   virtual std::string name() const {
-    std::ostringstream convert;
-    convert << "SIMDGroupSimple";
-    if (useRingBuf)
-      convert << "_RingBuf";
-    return convert.str();
+    return useRingBuf ? "SIMDGroupSimple_RingBuf" : "SIMDGroupSimple";
   }
 };
 

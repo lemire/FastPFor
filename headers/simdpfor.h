@@ -303,9 +303,7 @@ public:
   }
 
   virtual std::string name() const override {
-    std::ostringstream convert;
-    convert << "SIMDPFor";
-    return convert.str();
+    return "SIMDPFor";
   }
 };
 

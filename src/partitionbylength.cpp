@@ -38,19 +38,18 @@ int main(int argc, char **argv) {
   while (reader.loadIntegers(rawdata)) {
     uint32_t lengthinbits = gccbits(static_cast<uint32_t>(rawdata.size()));
     if (output.find(lengthinbits) == output.end()) {
-      ostringstream o;
-      o << filename << "." << lengthinbits;
-      cout << "creating output file " << o.str() << endl;
-      FILE *fd = ::fopen(o.str().c_str(), "w+b");
+      std::string o = filename + "." + std::to_string(lengthinbits);
+      cout << "creating output file " << o << endl;
+      FILE *fd = ::fopen(o.c_str(), "w+b");
       if (fd == NULL) {
         cerr << strerror(errno) << endl;
-        cerr << "can't open " << o.str().c_str() << endl;
+        cerr << "can't open " << o << endl;
         break;
       }
       setvbuf(fd, NULL, _IOFBF, 1024 * 4); // large buffer
       output[lengthinbits] = fd;
       counter[lengthinbits] = 0;
-      name[lengthinbits] = o.str();
+      name[lengthinbits] = o;
     }
     uint32_t thislength = static_cast<uint32_t>(rawdata.size());
     if (fwrite(&thislength, sizeof(thislength), 1, output[lengthinbits]) != 1) {

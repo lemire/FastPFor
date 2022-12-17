@@ -45,9 +45,7 @@ class CompositeCodec : public IntegerCODEC {
   }
 
   std::string name() const override {
-    std::ostringstream convert;
-    convert << codec1.name() << "+" << codec2.name();
-    return convert.str();
+    return codec1.name() + "+" + codec2.name();
   }
 
  private:
