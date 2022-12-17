@@ -59,7 +59,7 @@ struct algostats {
   bool SIMDDeltas;
 };
 
-void summarize(std::vector<algostats> &v, std::string prefix = "#") {
+inline void summarize(std::vector<algostats> &v, std::string prefix = "#") {
   if (v.empty())
     return;
   std::cout << "# building summary " << std::endl;

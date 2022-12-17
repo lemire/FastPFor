@@ -36,8 +36,8 @@ public:
   virtual void encodeArray(const uint32_t *in, const size_t length,
                            uint32_t *out, size_t &nvalue) = 0;
 
-  virtual void encodeArray(const uint64_t *in, const size_t length,
-                           uint32_t *out, size_t &nvalue) {
+  virtual void encodeArray(const uint64_t *, const size_t ,
+                           uint32_t *, size_t &) {
     throw std::logic_error("Not implemented!");
   }
   /**
@@ -57,8 +57,8 @@ public:
   virtual const uint32_t *decodeArray(const uint32_t *in, const size_t length,
                                       uint32_t *out, size_t &nvalue) = 0;
 
-  virtual const uint32_t *decodeArray(const uint32_t *in, const size_t length,
-                                      uint64_t *out, size_t &nvalue) {
+  virtual const uint32_t *decodeArray(const uint32_t *, const size_t ,
+                                      uint64_t *, size_t &) {
     throw std::logic_error("Not implemented!");
   }
 

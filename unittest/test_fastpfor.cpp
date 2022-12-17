@@ -116,7 +116,7 @@ namespace FastPForLib {
           std::uniform_int_distribution<int32_t> dist(
                                   std::numeric_limits<int32_t>::min(),
                                   std::numeric_limits<int32_t>::max());
-          for (int i = 0; i < values; ++i) {
+          for (uint32_t i = 0; i < values; ++i) {
             v.push_back(dist(e2));
           }
         }
@@ -127,7 +127,7 @@ namespace FastPForLib {
           std::uniform_int_distribution<int64_t> dist(
                                   std::numeric_limits<int64_t>::min(),
                                   std::numeric_limits<int64_t>::max());
-          for (int i = 0; i < values; ++i) {
+          for (uint32_t i = 0; i < values; ++i) {
             v.push_back(dist(e2));
           }
         }
