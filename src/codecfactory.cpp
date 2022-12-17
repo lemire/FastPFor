@@ -1,12 +1,35 @@
 #include "codecfactory.h"
 
-/**
- * We moved part of the factor to its own cpp file because some users
- * create multiple instances. Note that the factory is not meant to be
- * a safe class, it is a convenience class and you should just have one
- * instance of it per project.
- */
 namespace FastPForLib {
+std::vector<std::shared_ptr<IntegerCODEC>> CODECFactory::allSchemes() {
+  std::vector<std::shared_ptr<IntegerCODEC>> ans;
+  for (auto i = scodecmap.begin(); i != scodecmap.end(); ++i) {
+    ans.push_back(i->second);
+  }
+  return ans;
+}
+
+std::vector<std::string> CODECFactory::allNames() {
+  std::vector<std::string> ans;
+  for (auto i = scodecmap.begin(); i != scodecmap.end(); ++i) {
+    ans.push_back(i->first);
+  }
+  return ans;
+}
+
+std::shared_ptr<IntegerCODEC> &CODECFactory::getFromName(std::string name) {
+  if (scodecmap.find(name) == scodecmap.end()) {
+    std::cerr << "name " << name << " does not refer to a CODEC." << std::endl;
+    std::cerr << "possible choices:" << std::endl;
+    for (auto i = scodecmap.begin(); i != scodecmap.end(); ++i) {
+      std::cerr << static_cast<std::string>(i->first)
+                << std::endl; // useless cast, but just to be clear
+    }
+    std::cerr << "for now, I'm going to just return 'copy'" << std::endl;
+    return scodecmap["copy"];
+  }
+  return scodecmap[name];
+}
 
 // C++11 allows better than this, but neither Microsoft nor Intel support C++11
 // fully.
@@ -41,13 +64,13 @@ inline CodecMap initializefactory() {
   map["pfor2008"] = std::shared_ptr<IntegerCODEC>(
       new CompositeCodec<PFor2008, VariableByte>());
   map["simdnewpfor"] = std::shared_ptr<IntegerCODEC>(
-      new CompositeCodec<SIMDNewPFor<4, Simple16<false> >, VariableByte>());
+      new CompositeCodec<SIMDNewPFor<4, Simple16<false>>, VariableByte>());
   map["newpfor"] = std::shared_ptr<IntegerCODEC>(
-      new CompositeCodec<NewPFor<4, Simple16<false> >, VariableByte>());
+      new CompositeCodec<NewPFor<4, Simple16<false>>, VariableByte>());
   map["optpfor"] = std::shared_ptr<IntegerCODEC>(
-      new CompositeCodec<OPTPFor<4, Simple16<false> >, VariableByte>());
+      new CompositeCodec<OPTPFor<4, Simple16<false>>, VariableByte>());
   map["simdoptpfor"] = std::shared_ptr<IntegerCODEC>(
-      new CompositeCodec<SIMDOPTPFor<4, Simple16<false> >, VariableByte>());
+      new CompositeCodec<SIMDOPTPFor<4, Simple16<false>>, VariableByte>());
   map["varint"] = std::shared_ptr<IntegerCODEC>(new VariableByte());
   map["vbyte"] = std::shared_ptr<IntegerCODEC>(new VByte());
   map["maskedvbyte"] = std::shared_ptr<IntegerCODEC>(new MaskedVByte());
@@ -73,5 +96,5 @@ inline CodecMap initializefactory() {
   map["copy"] = std::shared_ptr<IntegerCODEC>(new JustCopy());
   return map;
 }
-CodecMap CODECFactory::scodecmap = initializefactory();
-}
+CODECFactory::CODECFactory() : scodecmap(initializefactory())  {}
+} // namespace FastPForLib

@@ -727,7 +727,8 @@ void message() {
   cout << "the --codecs flag takes as an argument"
           " a comma-separated list of schemes chosen among those:"
        << endl;
-  vector<string> all = CODECFactory::allNames();
+  CODECFactory factory;
+  vector<string> all = factory.allNames();
   for (auto i = all.begin(); i != all.end(); ++i) {
     cout << *i;
     if (i + 1 == all.end())
@@ -751,8 +752,9 @@ int main(int argc, char **argv) {
   bool computeentropy = false;
 
   bool splitlongarrays = true;
+  CODECFactory factory;
   vector<shared_ptr<IntegerCODEC>> tmp =
-      CODECFactory::allSchemes(); // the default
+      factory.allSchemes(); // the default
   vector<algostats> myalgos;
   for (auto &i : tmp) {
     myalgos.push_back(algostats(i));
@@ -780,9 +782,9 @@ int main(int argc, char **argv) {
           cout << "# pretty name = " << *i << endl;
           if (i->at(0) == '@') { // SIMD
             myalgos.push_back(algostats(
-                CODECFactory::getFromName(i->substr(1, i->size() - 1)), true));
+                factory.getFromName(i->substr(1, i->size() - 1)), true));
           } else {
-            myalgos.push_back(algostats(CODECFactory::getFromName(*i)));
+            myalgos.push_back(algostats(factory.getFromName(*i)));
           }
           cout << "# added '" << myalgos.back().name() << "'" << endl;
         }

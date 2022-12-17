@@ -41,45 +41,19 @@ namespace FastPForLib {
 typedef std::map<std::string, std::shared_ptr<IntegerCODEC>> CodecMap;
 
 /**
- * This class is a convenience class to generate codecs quickly.
- * It cannot be used safely in a multithreaded context where
- * each thread should have a different IntegerCODEC.
+ * You should have at least one factory per thread.
  */
 class CODECFactory {
 public:
-  static CodecMap scodecmap;
+  CODECFactory();
 
-  // hacked for convenience
-  static std::vector<std::shared_ptr<IntegerCODEC>> allSchemes() {
-    std::vector<std::shared_ptr<IntegerCODEC>> ans;
-    for (auto i = scodecmap.begin(); i != scodecmap.end(); ++i) {
-      ans.push_back(i->second);
-    }
-    return ans;
-  }
+  std::vector<std::shared_ptr<IntegerCODEC>> allSchemes();
 
-  static std::vector<std::string> allNames() {
-    std::vector<std::string> ans;
-    for (auto i = scodecmap.begin(); i != scodecmap.end(); ++i) {
-      ans.push_back(i->first);
-    }
-    return ans;
-  }
+  std::vector<std::string> allNames();
 
-  static std::shared_ptr<IntegerCODEC> &getFromName(std::string name) {
-    if (scodecmap.find(name) == scodecmap.end()) {
-      std::cerr << "name " << name << " does not refer to a CODEC."
-                << std::endl;
-      std::cerr << "possible choices:" << std::endl;
-      for (auto i = scodecmap.begin(); i != scodecmap.end(); ++i) {
-        std::cerr << static_cast<std::string>(i->first)
-                  << std::endl; // useless cast, but just to be clear
-      }
-      std::cerr << "for now, I'm going to just return 'copy'" << std::endl;
-      return scodecmap["copy"];
-    }
-    return scodecmap[name];
-  }
+  std::shared_ptr<IntegerCODEC> &getFromName(std::string name);
+private:
+  CodecMap scodecmap;
 };
 
 

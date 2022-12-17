@@ -697,7 +697,8 @@ void message(const char *prog) {
        << endl;
   cerr << "Use the --codecs flag to specify the schemes." << endl;
   cerr << " schemes include:" << endl;
-  vector<string> all = CODECFactory::allNames();
+  CODECFactory factory;
+  vector<string> all = factory.allNames();
   for (auto i = all.begin(); i != all.end(); ++i) {
     cerr << *i << endl;
   }
@@ -713,8 +714,9 @@ int main(int argc, char **argv) {
   size_t MINLENGTH = 1;
   size_t MAXLENGTH = (std::numeric_limits<uint32_t>::max)();
   size_t MAXCOUNTER = (std::numeric_limits<std::size_t>::max)();
+  CODECFactory factory;
   vector<shared_ptr<IntegerCODEC>> tmp =
-      CODECFactory::allSchemes(); // the default
+      factory.allSchemes(); // the default
   vector<algostats> myalgos;
   for (auto i = tmp.begin(); i != tmp.end(); ++i) {
     myalgos.push_back(algostats(*i));
@@ -759,9 +761,9 @@ int main(int argc, char **argv) {
           if (i->at(0) == '@') { // SIMD
             string namewithoutprefix = i->substr(1, i->size() - 1);
             myalgos.push_back(
-                algostats(CODECFactory::getFromName(namewithoutprefix), true));
+                algostats(factory.getFromName(namewithoutprefix), true));
           } else {
-            myalgos.push_back(algostats(CODECFactory::getFromName(*i)));
+            myalgos.push_back(algostats(factory.getFromName(*i)));
           }
           cout << "# added '" << myalgos.back().name() << "'" << endl;
         }

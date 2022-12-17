@@ -18,7 +18,8 @@ using namespace std;
 using namespace FastPForLib;
 
 int main() {
-  vector<shared_ptr<IntegerCODEC>> myalgos = CODECFactory::allSchemes();
+  CODECFactory factory;
+  vector<shared_ptr<IntegerCODEC>> myalgos = factory.allSchemes();
   for (uint32_t b = 0; b <= 28; ++b) {
 
     cout << "testing... b = " << b << endl;
