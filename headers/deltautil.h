@@ -30,9 +30,7 @@ struct algostats {
   std::string name() {
     // if SIMDDeltas is "true", we prepend @
     if (SIMDDeltas) {
-      std::ostringstream convert;
-      convert << "@" << algo->name();
-      return convert.str();
+      return "@" + algo->name();
     }
     return algo->name();
   }

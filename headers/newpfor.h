@@ -64,10 +64,7 @@ public:
   virtual const uint32_t *decodeArray(const uint32_t *in, const size_t len,
                                       uint32_t *out, size_t &nvalue);
   virtual std::string name() const {
-    std::ostringstream convert;
-    convert << "NewPFor<" << BlockSizeInUnitsOfPackSize << "," << ecoder.name()
-            << ">";
-    return convert.str();
+    return "NewPFor<" + std::to_string(BlockSizeInUnitsOfPackSize) + "," + ecoder.name() + ">";
   }
   ExceptionCoder ecoder;
   std::vector<uint32_t> exceptionsPositions;

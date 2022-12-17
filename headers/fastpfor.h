@@ -121,17 +121,17 @@ class FastPForImpl {
       in += thissize;
     }
     if (oldnvalue < nvalue) {
-      std::ostringstream os;
-      os << "It is possible we have a buffer overrun. You reported having "
+      std::string msg;
+      msg = "It is possible we have a buffer overrun. You reported having "
             "allocated "
-         << oldnvalue * sizeof(uint32_t)
-         << " bytes for the compressed data but we needed "
-         << nvalue * sizeof(uint32_t)
-         << " bytes. Please increase the available memory"
+          + std::to_string(oldnvalue * sizeof(uint32_t))
+          + " bytes for the compressed data but we needed "
+          + std::to_string(nvalue * sizeof(uint32_t))
+          + " bytes. Please increase the available memory"
             " for compressed data or check the value of the last parameter "
             "provided "
             " to the encodeArray method.";
-      throw std::logic_error(os.str());
+      throw std::logic_error(msg);
     }
     resetBuffer();  // if you don't do this, the buffer has a memory
   }

@@ -174,9 +174,9 @@ container diffs(const container &in, const bool aredistinct) {
 
 inline void checkifdivisibleby(size_t a, uint32_t x) {
   if (!divisibleby(a, x)) {
-    std::ostringstream convert;
-    convert << a << " not divisible by " << x;
-    throw std::logic_error(convert.str());
+    std::string msg = std::to_string(a) + " not divisible by "
+                    + std::to_string(x);
+    throw std::logic_error(msg);
   }
 }
 

@@ -89,9 +89,7 @@ public:
   }
 
   std::string name() const {
-    std::ostringstream convert;
-    convert << "BinaryPacking" << MiniBlockSize;
-    return convert.str();
+    return "BinaryPacking" + std::to_string(MiniBlockSize);
   }
 };
 
@@ -168,9 +166,7 @@ public:
   }
 
   std::string name() const override {
-    std::ostringstream convert;
-    convert << "FastBinaryPacking" << MiniBlockSize;
-    return convert.str();
+    return "FastBinaryPacking" + std::to_string(MiniBlockSize);
   }
 };
 
@@ -321,19 +317,14 @@ public:
   }
 
   std::string name() const {
-    std::ostringstream convert;
-    convert << "ByteAlignedPacking" << MiniBlockSize;
-    if (prescan or align) {
-      convert << "<";
-      if (prescan) {
-        convert << "prescan";
-        if (align)
-          convert << ",aligned";
-      } else if (align)
-        convert << "aligned";
-      convert << ">";
-    }
-    return convert.str();
+    if (!prescan && !align)
+      return "ByteAlignedPacking" +std::to_string(MiniBlockSize);
+    else if (prescan && align)
+      return "ByteAlignedPacking" + std::to_string(MiniBlockSize) + "<prescan,aligned>";
+    else if (prescan)
+      return "ByteAlignedPacking" + std::to_string(MiniBlockSize) + "<prescan>";
+    else if (align)
+      return "ByteAlignedPacking" + std::to_string(MiniBlockSize) + "<aligned>";
   }
 };
 

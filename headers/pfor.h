@@ -310,9 +310,7 @@ public:
   }
 
   virtual std::string name() const {
-    std::ostringstream convert;
-    convert << "PFor";
-    return convert.str();
+    return "PFor";
   }
 };
 

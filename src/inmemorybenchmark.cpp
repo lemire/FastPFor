@@ -677,6 +677,7 @@ extern "C" {
 #include "cpubenchmark.h"
 #include "deltautil.h"
 #include "stringutil.h"
+#include <sstream>
 
 using namespace std;
 using namespace FastPForLib;

@@ -40,12 +40,9 @@ public:
   uint32_t findBestB(const uint32_t *in, uint32_t len);
 
   virtual std::string name() const {
-    std::ostringstream convert;
-    convert
-        << "OPTPFor<" << BlockSizeInUnitsOfPackSize << ","
-        << NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::ecoder.name()
-        << ">";
-    return convert.str();
+    return "OPTPFor<" + std::to_string(BlockSizeInUnitsOfPackSize) + ","
+           + NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::ecoder.name()
+           + ">";
   }
 };
 
