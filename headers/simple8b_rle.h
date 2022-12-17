@@ -165,7 +165,7 @@ public:
     return outPos - outOffset;
   }
 
-  static uint32_t Decompress(const uint64_t *input, uint32_t inOffset,
+  static uint32_t Decompress(const uint64_t *input, uint32_t,
                              uint32_t *output, uint32_t outOffset,
                              uint32_t outCount) {
     uint32_t inPos = 0;
@@ -271,7 +271,7 @@ public:
     nvalue = count * 2;
   }
 
-  const uint32_t *decodeArray(const uint32_t *in, const size_t length,
+  const uint32_t *decodeArray(const uint32_t *in, const size_t,
                               uint32_t *out, size_t &nvalue) {
 
     uint32_t markednvalue;

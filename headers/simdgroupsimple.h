@@ -301,7 +301,7 @@ public:
    */
   inline static void comprCompleteBlock(const uint8_t &n, const __m128i *&in,
                                         __m128i *&out) {
-    __m128i res;
+    __m128i res = _mm_setzero_si128();
 
     // In the following, b means the bit width.
 
@@ -826,7 +826,7 @@ public:
       encodeArrayInternal_woRingBuf(in, len, out, nvalue);
   }
 
-  const uint32_t *decodeArray(const uint32_t *in, const size_t len,
+  const uint32_t *decodeArray(const uint32_t *in, const size_t,
                               uint32_t *out, size_t &nvalue) {
     if (needPaddingTo128Bits(out))
       throw std::runtime_error("the output buffer must be aligned to 16 bytes");

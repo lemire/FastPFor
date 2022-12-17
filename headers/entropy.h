@@ -62,7 +62,7 @@ public:
  * An entropic measure,
  * Index compression using 64-bit words by Vo Ngoc Anh and Alistair Moffat
  */
-__attribute__((pure)) double databits(const uint32_t *in, const size_t length) {
+inline __attribute__((pure)) double databits(const uint32_t *in, const size_t length) {
   double sum = 0.0;
   for (size_t k = 0; k < length; ++k) {
     sum += static_cast<double>(gccbits(in[k])) / static_cast<double>(length);
@@ -70,7 +70,7 @@ __attribute__((pure)) double databits(const uint32_t *in, const size_t length) {
   return sum;
 }
 
-double entropy(const uint32_t *in, const size_t length) {
+inline double entropy(const uint32_t *in, const size_t length) {
   if (length == 0)
     return 0;
   std::map<uint32_t, double> counter;
