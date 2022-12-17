@@ -48,12 +48,13 @@ typedef std::map<std::string, std::shared_ptr<IntegerCODEC>> CodecMap;
  */
 class CODECFactory {
 public:
-  static CodecMap scodecmap;
+  static CodecMap& scodecmap();
 
   // hacked for convenience
   static std::vector<std::shared_ptr<IntegerCODEC>> allSchemes() {
     std::vector<std::shared_ptr<IntegerCODEC>> ans;
-    for (auto i = scodecmap.begin(); i != scodecmap.end(); ++i) {
+    CodecMap& codecs = scodecmap();
+    for (auto i = codecs.begin(); i != codecs.end(); ++i) {
       ans.push_back(i->second);
     }
     return ans;
@@ -61,25 +62,27 @@ public:
 
   static std::vector<std::string> allNames() {
     std::vector<std::string> ans;
-    for (auto i = scodecmap.begin(); i != scodecmap.end(); ++i) {
+    CodecMap& codecs = scodecmap();
+    for (auto i = codecs.begin(); i != codecs.end(); ++i) {
       ans.push_back(i->first);
     }
     return ans;
   }
 
   static std::shared_ptr<IntegerCODEC> &getFromName(std::string name) {
-    if (scodecmap.find(name) == scodecmap.end()) {
+    CodecMap& codecs = scodecmap();
+    if (codecs.find(name) == codecs.end()) {
       std::cerr << "name " << name << " does not refer to a CODEC."
                 << std::endl;
       std::cerr << "possible choices:" << std::endl;
-      for (auto i = scodecmap.begin(); i != scodecmap.end(); ++i) {
+      for (auto i = codecs.begin(); i != codecs.end(); ++i) {
         std::cerr << static_cast<std::string>(i->first)
                   << std::endl; // useless cast, but just to be clear
       }
       std::cerr << "for now, I'm going to just return 'copy'" << std::endl;
-      return scodecmap["copy"];
+      return codecs["copy"];
     }
-    return scodecmap[name];
+    return codecs[name];
   }
 };
 
@@ -149,7 +152,11 @@ static inline CodecMap initializefactory() {
   return map;
 }
 
-CodecMap CODECFactory::scodecmap = initializefactory();
+inline CodecMap& CODECFactory::scodecmap()
+{
+  static CodecMap scodecmap = initializefactory();
+  return scodecmap;
+}
 
 } // namespace FastPFor
 
