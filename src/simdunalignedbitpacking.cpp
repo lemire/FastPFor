@@ -8,8 +8,6 @@
 
 namespace FastPForLib {
 
-using namespace std;
-
 namespace simdunaligned {
 
 static void SIMD_nullunpacker32(const __m128i *__restrict__,
@@ -14008,7 +14006,7 @@ void usimdunpack(const __m128i *__restrict__ in, uint32_t *__restrict__ out,
   default:
     break;
   }
-  throw logic_error("number of bits is unsupported");
+  throw std::logic_error("number of bits is unsupported");
 }
 
 /*assumes that integers fit in the prescribed number of bits*/
@@ -14150,7 +14148,7 @@ void usimdpackwithoutmask(const uint32_t *__restrict__ in,
   default:
     break;
   }
-  throw logic_error("number of bits is unsupported");
+  throw std::logic_error("number of bits is unsupported");
 }
 
 /*assumes that integers fit in the prescribed number of bits*/
@@ -14292,7 +14290,7 @@ void usimdpack(const uint32_t *__restrict__ in, __m128i *__restrict__ out,
   default:
     break;
   }
-  throw logic_error("number of bits is unsupported");
+  throw std::logic_error("number of bits is unsupported");
 }
 
 } // namespace FastPForLib
