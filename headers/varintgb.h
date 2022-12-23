@@ -14,8 +14,6 @@
 
 namespace FastPForLib {
 
-using namespace std;
-
 /**
  * Group VarInt.
  *
@@ -204,7 +202,7 @@ public:
     return reinterpret_cast<const uint32_t *>(inbyte);
   }
 
-  string name() const {
+  std::string name() const {
     if (delta)
       return "varintgbdelta";
     else

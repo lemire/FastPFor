@@ -13,8 +13,6 @@
 
 namespace FastPForLib {
 
-using namespace std;
-
 std::vector<std::string> split(const std::string &str, const std::string &del) {
   std::vector<std::string> tokens;
   size_t lastPos = str.find_first_not_of(del, 0);

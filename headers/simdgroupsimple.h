@@ -585,7 +585,7 @@ public:
         // directly instead of calculating it from a looked up bit width.
         const uint32_t mask = tableMask[i];
         pos = 0;
-        const size_t maxPos = min(static_cast<size_t>(n), l);
+        const size_t maxPos = std::min(static_cast<size_t>(n), l);
         while (pos < maxPos && quadMaxArray[j + pos] <= mask)
           pos++;
         if (pos == maxPos)
@@ -720,7 +720,7 @@ public:
     while (in128 < endIn128) {
       // Step 1: Refill the quad max ring buffer.
       const size_t countRemainingIn128 = static_cast<size_t>(endIn128 - in128);
-      const size_t rbSizeToReach = min(rbMaxSize, countRemainingIn128);
+      const size_t rbSizeToReach = std::min(rbMaxSize, countRemainingIn128);
       for (; rbSize < rbSizeToReach; rbSize++) {
         const uint32_t *const in32 =
             reinterpret_cast<const uint32_t *>(in128 + rbSize);
@@ -736,7 +736,7 @@ public:
         n = tableNum[i];
         const uint32_t mask = tableMask[i];
         pos = 0;
-        const size_t maxPos = min(static_cast<size_t>(n), rbSize);
+        const size_t maxPos = std::min(static_cast<size_t>(n), rbSize);
         while (pos < maxPos && quadMaxRb[(rbPos + pos) % rbMaxSize] <= mask)
           pos++;
         if (pos == maxPos)

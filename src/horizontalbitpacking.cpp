@@ -20,8 +20,6 @@
 
 namespace FastPForLib {
 
-using namespace std;
-
 static void SIMD_nullunpacker32(const uint8_t *, uint32_t *out) {
   memset(out, 0, 32 * 4 * 4);
 }
@@ -1062,7 +1060,7 @@ void simdhunpack(const uint8_t *in, uint32_t *out, uint32_t bit) {
   default:
     break;
   }
-  throw logic_error("number of bits is unsupported");
+  throw std::logic_error("number of bits is unsupported");
 }
 
 } // namespace FastPForLib
