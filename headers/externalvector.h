@@ -416,6 +416,6 @@ public:
   std::vector<size_t> mIndexes;
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* EXTERNALVECTOR_H_ */

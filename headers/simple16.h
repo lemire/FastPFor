@@ -1134,6 +1134,6 @@ void Simple16<MarkLength>::unpack28_1(uint32_t **out, const uint32_t **in) {
   *out = pout + 1;
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* SIMPLE16_H_ */

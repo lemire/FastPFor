@@ -537,6 +537,6 @@ void Simple9<MarkLength, hacked>::unpack9_3(uint32_t **out,
   *out = pout + 3;
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* SIMPLE9_H_ */

@@ -18,6 +18,6 @@ void usimdpackwithoutmask(const uint32_t *__restrict__ in,
 void usimdunpack(const __m128i *__restrict__ in, uint32_t *__restrict__ out,
                  uint32_t bit);
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* SIMDBITPACKING_H_ */

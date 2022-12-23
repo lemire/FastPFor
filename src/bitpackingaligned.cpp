@@ -17591,4 +17591,4 @@ uint32_t *fastpackwithoutmask_32(const uint32_t *__restrict__ in,
   throw std::logic_error("number of bits is unsupported");
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib

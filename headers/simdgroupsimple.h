@@ -892,6 +892,6 @@ const uint32_t SIMDGroupSimple<useRingBuf, pessimisticGap>::tableMask[] = {
   (static_cast<uint64_t>(1) << 32) - 1,
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* SIMDGROUPSIMPLE_H_ */

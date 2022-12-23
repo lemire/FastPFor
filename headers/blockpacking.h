@@ -328,6 +328,6 @@ public:
   }
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* BLOCKPACKING_H_ */

@@ -314,6 +314,6 @@ public:
   }
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* PFOR_H_ */

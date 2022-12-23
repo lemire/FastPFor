@@ -136,6 +136,6 @@ OPTPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::findBestB(
   return b;
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* OPTPFOR_H_ */

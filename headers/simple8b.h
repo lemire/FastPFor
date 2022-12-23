@@ -646,6 +646,6 @@ const uint32_t *Simple8b<MarkLength>::decodeArray(const uint32_t *in,
   return in;
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* SIMPLE8B_H_ */

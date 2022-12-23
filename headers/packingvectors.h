@@ -107,6 +107,6 @@ public:
   }
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* PACKINGVECTORS_H_ */

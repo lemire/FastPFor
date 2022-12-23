@@ -139,6 +139,6 @@ public:
   std::string name() const { return "SIMDBinaryPacking"; }
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* SIMDBINARYPACKING_H_ */

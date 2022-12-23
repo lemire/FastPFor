@@ -977,6 +977,6 @@ const uint32_t *unpackblock(const uint32_t *source, IntType *out,
   return source;
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* BITPACKINGHELPERS_H_ */

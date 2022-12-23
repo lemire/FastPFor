@@ -89,6 +89,6 @@ unsigned int ZRandom::getValue() {
   return y;
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* MERSENNE_H_ */

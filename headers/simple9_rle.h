@@ -298,6 +298,6 @@ public:
 
 #undef _SIMPLE9_USE_RLE
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* SIMPLE9_RLE_H_ */

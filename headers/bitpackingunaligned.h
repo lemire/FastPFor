@@ -4,8 +4,8 @@
  *
  * (c) Daniel Lemire, http://lemire.me/en/
  */
-#ifndef BITPACKINGUNALIGNED
-#define BITPACKINGUNALIGNED
+#ifndef BITPACKINGUNALIGNED_H_
+#define BITPACKINGUNALIGNED_H_
 #include "common.h"
 
 namespace FastPForLib {
@@ -37,6 +37,6 @@ byte *fastunalignedbytepackwithoutmask_16(const byte *__restrict__ in,
                                           byte *__restrict__ out,
                                           const uint32_t bit);
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
-#endif // BITPACKINGUNALIGNED
+#endif /* BITPACKINGUNALIGNED_H_ */

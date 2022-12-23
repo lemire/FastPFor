@@ -91,6 +91,6 @@ inline double entropy(const uint32_t *in, const size_t length) {
   return total;
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* ENTROPY_H_ */

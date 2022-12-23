@@ -5,8 +5,8 @@
  * (c) Daniel Lemire, http://lemire.me/en/
  */
 
-#ifndef CVSTOMAROPUCVS_H_
-#define CVSTOMAROPUCVS_H_
+#ifndef CVS_H_
+#define CVS_H_
 
 #include <fstream>
 #include <map>
@@ -288,6 +288,6 @@ public:
   size_t NumberOfLines;
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
-#endif /* CVSTOMAROPU_H_ */
+#endif /* CVS_H_ */

@@ -965,6 +965,6 @@ const uint8_t *unpack_vl(const uint8_t *__restrict__ in,
   }
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* ROLLEDBITPACKING_H_ */

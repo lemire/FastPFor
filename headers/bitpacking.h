@@ -4,8 +4,8 @@
  *
  * (c) Daniel Lemire, http://lemire.me/en/
  */
-#ifndef BITPACKING
-#define BITPACKING
+#ifndef BITPACKING_H_
+#define BITPACKING_H_
 #include "common.h"
 
 void __fastunpack0(const uint32_t *__restrict__ in, uint32_t *__restrict__ out);
@@ -484,4 +484,4 @@ void __fastpackwithoutmask63(const uint64_t *__restrict__ in,
 void __fastpackwithoutmask64(const uint64_t *__restrict__ in,
                              uint32_t *__restrict__ out);
 
-#endif // BITPACKING
+#endif /* BITPACKING_H_ */

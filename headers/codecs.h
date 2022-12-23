@@ -175,6 +175,6 @@ public:
   std::string name() const { return "PackedCODEC"; }
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* CODECS_H_ */
