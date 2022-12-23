@@ -146,6 +146,6 @@ SIMDOPTPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::findBestB(
   return b;
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* SIMDOPTPFOR_H_ */

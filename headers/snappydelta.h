@@ -16,7 +16,7 @@
 #include "common.h"
 #include "codecs.h"
 
-namespace FastPFor {
+namespace FastPForLib {
 
 class JustSnappy : public IntegerCODEC {
 public:
@@ -44,7 +44,7 @@ public:
   string name() const { return "Snappy"; }
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* SNAPPYDELTA_H_ */
 

@@ -90,6 +90,6 @@ public:
   unsigned long long stop() { return stopRDTSCP() - ticktime; }
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* CPUBENCHMARK_H_ */

@@ -25,6 +25,6 @@ void SIMD_fastpackwithoutmask_32(const uint32_t *__restrict__ in,
 void SIMD_fastpack_32(const uint32_t *__restrict__ in,
                       __m128i *__restrict__ out, const uint32_t bit);
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* SIMDBITPACKING_H_ */

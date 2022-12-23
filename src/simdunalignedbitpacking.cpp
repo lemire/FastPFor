@@ -14295,4 +14295,4 @@ void usimdpack(const uint32_t *__restrict__ in, __m128i *__restrict__ out,
   throw logic_error("number of bits is unsupported");
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib

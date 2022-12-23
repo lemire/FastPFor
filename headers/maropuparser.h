@@ -74,6 +74,6 @@ public:
   }
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* MAROPUPARSER_H_ */

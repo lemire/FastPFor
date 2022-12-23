@@ -288,6 +288,6 @@ public:
   size_t NumberOfLines;
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* CVSTOMAROPU_H_ */

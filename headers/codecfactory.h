@@ -30,6 +30,6 @@ private:
   CodecMap scodecmap;
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* CODECFACTORY_H_ */

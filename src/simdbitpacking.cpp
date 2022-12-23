@@ -14309,4 +14309,4 @@ void SIMD_fastpack_32(const uint32_t *__restrict__ in,
   simdpack(in, out, bit);
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib

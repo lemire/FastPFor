@@ -1065,4 +1065,4 @@ void simdhunpack(const uint8_t *in, uint32_t *out, uint32_t bit) {
   throw logic_error("number of bits is unsupported");
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib

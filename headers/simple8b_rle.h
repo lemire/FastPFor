@@ -308,6 +308,6 @@ public:
 
 #undef _SIMPLE8B_USE_RLE
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* SIMPLE8B_RLE_H_ */

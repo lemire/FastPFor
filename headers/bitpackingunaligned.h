@@ -37,6 +37,6 @@ byte *fastunalignedbytepackwithoutmask_16(const byte *__restrict__ in,
                                           byte *__restrict__ out,
                                           const uint32_t bit);
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif // BITPACKINGUNALIGNED

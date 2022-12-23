@@ -286,6 +286,6 @@ SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::decodeArray(
   return in;
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* SIMDNEWPFOR_H_ */

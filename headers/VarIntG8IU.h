@@ -209,7 +209,7 @@ private:
   }
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif // VARINTG8IU_H__
 #endif // __SSSE3__

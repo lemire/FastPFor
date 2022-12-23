@@ -27,6 +27,6 @@ std::vector<std::string> split(const std::string &str, const std::string &del) {
   return tokens;
 }
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* STRINGUTIL_H_ */

@@ -567,6 +567,6 @@ public:
   }
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* DELTAUTIL_H_ */

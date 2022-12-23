@@ -35,6 +35,6 @@ uint32_t *fastpackwithoutmask_32(const uint32_t *__restrict__ in,
                                  uint32_t *__restrict__ out,
                                  const uint32_t bit);
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif // BITPACKINGALIGNED

@@ -119,6 +119,6 @@ public:
 
 #endif
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif

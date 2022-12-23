@@ -557,6 +557,6 @@ public:
   std::string name() const override { return "SIMDSimplePFor"; }
 };
 
-} // namespace FastPFor
+} // namespace FastPForLib
 
 #endif /* SIMDFASTPFOR_H_ */
