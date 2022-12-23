@@ -5,8 +5,9 @@
  * (c) Daniel Lemire, http://lemire.me/en/
  */
 
-#ifndef EPFOR_H_
-#define EPFOR_H_
+#ifndef FASTPFOR_H_
+#define FASTPFOR_H_
+
 #include "blockpacking.h"
 #include "codecs.h"
 #include "common.h"
@@ -514,4 +515,4 @@ public:
 
 }  // namespace FastPForLib
 
-#endif /* EPFOR_H_ */
+#endif /* FASTPFOR_H_ */

@@ -200,4 +200,4 @@ generateZipfianArray32(uint32_t N, double power,
 
 } // namespace FastPForLib
 
-#endif
+#endif /* SYNTHETICDATA_H_ */

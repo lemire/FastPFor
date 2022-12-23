@@ -4,8 +4,8 @@
  *
  * (c) Daniel Lemire, http://lemire.me/en/
  */
-#ifndef BITPACKINGALIGNED
-#define BITPACKINGALIGNED
+#ifndef BITPACKINGALIGNED_H_
+#define BITPACKINGALIGNED_H_
 
 #include "common.h"
 
@@ -37,4 +37,4 @@ uint32_t *fastpackwithoutmask_32(const uint32_t *__restrict__ in,
 
 } // namespace FastPForLib
 
-#endif // BITPACKINGALIGNED
+#endif /* BITPACKINGALIGNED_H_ */

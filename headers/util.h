@@ -6,8 +6,8 @@
  * and Owen Kaser
  */
 
-#ifndef UTIL
-#define UTIL
+#ifndef UTIL_H_
+#define UTIL_H_
 #include "common.h"
 
 #ifdef __linux__
@@ -439,4 +439,4 @@ public:
 
 } // namespace FastPForLib
 
-#endif
+#endif /* UTIL_H_ */

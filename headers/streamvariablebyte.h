@@ -5,8 +5,8 @@
  * (c) Daniel Lemire, http://lemire.me/en/
  */
 
-#ifndef _STREAMVARIABLEBYTE_
-#define _STREAMVARIABLEBYTE_
+#ifndef STREAMVARIABLEBYTE_H_
+#define STREAMVARIABLEBYTE_H_
 
 #include "common.h"
 #include "codecs.h"
@@ -73,5 +73,6 @@ public:
 
   std::string name() const { return "streamvbyte"; }
 };
-}
-#endif
+} // namespace FastPForLib
+
+#endif /* STREAMVARIABLEBYTE_H_ */

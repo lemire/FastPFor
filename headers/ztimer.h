@@ -3,8 +3,8 @@
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  */
 
-#ifndef ZTIMER
-#define ZTIMER
+#ifndef ZTIMER_H_
+#define ZTIMER_H_
 
 #include "common.h"
 
@@ -121,4 +121,4 @@ public:
 
 } // namespace FastPForLib
 
-#endif
+#endif /* ZTIMER_H_ */

@@ -321,4 +321,4 @@ NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::decodeArray(
 
 } // namespace FastPForLib
 
-#endif /* PFOR_H_ */
+#endif /* NEWPFOR_H_ */

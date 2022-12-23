@@ -272,4 +272,4 @@ template <bool delta>
 uint32_t VarIntGB<delta>::mask[4] = {0xFF, 0xFFFF, 0xFFFFFF, 0xFFFFFFFF};
 }
 
-#endif // VARINTGB_H_
+#endif /* VARINTGB_H_ */
