@@ -81,6 +81,7 @@
     <ClCompile Include="..\src\bitpacking.cpp" />
     <ClCompile Include="..\src\bitpackingaligned.cpp" />
     <ClCompile Include="..\src\bitpackingunaligned.cpp" />
+    <ClCompile Include="..\src\codecfactory.cpp" />
     <ClCompile Include="..\src\horizontalbitpacking.cpp" />
     <ClCompile Include="..\src\simdbitpacking.cpp" />
     <ClCompile Include="..\src\simdunalignedbitpacking.cpp" />
