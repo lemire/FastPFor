@@ -9,6 +9,8 @@
 #define DELTAUTIL_H_
 #include <vector>
 #include <exception>
+#include <iostream>
+#include <iomanip>
 #include "common.h"
 #include "codecs.h"
 #include "memutil.h"

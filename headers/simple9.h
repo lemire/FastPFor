@@ -167,7 +167,7 @@ void Simple9<MarkLength, hacked>::encodeArray(const uint32_t *in,
         assert(which(out) == 14);
     } else {
       if ((*in >> 28) > 0) {
-        std::cerr << "Input's out of range: " << *in << std::endl;
+        fprintf(stderr, "Input's out of range: %u\n", *in);
         throw std::runtime_error(
             "You tried to apply Simple9 to an incompatible set of integers.");
       }
@@ -260,7 +260,7 @@ void Simple9<MarkLength, hacked>::encodeArray(const uint32_t *in,
         assert(which(out) == 14);
     } else {
       if ((*in >> 28) > 0) {
-        std::cerr << "Input's out of range: " << *in << std::endl;
+        fprintf(stderr, "Input's out of range: %u\n", *in);
         throw std::runtime_error(
             "You tried to apply Simple9 to an incompatible set of integers.");
       }
@@ -281,7 +281,7 @@ const uint32_t *
 Simple9<MarkLength, hacked>::decodeArray(const uint32_t *in, const size_t len,
                                          uint32_t *out, size_t &nvalue) {
   size_t lengths[] = {28, 14, 9, 7, 5, 4, 3, 2, 1};
-  vector<uint32_t> stats(16, 0);
+  std::vector<uint32_t> stats(16, 0);
   size_t expectedlength = 0;
 #else
 template <bool MarkLength, bool hacked>
@@ -294,7 +294,7 @@ Simple9<MarkLength, hacked>::decodeArray(const uint32_t *in, const size_t /* len
       throw NotEnoughStorage(*in);
   const uint32_t actualvalue = MarkLength ? *(in++) : nvalue;
   if (nvalue < actualvalue)
-    std::cerr << " possible overrun" << std::endl;
+    fprintf(stderr, "possible overrun\n");
   nvalue = actualvalue;
   const uint32_t *const end = out + nvalue;
   while (end > out) {
@@ -310,14 +310,11 @@ Simple9<MarkLength, hacked>::decodeArray(const uint32_t *in, const size_t /* len
   uint32_t sum = std::accumulate(stats.begin(), stats.end(), 0);
 
   for (uint32_t k = 0; k < stats.size(); ++k) {
-    std::cout << "k=" << k << std::endl;
-    std::cout << "simple9 stats[" << k << "]=" << (stats[k] * 1.0 / sum)
-              << std::endl;
+    printf("simple9 stats[k=%u]=%f\n", k, stats[k] * 1.0 / sum);
   }
-  std::cout << "alt computed length" << sum << std::endl;
-  std::cout << "computed length = " << expectedlength << std::endl;
-  std::cout << "we compressed " << nvalue << " integers down to " << len
-            << " 32-bit words" << std::endl;
+  printf("alt computed length %u\n", sum);
+  printf("computed length = %zu\n", expectedlength);
+  printf("we compressed %zu integers down to %zu 32-bit words\n", nvalue, len);
 #endif
   return in;
 }

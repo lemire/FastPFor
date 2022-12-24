@@ -30,7 +30,7 @@ struct qpc_clock {
   typedef std::chrono::time_point<qpc_clock, duration> time_point;
   static time_point now() {
     static bool isInited = false;
-    static LARGE_INTEGER frequency = {0, 0};
+    static LARGE_INTEGER frequency = {{0, 0}};
     if (!isInited) {
       if (QueryPerformanceFrequency(&frequency) == 0) {
         throw std::logic_error("QueryPerformanceCounter not supported: " +

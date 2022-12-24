@@ -5,6 +5,7 @@
  * (c) Daniel Lemire, http://lemire.me/en/
  */
 #include <memory>
+#include <iostream>
 #include <iomanip>
 #include <time.h>
 #include "codecfactory.h"
