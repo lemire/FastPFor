@@ -20,6 +20,7 @@
 #include "util.h"
 #include "codecs.h"
 #include "newpfor.h"
+#include "simple16.h"
 #include "usimdbitpacking.h"
 
 namespace FastPForLib {
