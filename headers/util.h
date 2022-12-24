@@ -19,17 +19,17 @@ namespace FastPForLib {
 //#define STATS
 // taken from stackoverflow
 #ifndef NDEBUG
-#define ASSERT(condition, message)                                             \
-  do {                                                                         \
-    if (!(condition)) {                                                        \
-      std::cerr << "Assertion `" #condition "` failed in " << __FILE__         \
-                << " line " << __LINE__ << ": " << message << std::endl;       \
-      std::exit(EXIT_FAILURE);                                                 \
-    }                                                                          \
+#define ASSERT(condition, message) /* message is an std::string */  \
+  do {                                                              \
+    if (!(condition)) {                                             \
+      fprintf(stderr, "Assertion `%s` failed in %s line %d : %s\n", \
+        #condition, __FILE__, __LINE__, (message).c_str());         \
+      std::exit(EXIT_FAILURE);                                      \
+    }                                                               \
   } while (false)
 #else
-#define ASSERT(condition, message)                                             \
-  do {                                                                         \
+#define ASSERT(condition, message)                                  \
+  do {                                                              \
   } while (false)
 #endif
 
@@ -178,12 +178,6 @@ inline void checkifdivisibleby(size_t a, uint32_t x) {
                     + std::to_string(x);
     throw std::logic_error(msg);
   }
-}
-
-template <class iter> void printme(iter i, iter b) {
-  for (iter j = i; j != b; ++j)
-    std::cout << *j << " ";
-  std::cout << std::endl;
 }
 
 __attribute__((const)) inline uint32_t asmbits(const uint32_t v) {
@@ -416,7 +410,7 @@ public:
     if (sum == 0)
       return;
     for (size_t k = 0; k < histo.size(); ++k) {
-      std::cout << prefix << k << " " << histo[k] / sum << std::endl;
+      printf("%s%zu %f\n", prefix.c_str(), k, histo[k] / sum);
     }
   }
   template <class container> void eatIntegers(const container &rawdata) {

@@ -47,13 +47,12 @@ std::vector<std::string> CODECFactory::allNames() {
 
 std::shared_ptr<IntegerCODEC> &CODECFactory::getFromName(std::string name) {
   if (scodecmap.find(name) == scodecmap.end()) {
-    std::cerr << "name " << name << " does not refer to a CODEC." << std::endl;
-    std::cerr << "possible choices:" << std::endl;
+    fprintf(stderr, "name %s does not refer to a CODEC.\n"
+                    "possible choices:\n", name.c_str());
     for (auto i = scodecmap.begin(); i != scodecmap.end(); ++i) {
-      std::cerr << static_cast<std::string>(i->first)
-                << std::endl; // useless cast, but just to be clear
+      fprintf(stderr, "%s\n", i->first.c_str());
     }
-    std::cerr << "for now, I'm going to just return 'copy'" << std::endl;
+    fprintf(stderr, "for now, I'm going to just return 'copy'\n");
     return scodecmap["copy"];
   }
   return scodecmap[name];

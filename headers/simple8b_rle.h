@@ -290,7 +290,7 @@ public:
     const uint64_t *finalin64 = reinterpret_cast<const uint64_t *>(endin);
 #endif
     if (nvalue < actualvalue) {
-      std::cerr << " possible overrun" << std::endl;
+      fprintf(stderr, "possible overrun\n");
     }
     nvalue = actualvalue;
 

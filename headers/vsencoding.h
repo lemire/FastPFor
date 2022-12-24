@@ -158,7 +158,7 @@ inline uint32_t *VSEncoding::compute_OptPartition(uint32_t *seq, uint32_t len,
   cost = new uint64_t[len + 1];
 
   if (SSSP == NULL || cost == NULL)
-    std::cerr << "Can't allocate memory" << std::endl;
+    fprintf(stderr, "Can't allocate memory\n");
 
   for (i = 0; i < len + 1U; ++i) {
     SSSP[i] = -1;
@@ -455,7 +455,7 @@ inline void VSEncodingBlocks::encodeVS(uint32_t len, const uint32_t *in,
   logs = new uint32_t[len];
 
   if (logs == NULL)
-    std::cerr << "Can't allocate memory" << std::endl;
+    fprintf(stderr, "Can't allocate memory\n");
 
   /* Compute logs of all numbers */
   for (i = 0; i < len; i++)
@@ -469,7 +469,7 @@ inline void VSEncodingBlocks::encodeVS(uint32_t len, const uint32_t *in,
   wt = new BitsWriter(out);
 
   if (wt == NULL)
-    std::cerr << "Can't initialize a class" << std::endl;
+    fprintf(stderr, "Can't initialize a class\n");
 
   /* countBlocksLogs[i] says how many blocks uses i bits */
   for (i = 0; i < VSEBLOCKS_LOGS_LEN; i++) {
@@ -508,7 +508,7 @@ inline void VSEncodingBlocks::encodeVS(uint32_t len, const uint32_t *in,
       blocks[i] = new uint32_t[countBlocksLogs[i]];
 
       if (blocks[i] == NULL)
-        std::cerr << "Can't allocate memory" << std::endl;
+        fprintf(stderr, "Can't allocate memory\n");
     } else {
       blocks[i] = NULL;
     }
@@ -707,8 +707,8 @@ inline void VSEncodingBlocks::encodeArray(const uint32_t *in, const size_t len,
   lout += csize;
   nvalue += csize;
   ++nvalue;
-  ASSERT(nvalue + initout == lout, (lout - initout) << " " << nvalue << " "
-                                                    << csize);
+  ASSERT(nvalue + initout == lout,
+    std::to_string(lout - initout) + " " + std::to_string(nvalue) + " " + std::to_string(csize));
 }
 
 inline const uint32_t *VSEncodingBlocks::decodeArray(const uint32_t *in,
@@ -742,7 +742,7 @@ inline const uint32_t *VSEncodingBlocks::decodeArray(const uint32_t *in,
   const uint32_t *ans = decodeVS(res, in, out, &__tmp[0]);
   assert(initin + len >= in);
   if (initout + orignvalue < out)
-    std::cerr << "possible overrun" << std::endl;
+    fprintf(stderr, "possible overrun\n");
   return ans;
 }
 

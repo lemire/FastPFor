@@ -421,7 +421,7 @@ void Simple8b<MarkLength>::encodeArray(const uint32_t *in, const size_t length,
     }
     if (becareful)
       ASSERT(initin + length - ValuesRemaining + NumberOfValuesCoded == in,
-             which(out64));
+          std::to_string(which(out64)));
     ++out64;
 
     ValuesRemaining -= NumberOfValuesCoded;
@@ -512,7 +512,7 @@ const uint32_t *Simple8b<MarkLength>::decodeArray(const uint32_t *in,
 #endif
 
   if (nvalue < actualvalue)
-    std::cerr << " possible overrun" << std::endl;
+    fprintf(stderr, "possible overrun\n");
   nvalue = actualvalue;
   const uint32_t *const end = out + nvalue;
   const uint32_t *const initout(out);
@@ -634,14 +634,14 @@ const uint32_t *Simple8b<MarkLength>::decodeArray(const uint32_t *in,
 #ifdef STATS
   uint32_t sum = std::accumulate(stats.begin(), stats.end(), 0);
   for (uint32_t k = 0; k < stats.size(); ++k) {
-    std::cout << "simple8b stats[" << k << "]=" << stats[k] * 1.0 / sum << std::endl;
+    printf("simple8b stats[%u]=%f\n", k, stats[k] * 1.0 / sum);
   }
 #endif
   assert(in64 <= finalin64);
   in = reinterpret_cast<const uint32_t *>(in64);
   assert(in <= endin);
   // check that we don't overrun the buffer too much?
-  ASSERT(out < end + 240, out - end);
+  ASSERT(out < end + 240, std::to_string(out - end));
   nvalue = MarkLength ? actualvalue : out - initout;
   return in;
 }

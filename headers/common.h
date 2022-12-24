@@ -31,8 +31,6 @@
 #include <chrono>
 #include <cmath>
 #include <cstdint>
-#include <iomanip>
-#include <iostream>
 #include <map>
 #include <memory>
 #include <numeric>
@@ -50,7 +48,6 @@
 
 #define __attribute__(n)
 #define __restrict__ __restrict
-
 #endif
 
 #endif /* COMMON_H_ */

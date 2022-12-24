@@ -242,14 +242,15 @@ void NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::encodeArray(
   }
 #ifdef STATS
   for (uint32_t k = 0; k < 33; ++k)
-    std::cout << "newpfor b=" << k << " " << stats[k] << std::endl;
+    printf("newpfor b=%u %u\n", k, stats[k]);
 #endif
   if (nvalue > initnvalue) {
-    std::cerr << " we have a possible buffer overrun" << std::endl;
+    fprintf(stderr, "we have a possible buffer overrun\n");
   }
-  ASSERT(len == static_cast<size_t>(in - initin), len << " " << (in - initin));
+  ASSERT(len == static_cast<size_t>(in - initin),
+      std::to_string(len) + " " + std::to_string(in - initin));
   ASSERT(nvalue == static_cast<size_t>(out - initout),
-         nvalue << " " << (out - initout));
+      std::to_string(nvalue) + " " + std::to_string(out - initout));
 }
 
 template <uint32_t BlockSizeInUnitsOfPackSize, class ExceptionCoder>
@@ -310,9 +311,10 @@ NewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::decodeArray(
   }
 
   if (static_cast<size_t>(out - initout) > nvalue) {
-    std::cerr << "possible buffer overrun" << std::endl;
+    fprintf(stderr, "possible buffer overrun\n");
   }
-  ASSERT(in <= len + initin, in - initin << " " << len);
+  ASSERT(in <= len + initin,
+      std::to_string(in - initin) + " " + std::to_string(len));
 
   nvalue = out - initout;
   assert(nvalue == numBlocks * BlockSize);
