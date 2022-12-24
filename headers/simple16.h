@@ -728,8 +728,8 @@ const uint32_t *Simple16<MarkLength>::decodeArray(const uint32_t *in,
     std::cerr << " possible overrun" << std::endl;
   nvalue = actualvalue;
 #ifdef STATS
-  cout << "simple16 decode " << len << endl;
-  vector<uint32_t> stats(16, 0);
+  std::cout << "simple16 decode " << len << std::endl;
+  std::vector<uint32_t> stats(16, 0);
 #endif
   const uint32_t *const end = out + nvalue;
   while (end > out) {
@@ -742,7 +742,7 @@ const uint32_t *Simple16<MarkLength>::decodeArray(const uint32_t *in,
 #ifdef STATS
   uint32_t sum = std::accumulate(stats.begin(), stats.end(), 0);
   for (uint32_t k = 0; k < stats.size(); ++k) {
-    cout << "simple16 stats[" << k << "]=" << stats[k] * 1.0 / sum << endl;
+    std::cout << "simple16 stats[" << k << "]=" << stats[k] * 1.0 / sum << std::endl;
   }
 #endif
   ASSERT(in <= endin, in - endin);

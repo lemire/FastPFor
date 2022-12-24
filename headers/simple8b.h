@@ -495,7 +495,7 @@ const uint32_t *Simple8b<MarkLength>::decodeArray(const uint32_t *in,
   const uint32_t *const endin(in + len);
 #endif
 #ifdef STATS
-  vector<uint32_t> stats(16, 0);
+  std::vector<uint32_t> stats(16, 0);
 #endif
   uint32_t markednvalue;
   if (MarkLength) {
@@ -634,7 +634,7 @@ const uint32_t *Simple8b<MarkLength>::decodeArray(const uint32_t *in,
 #ifdef STATS
   uint32_t sum = std::accumulate(stats.begin(), stats.end(), 0);
   for (uint32_t k = 0; k < stats.size(); ++k) {
-    cout << "simple8b stats[" << k << "]=" << stats[k] * 1.0 / sum << std::endl;
+    std::cout << "simple8b stats[" << k << "]=" << stats[k] * 1.0 / sum << std::endl;
   }
 #endif
   assert(in64 <= finalin64);

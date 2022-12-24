@@ -220,7 +220,7 @@ void SIMDNewPFor<BlockSizeInUnitsOfPackSize, ExceptionCoder>::encodeArray(
   }
 #ifdef STATS
   for (uint32_t k = 0; k < 33; ++k)
-    cout << "simdnewpfor b=" << k << " " << stats[k] << endl;
+    std::cout << "simdnewpfor b=" << k << " " << stats[k] << std::endl;
 #endif
   if (nvalue > initnvalue) {
     std::cerr << " we have a possible buffer overrun" << std::endl;
