@@ -18,6 +18,7 @@
 #include "common.h"
 #include "util.h"
 #include "codecs.h"
+#include "simple16.h"
 
 namespace FastPForLib {
 
