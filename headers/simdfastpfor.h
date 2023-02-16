@@ -256,7 +256,10 @@ public:
     for (uint32_t k = 0; k < 32 + 1; ++k)
       datatobepacked[k].clear();
     uint8_t *bc = &bytescontainer[0];
+    uint32_t* px = out;
     out = padTo128bits(out);
+    while (px != out)
+        *px++ = 0; // clear padding bytes
     assert(!needPaddingTo128Bits(in));
     for (const uint32_t *const final = in + length; (in + BlockSize <= final);
          in += BlockSize) {
