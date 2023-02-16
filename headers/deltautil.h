@@ -195,12 +195,12 @@ public:
 
     __m128i last = _mm_setzero_si128();
     while (pCurr < pEnd) {
-      __m128i a0 = _mm_load_si128(pCurr);
+      __m128i a0 = _mm_loadu_si128(pCurr);
       __m128i a1 = _mm_sub_epi32(a0, _mm_srli_si128(last, 12));
       a1 = _mm_sub_epi32(a1, _mm_slli_si128(a0, 4));
       last = a0;
 
-      _mm_store_si128(pCurr++, a1);
+      _mm_storeu_si128(pCurr++, a1);
     }
 
     if (Qty4 * 4 < TotalQty) {
@@ -225,10 +225,10 @@ public:
     }
     __m128i *pCurr = reinterpret_cast<__m128i *>(pData) + Qty4 - 1;
     const __m128i *pStart = reinterpret_cast<__m128i *>(pData);
-    __m128i a = _mm_load_si128(pCurr);
+    __m128i a = _mm_loadu_si128(pCurr);
     while (pCurr > pStart) {
-      __m128i b = _mm_load_si128(pCurr - 1);
-      _mm_store_si128(pCurr--, _mm_sub_epi32(a, b));
+      __m128i b = _mm_loadu_si128(pCurr - 1);
+      _mm_storeu_si128(pCurr--, _mm_sub_epi32(a, b));
       a = b;
     }
   }
@@ -244,11 +244,11 @@ public:
 
     __m128i *pCurr = reinterpret_cast<__m128i *>(pData);
     const __m128i *pEnd = pCurr + Qty4;
-    __m128i a = _mm_load_si128(pCurr++);
+    __m128i a = _mm_loadu_si128(pCurr++);
     while (pCurr < pEnd) {
-      __m128i b = _mm_load_si128(pCurr);
+      __m128i b = _mm_loadu_si128(pCurr);
       a = _mm_add_epi32(a, b);
-      _mm_store_si128(pCurr++, a);
+      _mm_storeu_si128(pCurr++, a);
     }
 
     for (size_t i = Qty4 * 4; i < TotalQty; ++i) {
@@ -304,12 +304,12 @@ public:
     __m128i *pCurr = reinterpret_cast<__m128i *>(pData);
     const __m128i *pEnd = pCurr + Qty4;
     while (pCurr < pEnd) {
-      __m128i a0 = _mm_load_si128(pCurr);
+      __m128i a0 = _mm_loadu_si128(pCurr);
       __m128i a1 = _mm_add_epi32(_mm_slli_si128(a0, 8), a0);
       __m128i a2 = _mm_add_epi32(_mm_slli_si128(a1, 4), a1);
       a0 = _mm_add_epi32(a2, runningCount);
       runningCount = _mm_shuffle_epi32(a0, 0xFF);
-      _mm_store_si128(pCurr++, a0);
+      _mm_storeu_si128(pCurr++, a0);
     }
 
     for (size_t i = Qty4 * 4; i < TotalQty; ++i) {
@@ -442,7 +442,6 @@ public:
           continue;
         uint32_t *outp = &outs[k][0];
         nvalue = outs[k].size();
-        assert(!needPaddingTo128Bits(outp));
         const size_t orignvalue = nvalue;
         {
           nvalue = orignvalue;
@@ -473,7 +472,6 @@ public:
         size_t recoveredsize = datas[k].size();
         assert(recoveredsize > 0);
         uint32_t *recov = recovereds.data();
-        assert(!needPaddingTo128Bits(recov));
 
         z.reset();
         c.decodeArray(outp, nvalue, recov, recoveredsize);
@@ -485,8 +483,6 @@ public:
             inverseDeltaSIMD(recov, recoveredsize);
           } else {
             fastinverseDelta2(recov, recoveredsize);
-            // fastinverseDelta(recov, recoveredsize);
-            // inverseDelta(recov, recoveredsize);
           }
           timemsinversedelta += static_cast<double>(z.split());
         }

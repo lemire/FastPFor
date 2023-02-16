@@ -256,8 +256,6 @@ public:
     for (uint32_t k = 0; k < 32 + 1; ++k)
       datatobepacked[k].clear();
     uint8_t *bc = &bytescontainer[0];
-    out = padTo128bits(out);
-    assert(!needPaddingTo128Bits(in));
     for (const uint32_t *const final = in + length; (in + BlockSize <= final);
          in += BlockSize) {
       uint8_t bestb, bestcexcept, maxb;
@@ -319,8 +317,6 @@ public:
     for (uint32_t k = 1; k <= 32; ++k) {
       unpackpointers[k] = datatobepacked[k].begin();
     }
-    in = padTo128bits(in);
-    assert(!needPaddingTo128Bits(out));
     for (uint32_t run = 0; run < nvalue / BlockSize; ++run, out += BlockSize) {
       const uint8_t b = *bytep++;
       const uint8_t cexcept = *bytep++;

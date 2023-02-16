@@ -96,8 +96,11 @@ public:
     while (srclength > 0 && nvalue >= 9) {
       compressed_size += encodeBlock(src, srclength, dst, nvalue);
     }
-    // Ouput might not be a multiple of 4 so we make it so
+    // Output might not be a multiple of 4 so we make it so
     nvalue = ((compressed_size + 3) / 4);
+    while (dst < reinterpret_cast<unsigned char*>(out + nvalue)) {
+      *dst++ = 0; // clear padding bytes
+    }
   }
 
   const uint32_t *decodeArray(const uint32_t *in, const size_t length,
@@ -194,6 +197,9 @@ public:
         dest[written] = static_cast<unsigned char>(value >> (j * 8));
         written++;
       }
+    }
+    while (written < 9) {
+      dest[written++] = 0; // clear padding bytes
     }
     dest += 9;
     dstlength -= 9;
