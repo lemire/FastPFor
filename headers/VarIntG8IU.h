@@ -199,7 +199,7 @@ public:
       }
     }
     while (written < 9) {
-         dest[written++] = 0; // clear padding bytes
+      dest[written++] = 0; // clear padding bytes
     }
     dest += 9;
     dstlength -= 9;
