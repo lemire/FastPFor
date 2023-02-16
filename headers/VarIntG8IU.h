@@ -99,7 +99,7 @@ public:
     // Output might not be a multiple of 4 so we make it so
     nvalue = ((compressed_size + 3) / 4);
     while (dst < reinterpret_cast<unsigned char*>(out + nvalue)) {
-         *dst++ = 0; // clear padding bytes
+      *dst++ = 0; // clear padding bytes
     }
   }
 
