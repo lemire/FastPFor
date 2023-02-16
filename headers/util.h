@@ -60,11 +60,6 @@ __attribute__((const)) const T *padTo64bits(const T *inbyte) {
                                      ~7);
 }
 
-template <class T> __attribute__((const)) T *padTo128bits(T *inbyte) {
-  return reinterpret_cast<T *>((reinterpret_cast<uintptr_t>(inbyte) + 15) &
-                               ~15);
-}
-
 template <class T>
 __attribute__((const)) const T *padTo128bits(const T *inbyte) {
   return reinterpret_cast<const T *>(
@@ -90,11 +85,6 @@ __attribute__((const)) bool needPaddingTo32Bits(const T *inbyte) {
 template <class T>
 __attribute__((const)) bool needPaddingTo64Bits(const T *inbyte) {
   return (reinterpret_cast<uintptr_t>(inbyte) & 7) != 0;
-}
-
-template <class T>
-__attribute__((const)) bool needPaddingTo128Bits(const T *inbyte) {
-  return (reinterpret_cast<uintptr_t>(inbyte) & 15) != 0;
 }
 
 template <class T> bool needPaddingTo64bytes(const T *inbyte) {

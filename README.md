@@ -244,9 +244,6 @@ One common issue is that people do not provide large enough buffers.
 Some schemes can have such small compression rates that the compressed data
 generated will be much larger than the input data.
 
-Also, make sure that all provided buffers are 16-byte aligned or else,
-some SSE instructions may fail.
-
 ## Is any of this code subject to patents?
 
 I (D. Lemire) did not patent anything.
