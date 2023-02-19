@@ -630,6 +630,9 @@ public:
     __m128i *outDataArea128 = reinterpret_cast<__m128i *>(initOutSelArea8 +
         countSelArea8 + sizeof(uint8_t) + countPadBytes);
     const __m128i *const initOutDataArea128 = outDataArea128;
+    uint8_t* pad8 = (uint8_t*)outDataArea128 - countPadBytes;
+    while (pad8 < (uint8_t*)outDataArea128)
+        *pad8++ = 0; // clear padding bytes
 
     const __m128i *in128 = reinterpret_cast<const __m128i *>(in);
 
