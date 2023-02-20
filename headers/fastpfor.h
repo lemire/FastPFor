@@ -200,7 +200,10 @@ class FastPForImpl {
         static_cast<uint32_t>(bc - &bytescontainer[0]);
     *(out++) = bytescontainersize;
     memcpy(out, &bytescontainer[0], bytescontainersize);
+    uint8_t* pad8 = (uint8_t*)out + bytescontainersize;
     out += (bytescontainersize + sizeof(uint32_t) - 1) / sizeof(uint32_t);
+    while (pad8 < (uint8_t*)out)
+        *pad8++ = 0; // clear padding bytes
 
     IntType bitmap = 0;
     for (uint32_t k = 2; k <= sizeof(IntType) * 8; ++k) {
@@ -472,7 +475,11 @@ public:
         static_cast<uint32_t>(bc - &bytescontainer[0]);
     *(out++) = bytescontainersize;
     memcpy(out, &bytescontainer[0], bytescontainersize);
+    uint8_t* pad8 = (uint8_t*)out + bytescontainersize;
     out += (bytescontainersize + sizeof(uint32_t) - 1) / sizeof(uint32_t);
+    while (pad8 < (uint8_t*)out)
+        *pad8++ = 0; // clear padding bytes
+
     size_t outcap = 0;
     ecoder.encodeArray(datatobepacked.data(), datatobepacked.size(), out,
                        outcap);
