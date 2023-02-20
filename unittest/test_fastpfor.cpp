@@ -110,26 +110,14 @@ namespace FastPForLib {
           }
         }
 
-        void _genDataRandom(std::vector<int32_t>& v, uint32_t values) {
-          v.clear();
+	template<typename T>
+        void _genDataRandom(std::vector<T>& v, uint32_t values) {
+          v.resize(values);
           std::mt19937_64 e2(123456);
-          std::uniform_int_distribution<int32_t> dist(
-                                  std::numeric_limits<int32_t>::min(),
-                                  std::numeric_limits<int32_t>::max());
-          for (uint32_t i = 0; i < values; ++i) {
-            v.push_back(dist(e2));
-          }
-        }
-
-        void _genDataRandom64(std::vector<int64_t>& v, uint32_t values) {
-          v.clear();
-          std::mt19937_64 e2(123456);
-          std::uniform_int_distribution<int64_t> dist(
-                                  std::numeric_limits<int64_t>::min(),
-                                  std::numeric_limits<int64_t>::max());
-          for (uint32_t i = 0; i < values; ++i) {
-            v.push_back(dist(e2));
-          }
+          std::uniform_int_distribution<T> dist(
+                                  std::numeric_limits<T>::min(),
+                                  std::numeric_limits<T>::max());
+	  std::generate_n(std::begin(v), values, std::bind(dist, e2));
         }
 
         void _genDataWithFixBits(
@@ -179,7 +167,7 @@ namespace FastPForLib {
   }
 
   TEST_P(FastPForTest, randomNumbers64) {
-    _genDataRandom64(in64, 65536);
+    _genDataRandom(in64, 65536);
     _verify64();
   }
 
@@ -239,7 +227,7 @@ namespace FastPForLib {
   }
 
   TEST_P(FastPForTest, fastpack_min_max64) {
-    _genDataRandom64(in64, 256);
+    _genDataRandom(in64, 256);
     in64[0] = std::numeric_limits<int64_t>::min();
     in64[127] = std::numeric_limits<int64_t>::max();
     in64[128] = std::numeric_limits<int64_t>::min();
