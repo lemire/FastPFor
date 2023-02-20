@@ -112,7 +112,7 @@ namespace FastPForLib {
 
 	template<typename T>
         void _genDataRandom(std::vector<T>& v, uint32_t values) {
-          v.clear();
+          v.resize(values);
           std::mt19937_64 e2(123456);
           std::uniform_int_distribution<T> dist(
                                   std::numeric_limits<T>::min(),
