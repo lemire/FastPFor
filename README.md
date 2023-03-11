@@ -1,5 +1,4 @@
 # The FastPFOR C++ library : Fast integer compression
-[![Build Status](https://travis-ci.org/lemire/FastPFor.png)](https://travis-ci.org/lemire/FastPFor)
 [![Build Status](https://img.shields.io/appveyor/ci/lemire/FastPFor.svg)](https://ci.appveyor.com/project/lemire/FastPFor)
 ![Ubuntu-CI](https://github.com/lemire/FastPFor/workflows/Ubuntu-CI/badge.svg)
 
@@ -63,6 +62,7 @@ https://github.com/lemire/FastDifferentialCoding
 
 ## Other recommended libraries
 
+* Fast integer compression in Go: https://github.com/ronanh/intcomp
 * High-performance dictionary coding https://github.com/lemire/dictionary
 * LittleIntPacker: C library to pack and unpack short arrays of integers as fast as possible https://github.com/lemire/LittleIntPacker
 * The SIMDComp library: A simple C library for compressing lists of integers using binary packing https://github.com/lemire/simdcomp
