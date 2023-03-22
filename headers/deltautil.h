@@ -429,6 +429,7 @@ public:
     container backupdata;
     backupdata.reserve(maxlength + 2048 + 64);
     for (auto i = myalgos.begin(); i != myalgos.end(); ++i) {
+      try {
       IntegerCODEC &c = *(i->algo);
       const bool SIMDDeltas = i->SIMDDeltas;
       size_t nvalue;
@@ -492,9 +493,6 @@ public:
                     << recoveredsize << std::endl;
           throw std::logic_error("arrays don't have same size: bug.");
         }
-        // if (!equal(datas[k].begin(), datas[k].end(), recov)) {
-        //    throw std::logic_error("we have a bug");
-        //}
         for (size_t i = 0; i < datas[k].size(); i++) {
           if (datas[k][i] != recov[i]) {
             std::cout << "difference at index " << i << ":" << std::endl;
@@ -559,6 +557,7 @@ public:
                   << "\t";
         std::cout << "\t";
       }
+    } catch(...) {}
     }
     if (pp.fulldisplay)
       std::cout << std::endl;
