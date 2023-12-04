@@ -170,6 +170,7 @@ set_target_properties(FastPFOR PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
     target_link_libraries(FastPFOR PUBLIC simde)
+    set_target_properties(FastPFOR PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
 
 # other executables
