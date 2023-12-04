@@ -228,6 +228,8 @@ add_test("FastPFOR_unittest" FastPFOR_unittest)
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
     target_link_libraries(FastPFOR simde)
     target_link_libraries(entropy simde)
+    target_link_libraries(gapstats simde)
+
 endif()
 
 include(GNUInstallDirs)
