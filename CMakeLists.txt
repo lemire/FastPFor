@@ -166,6 +166,9 @@ add_library(FastPFOR STATIC
     src/simdbitpacking.cpp
     src/varintdecode.c
     src/streamvbyte.c)
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
+    target_link_libraries(FastPFOR simde)
+endif()
 set_target_properties(FastPFOR PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 
 # other executables
@@ -226,7 +229,6 @@ add_test("FastPFOR_unittest" FastPFOR_unittest)
 
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-    target_link_libraries(FastPFOR simde)
     target_link_libraries(entropy simde)
     target_link_libraries(gapstats simde)
     target_link_libraries(partitionbylength simde)
