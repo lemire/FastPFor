@@ -3,12 +3,12 @@
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  */
 #if !defined(__SSSE3__) && !(defined(_MSC_VER) && defined(__AVX__))
-#ifndef _MSC_VER
-#pragma message                                                                \
-    "Disabling varintg8iu due to lack of SSSE3 support, try adding -mssse3 or the equivalent on your compiler"
-#else
-#pragma message("Disabling varintg8iu due to lack of SSSE3 support, try adding -mssse3 or the equivalent on your compiler")
-#endif
+    #ifndef VARINTG8IU_H__
+    #define VARINTG8IU_H__
+    #define SIMDE_ENABLE_NATIVE_ALIASES
+    #include <simde/x86/sse3.h>
+    #include "codecs.h"
+    #pragma message("Disabling varintg8iu due to lack of SSSE3 support, try adding -mssse3 or the equivalent on your compiler via simde")
 #else
 #ifndef VARINTG8IU_H__
 #define VARINTG8IU_H__

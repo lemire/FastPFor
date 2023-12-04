@@ -3,8 +3,8 @@
 #
 # Copyright (c) 2012 Louis Dionne
 #
-cmake_minimum_required(VERSION 3.0)
-set (CMAKE_CXX_STANDARD 11) # for constexpr specifier and other goodies
+cmake_minimum_required(VERSION 3.7)
+set (CMAKE_CXX_STANDARD 17) # for constexpr specifier and other goodies
 
 if (NOT CMAKE_BUILD_TYPE)
 		message(STATUS "No build type selected, default to Release")
@@ -23,7 +23,8 @@ set(PROJECT_DESCRIPTION "The FastPFOR C++ library: Fast integer compression")
 set(PROJECT_VERSION "0.1.9")
 
 include(DetectCPUFeatures)
-#
+include(CheckCXXCompilerFlag)
+
 # Runs compiler with "-dumpversion" and parses major/minor
 # version with a regex.
 #
@@ -54,56 +55,104 @@ endif()
 MESSAGE( STATUS "CMAKE_CXX_COMPILER_ID: " ${CMAKE_CXX_COMPILER_ID} )
 MESSAGE( STATUS "CMAKE_C_COMPILER: " ${CMAKE_C_COMPILER} )
 MESSAGE( STATUS "CXX_COMPILER_VERSION: " ${CXX_COMPILER_VERSION} )
-if( SUPPORT_SSE42 )
-    MESSAGE( STATUS "SSE 4.2 support detected" )
+
+# here we divide into x86 or arm
+
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+    if( SUPPORT_SSE42 )
+        MESSAGE( STATUS "SSE 4.2 support detected" )
+    else()
+        MESSAGE( STATUS "SSE 4.2 support not detected" )
+    endif()
+
+    if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+        # require at least gcc 4.7
+        if (CXX_COMPILER_VERSION VERSION_LESS 4.7)
+            message(STATUS "GCC version must be at least 4.7!")
+        endif()
+        # Uncomment the following lines to see how the code compiles without AVX,SSE4.2 and/or SSE2
+        #set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast -lm  -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=x86-64")
+        #set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast -lm  -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=core2")
+        #set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast -lm  -DNDEBUG -std=c++11 -DHAVE_CXX0X -msse4.2")
+        set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Wcast-align -Ofast -lm  -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=native")
+        set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -lm  -std=c++11 -DHAVE_CXX0X -march=native")
+        set (CMAKE_C_FLAGS_RELEASE "-Wall -Wcast-align -Ofast -lm  -DNDEBUG -std=c99  -march=native")
+        set (CMAKE_C_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -lm  -std=c99  -march=native")
+    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
+        if (CXX_COMPILER_VERSION VERSION_LESS 14.0.1)
+            message(STATUS "Intel version must be at least 14.0.1!")
+        endif()
+        set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast  -DNDEBUG -std=c++11 -DHAVE_CXX0X  -march=native")
+        set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -ggdb   -std=c++11 -DHAVE_CXX0X  -march=native")
+        set (CMAKE_C_FLAGS_RELEASE "-Wall -Ofast  -DNDEBUG -std=c99  -march=native")
+        set (CMAKE_C_FLAGS_DEBUG   "-Wall -ggdb   -std=c99  -march=native")
+    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
+        if (CXX_COMPILER_VERSION VERSION_LESS 4.2.1)
+            message(STATUS  "Clang version must be at least 4.2.1!" )
+        endif()
+        set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Wcast-align -O3 -DNDEBUG -std=c++11 -DHAVE_CXX0X -msse4.1 -march=native")
+        set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -std=c++11 -DHAVE_CXX0X -msse4.1 -march=native")
+        set (CMAKE_C_FLAGS_RELEASE "-Wall -Wcast-align -O3 -DNDEBUG -std=c99 -msse4.1 -march=native")
+        set (CMAKE_C_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -std=c99 -msse4.1 -march=native")
+    elseif(WIN32)
+        # TODO add support for later versions?
+        if(NOT MSVC12)
+             message(STATUS "On Windows, only MSVC version 12 is supported!")
+        endif()
+    else ()
+        message(FATAL_ERROR "Please, use GCC, Clang, or the Intel compiler!")
+    endif()
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
+    CHECK_CXX_COMPILER_FLAG("-mfpu=neon" COMPILER_SUPPORTS_NEON)
+
+    if( COMPILER_SUPPORTS_NEON )
+        MESSAGE( STATUS "Neon support detected" )
+    else()
+        MESSAGE(FATAL_ERROR "Neon support not detected" )
+    endif()
+
+    # we have to install simde
+    # for arm otherwise the library is not usable
+
+    include("${CMAKE_MODULE_PATH}/simde.cmake")
+
+    if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+        # require at least gcc 4.7
+        if (CXX_COMPILER_VERSION VERSION_LESS 4.7)
+            message(STATUS "GCC version must be at least 4.7!")
+        endif()
+        # Uncomment the following lines to see how the code compiles without AVX,SSE4.2 and/or SSE2
+        #set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast -lm  -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=x86-64")
+        #set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast -lm  -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=core2")
+        #set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast -lm  -DNDEBUG -std=c++11 -DHAVE_CXX0X -msse4.2")
+        set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Wcast-align -Ofast -lm  -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=native")
+        set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -lm  -std=c++11 -DHAVE_CXX0X -march=native")
+        set (CMAKE_C_FLAGS_RELEASE "-Wall -Wcast-align -Ofast -lm  -DNDEBUG -std=c99  -march=native")
+        set (CMAKE_C_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -lm  -std=c99  -march=native")
+    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
+        if (CXX_COMPILER_VERSION VERSION_LESS 14.0.1)
+            message(STATUS "Intel version must be at least 14.0.1!")
+        endif()
+        set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast  -DNDEBUG -std=c++11 -DHAVE_CXX0X  -march=native")
+        set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -ggdb   -std=c++11 -DHAVE_CXX0X  -march=native")
+        set (CMAKE_C_FLAGS_RELEASE "-Wall -Ofast  -DNDEBUG -std=c99  -march=native")
+        set (CMAKE_C_FLAGS_DEBUG   "-Wall -ggdb   -std=c99  -march=native")
+    elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
+        if (CXX_COMPILER_VERSION VERSION_LESS 4.2.1)
+            message(STATUS  "Clang version must be at least 4.2.1!" )
+        endif()
+        set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Wcast-align -O3 -DNDEBUG -std=c++11 -DHAVE_CXX0X-march=native")
+        set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -std=c++11 -DHAVE_CXX0X -march=native")
+        set (CMAKE_C_FLAGS_RELEASE "-Wall -Wcast-align -O3 -DNDEBUG -std=c99-march=native")
+        set (CMAKE_C_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -std=c99 -march=native")
+    elseif(WIN32)
+        message(FATAL_ERROR "Please, use Linux or MacOS!")
+    else ()
+        message(FATAL_ERROR "Please, use GCC, Clang, or the Intel compiler!")
+    endif()
 else()
-    MESSAGE( STATUS "SSE 4.2 support not detected" )
+    message(FATAL_ERROR "Please, x86 or arm!")
 endif()
-
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-    # require at least gcc 4.7
-    if (CXX_COMPILER_VERSION VERSION_LESS 4.7)
-        message(STATUS "GCC version must be at least 4.7!")
-    endif()
-    # Uncomment the following lines to see how the code compiles without AVX,SSE4.2 and/or SSE2
-    #set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast -lm  -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=x86-64")
-    #set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast -lm  -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=core2")
-    #set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast -lm  -DNDEBUG -std=c++11 -DHAVE_CXX0X -msse4.2")
-    set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Wcast-align -Ofast -lm  -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=native")
-    set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -lm  -std=c++11 -DHAVE_CXX0X -march=native")
-    set (CMAKE_C_FLAGS_RELEASE "-Wall -Wcast-align -Ofast -lm  -DNDEBUG -std=c99  -march=native")
-    set (CMAKE_C_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -lm  -std=c99  -march=native")
-elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
-    if (CXX_COMPILER_VERSION VERSION_LESS 14.0.1)
-        message(STATUS "Intel version must be at least 14.0.1!")
-    endif()
-    set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Ofast  -DNDEBUG -std=c++11 -DHAVE_CXX0X  -march=native")
-    set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -ggdb   -std=c++11 -DHAVE_CXX0X  -march=native")
-    set (CMAKE_C_FLAGS_RELEASE "-Wall -Ofast  -DNDEBUG -std=c99  -march=native")
-    set (CMAKE_C_FLAGS_DEBUG   "-Wall -ggdb   -std=c99  -march=native")
-elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
-    if (CXX_COMPILER_VERSION VERSION_LESS 4.2.1)
-        message(STATUS  "Clang version must be at least 4.2.1!" )
-    endif()
-    set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Wcast-align -O3 -DNDEBUG -std=c++11 -DHAVE_CXX0X -msse4.1 -march=native")
-    set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -std=c++11 -DHAVE_CXX0X -msse4.1 -march=native")
-    set (CMAKE_C_FLAGS_RELEASE "-Wall -Wcast-align -O3 -DNDEBUG -std=c99 -msse4.1 -march=native")
-    set (CMAKE_C_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -std=c99 -msse4.1 -march=native")
-elseif(WIN32)
-    # TODO add support for later versions?
-    if(NOT MSVC12)
-         message(STATUS "On Windows, only MSVC version 12 is supported!")
-    endif()
-else ()
-    message(FATAL_ERROR "Please, use GCC, Clang, or the Intel compiler!")
-endif()
-
-MESSAGE( STATUS "CMAKE_CXX_FLAGS_DEBUG: " ${CMAKE_CXX_FLAGS_DEBUG} )
-MESSAGE( STATUS "CMAKE_CXX_FLAGS_RELEASE: " ${CMAKE_CXX_FLAGS_RELEASE} )
-MESSAGE( STATUS "CMAKE_C_FLAGS_DEBUG: " ${CMAKE_C_FLAGS_DEBUG} )
-MESSAGE( STATUS "CMAKE_C_FLAGS_RELEASE: " ${CMAKE_C_FLAGS_RELEASE} )
-
-
 
 
 # library target
@@ -151,39 +200,7 @@ else()
     target_link_libraries(inmemorybenchmarksnappy FastPFOR ${snappy_LIBRARIES})
 endif()
 
-# Download and unpack googletest at configure time
-configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
-execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
-  RESULT_VARIABLE result
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/googletest-download )
-if(result)
-  message(FATAL_ERROR "CMake step for googletest failed: ${result}")
-endif()
-execute_process(COMMAND ${CMAKE_COMMAND} --build .
-  RESULT_VARIABLE result
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/googletest-download )
-if(result)
-  message(FATAL_ERROR "Build step for googletest failed: ${result}")
-endif()
-
-# Prevent GoogleTest from overriding our compiler/linker options
-# when building with Visual Studio
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
-# Add googletest directly to our build. This adds
-# the following targets: gtest, gtest_main, gmock
-# and gmock_main
-add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
-                 ${CMAKE_CURRENT_BINARY_DIR}/googletest-build
-                 EXCLUDE_FROM_ALL)
-
-# The gtest/gmock targets carry header search path
-# dependencies automatically when using CMake 2.8.11 or
-# later. Otherwise we have to add them here ourselves.
-if(CMAKE_VERSION VERSION_LESS 2.8.11)
-    include_directories("${gtest_SOURCE_DIR}/include"
-                        "${gmock_SOURCE_DIR}/include")
-endif()
+include("${CMAKE_MODULE_PATH}/googletest.cmake")
 
 add_executable(codecs src/codecs.cpp)
 target_link_libraries(codecs FastPFOR)
@@ -208,7 +225,6 @@ target_link_libraries(FastPFOR_unittest gtest FastPFOR)
 enable_testing()
 add_test("unit" unit)
 add_test("FastPFOR_unittest" FastPFOR_unittest)
-
 
 include(GNUInstallDirs)
 install(TARGETS FastPFOR
