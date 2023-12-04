@@ -66,7 +66,18 @@ inline unsigned long long rdtsc() {
 static __inline__ unsigned long long startRDTSC(void) { return rdtsc(); }
 
 static __inline__ unsigned long long stopRDTSCP(void) { return rdtsc(); }
+#elif defined(__aarch64__)
 
+    inline uint64_t rdtsc() {
+        uint64_t cycles;
+        asm volatile("mrs %0, cntvct_el0"
+                : "=r"(cycles)); /* output */
+        return cycles;
+    }
+
+    static __inline__ uint64_t startRDTSC(void) { return rdtsc(); }
+
+    static __inline__ uint64_t stopRDTSCP(void) { return rdtsc(); }
 #elif(defined(__arm__) || defined(__ppc__) || defined(__ppc64__))
 
 // for PPC we should be able to use tbl, but I could not find

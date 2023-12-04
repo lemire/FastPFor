@@ -332,6 +332,14 @@ inline void __vseblocks_copy16(const uint32_t *src, uint32_t *dest) {
 inline void __vseblocks_zero32(uint32_t *dest) {
   memset(dest, 0, 32 * sizeof(uint32_t));
 }
+#elif defined(__aarch64__)
+inline void __vseblocks_copy16(const uint32_t *src, uint32_t *dest) {
+  memcpy(dest, src, 16 * sizeof(uint32_t));
+}
+
+inline void __vseblocks_zero32(uint32_t *dest) {
+  memset(dest, 0, 32 * sizeof(uint32_t));
+}
 #else
 
 #define __vseblocks_copy16(src, dest)                                          \

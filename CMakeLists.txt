@@ -154,7 +154,6 @@ else()
     message(FATAL_ERROR "Please, x86 or arm!")
 endif()
 
-
 # library target
 include_directories(headers)
 add_library(FastPFOR STATIC
@@ -169,6 +168,9 @@ add_library(FastPFOR STATIC
     src/streamvbyte.c)
 set_target_properties(FastPFOR PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
+    target_link_libraries(FastPFOR PUBLIC simde)
+endif()
 
 # other executables
 add_executable(gapstats src/gapstats.cpp)

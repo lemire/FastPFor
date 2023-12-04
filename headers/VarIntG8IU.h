@@ -2,17 +2,17 @@
  * This code is released under the
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  */
-#if !defined(__SSSE3__) && !(defined(_MSC_VER) && defined(__AVX__))
-    #ifndef VARINTG8IU_H__
-    #define VARINTG8IU_H__
-    #define SIMDE_ENABLE_NATIVE_ALIASES
-    #include <simde/x86/sse3.h>
-    #include "codecs.h"
-    #pragma message("Disabling varintg8iu due to lack of SSSE3 support, try adding -mssse3 or the equivalent on your compiler via simde")
+#if !defined(__SSSE3__) && !(defined(_MSC_VER) && defined(__AVX__)) && !(defined(__ARM_NEON__))
+#pragma message("Disabling varintg8iu due to lack of SSSE3 support, try adding -mssse3 or the equivalent on your compiler via simde")
 #else
 #ifndef VARINTG8IU_H__
 #define VARINTG8IU_H__
+#if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
 #include <emmintrin.h>
+#elif defined(__GNUC__) && defined(__ARM_NEON__)
+/* GCC-compatible compiler, targeting ARM with NEON */
+#include <simde/x86/sse3.h>
+#endif
 #include "codecs.h"
 #ifdef __GNUC__
 #define PREDICT_FALSE(x) (__builtin_expect(x, 0))

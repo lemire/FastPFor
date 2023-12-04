@@ -151,18 +151,22 @@ public:
    * function is called at most once per array to compress. Hence, top
    * efficiency is not that crucial here.
    */
-  inline static void comprIncompleteBlock(const uint8_t &n, const __m128i *&in,
-                                          __m128i *&out) {
-    // Since we have to produce exactly one compressed vector anyway, we can
-    // use the highest bit width allowing us to pack all n values.
-    const unsigned b = 32 / n;
-    __m128i comprBlock = _mm_loadu_si128(in++);
-    for (size_t k = 1; k < n; k++)
-      comprBlock = _mm_or_si128(comprBlock,
-                                _mm_slli_epi32(_mm_loadu_si128(in++), k * b));
-    _mm_storeu_si128(out++, comprBlock);
-  }
 
+#if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
+    inline static void comprIncompleteBlock(const uint8_t &n, const __m128i *&in,
+                                              __m128i *&out) {
+        // Since we have to produce exactly one compressed vector anyway, we can
+        // use the highest bit width allowing us to pack all n values.
+        const unsigned b = 32 / n;
+        __m128i comprBlock = _mm_loadu_si128(in++);
+        for (size_t k = 1; k < n; k++)
+          comprBlock = _mm_or_si128(comprBlock,
+                                    _mm_slli_epi32(_mm_loadu_si128(in++), k * b));
+        _mm_storeu_si128(out++, comprBlock);
+      }
+#elif defined(__GNUC__) && defined(__ARM_NEON__)
+    // TODO: HERE INSERT
+#endif
   /**
    * The following ten functions pack a certain amount of uncompressed data.
    * The function unrolledPacking_#n_#b packs #n quads, i.e., 4x #n integers,
@@ -347,17 +351,22 @@ public:
    * function is called at most once per array to decompress. Hence, top
    * efficiency is not that crucial here.
    */
-  inline static void decomprIncompleteBlock(const uint8_t &n,
+
+#if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
+        inline static void decomprIncompleteBlock(const uint8_t &n,
                                             const __m128i *&in,
                                             __m128i *&out) {
-    // We choose the bit width consistent with comprIncompleteBlock().
-    const unsigned b = 32 / n;
-    const __m128i mask = _mm_set1_epi32((static_cast<uint64_t>(1) << b) - 1);
-    const __m128i comprBlock = _mm_loadu_si128(in++);
-    for (size_t k = 0; k < n; k++)
-      _mm_storeu_si128(out++,
-                      _mm_and_si128(_mm_srli_epi32(comprBlock, k * b), mask));
-  }
+        // We choose the bit width consistent with comprIncompleteBlock().
+        const unsigned b = 32 / n;
+        const __m128i mask = _mm_set1_epi32((static_cast<uint64_t>(1) << b) - 1);
+        const __m128i comprBlock = _mm_loadu_si128(in++);
+        for (size_t k = 0; k < n; k++)
+          _mm_storeu_si128(out++,
+                          _mm_and_si128(_mm_srli_epi32(comprBlock, k * b), mask));
+      }
+#elif defined(__GNUC__) && defined(__ARM_NEON__)
+        // TODO: HERE INSERT
+#endif
 
   /**
    * The following ten functions unpack a certain amount of compressed data.

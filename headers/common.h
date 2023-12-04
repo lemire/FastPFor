@@ -10,7 +10,12 @@
 // C headers (sorted)
 #include <errno.h>
 #include <fcntl.h>
+#if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
 #include <immintrin.h>
+#elif defined(__GNUC__) && defined(__ARM_NEON__)
+#include <simde/x86/sse4.1.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

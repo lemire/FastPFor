@@ -8923,14 +8923,15 @@ static void __SIMD_fastpack16_32(const uint32_t *__restrict__ _in,
   }
 }
 
+
 static void __SIMD_fastunpack1_32(const __m128i *__restrict__ in,
                                   uint32_t *__restrict__ _out) {
-  __m128i *out = reinterpret_cast<__m128i *>(_out);
-  __m128i InReg1 = _mm_loadu_si128(in);
-  __m128i InReg2 = InReg1;
-  __m128i OutReg1, OutReg2, OutReg3, OutReg4;
-  const __m128i mask = _mm_set1_epi32(1);
-
+    __m128i *out = reinterpret_cast<__m128i *>(_out);
+    __m128i InReg1 = _mm_loadu_si128(in);
+    __m128i InReg2 = InReg1;
+    __m128i OutReg1, OutReg2, OutReg3, OutReg4;
+    const __m128i mask = _mm_set1_epi32(1);
+#if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
   unsigned shift = 0;
 
   for (unsigned i = 0; i < 8; ++i) {
@@ -8943,6 +8944,9 @@ static void __SIMD_fastunpack1_32(const __m128i *__restrict__ in,
     _mm_storeu_si128(out++, OutReg3);
     _mm_storeu_si128(out++, OutReg4);
   }
+#elif defined(__GNUC__) && defined(__ARM_NEON__)
+        // TODO: HERE INSERT
+#endif
 }
 
 static void __SIMD_fastunpack2_32(const __m128i *__restrict__ in,
