@@ -168,11 +168,6 @@ add_library(FastPFOR STATIC
     src/streamvbyte.c)
 set_target_properties(FastPFOR PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-    target_link_libraries(FastPFOR PUBLIC simde)
-    set_target_properties(FastPFOR PROPERTIES POSITION_INDEPENDENT_CODE ON)
-endif()
-
 # other executables
 add_executable(gapstats src/gapstats.cpp)
 add_executable(partitionbylength src/partitionbylength.cpp)
@@ -228,6 +223,13 @@ target_link_libraries(FastPFOR_unittest gtest FastPFOR)
 enable_testing()
 add_test("unit" unit)
 add_test("FastPFOR_unittest" FastPFOR_unittest)
+
+
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
+    target_link_libraries(FastPFOR_unittest simde)
+    target_link_libraries(FastPFOR simde)
+    set_target_properties(FastPFOR PROPERTIES POSITION_INDEPENDENT_CODE ON)
+endif()
 
 include(GNUInstallDirs)
 install(TARGETS FastPFOR
