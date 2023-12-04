@@ -12,7 +12,7 @@
 #include <fcntl.h>
 #if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
 #include <immintrin.h>
-#elif defined(__GNUC__) && defined(__ARM_NEON__)
+#elif defined(__GNUC__) && defined(__aarch64__)
 #include <simde/x86/sse4.1.h>
 #endif
 
