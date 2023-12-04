@@ -229,7 +229,7 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
     target_link_libraries(FastPFOR simde)
     target_link_libraries(entropy simde)
     target_link_libraries(gapstats simde)
-
+    target_link_libraries(partitionbylength simde)
 endif()
 
 include(GNUInstallDirs)
