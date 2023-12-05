@@ -8944,7 +8944,7 @@ static void __SIMD_fastunpack1_32(const __m128i *__restrict__ in,
     _mm_storeu_si128(out++, OutReg3);
     _mm_storeu_si128(out++, OutReg4);
   }
-#elif defined(__GNUC__) && defined(__arch64__)
+#elif defined(__arch64__)
     OutReg1 = _mm_and_si128(_mm_srli_epi32(InReg1, 0), mask);
     OutReg2 = _mm_and_si128(_mm_srli_epi32(InReg2, 1), mask);
     OutReg3 = _mm_and_si128(_mm_srli_epi32(InReg1, 2), mask);

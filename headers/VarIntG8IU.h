@@ -10,7 +10,7 @@
 #if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
 #include <emmintrin.h>
 
-#elif defined(__GNUC__) && defined(__arch64__)
+#elif defined(__arch64__)
 /* GCC-compatible compiler, targeting ARM with NEON */
 #define SIMDE_ENABLE_NATIVE_ALIASES
 #include <simde/x86/sse3.h>
