@@ -13,7 +13,6 @@
 #if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
 #include <immintrin.h>
 #elif defined(__GNUC__) && defined(__aarch64__)
-#define SIMDE_ENABLE_NATIVE_ALIASES
 #include <simde/x86/sse4.1.h>
 #endif
 

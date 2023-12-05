@@ -17,7 +17,6 @@
 
 #elif defined(__aarch64__)
      /* GCC-compatible compiler, targeting ARM with NEON */
-     #define SIMDE_ENABLE_NATIVE_ALIASES
      #include <simde/x86/sse4.1.h>
 #elif defined(__GNUC__) && defined(__IWMMXT__)
      /* GCC-compatible compiler, targeting ARM with WMMX */

@@ -179,7 +179,7 @@ add_executable(gapstats src/gapstats.cpp)
 add_executable(partitionbylength src/partitionbylength.cpp)
 add_executable(csv2maropu src/csv2maropu.cpp)
 
-if (CMAKE_SYSTEM_PROCESSOR OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+if (CMAKE_SYSTEM_PROCESSOR MATCHES "arm" OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
     target_link_libraries(gapstats PUBLIC simde)
     target_link_libraries(partitionbylength PUBLIC simde)
     target_link_libraries(csv2maropu PUBLIC simde)
