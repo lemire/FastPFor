@@ -25,7 +25,7 @@ set(PROJECT_VERSION "0.1.9")
 include(DetectCPUFeatures)
 include(CheckCXXCompilerFlag)
 
-message("Arch ${CMAKE_SYSTEM_PROCESSOR}")
+message("Building for architecture: ${CMAKE_SYSTEM_PROCESSOR}")
 
 # Runs compiler with "-dumpversion" and parses major/minor
 # version with a regex.
@@ -104,7 +104,7 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
     else ()
         message(FATAL_ERROR "Please, use GCC, Clang, or the Intel compiler!")
     endif()
-elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
+elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "arm" OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
     CHECK_CXX_COMPILER_FLAG("-mfpu=neon" COMPILER_SUPPORTS_NEON)
 
     if( COMPILER_SUPPORTS_NEON )
