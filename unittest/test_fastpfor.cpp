@@ -4,6 +4,7 @@
 #include <random>
 #include <cmath>
 #include <string>
+#include <functional>
 
 #include "gtest/gtest.h"
 
