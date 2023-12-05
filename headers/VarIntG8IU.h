@@ -11,6 +11,7 @@
 #include <emmintrin.h>
 #elif defined(__GNUC__) && defined(__ARM_NEON__)
 /* GCC-compatible compiler, targeting ARM with NEON */
+#define SIMDE_ENABLE_NATIVE_ALIASES
 #include <simde/x86/sse3.h>
 #endif
 #include "codecs.h"

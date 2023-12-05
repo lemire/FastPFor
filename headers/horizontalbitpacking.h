@@ -22,9 +22,10 @@
 #define HORIZONTALBITPACKING_H_
 
 #if !defined(__SSE4_1__) && !(defined(_MSC_VER) && defined(__AVX__))
-    #include <simde/x86/sse4.1.h>
+#define SIMDE_ENABLE_NATIVE_ALIASES
+#include <simde/x86/sse4.1.h>
 
-    #pragma message("No SSSE4.1 support? switched to simde")
+#pragma message("No SSSE4.1 support? switched to simde")
 #endif
 #include "common.h"
 
