@@ -105,13 +105,13 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
         message(FATAL_ERROR "Please, use GCC, Clang, or the Intel compiler!")
     endif()
 elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "arm" OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
-    CHECK_CXX_COMPILER_FLAG("-mfpu=neon" COMPILER_SUPPORTS_NEON)
+    # CHECK_CXX_COMPILER_FLAG("-mfpu=neon" COMPILER_SUPPORTS_NEON)
 
-    if( COMPILER_SUPPORTS_NEON )
-        MESSAGE( STATUS "Neon support detected" )
-    else()
-        MESSAGE(FATAL_ERROR "Neon support not detected" )
-    endif()
+    # if( COMPILER_SUPPORTS_NEON )
+    #     MESSAGE( STATUS "Neon support detected" )
+    # else()
+    #     MESSAGE(FATAL_ERROR "Neon support not detected" )
+    # endif()
 
     # we have to install simde
     # for arm otherwise the library is not usable
