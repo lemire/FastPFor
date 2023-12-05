@@ -2,7 +2,7 @@
  * This code is released under the
  * Apache License Version 2.0 http://www.apache.org/licenses/.
  */
-#if !defined(__SSSE3__) && !(defined(_MSC_VER) && defined(__AVX__)) && !(defined(__arch64__))
+#if !defined(__SSSE3__) && !(defined(_MSC_VER) && defined(__AVX__)) && !(defined(__aarch64__))
 #pragma message("Disabling varintg8iu due to lack of SSSE3 support, try adding -mssse3 or the equivalent on your compiler via simde")
 #else
 #ifndef VARINTG8IU_H__
@@ -10,7 +10,7 @@
 #if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
 #include <emmintrin.h>
 
-#elif defined(__arch64__)
+#elif defined(__aarch64__)
 /* GCC-compatible compiler, targeting ARM with NEON */
 #define SIMDE_ENABLE_NATIVE_ALIASES
 #include <simde/x86/sse3.h>
