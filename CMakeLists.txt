@@ -25,6 +25,8 @@ set(PROJECT_VERSION "0.1.9")
 include(DetectCPUFeatures)
 include(CheckCXXCompilerFlag)
 
+message("Arch ${CMAKE_SYSTEM_PROCESSOR}")
+
 # Runs compiler with "-dumpversion" and parses major/minor
 # version with a regex.
 #
