@@ -25,6 +25,7 @@ set(PROJECT_VERSION "0.1.9")
 include(DetectCPUFeatures)
 include("${CMAKE_MODULE_PATH}/environment.cmake")
 
+
 message("Building for architecture: ${CMAKE_SYSTEM_PROCESSOR}")
 
 # Runs compiler with "-dumpversion" and parses major/minor
