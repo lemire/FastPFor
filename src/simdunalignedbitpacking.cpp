@@ -8930,7 +8930,7 @@ static void __SIMD_fastpack16_32(const uint32_t *__restrict__ _in,
         __m128i InReg2 = InReg1;
         __m128i OutReg1, OutReg2, OutReg3, OutReg4;
         const __m128i mask = _mm_set1_epi32(1);
-#if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
+#if (defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__)))  || (defined(_MSC_VER))
         unsigned shift = 0;
 
   for (unsigned i = 0; i < 8; ++i) {
