@@ -23,7 +23,6 @@ set(PROJECT_DESCRIPTION "The FastPFOR C++ library: Fast integer compression")
 set(PROJECT_VERSION "0.1.9")
 
 include(DetectCPUFeatures)
-include(CheckCXXCompilerFlag)
 include("${CMAKE_MODULE_PATH}/environment.cmake")
 
 message("Building for architecture: ${CMAKE_SYSTEM_PROCESSOR}")
@@ -55,7 +54,6 @@ if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
 else()
    MESSAGE( STATUS "Please use a 64-bit system. " )
 endif()
-
 MESSAGE( STATUS "CMAKE_CXX_COMPILER_ID: " ${CMAKE_CXX_COMPILER_ID} )
 MESSAGE( STATUS "CMAKE_C_COMPILER: " ${CMAKE_C_COMPILER} )
 MESSAGE( STATUS "CXX_COMPILER_VERSION: " ${CXX_COMPILER_VERSION} )
@@ -107,8 +105,12 @@ elseif (WIN32)
     endif ()
 else ()
     message(FATAL_ERROR "Please, use GCC, Clang, or the Intel compiler!")
-endif()
+endif ()
 
+MESSAGE(STATUS "CMAKE_CXX_FLAGS_DEBUG: " ${CMAKE_CXX_FLAGS_DEBUG})
+MESSAGE(STATUS "CMAKE_CXX_FLAGS_RELEASE: " ${CMAKE_CXX_FLAGS_RELEASE})
+MESSAGE(STATUS "CMAKE_C_FLAGS_DEBUG: " ${CMAKE_C_FLAGS_DEBUG})
+MESSAGE(STATUS "CMAKE_C_FLAGS_RELEASE: " ${CMAKE_C_FLAGS_RELEASE})
 # library target
 include_directories(headers)
 add_library(FastPFOR STATIC
