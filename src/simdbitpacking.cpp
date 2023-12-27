@@ -8923,7 +8923,6 @@ static void __SIMD_fastpack16_32(const uint32_t *__restrict__ _in,
   }
 }
 
-
 static void __SIMD_fastunpack1_32(const __m128i *__restrict__ in,
                                   uint32_t *__restrict__ _out) {
   __m128i *out = reinterpret_cast<__m128i *>(_out);
