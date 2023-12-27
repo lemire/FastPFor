@@ -1,0 +1,1 @@
+cmd='/snap/clion/261/bin/cmake/linux/x64/bin/cmake;-DCMAKE_INSTALL_PREFIX=/home/kosakseb/Developer/FastPFor/cmake-build-debug-event-trace/vendor/gtm/gtest;-DCMAKE_C_COMPILER=/usr/bin/cc;-DCMAKE_CXX_COMPILER=/usr/bin/c++;-DCMAKE_CXX_FLAGS=;-GUnix Makefiles;-S;<SOURCE_DIR><SOURCE_SUBDIR>;-B;<BINARY_DIR>'

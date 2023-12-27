@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall -Wcast-align -ggdb  -lm  -std=c++11 -DHAVE_CXX0X -march=native -rdynamic CMakeFiles/codecs.dir/src/codecs.cpp.o -o codecs  libFastPFOR.a 

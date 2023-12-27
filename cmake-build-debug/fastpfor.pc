@@ -1,0 +1,9 @@
+prefix=/usr/local
+libdir=/usr/local/lib
+includedir=/usr/local/include
+
+Name: FastPFOR
+Description: The FastPFOR C++ library: Fast integer compression
+Version: 0.1.9
+Libs: -L${libdir} -lFastPFOR
+Cflags: -I${includedir}
