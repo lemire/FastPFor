@@ -324,15 +324,7 @@ public:
                                // VSEncodingBlocks::TAIL_MERGIN];
 };
 
-#ifdef _MSC_VER
-inline void __vseblocks_copy16(const uint32_t *src, uint32_t *dest) {
-  memcpy(dest, src, 16 * sizeof(uint32_t));
-}
-
-inline void __vseblocks_zero32(uint32_t *dest) {
-  memset(dest, 0, 32 * sizeof(uint32_t));
-}
-#elif defined(__aarch64__)
+#if defined(_MSC_VER) || (defined(__GNUC__) && defined(__aarch64__))
 inline void __vseblocks_copy16(const uint32_t *src, uint32_t *dest) {
   memcpy(dest, src, 16 * sizeof(uint32_t));
 }

@@ -122,7 +122,7 @@ __attribute__((const)) inline uint32_t gccbits(const uint64_t v) {
       return static_cast<uint32_t>(index + 32 + 1);
     }
   #endif
-#elif defined(__GNUC__) || defined(__clang__) || defined(__aarch64__)
+#elif defined(__aarch64__)
     return 64 - __builtin_clzll(v);
 #else
   uint32_t answer;

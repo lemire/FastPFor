@@ -21,10 +21,18 @@
 #ifndef HORIZONTALBITPACKING_H_
 #define HORIZONTALBITPACKING_H_
 
-#if !defined(__SSE4_1__) && !(defined(_MSC_VER) && defined(__AVX__))
-#include <simde/x86/sse4.1.h>
 
-#pragma message("No SSSE4.1 support? switched to simde")
+#if !defined(__SSE4_1__) && !(defined(_MSC_VER) && defined(__AVX__))
+#ifndef __aarch64__
+#include <simde/x86/sse4.1.h>
+#pragma message "Switched to SIMDe instructions to use NEON"
+#endif
+
+#ifndef _MSC_VER
+#pragma message "No SSSE4.1 support? try adding -msse4.1 or the equivalent on your compiler"
+#else
+#pragma message("No SSSE4.1 support? try adding -msse4.1 or the equivalent on your compiler")
+#endif
 #endif
 #include "common.h"
 
