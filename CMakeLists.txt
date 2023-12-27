@@ -177,6 +177,7 @@ add_executable(unit src/unit.cpp)
 target_link_libraries(unit FastPFOR)
 add_custom_target(check unit DEPENDS unit)
 
+
 add_executable(FastPFOR_unittest
     unittest/test_composite.cpp
     unittest/test_driver.cpp
@@ -186,6 +187,7 @@ target_link_libraries(FastPFOR_unittest gtest FastPFOR)
 enable_testing()
 add_test("unit" unit)
 add_test("FastPFOR_unittest" FastPFOR_unittest)
+
 
 include(GNUInstallDirs)
 install(TARGETS FastPFOR
