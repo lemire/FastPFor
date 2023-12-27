@@ -24,6 +24,7 @@ set(PROJECT_VERSION "0.1.9")
 
 include(DetectCPUFeatures)
 include(CheckCXXCompilerFlag)
+include("${CMAKE_MODULE_PATH}/environment.cmake")
 
 message("Building for architecture: ${CMAKE_SYSTEM_PROCESSOR}")
 
@@ -55,8 +56,6 @@ else()
    MESSAGE( STATUS "Please use a 64-bit system. " )
 endif()
 
-include("${CMAKE_MODULE_PATH}/environment.cmake")
-
 MESSAGE( STATUS "CMAKE_CXX_COMPILER_ID: " ${CMAKE_CXX_COMPILER_ID} )
 MESSAGE( STATUS "CMAKE_C_COMPILER: " ${CMAKE_C_COMPILER} )
 MESSAGE( STATUS "CXX_COMPILER_VERSION: " ${CXX_COMPILER_VERSION} )
@@ -64,14 +63,12 @@ MESSAGE( STATUS "CXX_COMPILER_VERSION: " ${CXX_COMPILER_VERSION} )
 if (SUPPORT_SSE42)
     MESSAGE(STATUS "SSE 4.2 support detected")
 else ()
-    MESSAGE(STATUS "SSE 4.2 support not detected")
-endif ()
-
-if (SUPPORT_NEON)
-    include("${CMAKE_MODULE_PATH}/simde.cmake")
-    MESSAGE(STATUS "USING SIMDE FOR SIMD OPERATIONS")
-else ()
-    MESSAGE(STATUS "SIMDE NOT DETECTED/NOT USED")
+    if (SUPPORT_NEON)
+        include("${CMAKE_MODULE_PATH}/simde.cmake")
+        MESSAGE(STATUS "USING SIMDE FOR SIMD OPERATIONS")
+    else ()
+        MESSAGE(STATUS "SIMDE and SSE 4.2 support not detected")
+    endif ()
 endif ()
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")

@@ -1,2 +1,0 @@
-/usr/bin/ar qc libFastPFOR.a CMakeFiles/FastPFOR.dir/src/bitpacking.cpp.o CMakeFiles/FastPFOR.dir/src/bitpackingaligned.cpp.o CMakeFiles/FastPFOR.dir/src/bitpackingunaligned.cpp.o CMakeFiles/FastPFOR.dir/src/horizontalbitpacking.cpp.o CMakeFiles/FastPFOR.dir/src/simdunalignedbitpacking.cpp.o CMakeFiles/FastPFOR.dir/src/codecfactory.cpp.o CMakeFiles/FastPFOR.dir/src/simdbitpacking.cpp.o CMakeFiles/FastPFOR.dir/src/varintdecode.c.o CMakeFiles/FastPFOR.dir/src/streamvbyte.c.o
-/usr/bin/ranlib libFastPFOR.a

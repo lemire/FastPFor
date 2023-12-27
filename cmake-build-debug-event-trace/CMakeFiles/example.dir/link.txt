@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wall -Wcast-align -ggdb  -lm  -std=c++11 -DHAVE_CXX0X -march=native -rdynamic CMakeFiles/example.dir/example.cpp.o -o example  libFastPFOR.a 

@@ -1,3 +1,5 @@
 include(CheckCXXCompilerFlag)
 
-check_cxx_compiler_flag("-mfpu=neon" SUPPORT_NEON)
+if (CMAKE_SYSTEM_PROCESSOR MATCHES "arm" OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    set(SUPPORT_NEON ON)
+endif ()
