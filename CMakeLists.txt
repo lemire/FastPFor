@@ -101,7 +101,7 @@ elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STR
 elseif(WIN32)
     # TODO add support for later versions?
     if(NOT MSVC12)
-        message(STATUS "On Windows, only MSVC version 12 is supported!")
+         message(STATUS "On Windows, only MSVC version 12 is supported!")
     endif()
 else ()
     message(FATAL_ERROR "Please, use GCC, Clang, or the Intel compiler!")
@@ -111,6 +111,10 @@ MESSAGE(STATUS "CMAKE_CXX_FLAGS_DEBUG: " ${CMAKE_CXX_FLAGS_DEBUG})
 MESSAGE(STATUS "CMAKE_CXX_FLAGS_RELEASE: " ${CMAKE_CXX_FLAGS_RELEASE})
 MESSAGE(STATUS "CMAKE_C_FLAGS_DEBUG: " ${CMAKE_C_FLAGS_DEBUG})
 MESSAGE(STATUS "CMAKE_C_FLAGS_RELEASE: " ${CMAKE_C_FLAGS_RELEASE})
+
+
+
+
 # library target
 include_directories(headers)
 add_library(FastPFOR STATIC
@@ -124,6 +128,7 @@ add_library(FastPFOR STATIC
     src/varintdecode.c
     src/streamvbyte.c)
 set_target_properties(FastPFOR PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
+
 
 # other executables
 add_executable(gapstats src/gapstats.cpp)
