@@ -175,7 +175,7 @@ inline void checkifdivisibleby(size_t a, uint32_t x) {
 __attribute__((const)) inline uint32_t asmbits(const uint32_t v) {
 #ifdef _MSC_VER
   return gccbits(v);
-#elifdef __ARM_NEON__
+#elif defined(__ARM_NEON__)
   return gccbits(v);
 #else
   if (v == 0)

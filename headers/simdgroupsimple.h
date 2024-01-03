@@ -912,7 +912,7 @@ namespace FastPForLib {
       case 253:return _mm_srli_epi32(comprBlock, 253);
       case 254:return _mm_srli_epi32(comprBlock, 254);
       case 255:return _mm_srli_epi32(comprBlock, 255);
-      default: _mm_srli_epi32(comprBlock, 255); break;
+      default:return _mm_srli_epi32(comprBlock, 255);
   }
   }
 #endif
