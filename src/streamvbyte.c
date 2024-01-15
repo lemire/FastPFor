@@ -7,14 +7,18 @@
 
 #if defined(_MSC_VER)
      /* Microsoft C/C++-compatible compiler */
-     #include <intrin.h>
+     #if (defined(__x86_64__) || defined(__i386__))
+      #include <intrin.h>
+      #elif defined(__aarch64__)
+      #include <simde/x86/sse4.1.h>
+      #endif
+
      #include <iso646.h>
      #include <stdint.h>
      #define __restrict__ __restrict
 #elif defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
      /* GCC-compatible compiler, targeting x86/x86-64 */
      #include <x86intrin.h>
-
 #elif defined(__aarch64__)
      /* GCC-compatible compiler, targeting ARM with NEON */
      #include <simde/x86/sse4.1.h>
