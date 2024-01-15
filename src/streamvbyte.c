@@ -626,8 +626,12 @@ static const int8_t shuffleTable[256][16] = {
 #if !defined(_MSC_VER) || defined(__clang__)
 static const xmm_t High16To32 = { (long long)0xFFFF0B0AFFFF0908, (long long)0xFFFF0F0EFFFF0D0C};
 #else
+#if defined(_M_X64) || defined(_M_AMD64)
 static const xmm_t High16To32 = {8,  9,  -1, -1, 10, 11, -1, -1,
                            12, 13, -1, -1, 14, 15, -1, -1};
+#elif defined(_M_ARM64)
+static const xmm_t High16To32 = { (long long)0xFFFF0B0AFFFF0908, (long long)0xFFFF0F0EFFFF0D0C};
+#endif
 #endif
 
 static inline void _write_avx(uint32_t *out, xmm_t Vec) {
