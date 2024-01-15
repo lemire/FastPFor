@@ -50,9 +50,9 @@
 #include <iso646.h>
 #include <stdint.h>
 
-#if (defined(__x86_64__) || defined(__i386__))
+#if (defined(_M_IX86_FP))
 #include <intrin.h>
-#elif defined(__aarch64__)
+#elif defined(_M_ARM64)
 #include <simde/x86/sse4.1.h>
 #endif
 

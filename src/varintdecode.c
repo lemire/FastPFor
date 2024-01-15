@@ -5,9 +5,9 @@
 
 #if defined(_MSC_VER)
      /* Microsoft C/C++-compatible compiler */
-     #if (defined(__x86_64__) || defined(__i386__))
+     #if (defined(_M_IX86_FP))
       #include <intrin.h>
-      #elif defined(__aarch64__)
+      #elif defined(_M_ARM64)
       #include <simde/x86/sse4.1.h>
       #endif
 #elif defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
