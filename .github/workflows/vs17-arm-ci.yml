@@ -13,8 +13,19 @@ jobs:
           - {gen: Visual Studio 17 2022, arch: ARM64}
     steps:
       - name: checkout
-        uses: actions/checkout@v4
-      - name: Use cmake
+        uses: actions/checkout@v2
+      - name: Configure
         run: |
-          cmake -G "${{matrix.gen}}" -A ${{ matrix.arch }} -DCMAKE_CROSSCOMPILING=1 -B build  &&
-          cmake --build build --verbose
+          cmake -B build
+      - name: Build Debug
+        run: cmake --build build --config Debug --verbose
+      - name: Build Release
+        run: cmake --build build --config Release --verbose
+      - name: Run Release tests
+        run: |
+          cd build
+          ctest -C Release  -LE explicitonly  --output-on-failure
+      - name: Run Debug tests
+        run: |
+          cd build
+          ctest -C Debug  -LE explicitonly  --output-on-failure

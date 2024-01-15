@@ -42,11 +42,34 @@ static __inline__ unsigned long long stopRDTSCP(void) {
                  "%rdx");
   return (static_cast<unsigned long long>(cycles_high) << 32) | cycles_low;
 }
-#elif defined(_MSC_VER)
+#elif  (defined(_MSC_VER) && (defined(_M_X64) || defined(_M_AMD64)))
 
 static inline unsigned long long startRDTSC(void) { return __rdtsc(); }
 
 static inline unsigned long long stopRDTSCP(void) { return __rdtsc(); }
+#elif defined(_MSC_VER) && defined(_M_ARM64)
+  // oriented by zeromq implementation for msc arm/arm64
+  // https://github.com/zeromq/libzmq/blob/master/src/clock.cpp
+  inline unsigned long long rdtsc() {
+    const int64_t pmccntr_el0 = (((3 & 1) << 14) |  // op0
+                                 ((3 & 7) << 11) |  // op1
+                                 ((9 & 15) << 7) |  // crn
+                                 ((13 & 15) << 3) | // crm
+                                 ((0 & 7) << 0));   // op2
+
+    return _ReadStatusReg (pmccntr_el0);
+  }
+
+  static inline unsigned long long startRDTSC(void) { return rdtsc(); }
+
+  static inline unsigned long long stopRDTSCP(void) { return rdtsc(); }
+#elif  (defined(_MSC_VER) && (defined(_M_ARM64)))
+// Taken from microsoft documentation (see
+// https://learn.microsoft.com/en-us/cpp/build/overview-of-arm-abi-conventions?view=msvc-170
+
+static inline unsigned long long startRDTSC(void) { return __rdpmccntr64(); }
+
+static inline unsigned long long stopRDTSCP(void) { return __rdpmccntr64(); }
 
 #elif defined(__i386__) || defined(__x86_64__)
 
@@ -66,7 +89,7 @@ inline unsigned long long rdtsc() {
 static __inline__ unsigned long long startRDTSC(void) { return rdtsc(); }
 
 static __inline__ unsigned long long stopRDTSCP(void) { return rdtsc(); }
-#elif defined(__aarch64__)
+#elif (defined(__GNUC__) && (defined(__arch64__)))
     inline uint64_t rdtsc() {
         uint64_t cycles;
         asm volatile("mrs %0, cntvct_el0"
@@ -77,14 +100,14 @@ static __inline__ unsigned long long stopRDTSCP(void) { return rdtsc(); }
     static __inline__ uint64_t startRDTSC(void) { return rdtsc(); }
 
     static __inline__ uint64_t stopRDTSCP(void) { return rdtsc(); }
-#elif(defined(__arm__) || defined(__ppc__) || defined(__ppc64__))
+#elif(defined(__arm__) || defined(__ppc__) || defined(__ppc64__)) || (defined(_MSC_VER) && defined(_M_ARM64))
 
 // for PPC we should be able to use tbl, but I could not find
 // an equivalent to rdtsc for ARM.
 
-inline uint64 rdtsc() { return 0; }
-static __inline__ ticks startRDTSC(void) { return 0; }
-static __inline__ ticks stopRDTSCP(void) { return 0; }
+inline uint64_t rdtsc() { return 0; }
+static __inline__ uint64_t startRDTSC(void) { return 0; }
+static __inline__ uint64_t stopRDTSCP(void) { return 0; }
 #else
 #error Unknown architecture
 #endif
