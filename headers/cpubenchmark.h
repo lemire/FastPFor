@@ -47,18 +47,9 @@ static __inline__ unsigned long long stopRDTSCP(void) {
 static inline unsigned long long startRDTSC(void) { return __rdtsc(); }
 
 static inline unsigned long long stopRDTSCP(void) { return __rdtsc(); }
-
-#elif defined(_MSC_VER) && defined(_M_ARM)
+#elif defined(_MSC_VER) && defined(_M_ARM64)
   // oriented by zeromq implementation for msc arm/arm64
   // https://github.com/zeromq/libzmq/blob/master/src/clock.cpp
-  inline unsigned long long rdtsc() {
-    return __rdpmccntr64 ();
-  }
-
-  static inline unsigned long long startRDTSC(void) { return rdtsc(); }
-
-  static inline unsigned long long stopRDTSCP(void) { return rdtsc(); }
-#elif defined(_MSC_VER) && defined(_M_ARM64)
   inline unsigned long long rdtsc() {
     const int64_t pmccntr_el0 = (((3 & 1) << 14) |  // op0
                                  ((3 & 7) << 11) |  // op1

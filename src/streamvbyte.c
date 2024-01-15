@@ -7,8 +7,9 @@
 
 #if defined(_MSC_VER)
      /* Microsoft C/C++-compatible compiler */
+      #if (defined(_M_X64) || defined(_M_AMD64))
       #include <intrin.h>
-      #if defined(_M_ARM64)
+      #elif defined(_M_ARM64)
       #include <simde/x86/sse4.1.h>
       #endif
 
