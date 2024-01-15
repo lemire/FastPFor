@@ -152,7 +152,7 @@ namespace FastPForLib {
          * efficiency is not that crucial here.
          */
 
-#if (defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))) || defined(_MSC_VER)
+#if (defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__)))  || (defined(_MSC_VER) && defined(_M_IX86))
 
         inline static void comprIncompleteBlock(const uint8_t &n, const __m128i *&in,
                                                 __m128i *&out) {
@@ -166,7 +166,7 @@ namespace FastPForLib {
             _mm_storeu_si128(out++, comprBlock);
         }
 
-#elif defined(__aarch64__)
+#elif (defined(__GNUC__) && (defined(__arch64__))) || (defined(_MSC_VER) && defined(_M_ARM64))
         inline static void comprIncompleteBlock(const uint8_t &n, const __m128i *&in,
                                                   __m128i *&out) {
             // Since we have to produce exactly one compressed vector anyway, we can
@@ -627,7 +627,7 @@ namespace FastPForLib {
          * efficiency is not that crucial here.
          */
 
-#if (defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))) || defined(_MSC_VER)
+#if (defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__)))  || (defined(_MSC_VER) && defined(_M_IX86))
 
         inline static void decomprIncompleteBlock(const uint8_t &n,
                                                   const __m128i *&in,
@@ -641,7 +641,7 @@ namespace FastPForLib {
                                  _mm_and_si128(_mm_srli_epi32(comprBlock, k * b), mask));
         }
 
-#elif defined(__aarch64__)
+#elif (defined(__GNUC__) && (defined(__arch64__))) || (defined(_MSC_VER) && defined(_M_ARM64))
         inline static void decomprIncompleteBlock(const uint8_t &n,
                                             const __m128i *&in,
                                             __m128i *&out) {

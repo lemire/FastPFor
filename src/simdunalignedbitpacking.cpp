@@ -8930,7 +8930,7 @@ static void __SIMD_fastunpack1_32(const __m128i *__restrict__ in,
   __m128i InReg2 = InReg1;
   __m128i OutReg1, OutReg2, OutReg3, OutReg4;
   const __m128i mask = _mm_set1_epi32(1);
-#if (defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__)))  || (defined(_MSC_VER))
+#if (defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__)))  || (defined(_MSC_VER) && defined(_M_IX86))
   unsigned shift = 0;
 
   for (unsigned i = 0; i < 8; ++i) {
@@ -8943,7 +8943,7 @@ static void __SIMD_fastunpack1_32(const __m128i *__restrict__ in,
     _mm_storeu_si128(out++, OutReg3);
     _mm_storeu_si128(out++, OutReg4);
   }
-#else
+#elif (defined(__GNUC__) && (defined(__arch64__))) || (defined(_MSC_VER) && defined(_M_ARM64))
   OutReg1 = _mm_and_si128(_mm_srli_epi32(InReg1, 0), mask);
   OutReg2 = _mm_and_si128(_mm_srli_epi32(InReg2, 1), mask);
   OutReg3 = _mm_and_si128(_mm_srli_epi32(InReg1, 2), mask);
