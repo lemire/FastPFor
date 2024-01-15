@@ -49,7 +49,12 @@
 #ifdef _MSC_VER
 #include <iso646.h>
 #include <stdint.h>
+
+#if (defined(__x86_64__) || defined(__i386__))
 #include <intrin.h>
+#elif defined(__aarch64__)
+#include <simde/x86/sse4.1.h>
+#endif
 
 #define __attribute__(n)
 #define __restrict__ __restrict
