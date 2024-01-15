@@ -50,9 +50,9 @@
 #include <iso646.h>
 #include <stdint.h>
 
-#if (defined(_M_X64) || defined(_M_AMD64))
 #include <intrin.h>
-#elif defined(_M_ARM64)
+
+#if defined(_M_ARM64)
 #include <simde/x86/sse4.1.h>
 #endif
 

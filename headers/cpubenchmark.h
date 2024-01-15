@@ -48,7 +48,8 @@ static inline unsigned long long startRDTSC(void) { return __rdtsc(); }
 
 static inline unsigned long long stopRDTSCP(void) { return __rdtsc(); }
 #elif  (defined(_MSC_VER) && (defined(_M_ARM64)))
-
+// Taken from microsoft documentation (see
+// https://learn.microsoft.com/en-us/cpp/build/overview-of-arm-abi-conventions?view=msvc-170
 static inline unsigned long long startRDTSC(void) { return __rdpmccntr64(); }
 
 static inline unsigned long long stopRDTSCP(void) { return __rdpmccntr64(); }
