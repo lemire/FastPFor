@@ -42,7 +42,12 @@ static __inline__ unsigned long long stopRDTSCP(void) {
                  "%rdx");
   return (static_cast<unsigned long long>(cycles_high) << 32) | cycles_low;
 }
-#elif  (defined(_MSC_VER) && (defined(_M_X64) || defined(_M_AMD64)))
+#elif  (defined(_MSC_VER) && (defined(_M_X64) || defined(_M_AMD64) || defined(_M_ARM64)))
+
+#if defined(_M_ARM64)
+extern "C" uint64 __rdtsc();
+#pragma intrinsic(__rdtsc)
+#endif
 
 static inline unsigned long long startRDTSC(void) { return __rdtsc(); }
 
@@ -66,7 +71,7 @@ inline unsigned long long rdtsc() {
 static __inline__ unsigned long long startRDTSC(void) { return rdtsc(); }
 
 static __inline__ unsigned long long stopRDTSCP(void) { return rdtsc(); }
-#elif (defined(__GNUC__) && (defined(__arch64__))) || (defined(_MSC_VER) && defined(_M_ARM64))
+#elif (defined(__GNUC__) && (defined(__arch64__)))
     inline uint64_t rdtsc() {
         uint64_t cycles;
         asm volatile("mrs %0, cntvct_el0"
@@ -77,18 +82,14 @@ static __inline__ unsigned long long stopRDTSCP(void) { return rdtsc(); }
     static __inline__ uint64_t startRDTSC(void) { return rdtsc(); }
 
     static __inline__ uint64_t stopRDTSCP(void) { return rdtsc(); }
-#elif(defined(__arm__) || defined(__ppc__) || defined(__ppc64__))
+#elif(defined(__arm__) || defined(__ppc__) || defined(__ppc64__)) || (defined(_MSC_VER) && defined(_M_ARM64))
 
 // for PPC we should be able to use tbl, but I could not find
 // an equivalent to rdtsc for ARM.
 
-    inline uint64_t rdtsc() {
-        return 0;
-    }
-
-    static __inline__ uint64_t startRDTSC(void) { return rdtsc(); }
-
-    static __inline__ uint64_t stopRDTSCP(void) { return rdtsc(); }
+inline uint64_t rdtsc() { return 0; }
+static __inline__ uint64_t startRDTSC(void) { return 0; }
+static __inline__ uint64_t stopRDTSCP(void) { return 0; }
 #else
 #error Unknown architecture
 #endif
