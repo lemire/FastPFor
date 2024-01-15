@@ -5,7 +5,7 @@
 
 #if defined(_MSC_VER)
      /* Microsoft C/C++-compatible compiler */
-     #if (defined(_M_IX86_FP))
+     #if (defined(_M_IX86))
       #include <intrin.h>
       #elif defined(_M_ARM64)
       #include <simde/x86/sse4.1.h>
