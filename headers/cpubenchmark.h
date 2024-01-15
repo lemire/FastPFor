@@ -42,16 +42,16 @@ static __inline__ unsigned long long stopRDTSCP(void) {
                  "%rdx");
   return (static_cast<unsigned long long>(cycles_high) << 32) | cycles_low;
 }
-#elif  (defined(_MSC_VER) && (defined(_M_X64) || defined(_M_AMD64) || defined(_M_ARM64)))
-
-#if defined(_M_ARM64)
-extern "C" uint64 __rdtsc();
-#pragma intrinsic(__rdtsc)
-#endif
+#elif  (defined(_MSC_VER) && (defined(_M_X64) || defined(_M_AMD64)))
 
 static inline unsigned long long startRDTSC(void) { return __rdtsc(); }
 
 static inline unsigned long long stopRDTSCP(void) { return __rdtsc(); }
+#elif  (defined(_MSC_VER) && (defined(_M_ARM64)))
+
+static inline unsigned long long startRDTSC(void) { return __rdpmccntr64(); }
+
+static inline unsigned long long stopRDTSCP(void) { return __rdpmccntr64(); }
 
 #elif defined(__i386__) || defined(__x86_64__)
 
