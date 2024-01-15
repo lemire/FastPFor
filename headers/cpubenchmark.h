@@ -47,9 +47,35 @@ static __inline__ unsigned long long stopRDTSCP(void) {
 static inline unsigned long long startRDTSC(void) { return __rdtsc(); }
 
 static inline unsigned long long stopRDTSCP(void) { return __rdtsc(); }
+
+#elif defined(_MSC_VER) && defined(_M_ARM)
+  // oriented by zeromq implementation for msc arm/arm64
+  // https://github.com/zeromq/libzmq/blob/master/src/clock.cpp
+  inline unsigned long long rdtsc() {
+    return __rdpmccntr64 ();
+  }
+
+  static inline unsigned long long startRDTSC(void) { return rdtsc(); }
+
+  static inline unsigned long long stopRDTSCP(void) { return rdtsc(); }
+#elif defined(_MSC_VER) && defined(_M_ARM64)
+  inline unsigned long long rdtsc() {
+    const int64_t pmccntr_el0 = (((3 & 1) << 14) |  // op0
+                                 ((3 & 7) << 11) |  // op1
+                                 ((9 & 15) << 7) |  // crn
+                                 ((13 & 15) << 3) | // crm
+                                 ((0 & 7) << 0));   // op2
+
+    return _ReadStatusReg (pmccntr_el0);
+  }
+
+  static inline unsigned long long startRDTSC(void) { return rdtsc(); }
+
+  static inline unsigned long long stopRDTSCP(void) { return rdtsc(); }
 #elif  (defined(_MSC_VER) && (defined(_M_ARM64)))
 // Taken from microsoft documentation (see
 // https://learn.microsoft.com/en-us/cpp/build/overview-of-arm-abi-conventions?view=msvc-170
+
 static inline unsigned long long startRDTSC(void) { return __rdpmccntr64(); }
 
 static inline unsigned long long stopRDTSCP(void) { return __rdpmccntr64(); }
