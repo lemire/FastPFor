@@ -42,7 +42,7 @@ static __inline__ unsigned long long stopRDTSCP(void) {
                  "%rdx");
   return (static_cast<unsigned long long>(cycles_high) << 32) | cycles_low;
 }
-#elif defined(_MSC_VER)
+#elif (defined(_MSC_VER) && defined(_M_ARM64))
 
 static inline unsigned long long startRDTSC(void) { return __rdtsc(); }
 
@@ -66,7 +66,7 @@ inline unsigned long long rdtsc() {
 static __inline__ unsigned long long startRDTSC(void) { return rdtsc(); }
 
 static __inline__ unsigned long long stopRDTSCP(void) { return rdtsc(); }
-#elif defined(__aarch64__)
+#elif (defined(__GNUC__) && (defined(__arch64__))) || (defined(_MSC_VER) && defined(_M_ARM64))
     inline uint64_t rdtsc() {
         uint64_t cycles;
         asm volatile("mrs %0, cntvct_el0"
