@@ -7,16 +7,21 @@
 
 #if defined(_MSC_VER)
      /* Microsoft C/C++-compatible compiler */
-     #include <intrin.h>
+      #if (defined(_M_X64) || defined(_M_AMD64))
+      #include <intrin.h>
+      #elif defined(_M_ARM64)
+      #include <simde/x86/sse4.1.h>
+      #endif
+
      #include <iso646.h>
      #include <stdint.h>
      #define __restrict__ __restrict
 #elif defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
      /* GCC-compatible compiler, targeting x86/x86-64 */
      #include <x86intrin.h>
-#elif defined(__GNUC__) && defined(__ARM_NEON__)
+#elif defined(__aarch64__)
      /* GCC-compatible compiler, targeting ARM with NEON */
-     #include <arm_neon.h>
+     #include <simde/x86/sse4.1.h>
 #elif defined(__GNUC__) && defined(__IWMMXT__)
      /* GCC-compatible compiler, targeting ARM with WMMX */
      #include <mmintrin.h>
@@ -618,7 +623,7 @@ static const int8_t shuffleTable[256][16] = {
 // static char HighTo32[16] = {8, 9, -1, -1, 10, 11, -1, -1, 12, 13, -1, -1, 14,
 // 15, -1, -1};
 // Byte Order: {0x0706050403020100, 0x0F0E0D0C0B0A0908}
-#if !defined(_MSC_VER) || defined(__clang__)
+#if !defined(_MSC_VER) || defined(__clang__) || (defined(_MSC_VER) && defined(_M_ARM64))
 static const xmm_t High16To32 = { (long long)0xFFFF0B0AFFFF0908, (long long)0xFFFF0F0EFFFF0D0C};
 #else
 static const xmm_t High16To32 = {8,  9,  -1, -1, 10, 11, -1, -1,

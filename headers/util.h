@@ -122,6 +122,8 @@ __attribute__((const)) inline uint32_t gccbits(const uint64_t v) {
       return static_cast<uint32_t>(index + 32 + 1);
     }
   #endif
+#elif defined(__aarch64__)
+    return 64 - __builtin_clzll(v);
 #else
   uint32_t answer;
   __asm__("bsr %1, %0;" : "=r"(answer) : "r"(v));
@@ -173,6 +175,8 @@ inline void checkifdivisibleby(size_t a, uint32_t x) {
 __attribute__((const)) inline uint32_t asmbits(const uint32_t v) {
 #ifdef _MSC_VER
   return gccbits(v);
+#elif defined(__aarch64__)
+  return gccbits(v);
 #else
   if (v == 0)
     return 0;
@@ -185,6 +189,8 @@ __attribute__((const)) inline uint32_t asmbits(const uint32_t v) {
 __attribute__((const)) inline uint32_t asmbits(const uint64_t v) {
 #ifdef _MSC_VER
   return gccbits(v);
+#elif defined(__aarch64__)
+    return gccbits(v);
 #else
   if (v == 0) return 0;
   uint64_t answer;

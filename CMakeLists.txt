@@ -23,7 +23,11 @@ set(PROJECT_DESCRIPTION "The FastPFOR C++ library: Fast integer compression")
 set(PROJECT_VERSION "0.1.9")
 
 include(DetectCPUFeatures)
-#
+include("${CMAKE_MODULE_PATH}/environment.cmake")
+
+
+message("Building for architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+
 # Runs compiler with "-dumpversion" and parses major/minor
 # version with a regex.
 #
@@ -57,7 +61,12 @@ MESSAGE( STATUS "CXX_COMPILER_VERSION: " ${CXX_COMPILER_VERSION} )
 if( SUPPORT_SSE42 )
     MESSAGE( STATUS "SSE 4.2 support detected" )
 else()
-    MESSAGE( STATUS "SSE 4.2 support not detected" )
+    if (SUPPORT_NEON)
+        include("${CMAKE_MODULE_PATH}/simde.cmake")
+        MESSAGE(STATUS "USING SIMDE FOR SIMD OPERATIONS")
+    else ()
+        MESSAGE(STATUS "SIMDE and SSE 4.2 support not detected")
+    endif ()
 endif()
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
@@ -85,10 +94,10 @@ elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STR
     if (CXX_COMPILER_VERSION VERSION_LESS 4.2.1)
         message(STATUS  "Clang version must be at least 4.2.1!" )
     endif()
-    set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Wcast-align -O3 -DNDEBUG -std=c++11 -DHAVE_CXX0X -msse4.1 -march=native")
-    set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -std=c++11 -DHAVE_CXX0X -msse4.1 -march=native")
-    set (CMAKE_C_FLAGS_RELEASE "-Wall -Wcast-align -O3 -DNDEBUG -std=c99 -msse4.1 -march=native")
-    set (CMAKE_C_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -std=c99 -msse4.1 -march=native")
+    set (CMAKE_CXX_FLAGS_RELEASE "-Wall -Wcast-align -O3 -DNDEBUG -std=c++11 -DHAVE_CXX0X -march=native")
+    set (CMAKE_CXX_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -std=c++11 -DHAVE_CXX0X -march=native")
+    set (CMAKE_C_FLAGS_RELEASE "-Wall -Wcast-align -O3 -DNDEBUG -std=c99 -march=native")
+    set (CMAKE_C_FLAGS_DEBUG   "-Wall -Wcast-align -ggdb  -std=c99 -march=native")
 elseif(WIN32)
     # TODO add support for later versions?
     if(NOT MSVC12)
@@ -125,6 +134,13 @@ set_target_properties(FastPFOR PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 add_executable(gapstats src/gapstats.cpp)
 add_executable(partitionbylength src/partitionbylength.cpp)
 add_executable(csv2maropu src/csv2maropu.cpp)
+
+if (SUPPORT_NEON)
+    target_link_libraries(FastPFOR PUBLIC simde)
+    target_link_libraries(gapstats PUBLIC simde)
+    target_link_libraries(partitionbylength PUBLIC simde)
+    target_link_libraries(csv2maropu PUBLIC simde)
+endif()
 
 add_executable(entropy src/entropy.cpp)
 target_link_libraries(entropy FastPFOR)

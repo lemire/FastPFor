@@ -10,7 +10,12 @@
 // C headers (sorted)
 #include <errno.h>
 #include <fcntl.h>
+#if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
 #include <immintrin.h>
+#elif defined(__GNUC__) && defined(__aarch64__)
+#include <simde/x86/sse4.1.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -44,7 +49,12 @@
 #ifdef _MSC_VER
 #include <iso646.h>
 #include <stdint.h>
+
+#if (defined(_M_X64) || defined(_M_AMD64))
 #include <intrin.h>
+#elif defined(_M_ARM64)
+#include <simde/x86/sse4.1.h>
+#endif
 
 #define __attribute__(n)
 #define __restrict__ __restrict
