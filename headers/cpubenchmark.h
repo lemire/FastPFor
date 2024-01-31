@@ -89,7 +89,7 @@ inline unsigned long long rdtsc() {
 static __inline__ unsigned long long startRDTSC(void) { return rdtsc(); }
 
 static __inline__ unsigned long long stopRDTSCP(void) { return rdtsc(); }
-#elif (defined(__GNUC__) && (defined(__arch64__)))
+#elif (defined(__GNUC__) && (defined(__aarch64__)))
     inline uint64_t rdtsc() {
         uint64_t cycles;
         asm volatile("mrs %0, cntvct_el0"
