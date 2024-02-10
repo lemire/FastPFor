@@ -89,7 +89,6 @@ public:
     const uint8_t *inbyte = reinterpret_cast<const uint8_t *>(in);
     nvalue = masked_vbyte_read_loop_fromcompressedsize(inbyte, out, length * 4);
     return reinterpret_cast<const uint32_t *>(inbyte);
-    return in + length;
   }
 
   std::string name() const { return "MaskedVByte"; }
