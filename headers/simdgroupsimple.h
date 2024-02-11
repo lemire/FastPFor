@@ -1292,7 +1292,7 @@ namespace FastPForLib {
                 // Step 2: Determine the next selector.
                 pos = 0;
                 uint8_t i;
-                uint8_t n;
+                uint8_t n = 0;
                 for (i = 0; i <= 9; i++) {
                     n = tableNum[i];
                     const uint32_t mask = tableMask[i];
