@@ -8930,7 +8930,7 @@ static void __SIMD_fastunpack1_32(const __m128i *__restrict__ in,
   __m128i InReg2 = InReg1;
   __m128i OutReg1, OutReg2, OutReg3, OutReg4;
   const __m128i mask = _mm_set1_epi32(1);
-#if defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__)) || (defined(_MSC_VER) && (defined(_M_X64) || defined(_M_AMD64)))
+#if (defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))) || (defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_AMD64)))
   unsigned shift = 0;
 
   for (unsigned i = 0; i < 8; ++i) {

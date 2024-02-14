@@ -152,7 +152,7 @@ namespace FastPForLib {
          * efficiency is not that crucial here.
          */
 
-#if (defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__)))  || (defined(_MSC_VER) && (defined(_M_X64) || defined(_M_AMD64)))
+#if (defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))) || (defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_AMD64)))
 
         inline static void comprIncompleteBlock(const uint8_t &n, const __m128i *&in,
                                                 __m128i *&out) {
@@ -627,7 +627,7 @@ namespace FastPForLib {
          * efficiency is not that crucial here.
          */
 
-#if (defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__)))  || (defined(_MSC_VER) && (defined(_M_X64) || defined(_M_AMD64)))
+#if (defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))) || (defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_AMD64)))
 
         inline static void decomprIncompleteBlock(const uint8_t &n,
                                                   const __m128i *&in,
