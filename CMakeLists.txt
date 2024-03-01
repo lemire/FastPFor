@@ -23,7 +23,7 @@ set(PROJECT_DESCRIPTION "The FastPFOR C++ library: Fast integer compression")
 set(PROJECT_VERSION "0.1.9")
 
 include(DetectCPUFeatures)
-include("${CMAKE_MODULE_PATH}/environment.cmake")
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/environment.cmake")
 
 
 message("Building for architecture: ${CMAKE_SYSTEM_PROCESSOR}")
