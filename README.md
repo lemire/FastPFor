@@ -15,7 +15,7 @@ desktop or laptop processors. That is, it can decompress data at a rate of 15 GB
 This is significantly faster than generic codecs like gzip, LZO, Snappy or LZ4.
 
 It is used by the [zsearch engine](http://victorparmar.github.com/zsearch/)
-as well as in [GMAP and GSNAP](http://research-pub.gene.com/gmap/). It
+as well as in [GMAP and GSNAP](http://research-pub.gene.com/gmap/). DuckDB derived some of their code from this library It
 has [been ported to Java](https://github.com/lemire/JavaFastPFOR),
 [C#](https://github.com/Genbox/CSharpFastPFOR)  and 
 [Go](https://github.com/reducedb/encoding). The Java port is used by
