@@ -51,6 +51,8 @@ public:
                                 count, std::numeric_limits<uint32_t>::max())),
         0, 1);
     nvalue = static_cast<size_t>(bytesWritten + 3) / 4;
+    for (size_t i = bytesWritten; i < nvalue * 4; ++i)
+      reinterpret_cast<uint8_t*>(out)[i] = 0;
   }
 
   const uint32_t *decodeArray(const uint32_t *in, const size_t /* count */,
