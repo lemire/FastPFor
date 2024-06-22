@@ -125,12 +125,11 @@ The code was tested under Windows, Linux and MacOS.
 
 ## Hardware Requirements
 
-We require an x64 platform.
+On an x64 platform, your processor should support SSSE3. This includes almost every Intel or AMD processor
+sold after 2006. (Note: the key schemes require merely SSE2.)  Some specific binaries will only run if your processor 
+supports SSE4.1. They have been purely used for specific tests however.
 
-To fully use the library, your processor should support SSSE3. This includes almost every Intel or AMD processor
-sold after 2006. (Note: the key schemes require merely SSE2.) 
-
-Some specific binaries will only run if your processor supports SSE4.1. They have been purely used for specific tests however.
+We also support ARM platforms through SIMDe, by wrapping.
 
 ## Building with CMake
 
