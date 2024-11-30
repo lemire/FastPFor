@@ -286,6 +286,7 @@ public:
 
   const uint32_t *decodeArray(const uint32_t *in, const size_t length,
                               uint32_t *out, size_t &nvalue) {
+    (void)length;
     const uint32_t actuallength = *in++;
     const uint8_t *inbyte = reinterpret_cast<const uint8_t *>(in);
     const uint32_t *const initout(out);
